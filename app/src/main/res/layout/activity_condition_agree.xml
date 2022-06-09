@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".join.ConditionAgreeActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_layout_bar_terms_conditions"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/primary_color"
+        >
+
+        <ImageButton
+            android:id="@+id/img_btn_back_terms_conditions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_keyboard_arrow_left_30_white"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="10dp"
+
+            android:background="?attr/selectableItemBackgroundBorderless"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/img_btn_back_terms_conditions"
+
+            android:text="@string/terms_and_conditions"
+            android:layout_marginHorizontal="10dp"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_terms_and_conditions"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/constraint_layout_bar_terms_conditions"
+        app:layout_constraintBottom_toTopOf="@id/btn_next_terms_conditions"
+        app:cardUseCompatPadding="true"
+        app:cardElevation="10dp"
+        android:elevation="10dp"
+        app:cardCornerRadius="10dp"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            >
+
+            <TextView
+                android:id="@+id/tv_terms_conditions_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nanum_gothic_bold"
+                android:text="@string/terms_and_conditions"
+                android:textColor="@color/black"
+                android:layout_margin="10dp"
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+
+            <View
+                android:id="@+id/view_line_terms_conditions"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_terms_conditions_title"
+
+                android:layout_marginTop="10dp"
+
+                android:elevation="10dp"
+                android:background="@color/gray"
+
+                />
+
+            <WebView
+                android:id="@+id/web_condition_agree"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toBottomOf="@id/view_line_terms_conditions"
+                app:layout_constraintBottom_toTopOf="@id/check_box_terms_conditions"
+                android:layout_marginVertical="10dp"
+
+                />
+
+            <CheckBox
+                android:id="@+id/check_box_terms_conditions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="textStart"
+                android:text="@string/request_terms_condition_persional_info_agree"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="30dp"
+                />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+
+
+
+    <android.widget.Button
+        android:id="@+id/btn_next_terms_conditions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/text_field_background_round_white"
+        android:backgroundTint="@color/primary_color"
+        android:textColor="@color/white"
+        android:fontFamily="@font/nanum_gothic_bold"
+        android:text="@string/next"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="10dp"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

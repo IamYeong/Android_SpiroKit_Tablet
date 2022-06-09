@@ -6,4 +6,117 @@
     android:layout_height="match_parent"
     tools:context=".login.LoginActivity">
 
+
+    <TextView
+        android:id="@+id/tv_logo_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="@string/spirokit_title"
+        android:textSize="50sp"
+        android:textColor="@color/primary_color"
+        android:fontFamily="@font/times"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/et_email_login"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:text="사용자 로그인"
+        android:fontFamily="@font/nanum_gothic_bold"
+
+        app:layout_constraintBottom_toTopOf="@id/et_email_login"
+        android:layout_marginBottom="20dp"
+        />
+
+    <EditText
+        android:id="@+id/et_email_login"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        app:layout_constraintStart_toStartOf="@id/tv_logo_login"
+        app:layout_constraintEnd_toEndOf="@id/tv_logo_login"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+
+        android:background="@drawable/text_field_background_round_white"
+        android:paddingHorizontal="15dp"
+
+        android:layout_weight="1"
+
+        android:hint="@string/email"
+
+        android:fontFamily="@font/nanum_gothic"
+        android:inputType="textEmailAddress"
+        android:elevation="10dp"
+        />
+
+
+    <EditText
+        android:id="@+id/et_password_login"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        app:layout_constraintStart_toStartOf="@id/tv_logo_login"
+        app:layout_constraintEnd_toEndOf="@id/tv_logo_login"
+
+        app:layout_constraintTop_toBottomOf="@id/et_email_login"
+        app:layout_constraintBottom_toTopOf="@id/btn_user_login"
+        android:background="@drawable/text_field_background_round_white"
+        android:elevation="10dp"
+
+        android:paddingHorizontal="10dp"
+        android:layout_weight="1"
+
+        android:layout_marginTop="20dp"
+
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        />
+
+    <android.widget.Button
+        android:id="@+id/btn_user_login"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        app:layout_constraintStart_toStartOf="@id/tv_logo_login"
+        app:layout_constraintEnd_toEndOf="@id/tv_logo_login"
+
+        app:layout_constraintTop_toBottomOf="@id/et_password_login"
+
+        android:textColor="@color/white"
+        android:text="로그인"
+
+        android:background="@drawable/text_field_background_round_white"
+        android:backgroundTint="@color/primary_color"
+
+        android:layout_marginTop="30dp"
+
+        />
+
+
+    <android.widget.Button
+        android:id="@+id/btn_to_register_from_login"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        app:layout_constraintStart_toStartOf="@id/tv_logo_login"
+        app:layout_constraintEnd_toEndOf="@id/tv_logo_login"
+
+        app:layout_constraintTop_toBottomOf="@id/btn_user_login"
+        android:layout_marginVertical="10dp"
+
+        android:textColor="@color/white"
+        android:text="등록"
+
+        android:background="@drawable/text_field_background_round_white"
+        android:backgroundTint="@color/gray"
+        />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

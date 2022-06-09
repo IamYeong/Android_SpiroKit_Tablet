@@ -5,8 +5,11 @@
 
     <color name="primary_color">#35569C</color>
     <color name="secondary_color">#738CBE</color>
-    <color name="white_background_color"></color>
 
     <color name="highlight_color">#55D8DC</color>
+
+    <color name="gray">#FFC2C2C2</color>
+    <color name="gray_dark">#FF888888</color>
+    <color name="gray_light">#FFE2E2E2</color>
 
 </resources>
