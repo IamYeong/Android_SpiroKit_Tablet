@@ -6,13 +6,77 @@
     android:layout_height="match_parent"
     tools:context=".main.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_layout_bar_main"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/primary_color"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+
+            android:fontFamily="@font/nanum_gothic"
+            android:text="@string/spirokit_title"
+            android:layout_marginHorizontal="10dp"
+            />
+
+        <ImageButton
+            android:id="@+id/img_btn_setting_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_settings_30_white"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="20dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <fragment
+        android:id="@+id/fragment_container_patients_main"
+        android:layout_width="300dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/constraint_layout_bar_main"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+
+        tools:layout="@layout/fragment_patients"
+        />
+
+    <fragment
+        android:id="@+id/fragment_container_patient_info_main"
+        android:layout_width="250dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/constraint_layout_bar_main"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/fragment_container_patients_main"
+        />
+
+    <fragment
+        android:id="@+id/fragment_container_result_main"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/constraint_layout_bar_main"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/fragment_container_patient_info_main"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout="@layout/activity_condition_agree"
+        />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

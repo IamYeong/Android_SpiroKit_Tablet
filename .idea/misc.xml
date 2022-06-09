@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/ic_baseline_keyboard_arrow_left_30_white.xml" value="0.2615" />
+        <entry key="app/src/main/res/drawable/ic_baseline_search_30.xml" value="0.2615" />
+        <entry key="app/src/main/res/drawable/person_add.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/text_field_background_round_white.xml" value="0.2615" />
         <entry key="app/src/main/res/font/fonts.xml" value="0.17786458333333333" />
         <entry key="app/src/main/res/layout/activity_condition_agree.xml" value="0.12" />
