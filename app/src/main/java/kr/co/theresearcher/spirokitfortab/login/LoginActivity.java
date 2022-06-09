@@ -14,6 +14,7 @@ import android.widget.EditText;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.join.ConditionAgreeActivity;
 import kr.co.theresearcher.spirokitfortab.join.JoinUserActivity;
+import kr.co.theresearcher.spirokitfortab.main.MainActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -39,6 +40,19 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = new Intent(LoginActivity.this, ConditionAgreeActivity.class);
                 startActivity(intent);
 
+            }
+        });
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+
+
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                //finish();
             }
         });
 
