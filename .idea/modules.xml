@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/spirokit-aos-tab-01.iml" filepath="$PROJECT_DIR$/.idea/modules/spirokit-aos-tab-01.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/SpiroKitForTab.iml" filepath="$PROJECT_DIR$/.idea/modules/SpiroKitForTab.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/SpiroKitForTab.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/SpiroKitForTab.app.iml" />
     </modules>
   </component>
 </project>
