@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import kr.co.theresearcher.spirokitfortab.R;
+import kr.co.theresearcher.spirokitfortab.bluetooth.SpiroKitBluetoothLeService;
 import kr.co.theresearcher.spirokitfortab.main.information.PatientInformationFragment;
 import kr.co.theresearcher.spirokitfortab.main.patients.PatientsFragment;
 import kr.co.theresearcher.spirokitfortab.main.result.ResultFragment;
@@ -43,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        startService(new Intent(getApplicationContext(), SpiroKitBluetoothLeService.class));
+
     }
 
     private void setFragment(int id, Fragment fragment) {
@@ -53,4 +57,20 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        stopService(new Intent(getApplicationContext(), SpiroKitBluetoothLeService.class));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 }

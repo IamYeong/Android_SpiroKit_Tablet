@@ -85,7 +85,7 @@
     <string name="male">남</string>
     <string name="female">여</string>
     <string name="no_smoking">금연</string>
-    <string name="smoking">흡연</string>'
+    <string name="smoking">흡연</string>
 
     <string name="birth_date_picker">생년월일 선택</string>
     <string name="start_smoking_date_picker">흡연시작일 선택</string>
@@ -179,6 +179,7 @@
 
     <string name="connect_this_device">연결하시겠습니까?</string>
     <string name="connecting">연결 시도 중</string>
+    <string name="scanning">SpiroKit 탐색 중</string>
 
     <!-- 결과 화면 -->
 
@@ -204,8 +205,7 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="loading_results">결과 로드 중.....</string>
 
     <!-- 예외화면 -->

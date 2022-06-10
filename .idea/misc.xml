@@ -22,6 +22,7 @@
         <entry key="app/src/main/res/drawable/under_line.xml" value="0.2615" />
         <entry key="app/src/main/res/font/fonts.xml" value="0.17786458333333333" />
         <entry key="app/src/main/res/layout/activity_condition_agree.xml" value="0.12" />
+        <entry key="app/src/main/res/layout/activity_exception.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_join_user.xml" value="0.12" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.15" />
@@ -36,6 +37,7 @@
         <entry key="app/src/main/res/layout/fragment_patients.xml" value="0.16276041666666666" />
         <entry key="app/src/main/res/layout/fragment_result.xml" value="0.14" />
         <entry key="app/src/main/res/layout/item_result.xml" value="0.16" />
+        <entry key="app/src/main/res/layout/item_scan_result.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_setting_app_version.xml" value="0.16276041666666666" />
         <entry key="app/src/main/res/layout/item_setting_auto_pairing.xml" value="0.16276041666666666" />
         <entry key="app/src/main/res/layout/item_setting_manual.xml" value="0.16276041666666666" />
