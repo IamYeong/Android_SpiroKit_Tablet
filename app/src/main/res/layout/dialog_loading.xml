@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/background_dialog"
+    >
+
+    <TextView
+        android:id="@+id/tv_title_loading_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        android:layout_margin="10dp"
+        android:fontFamily="@font/nanum_gothic"
+        android:text="Loading..."
+
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textAlignment="center"
+
+        />
+
+    <ProgressBar
+        android:id="@+id/progress_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateDrawable="@drawable/item_loading"
+        android:indeterminateDuration="500"
+
+        app:layout_constraintTop_toBottomOf="@id/tv_title_loading_dialog"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        android:layout_margin="10dp"
+        android:padding="30dp"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
