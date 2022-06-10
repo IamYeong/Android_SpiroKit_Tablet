@@ -26,11 +26,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SpiroKitForTab">
         <activity
+            android:name=".setting.SettingActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"/>
+        <activity
             android:name=".measurement.MeasurementFvcActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".join.ConditionAgreeActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".join.JoinUserActivity"
             android:exported="false"

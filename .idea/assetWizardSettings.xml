@@ -18,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:$USER_HOME$/Library/Android/sdk/icons/material/materialicons/keyboard_arrow_left/baseline_keyboard_arrow_left_24.xml" />
+                                      <entry key="url" value="file:$USER_HOME$/Library/Android/sdk/icons/material/materialicons/dns/baseline_dns_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -28,7 +28,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_baseline_keyboard_arrow_left_30_black" />
+                            <entry key="outputName" value="ic_baseline_dns_30" />
                           </map>
                         </option>
                       </PersistentState>
