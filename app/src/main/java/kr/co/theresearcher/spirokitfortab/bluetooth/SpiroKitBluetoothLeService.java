@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.Looper;
+import android.util.Log;
 
 import java.util.List;
 import java.util.UUID;
@@ -34,6 +35,9 @@ public class SpiroKitBluetoothLeService extends Service {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             super.onConnectionStateChange(gatt, status, newState);
+
+            Log.d(getClass().getSimpleName(), "CONNECT STATE : " + newState);
+
 
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 bluetoothLeCallback.onConnectStateChanged(newState);
@@ -65,6 +69,8 @@ public class SpiroKitBluetoothLeService extends Service {
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             super.onServicesDiscovered(gatt, status);
+
+            Log.d(getClass().getSimpleName(), "onServiceDiscovered");
 
             bluetoothLeCallback.onDiscoverServices();
 
@@ -113,6 +119,8 @@ public class SpiroKitBluetoothLeService extends Service {
         public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
             super.onDescriptorWrite(gatt, descriptor, status);
 
+            Log.d(getClass().getSimpleName(), "onDescriptorWrite");
+
             bluetoothLeCallback.onDescriptorWrite();
             isConnect = true;
 
@@ -158,6 +166,7 @@ public class SpiroKitBluetoothLeService extends Service {
 
     public boolean connect(String deviceAddress) {
 
+        Log.d(getClass().getSimpleName(), "service connect() call");
         if (!initialize()) return false;
 
         SharedPreferencesManager.setBluetoothDeviceMacAddress(getApplicationContext(), deviceAddress);

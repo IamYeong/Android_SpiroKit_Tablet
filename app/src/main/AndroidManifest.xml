@@ -25,7 +25,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SpiroKitForTab">
+        android:theme="@style/Theme.SpiroKitForTab"
+        android:usesCleartextTraffic="true"
+        >
         <activity
             android:name=".setting.SettingActivity"
             android:exported="false"
@@ -60,6 +62,13 @@
             android:name=".main.MainActivity"
             android:exported="true"
             android:screenOrientation="landscape" />
+
+        <service android:name=".bluetooth.SpiroKitBluetoothLeService"
+            android:enabled="true"
+            android:exported="false"
+            android:permission="TODO"
+            />
+
     </application>
 
 </manifest>

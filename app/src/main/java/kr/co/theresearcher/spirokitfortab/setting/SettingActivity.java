@@ -32,6 +32,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,6 +78,12 @@ public class SettingActivity extends AppCompatActivity {
 
             mService = ((SpiroKitBluetoothLeService.LocalBinder)iBinder).getService();
 
+            if (mService.isConnect()) {
+                macAddressText.setText(SharedPreferencesManager.getBluetoothDeviceMacAddress(SettingActivity.this));
+            } else {
+                macAddressText.setText(getString(R.string.state_disconnect));
+            }
+
             mService.setBluetoothLeCallback(new SpiroKitBluetoothLeService.BluetoothLeCallback() {
                 @Override
                 public void onReadCharacteristic(byte[] data) {
@@ -93,7 +100,10 @@ public class SettingActivity extends AppCompatActivity {
                     //testTitleText.setText("DESCRIPTOR WRITE");
 
                     //연결 완료
-                    macAddressText.setText(SharedPreferencesManager.getBluetoothDeviceMacAddress(SettingActivity.this));
+                    Log.d(getClass().getSimpleName(), "**********onDescriptorWrite");
+                    if (loadingDialog.isShowing()) loadingDialog.dismiss();
+                    finish();
+                    //macAddressText.setText(SharedPreferencesManager.getBluetoothDeviceMacAddress(SettingActivity.this));
                 }
 
                 @Override
@@ -105,6 +115,7 @@ public class SettingActivity extends AppCompatActivity {
                 public void onConnectStateChanged(int status) {
                     if (status == BluetoothProfile.STATE_CONNECTED) {
                         //testTitleText.setText(String.valueOf(status));
+
                     }
                 }
             });
@@ -130,12 +141,9 @@ public class SettingActivity extends AppCompatActivity {
                                 handler.postDelayed(stopScanRunnable, 5000);
 
                                 bluetoothLeScanner.startScan(filters, scanSettings, scanCallback);
+                                loadingDialog.setTitle(getString(R.string.scanning));
                                 loadingDialog.show();
-                                //loadingProgress.setVisibility(View.VISIBLE);
-                                //backButton.setVisibility(View.GONE);
-                                //startScanButton.setVisibility(View.GONE);
-                                //scanInfoText.setVisibility(View.INVISIBLE);
-                                //listLayout.setVisibility(View.VISIBLE);
+
                             } else {
 
                                 ConfirmDialog confirmDialog = new ConfirmDialog(SettingActivity.this);
@@ -173,8 +181,11 @@ public class SettingActivity extends AppCompatActivity {
 
                             String macAddress = result.getDevice().getAddress();
 
+                            Log.d(getClass().getSimpleName(), macAddress + ", " + mService.getClass().getSimpleName());
+
                             if (mService != null) {
 
+                                loadingDialog.setTitle(getString(R.string.connecting));
                                 loadingDialog.show();
                                 mService.connect(macAddress);
 
@@ -232,7 +243,7 @@ public class SettingActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        bindService(new Intent(SettingActivity.this, SpiroKitBluetoothLeService.class), serviceConnection, Context.BIND_AUTO_CREATE);
+        bindService(new Intent(getApplicationContext(), SpiroKitBluetoothLeService.class), serviceConnection, 0);
     }
 
     private boolean checkBLE() {
