@@ -155,6 +155,10 @@
     <string name="data_length_zero">저장할 데이터가 충분하지 않습니다</string>
     <string name="not_save_pre_yet">PRE 검사 전에 POST 검사는 저장될 수 없습니다</string>
 
+    <string name="n_order_test">%1$d차 검사</string>
+    <string name="pre_save">PRE 저장</string>
+    <string name="post_save">POST 저장</string>
+
     <!-- 연결 화면 -->
     <string name="connect_device">디바이스 연결</string>
     <string name="device">디바이스</string>
