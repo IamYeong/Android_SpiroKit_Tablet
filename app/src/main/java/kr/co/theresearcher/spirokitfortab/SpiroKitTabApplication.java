@@ -2,6 +2,8 @@ package kr.co.theresearcher.spirokitfortab;
 
 import android.app.Application;
 
+import kr.co.theresearcher.spirokitfortab.volley.SpiroKitVolley;
+
 public class SpiroKitTabApplication extends Application {
 
     @Override
@@ -11,6 +13,7 @@ public class SpiroKitTabApplication extends Application {
         Thread.UncaughtExceptionHandler defaultHandler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(new TheSpiroKitExceptionHandler(this, defaultHandler));
         TheSpiroKitErrorHandler errorHandler = new TheSpiroKitErrorHandler(getApplicationContext());
+        SpiroKitVolley.createRequestQueue(getApplicationContext());
 
     }
 

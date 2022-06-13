@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,6 +32,9 @@ import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.join.ConditionAgreeActivity;
 import kr.co.theresearcher.spirokitfortab.join.JoinUserActivity;
 import kr.co.theresearcher.spirokitfortab.main.MainActivity;
+import kr.co.theresearcher.spirokitfortab.volley.ErrorResponse;
+import kr.co.theresearcher.spirokitfortab.volley.SpiroKitVolley;
+import kr.co.theresearcher.spirokitfortab.volley.VolleyResponseListener;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -65,9 +69,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
-
-                String url = "http://3.35.64.150:8000/apis/user/login";
                 JSONObject jsonObject = new JSONObject();
 
                 try {
@@ -80,33 +81,22 @@ public class LoginActivity extends AppCompatActivity {
 
                 }
 
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject,
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-
-                                System.out.println(response.toString());
-
-                            }
-                        }, new Response.ErrorListener() {
+                SpiroKitVolley.setVolleyListener(new VolleyResponseListener() {
                     @Override
-                    public void onErrorResponse(VolleyError error) {
+                    public void onResponse(JSONObject jsonResponse) {
+                        Log.d(getClass().getSimpleName(), jsonResponse.toString());
+                    }
 
-                        System.out.println("error");
+                    @Override
+                    public void onError(ErrorResponse errorResponse) {
+                        Log.d(getClass().getSimpleName(), errorResponse.toString());
                     }
                 });
 
-                requestQueue.add(jsonObjectRequest);
-                /*
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                //finish();
+                SpiroKitVolley.postJson(jsonObject);
 
-                 */
             }
         });
-
-        requestQueue = Volley.newRequestQueue(LoginActivity.this);
 
     }
 }
