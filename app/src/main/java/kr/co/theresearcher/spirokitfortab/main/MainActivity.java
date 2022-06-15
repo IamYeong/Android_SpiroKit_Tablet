@@ -95,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
 
-        setFragment(R.id.fragment_container_patients_main, new PatientsFragment());
         setFragment(R.id.fragment_container_patient_info_main, new PatientInformationFragment());
         setFragment(R.id.fragment_container_result_main, new FvcResultFragment());
 
@@ -106,9 +105,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
-
 
         startService(new Intent(getApplicationContext(), SpiroKitBluetoothLeService.class));
 
