@@ -243,7 +243,7 @@ public class SettingActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        bindService(new Intent(getApplicationContext(), SpiroKitBluetoothLeService.class), serviceConnection, 0);
+        bindService(new Intent(getApplicationContext(), SpiroKitBluetoothLeService.class), serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
     private boolean checkBLE() {

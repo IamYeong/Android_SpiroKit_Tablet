@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="kr.co.theresearcher.spirokitfortab">
 
     <uses-permission
@@ -14,8 +15,10 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28"
+        tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -23,23 +26,29 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SpiroKitForTab"
-        android:usesCleartextTraffic="true"
-        >
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".measurement.mvv.MeasurementMvvActivity"
+            android:exported="false" />
+        <activity
+            android:name=".measurement.svc.MeasurementSvcActivity"
+            android:exported="false" />
         <activity
             android:name=".setting.SettingActivity"
             android:exported="false"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
-            android:name=".measurement.MeasurementFvcActivity"
+            android:name=".measurement.fvc.MeasurementFvcActivity"
             android:exported="false"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".join.ConditionAgreeActivity"
             android:exported="false"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".join.JoinUserActivity"
             android:exported="false"
@@ -63,12 +72,11 @@
             android:exported="true"
             android:screenOrientation="landscape" />
 
-        <service android:name=".bluetooth.SpiroKitBluetoothLeService"
+        <service
+            android:name=".bluetooth.SpiroKitBluetoothLeService"
             android:enabled="true"
             android:exported="false"
-            android:permission="TODO"
-            />
-
+            android:permission="TODO" />
     </application>
 
 </manifest>

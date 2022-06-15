@@ -69,6 +69,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+
+                /*
+
                 JSONObject jsonObject = new JSONObject();
 
                 try {
@@ -94,6 +99,8 @@ public class LoginActivity extends AppCompatActivity {
                 });
 
                 SpiroKitVolley.postJson(jsonObject);
+
+                 */
 
             }
         });

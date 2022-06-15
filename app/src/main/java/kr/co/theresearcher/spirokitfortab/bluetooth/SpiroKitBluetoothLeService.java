@@ -215,6 +215,7 @@ public class SpiroKitBluetoothLeService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
 
+        Log.d(getClass().getSimpleName(), "Service, onBind");
         return mBinder;
     }
 
@@ -222,12 +223,15 @@ public class SpiroKitBluetoothLeService extends Service {
     public boolean onUnbind(Intent intent) {
         //intentThread.interrupt();
         //intentThread = null;
+        Log.d(getClass().getSimpleName(), "Service, onUnbind");
         return super.onUnbind(intent);
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        Log.d(getClass().getSimpleName(), "Service, onCreate");
 
     }
 
@@ -236,6 +240,7 @@ public class SpiroKitBluetoothLeService extends Service {
     public void onDestroy() {
         super.onDestroy();
 
+        Log.d(getClass().getSimpleName(), "Service, onDestroy");
         destroyService();
 
     }

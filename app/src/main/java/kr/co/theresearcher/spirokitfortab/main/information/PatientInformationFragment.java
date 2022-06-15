@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import kr.co.theresearcher.spirokitfortab.R;
-import kr.co.theresearcher.spirokitfortab.measurement.MeasurementFvcActivity;
+import kr.co.theresearcher.spirokitfortab.measurement.fvc.MeasurementFvcActivity;
 
 public class PatientInformationFragment extends Fragment {
 

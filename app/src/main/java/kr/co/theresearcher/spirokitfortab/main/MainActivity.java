@@ -13,17 +13,15 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
 import kr.co.theresearcher.spirokitfortab.R;
-import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.bluetooth.SpiroKitBluetoothLeService;
 import kr.co.theresearcher.spirokitfortab.main.information.PatientInformationFragment;
 import kr.co.theresearcher.spirokitfortab.main.patients.PatientsFragment;
-import kr.co.theresearcher.spirokitfortab.main.result.ResultFragment;
+import kr.co.theresearcher.spirokitfortab.main.result.fvc.FvcResultFragment;
 import kr.co.theresearcher.spirokitfortab.setting.SettingActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
     private ImageButton settingButton;
     private Button measButton;
-
 
     private SpiroKitBluetoothLeService mService;
 
@@ -100,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
         setFragment(R.id.fragment_container_patients_main, new PatientsFragment());
         setFragment(R.id.fragment_container_patient_info_main, new PatientInformationFragment());
-        setFragment(R.id.fragment_container_result_main, new ResultFragment());
+        setFragment(R.id.fragment_container_result_main, new FvcResultFragment());
 
         settingButton.setOnClickListener(new View.OnClickListener() {
             @Override

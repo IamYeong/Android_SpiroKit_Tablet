@@ -210,6 +210,8 @@
 
     <!-- 예외화면 -->
     <string name="exception_user_message">일시적 오류가 발생되었습니다.\n해당 사항은 조치가 가능하도록 로그로 남겼으며\n빠른 시일 내로 조치 후 업데이트하겠습니다.\n아래 버튼을 통해 이전 화면으로 돌아갈 수 있습니다.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

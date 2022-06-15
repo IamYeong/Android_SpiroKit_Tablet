@@ -43,4 +43,8 @@ dependencies {
     //Room
     implementation("androidx.room:room-runtime:2.4.2")
     annotationProcessor("androidx.room:room-compiler:2.4.2")
+
+    //tar
+    implementation 'org.apache.commons:commons-compress:1.14'
+    //implementation 'org.kamranzafar:jtar:2.3'
 }

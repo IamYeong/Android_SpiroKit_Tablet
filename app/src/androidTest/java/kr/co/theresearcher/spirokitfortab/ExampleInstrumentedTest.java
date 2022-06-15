@@ -10,6 +10,8 @@ import org.junit.runner.RunWith;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
+
 /**
  * Instrumented test, which will execute on an Android device.
  *
@@ -21,6 +23,9 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("kr.co.theresearcher.spirokitfortab", appContext.getPackageName());
+
+
+
+
     }
 }
