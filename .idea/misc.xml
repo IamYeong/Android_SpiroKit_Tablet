@@ -18,6 +18,7 @@
         <entry key="app/src/main/res/drawable/item_selected_fvc_result_stroke.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/person_add.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/progressbar_secondary_color_style.xml" value="0.2615" />
+        <entry key="app/src/main/res/drawable/spinner_background_white.xml" value="0.328" />
         <entry key="app/src/main/res/drawable/text_field_background_round_white.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/under_line.xml" value="0.2615" />
         <entry key="app/src/main/res/font/fonts.xml" value="0.17786458333333333" />
@@ -27,6 +28,7 @@
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.15" />
         <entry key="app/src/main/res/layout/activity_measurement_fvc.xml" value="0.12" />
+        <entry key="app/src/main/res/layout/activity_patient_insert.xml" value="0.16" />
         <entry key="app/src/main/res/layout/activity_setting.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.12" />
         <entry key="app/src/main/res/layout/dialog_confirm.xml" value="0.16276041666666666" />

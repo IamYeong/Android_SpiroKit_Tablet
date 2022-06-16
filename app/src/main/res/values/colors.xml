@@ -10,6 +10,7 @@
 
     <color name="highlight_color">#55D8DC</color>
 
+    <color name="gray_background">#FFF5F5F5</color>
     <color name="gray">#FFC2C2C2</color>
     <color name="gray_dark">#FF888888</color>
     <color name="gray_light">#FFE2E2E2</color>

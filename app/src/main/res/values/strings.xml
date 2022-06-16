@@ -81,6 +81,7 @@
     <string name="smoking_period">흡연기간</string>
     <string name="smoking_is_now">현재 흡연 여부</string>
     <string name="smoking_no_when">금연 시기</string>
+    <string name="match_doctor">담당의사</string>
 
     <string name="male">남</string>
     <string name="female">여</string>

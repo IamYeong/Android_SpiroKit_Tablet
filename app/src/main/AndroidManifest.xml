@@ -32,6 +32,12 @@
         android:theme="@style/Theme.SpiroKitForTab"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".patient_input.PatientModifyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".patient_input.PatientInsertActivity"
+            android:exported="false" />
+        <activity
             android:name=".measurement.mvv.MeasurementMvvActivity"
             android:exported="false" />
         <activity
