@@ -4,33 +4,20 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity
-public class HumanRace {
+public enum HumanRace {
 
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "HUMAN_RACE_ID")
-    private int id;
+    y("yellow"), // yellow
+    w("white"), // white
+    b("black"); // black
 
-    @ColumnInfo(name = "HUMAN_RACE_NAME")
-    private String name;
+    String value;
 
-    public HumanRace(String name) {
-        this.name = name;
+    HumanRace(String value) {
+        this.value = value;
     }
 
-    public int getId() {
-        return id;
+    public String getValue() {
+        return value;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

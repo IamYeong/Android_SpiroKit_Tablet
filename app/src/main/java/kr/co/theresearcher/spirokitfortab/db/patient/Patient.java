@@ -23,7 +23,7 @@ public class Patient {
     @ColumnInfo(name = "PATIENT_WEIGHT")
     private int weight;
 
-    @ColumnInfo(name = "PATIENT_WEIGHT")
+    @ColumnInfo(name = "PATIENT_HEIGHT")
     private int height;
 
     @ColumnInfo(name = "PATIENT_HUMAN_RACE_ID")

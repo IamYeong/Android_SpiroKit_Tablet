@@ -36,6 +36,7 @@
             android:exported="false" />
         <activity
             android:name=".patient_input.PatientInsertActivity"
+
             android:exported="false" />
         <activity
             android:name=".measurement.mvv.MeasurementMvvActivity"

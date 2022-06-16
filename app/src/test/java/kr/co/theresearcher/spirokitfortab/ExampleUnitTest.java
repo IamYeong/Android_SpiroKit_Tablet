@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+import kr.co.theresearcher.spirokitfortab.db.human_race.HumanRace;
+
 /**
  * Example local unit test, which will execute on the development machine (host).
  *
@@ -12,6 +14,8 @@ import static org.junit.Assert.*;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
+
+        //System.out.println((HumanRace.b.toString()));
+
     }
 }

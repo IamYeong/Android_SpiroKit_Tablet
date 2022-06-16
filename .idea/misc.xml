@@ -5,6 +5,7 @@
       <map>
         <entry key="app/src/main/res/drawable/background_dialog.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/button_shape.xml" value="0.2615" />
+        <entry key="app/src/main/res/drawable/ic_baseline_bluetooth_30_black.xml" value="0.328" />
         <entry key="app/src/main/res/drawable/ic_baseline_date_range_30_black.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/ic_baseline_delete_30_black.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/ic_baseline_dns_30.xml" value="0.2615" />
@@ -12,8 +13,11 @@
         <entry key="app/src/main/res/drawable/ic_baseline_keyboard_arrow_left_30_black.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/ic_baseline_keyboard_arrow_left_30_white.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/ic_baseline_menu_book_30_black.xml" value="0.2615" />
+        <entry key="app/src/main/res/drawable/ic_baseline_person_add_30_black.xml" value="0.328" />
         <entry key="app/src/main/res/drawable/ic_baseline_search_30.xml" value="0.2615" />
+        <entry key="app/src/main/res/drawable/ic_baseline_settings_30_white.xml" value="0.328" />
         <entry key="app/src/main/res/drawable/item_img_btn_bg.xml" value="0.2615" />
+        <entry key="app/src/main/res/drawable/item_img_btn_bg_gray.xml" value="0.328" />
         <entry key="app/src/main/res/drawable/item_loading.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/item_selected_fvc_result_stroke.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/person_add.xml" value="0.2615" />
