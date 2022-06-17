@@ -44,7 +44,7 @@
 
 
         <android.widget.Button
-            android:id="@+id/btn_complete_meas"
+            android:id="@+id/btn_complete_fvc_meas"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/button_shape"
@@ -241,7 +241,7 @@
                 />
 
             <android.widget.Button
-                android:id="@+id/btn_pre_save_meas"
+                android:id="@+id/btn_pre_save_fvc_meas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_shape"
@@ -256,7 +256,7 @@
                 />
 
             <android.widget.Button
-                android:id="@+id/btn_post_save_meas"
+                android:id="@+id/btn_post_save_fvc_meas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_shape"

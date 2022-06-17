@@ -5,6 +5,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import kr.co.theresearcher.spirokitfortab.db.human_race.HumanRace;
+import kr.co.theresearcher.spirokitfortab.db.meas_group.MeasGroup;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -15,7 +16,8 @@ public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
 
-        //System.out.println((HumanRace.b.toString()));
+        System.out.println(MeasGroup.mvv.ordinal());
+
 
     }
 }

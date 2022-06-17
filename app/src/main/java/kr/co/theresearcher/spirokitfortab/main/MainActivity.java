@@ -23,11 +23,13 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
 import kr.co.theresearcher.spirokitfortab.R;
+import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.bluetooth.SpiroKitBluetoothLeService;
 import kr.co.theresearcher.spirokitfortab.db.RoomNames;
 import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
@@ -175,30 +177,6 @@ public class MainActivity extends AppCompatActivity {
 
         bindService(new Intent(getApplicationContext(), SpiroKitBluetoothLeService.class), serviceConnection ,Context.BIND_AUTO_CREATE);
 
-        Thread thread = new Thread() {
-
-            @Override
-            public void run() {
-                super.run();
-                Looper.prepare();
-
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
-
-                PatientDatabase database = Room.databaseBuilder(MainActivity.this, PatientDatabase.class, RoomNames.ROOM_PATIENT_DB_NAME).build();
-                PatientDao patientDao = database.patientDao();
-                List<Patient> patients = patientDao.selectAllPatient();
-                database.close();
-
-                for (Patient patient : patients) {
-                    Log.d(getClass().getSimpleName(), String.format(patient.getName() + ", " + patient.getHeight() + ", " + patient.getWeight() + ", " + patient.getChartNumber() + ", " + simpleDateFormat.format(patient.getBirthDate()) + ", " + patient.getHumanRaceId() + ", "
-                            + patient.getSmokeAmountPack() + ", " + simpleDateFormat.format(patient.getStartSmokeDate()) + ", " + simpleDateFormat.format(patient.getStopSmokeDate())));
-                }
-
-
-                Looper.loop();
-            }
-        };
-        thread.start();
 
     }
 }

@@ -153,7 +153,7 @@ public class VolumeFlowRunView extends View {
 
         }
 
-        Log.d(getClass().getSimpleName(), this.x + ", " + y + "___" + xValueMargin + ", " + (yValueMargin));
+        //Log.d(getClass().getSimpleName(), this.x + ", " + y + "___" + xValueMargin + ", " + (yValueMargin));
 
         if (isOver) {
 

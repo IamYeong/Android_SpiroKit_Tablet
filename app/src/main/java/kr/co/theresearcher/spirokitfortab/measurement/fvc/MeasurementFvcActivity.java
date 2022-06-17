@@ -2,6 +2,7 @@ package kr.co.theresearcher.spirokitfortab.measurement.fvc;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import android.bluetooth.BluetoothProfile;
 import android.content.ComponentName;
@@ -9,21 +10,43 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.Buffer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import kr.co.theresearcher.spirokitfortab.Fluid;
 import kr.co.theresearcher.spirokitfortab.R;
+import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.bluetooth.SpiroKitBluetoothLeService;
+import kr.co.theresearcher.spirokitfortab.db.RoomNames;
+import kr.co.theresearcher.spirokitfortab.db.meas_group.MeasGroup;
+import kr.co.theresearcher.spirokitfortab.db.measurement.Measurement;
+import kr.co.theresearcher.spirokitfortab.db.measurement.MeasurementDao;
+import kr.co.theresearcher.spirokitfortab.db.measurement.MeasurementDatabase;
+import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
 import kr.co.theresearcher.spirokitfortab.graph.TimerProgressView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowResultView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowRunView;
@@ -41,22 +64,27 @@ public class MeasurementFvcActivity extends AppCompatActivity {
     private WeakFlowProgressView weakFlowProgressView;
     private VolumeFlowRunView volumeFlowRunView;
     private VolumeTimeRunView volumeTimeRunView;
-    private List<VolumeFlowResultView> volumeFlowResultViewList = new ArrayList<>();
-    private List<VolumeTimeResultView> volumeTimeResultViewList = new ArrayList<>();
+    private List<VolumeFlowRunView> volumeFlowResultViewList = new ArrayList<>();
+    private List<VolumeTimeRunView> volumeTimeResultViewList = new ArrayList<>();
     private List<Integer> pulseWidthList = new ArrayList<>();
     private RecyclerView rv;
-    private Button retestButton, completeButton, startStopButton;
+    private Button retestButton, completeButton, startStopButton, preSaveButton, postSaveButton;
     private ProgressBar timerProgressBar, weakFlowProgressBar;
 
     private boolean isStart = false;
     private int dataReceivedCount = 0;
     private boolean flowToggle = false;
+    private long startTimestamp;
+
+    private int testOrder = 1;
 
     private Timer timer;
     private TimerTask timerTask;
     private int timerCount = 0;
 
-    //...
+    private Handler handler = new Handler(Looper.getMainLooper());
+
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd_hhmmssSS", Locale.getDefault());
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -141,10 +169,13 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         timerFrameLayout = findViewById(R.id.frame_expiratory_timer_marking);
         weakFlowFrameLayout = findViewById(R.id.frame_weak_expiratory_marking);
 
+        preSaveButton = findViewById(R.id.btn_pre_save_fvc_meas);
+        postSaveButton = findViewById(R.id.btn_post_save_fvc_meas);
+
         rv = findViewById(R.id.rv_meas);
         retestButton = findViewById(R.id.btn_retest_meas);
         startStopButton = findViewById(R.id.btn_start_stop_meas);
-        completeButton = findViewById(R.id.btn_complete_meas);
+        completeButton = findViewById(R.id.btn_complete_fvc_meas);
 
         timerProgressBar = findViewById(R.id.progressbar_expiratory_timer);
         weakFlowProgressBar = findViewById(R.id.progressbar_weak_expiratory);
@@ -240,6 +271,58 @@ public class MeasurementFvcActivity extends AppCompatActivity {
             }
         });
 
+        preSaveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                saveData(false);
+
+            }
+        });
+
+        postSaveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                saveData(true);
+
+            }
+        });
+
+        completeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Thread thread = new Thread() {
+
+                    @Override
+                    public void run() {
+                        super.run();
+                        Looper.prepare();
+
+                        MeasurementDatabase database = Room.databaseBuilder(MeasurementFvcActivity.this, MeasurementDatabase.class, RoomNames.ROOM_MEASUREMENT_DB_NAME).build();
+                        MeasurementDao measurementDao = database.measurementDao();
+                        Measurement measurement = new Measurement(SharedPreferencesManager.getPatientId(MeasurementFvcActivity.this),
+                                MeasGroup.fvc.ordinal(), startTimestamp, simpleDateFormat.format(startTimestamp));
+                        measurementDao.insertMeasurement(measurement);
+                        database.close();
+
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                finish();
+                            }
+                        });
+
+                        Looper.loop();
+                    }
+                };
+
+                thread.start();
+
+            }
+        });
+
 
         retestButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -282,6 +365,8 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
             }
         });
+
+        startTimestamp = Calendar.getInstance().getTime().getTime();
 
     }
 
@@ -439,6 +524,96 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         });
 
         //updateFlowProgressBar((float)lps);
+
+    }
+
+    private void saveData(boolean isPost) {
+
+        isStart = false;
+
+        Thread thread = new Thread() {
+
+            @Override
+            public void run() {
+                super.run();
+                Looper.prepare();
+
+                try {
+
+                    long date = Calendar.getInstance().getTime().getTime();
+
+                    File csvFile = new File(getExternalFilesDir("data/" + SharedPreferencesManager.getOfficeID(MeasurementFvcActivity.this)
+                            + "/" + SharedPreferencesManager.getPatientId(MeasurementFvcActivity.this) + "/" + simpleDateFormat.format(startTimestamp)
+                            + "/" + testOrder), testOrder + ".csv");
+
+                    FileWriter fileWriter = new FileWriter(csvFile);
+                    BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+                    for (int i = 0; i < pulseWidthList.size(); i++) {
+
+                        bufferedWriter.write(Integer.toString(pulseWidthList.get(i)));
+                        bufferedWriter.write("\n");
+
+                    }
+                    pulseWidthList.clear();
+                    bufferedWriter.close();
+                    //CSV 파일 저장================
+
+
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("pid", SharedPreferencesManager.getPatientId(MeasurementFvcActivity.this));
+                    jsonObject.put("isPost", isPost);
+                    jsonObject.put("order", testOrder);
+                    jsonObject.put("ts", date);
+                    jsonObject.put("meas", MeasGroup.fvc);
+
+
+                    File jsonFile = new File(getExternalFilesDir("data/" + SharedPreferencesManager.getOfficeID(MeasurementFvcActivity.this)
+                            + "/" + SharedPreferencesManager.getPatientId(MeasurementFvcActivity.this) + "/" + simpleDateFormat.format(startTimestamp)
+                            + "/" + testOrder), testOrder + ".json");
+
+                    FileOutputStream fileOutputStream = new FileOutputStream(jsonFile);
+                    fileOutputStream.write(jsonObject.toString().getBytes());
+
+                    fileOutputStream.close();
+                    //Json 파일 저장===================
+
+                    jsonObject = null;
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            ConfirmDialog confirmDialog = new ConfirmDialog(MeasurementFvcActivity.this);
+                            confirmDialog.setTitle(getString(R.string.success_data_save));
+                            confirmDialog.show();
+
+                            isStart = true;
+
+                            volumeFlowRunView.clear();
+                            volumeTimeRunView.clear();
+                            volumeFlowRunView.postInvalidate();
+                            volumeTimeRunView.postInvalidate();
+
+
+                        }
+                    });
+
+
+                } catch (JSONException e) {
+
+                } catch (IOException e) {
+
+                }
+
+                testOrder++;
+                Looper.loop();
+            }
+        };
+        thread.start();
+
+    }
+
+    private void addResult() {
 
     }
 

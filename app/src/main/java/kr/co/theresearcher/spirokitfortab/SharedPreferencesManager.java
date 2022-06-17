@@ -27,6 +27,8 @@ public class SharedPreferencesManager {
     public static final String IS_CONNECT =
             "kr.co.theresearcher.is.connect";
 
+    public static final String OFFICE_ID =
+            "kr.co.theresearcher.office.id";
 
 
     public static SharedPreferences getPreferences(Context context) {
@@ -238,4 +240,16 @@ public class SharedPreferencesManager {
     public static boolean getConnectState(Context context) {
         return getPreferences(context).getBoolean(IS_CONNECT, false);
     }
+
+    public static int getOfficeID(Context context) {
+        return getPreferences(context).getInt(OFFICE_ID, 0);
+    }
+
+    public static boolean setOfficeID(Context context, int id) {
+        SharedPreferences sharedPreferences = getPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(OFFICE_ID, id);
+        return editor.commit();
+    }
+
 }
