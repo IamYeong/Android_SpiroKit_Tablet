@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class VolumeFlowRunView extends View {
     private float xInterval, yInterval;
     private float xPadding, yPadding;
     private int xMarking, yMarking;
+    private float xValueMargin, yValueMargin;
 
     public VolumeFlowRunView(Context context) {
         super(context);
@@ -53,15 +55,15 @@ public class VolumeFlowRunView extends View {
         //X 축 중앙선
         canvas.drawLine(0f, canvasHeight * 0.5f, canvasWidth, canvasHeight * 0.5f, linePaint);
         //Y 축 측면선
-        canvas.drawLine(0f, canvasHeight, 0f, 0f, linePaint);
+        //canvas.drawLine(0f, canvasHeight, 0f, 0f, linePaint);
 
         //경로 그리기
         canvas.drawPath(path, pathPaint);
 
         for (int i = 1; i < xMarking; i++) {
-            canvas.drawLine((float)xPadding * (float)i, canvasHeight * 0.5f, ((float)xPadding * (float)i), (canvasHeight * 0.5f) - 20f, linePaint); // 중앙에 x축 눈금 그리기
+            canvas.drawLine((float)xPadding * (float)i, canvasHeight, ((float)xPadding * (float)i), (canvasHeight) - 20f, linePaint); // 중앙에 x축 눈금 그리기
             //canvas.drawText(Float.toString(Fluid.autoRound(1, ((float)xInterval * (float) i))), ((float)xPadding * (float)i) - 20f, (canvasHeight * 0.5f) - 25f, labelPaint);
-            canvas.drawText(Float.toString(Fluid.autoRound(1, maxX - (xInterval * (double) i))), (xPadding * (float)i) - 20f, (canvasHeight * 0.5f) - 25f, labelPaint);
+            canvas.drawText(Float.toString(Fluid.autoRound(1, maxX - (xInterval * (double) i))), (xPadding * (float)i) - 5f, (canvasHeight) - 25f, labelPaint);
         }
 
         for (int i = 1; i < yMarking; i++) {
@@ -82,6 +84,9 @@ public class VolumeFlowRunView extends View {
 
         xPadding = canvasWidth / (float)xMarking;
         yPadding = canvasHeight / (float)yMarking;
+
+        xValueMargin = (maxX - minX) * 0.05f;
+        yValueMargin = (maxY - minY) * 0.05f;
 
         this.x = (maxX - minX) * xStartPosition;
         path.reset();
@@ -117,7 +122,7 @@ public class VolumeFlowRunView extends View {
         else this.x += x;
         values.add(new Coordinate(x, y));
 
-        if ((this.x > maxX) || (this.x < minX)) {
+        if ((this.x > (maxX - xValueMargin)) || (this.x < (xValueMargin - minX))) {
 
             isOver = true;
 
@@ -127,25 +132,28 @@ public class VolumeFlowRunView extends View {
 
         }
 
-        if (y > maxY) {
+        if (y > (maxY - yValueMargin)) {
 
             isOver = true;
 
-            maxX *= y / maxY;
-            minY *= y / maxY;
-            maxY = y;
+            maxX *= y / (maxY - yValueMargin);
+            minY *= y / (maxY - yValueMargin);
+            maxY *= y / (maxY - yValueMargin);
 
         }
 
-        if (y < minY) {
+        if (y < (minY + yValueMargin)) {
 
             isOver = true;
 
-            maxX *= Math.abs(y / minY);
-            maxY *= Math.abs(y / minY);
-            minY = y;
+
+            maxY *= Math.abs(y / (minY + yValueMargin));
+            maxX *= Math.abs(y / (minY + yValueMargin));
+            minY *= Math.abs(y / (minY + yValueMargin));
 
         }
+
+        Log.d(getClass().getSimpleName(), this.x + ", " + y + "___" + xValueMargin + ", " + (yValueMargin));
 
         if (isOver) {
 
@@ -204,21 +212,21 @@ public class VolumeFlowRunView extends View {
     private void setLabelPaint() {
 
         labelPaint.setColor(getContext().getColor(R.color.secondary_color));
-        labelPaint.setTextSize(30f);
+        labelPaint.setTextSize(20f);
 
     }
 
     private void setLinePaint() {
 
         linePaint.setColor(getContext().getColor(R.color.secondary_color));
-        linePaint.setStrokeWidth(3f);
+        linePaint.setStrokeWidth(2f);
 
     }
 
     private void setPathPaint() {
 
         pathPaint.setAntiAlias(true);
-        pathPaint.setStrokeWidth(6f);
+        pathPaint.setStrokeWidth(3f);
         pathPaint.setStyle(Paint.Style.STROKE);
         pathPaint.setColor(getContext().getColor(R.color.primary_color));
 

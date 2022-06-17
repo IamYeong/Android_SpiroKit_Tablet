@@ -15,6 +15,7 @@ import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -25,10 +26,12 @@ import android.widget.TextView;
 import java.util.List;
 
 import kr.co.theresearcher.spirokitfortab.R;
+import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.db.RoomNames;
 import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
 import kr.co.theresearcher.spirokitfortab.db.patient.PatientDao;
 import kr.co.theresearcher.spirokitfortab.db.patient.PatientDatabase;
+import kr.co.theresearcher.spirokitfortab.main.patients.OnItemSimpleSelectedListener;
 import kr.co.theresearcher.spirokitfortab.main.patients.PatientsAdapter;
 import kr.co.theresearcher.spirokitfortab.measurement.fvc.MeasurementFvcActivity;
 
@@ -70,10 +73,21 @@ public class PatientInformationFragment extends Fragment {
         patientsAdapter = new PatientsAdapter(context);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        patientsAdapter.setSimpleSelectedListener(new OnItemSimpleSelectedListener() {
+            @Override
+            public void onSimpleSelected() {
+
+                updatePatientInformation();
+
+                patientsRV.setVisibility(View.INVISIBLE);
+                patientsRV.setClickable(false);
+
+
+            }
+        });
+
         patientsRV.setLayoutManager(linearLayoutManager);
         patientsRV.setAdapter(patientsAdapter);
-
-
 
         patientSearchField.addTextChangedListener(new TextWatcher() {
             @Override
@@ -167,4 +181,16 @@ public class PatientInformationFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
     }
+
+    private void updatePatientInformation() {
+
+        patientNameText.setText(SharedPreferencesManager.getPatientName(context));
+        StringBuilder info = new StringBuilder();
+
+        info.append(getString(R.string.chart_number_colon, SharedPreferencesManager.getPatientChartNumber(context))).append("\n");
+
+
+
+    }
+
 }

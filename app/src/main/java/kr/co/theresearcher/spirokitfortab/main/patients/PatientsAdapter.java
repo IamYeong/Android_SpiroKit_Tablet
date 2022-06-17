@@ -18,6 +18,7 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 import kr.co.theresearcher.spirokitfortab.R;
+import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
 
 public class PatientsAdapter extends RecyclerView.Adapter<PatientsViewHolder> {
@@ -25,12 +26,18 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsViewHolder> {
     private List<Patient> patients;
     private List<Patient> searchResults;
     private Context context;
+    private OnItemSimpleSelectedListener simpleSelectedListener;
+
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
 
     public PatientsAdapter(Context context) {
         this.context = context;
         patients = new ArrayList<>();
         searchResults = new ArrayList<>();
+    }
+
+    public void setSimpleSelectedListener(OnItemSimpleSelectedListener listener) {
+        this.simpleSelectedListener = listener;
     }
 
     public void setPatients(List<Patient> patientList) {
@@ -101,6 +108,22 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsViewHolder> {
             public void onClick(View v) {
 
                 //선택 UI 처리 후 리스너로 전달, 리사이클러뷰 닫고 환자 정보 보여주면 됨.
+
+                SharedPreferencesManager.setPatientId(context, patient.getId());
+                SharedPreferencesManager.setPatientName(context, patient.getName());
+                SharedPreferencesManager.setPatientBirth(context, patient.getBirthDate());
+                SharedPreferencesManager.setPatientChartNumber(context, patient.getChartNumber());
+                SharedPreferencesManager.setPatientHeight(context, patient.getHeight());
+                SharedPreferencesManager.setPatientGender(context, patient.isGender());
+                SharedPreferencesManager.setPatientWeight(context, patient.getWeight());
+                SharedPreferencesManager.setPatientIsSmoking(context, patient.isSmoke());
+                SharedPreferencesManager.setPatientStartSmokingDate(context, patient.getStartSmokeDate());
+                SharedPreferencesManager.setPatientNoSmokingDate(context, patient.getStopSmokeDate());
+                SharedPreferencesManager.setPatientSmokingAmount(context, patient.getSmokeAmountPack());
+                SharedPreferencesManager.setPatientHumanRaceId(context, patient.getHumanRaceId());
+                //주치의 입력
+
+                simpleSelectedListener.onSimpleSelected();
 
             }
         });

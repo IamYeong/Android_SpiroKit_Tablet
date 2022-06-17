@@ -7,7 +7,7 @@
         <shape>
 
             <corners android:radius="100dp"/>
-            <solid android:color="@color/gray_progress_not_fill" />
+            <solid android:color="@color/secondary_color" />
 
         </shape>
 
@@ -22,7 +22,7 @@
             <shape>
 
                 <corners android:radius="100dp"/>
-                <solid android:color="@color/secondary_color"/>
+                <solid android:color="@color/highlight_color"/>
 
             </shape>
 
@@ -38,7 +38,7 @@
         <scale android:scaleWidth="100%" android:useIntrinsicSizeAsMinimum="true">
             <shape>
                 <corners android:radius="100dp" />
-                <solid android:color="@color/secondary_color" />
+                <solid android:color="@color/highlight_color" />
                 <size android:width="10dp"/>
             </shape>
         </scale>

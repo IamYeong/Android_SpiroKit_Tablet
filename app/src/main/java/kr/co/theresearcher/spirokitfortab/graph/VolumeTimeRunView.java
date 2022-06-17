@@ -30,6 +30,7 @@ public class VolumeTimeRunView extends View {
     private float xInterval, yInterval;
     private float xPadding, yPadding;
     private int xMarking, yMarking;
+    private float xValueMargin, yValueMargin;
 
     public VolumeTimeRunView(Context context) {
         super(context);
@@ -50,9 +51,9 @@ public class VolumeTimeRunView extends View {
         super.onDraw(canvas);
 
         //X 축 하단선
-        canvas.drawLine(0f, canvasHeight, canvasWidth, canvasHeight, linePaint);
+        //canvas.drawLine(0f, canvasHeight, canvasWidth, canvasHeight, linePaint);
         //Y 축 측면선
-        canvas.drawLine(0f, canvasHeight, 0f, 0f, linePaint);
+        //canvas.drawLine(0f, canvasHeight, 0f, 0f, linePaint);
 
         //경로 그리기
         canvas.drawPath(path, pathPaint);
@@ -60,7 +61,7 @@ public class VolumeTimeRunView extends View {
 
         for (int i = 1; i < xMarking; i++) {
             canvas.drawLine((float)xPadding * (float)i, canvasHeight, ((float)xPadding * (float)i), (canvasHeight) - 20f, linePaint); // 중앙에 x축 눈금 그리기
-            canvas.drawText(Float.toString(Fluid.autoRound(1, ((float)xInterval * (float) i))), ((float)xPadding * (float)i) - 20f, (canvasHeight) - 25f, labelPaint);
+            canvas.drawText(Float.toString(Fluid.autoRound(1, xValueMargin + ((float)xInterval * (float) i))), ((float)xPadding * (float)i) - 5f, (canvasHeight) - 25f, labelPaint);
             //canvas.drawText(Float.toString(Fluid.autoRound(1, maxX - (xInterval * (double) i))), (xPadding * (float)i) - 20f, (canvasHeight) - 25f, labelPaint);
         }
 
@@ -83,8 +84,11 @@ public class VolumeTimeRunView extends View {
         xPadding = canvasWidth / (float)xMarking;
         yPadding = canvasHeight / (float)yMarking;
 
+        xValueMargin = maxX * 0.05f;
+        yValueMargin = maxY * 0.05f;
+
         path.reset();
-        path.moveTo(xToPosition(0f), yToPosition(0f));
+        path.moveTo(xToPosition(xValueMargin), yToPosition(0f));
 
 
     }
@@ -110,27 +114,27 @@ public class VolumeTimeRunView extends View {
         boolean isOver = false;
         values.add(new Coordinate(x, y));
 
-        if ((this.x + x) > maxX) {
+        if ((this.x + x) > (maxX - xValueMargin)) {
 
             isOver = true;
 
-            maxY *= (x + (maxX - minX)) / (maxX - minX);
-            maxX += x;
+            maxY *= (x + (maxX - xValueMargin)) / (maxX - xValueMargin);
+            maxX *= (x + (maxX - xValueMargin)) / (maxX - xValueMargin);
 
         }
 
-        if ((this.y + y) > maxY) {
+        if ((this.y + y) > (maxY - yValueMargin)) {
 
             isOver = true;
 
-            maxX *= (maxY + y) / maxY;
-            maxY += y;
+            maxX *= (y + (maxY - yValueMargin)) / (maxY - yValueMargin);
+            maxY *= (y + (maxY - yValueMargin)) / (maxY - yValueMargin);
 
         }
 
         if (isOver) {
 
-            this.x = 0f;
+            this.x = xValueMargin;
             this.y = 0f;
             commit();
 
@@ -154,7 +158,7 @@ public class VolumeTimeRunView extends View {
     public void clear() {
 
         values.clear();
-        this.x = 0f;
+        this.x = xValueMargin;
         this.y = 0f;
         commit();
 
@@ -190,24 +194,23 @@ public class VolumeTimeRunView extends View {
     private void setLabelPaint() {
 
         labelPaint.setColor(getContext().getColor(R.color.secondary_color));
-        labelPaint.setTextSize(30f);
+        labelPaint.setTextSize(20f);
 
     }
 
     private void setLinePaint() {
 
         linePaint.setColor(getContext().getColor(R.color.secondary_color));
-        linePaint.setStrokeWidth(3f);
+        linePaint.setStrokeWidth(2f);
 
     }
 
     private void setPathPaint() {
 
         pathPaint.setAntiAlias(true);
-        pathPaint.setStrokeWidth(6f);
+        pathPaint.setStrokeWidth(3f);
         pathPaint.setStyle(Paint.Style.STROKE);
         pathPaint.setColor(getContext().getColor(R.color.primary_color));
 
     }
-
 }

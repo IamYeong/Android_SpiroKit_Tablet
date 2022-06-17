@@ -18,4 +18,6 @@
 
     <color name="ble_connection">#FF00FF22</color>
 
+    <color name="graph_red">#A01111</color>
+
 </resources>

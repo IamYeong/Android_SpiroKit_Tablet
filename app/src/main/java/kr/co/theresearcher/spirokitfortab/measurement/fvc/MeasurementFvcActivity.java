@@ -145,7 +145,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                 volumeFlowRunView.setX(2f, 0f);
                 volumeFlowRunView.setY(1.25f, -1.25f);
                 volumeFlowRunView.setxStartPosition(0.5f);
-                volumeFlowRunView.setMarkingCount(5, 10);
+                volumeFlowRunView.setMarkingCount(8, 10);
 
                 volumeFlowRunView.commit();
 
@@ -167,7 +167,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
                 volumeTimeRunView.setCanvasSize(width, height);
                 volumeTimeRunView.setX(0.8f, 0f);
-                volumeTimeRunView.setY(0.2f, 0f);
+                volumeTimeRunView.setY(0.4f, 0f);
                 volumeTimeRunView.setMarkingCount(8, 8);
                 volumeTimeRunView.setxStartPosition(0f);
 

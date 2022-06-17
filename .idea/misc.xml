@@ -6,6 +6,7 @@
         <entry key="app/src/main/res/drawable/background_dialog.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/button_out_line_highlight.xml" value="0.342" />
         <entry key="app/src/main/res/drawable/button_shape.xml" value="0.2615" />
+        <entry key="app/src/main/res/drawable/graph_out_line.xml" value="0.328" />
         <entry key="app/src/main/res/drawable/ic_baseline_bluetooth_30_black.xml" value="0.328" />
         <entry key="app/src/main/res/drawable/ic_baseline_date_range_30_black.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/ic_baseline_delete_30_black.xml" value="0.2615" />
@@ -16,6 +17,8 @@
         <entry key="app/src/main/res/drawable/ic_baseline_keyboard_arrow_left_30_white.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/ic_baseline_menu_book_30_black.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/ic_baseline_person_add_30_black.xml" value="0.328" />
+        <entry key="app/src/main/res/drawable/ic_baseline_play_arrow_30_white.xml" value="0.328" />
+        <entry key="app/src/main/res/drawable/ic_baseline_refresh_30_white.xml" value="0.328" />
         <entry key="app/src/main/res/drawable/ic_baseline_search_30.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/ic_baseline_settings_30_white.xml" value="0.328" />
         <entry key="app/src/main/res/drawable/item_img_btn_bg.xml" value="0.2615" />
@@ -34,7 +37,7 @@
         <entry key="app/src/main/res/layout/activity_join_user.xml" value="0.12" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.15" />
-        <entry key="app/src/main/res/layout/activity_measurement_fvc.xml" value="0.12" />
+        <entry key="app/src/main/res/layout/activity_measurement_fvc.xml" value="0.16" />
         <entry key="app/src/main/res/layout/activity_patient_insert.xml" value="0.16" />
         <entry key="app/src/main/res/layout/activity_setting.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.12" />

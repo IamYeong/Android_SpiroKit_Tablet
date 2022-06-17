@@ -206,10 +206,10 @@ public class SharedPreferencesManager {
         return getPreferences(context).getLong(INPUT_PATIENT_ + "no.smoking", Calendar.getInstance().getTime().getTime());
     }
 
-    public static boolean setPatientSmokingAmount(Context context, int pack) {
+    public static boolean setPatientSmokingAmount(Context context, float pack) {
         SharedPreferences sharedPreferences = getPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(INPUT_PATIENT_ + "pack", pack);
+        editor.putFloat(INPUT_PATIENT_ + "pack", pack);
         return editor.commit();
     }
 
