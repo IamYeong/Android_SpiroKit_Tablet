@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.328" />
         <entry key="app/src/main/res/drawable/background_dialog.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/button_out_line_highlight.xml" value="0.342" />
         <entry key="app/src/main/res/drawable/button_shape.xml" value="0.2615" />
@@ -14,8 +15,12 @@
         <entry key="app/src/main/res/drawable/ic_baseline_dns_30.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/ic_baseline_edit_30.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/ic_baseline_edit_30_black.xml" value="0.342" />
+        <entry key="app/src/main/res/drawable/ic_baseline_error_outline_30_white.xml" value="0.328" />
+        <entry key="app/src/main/res/drawable/ic_baseline_keyboard_arrow_down_30_white.xml" value="0.328" />
         <entry key="app/src/main/res/drawable/ic_baseline_keyboard_arrow_left_30_black.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/ic_baseline_keyboard_arrow_left_30_white.xml" value="0.2615" />
+        <entry key="app/src/main/res/drawable/ic_baseline_keyboard_arrow_right_30_white.xml" value="0.328" />
+        <entry key="app/src/main/res/drawable/ic_baseline_logout_30_white.xml" value="0.328" />
         <entry key="app/src/main/res/drawable/ic_baseline_menu_book_30_black.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/ic_baseline_person_add_30_black.xml" value="0.328" />
         <entry key="app/src/main/res/drawable/ic_baseline_play_arrow_30_white.xml" value="0.328" />

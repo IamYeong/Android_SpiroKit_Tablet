@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
     private List<Integer> pulseWidthList = new ArrayList<>();
     private RecyclerView rv;
     private Button retestButton, completeButton, startStopButton;
+    private ProgressBar timerProgressBar, weakFlowProgressBar;
 
     private boolean isStart = false;
     private int dataReceivedCount = 0;
@@ -143,6 +145,9 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         retestButton = findViewById(R.id.btn_retest_meas);
         startStopButton = findViewById(R.id.btn_start_stop_meas);
         completeButton = findViewById(R.id.btn_complete_meas);
+
+        timerProgressBar = findViewById(R.id.progressbar_expiratory_timer);
+        weakFlowProgressBar = findViewById(R.id.progressbar_weak_expiratory);
 
         realTimeVolumeFlowGraphLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -330,26 +335,22 @@ public class MeasurementFvcActivity extends AppCompatActivity {
             volume = (float)Fluid.calcVolume(time, lps);
             lps *= -1f;
 
-
             if (flowToggle) {
                 flowToggle = false;
 
                 timer.cancel();
                 timerCount = 0;
 
-                /*
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        initializingFlowProgressBar();
-                        initializingTimeProgressBar();
+                        timerProgressBar.setProgress(0);
+                        weakFlowProgressBar.setProgress(0);
+                        volumeTimeRunView.clear();
                     }
                 });
 
-                 */
             }
-
-            volumeTimeRunView.clear();
 
         } else if ((value > 0) && (value < 100_000_000)) {
             //호기
@@ -358,6 +359,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
                 flowToggle = true;
 
+                timerCount = 0;
                 timer = new Timer();
                 //timerTask.cancel();
                 timerTask = new TimerTask() {
@@ -366,43 +368,40 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
                         if (timerCount > 160) {
 
-                            timerCount = 0;
-                            timer.cancel();
+                            //timerCount = 0;
+                            //timer.cancel();
 
                         } else if (timerCount >= 60) {
 
-                            /*
+
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    timeProgressBar.setProgressTintList(getResources().getColorStateList(R.color.theme_bar_change, getTheme()));
-                                    timeProgressBar.setProgress(timerCount++);
+                                    //timerProgressBar.setProgressTintList(getResources().getColorStateList(R.color.theme_bar_change, getTheme()));
+                                    timerProgressBar.setProgress(timerCount++);
                                 }
                             });
 
-                             */
+
 
 
                         } else {
-                            /*
 
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
 
-                                    timeProgressBar.setProgressTintList(getResources().getColorStateList(R.color.white, getTheme()));
-                                    timeProgressBar.setProgress(timerCount++);
+                                    //timerProgressBar.setProgressTintList(getResources().getColorStateList(R.color.white, getTheme()));
+                                    timerProgressBar.setProgress(timerCount++);
                                 }
                             });
-
-                             */
 
                         }
 
                     }
                 };
 
-                //timer.scheduleAtFixedRate(timerTask, 0, 100);
+                timer.scheduleAtFixedRate(timerTask, 0, 100);
 
             }
 
@@ -427,6 +426,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
         }
 
+        weakFlowProgressBar.setProgress((int)(lps * 1000f));
         volumeFlowRunView.setValue(volume, lps);
         volumeTimeRunView.setValue(time, volume, lps);
 
