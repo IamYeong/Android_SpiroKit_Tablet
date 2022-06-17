@@ -27,6 +27,8 @@ public class SharedPreferencesManager {
     public static final String IS_CONNECT =
             "kr.co.theresearcher.is.connect";
 
+
+
     public static SharedPreferences getPreferences(Context context) {
         return context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
     }

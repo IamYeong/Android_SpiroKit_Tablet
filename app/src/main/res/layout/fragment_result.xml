@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
 
         android:fontFamily="@font/nanum_gothic_bold"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:text="@string/volume_flow_graph"
 
         android:layout_margin="20dp"
@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
 
         android:fontFamily="@font/nanum_gothic_bold"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:text="@string/volume_flow_graph"
 
         android:layout_margin="20dp"

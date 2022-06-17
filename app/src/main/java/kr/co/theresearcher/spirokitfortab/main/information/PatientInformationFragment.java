@@ -6,8 +6,12 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -18,7 +22,14 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.util.List;
+
 import kr.co.theresearcher.spirokitfortab.R;
+import kr.co.theresearcher.spirokitfortab.db.RoomNames;
+import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
+import kr.co.theresearcher.spirokitfortab.db.patient.PatientDao;
+import kr.co.theresearcher.spirokitfortab.db.patient.PatientDatabase;
+import kr.co.theresearcher.spirokitfortab.main.patients.PatientsAdapter;
 import kr.co.theresearcher.spirokitfortab.measurement.fvc.MeasurementFvcActivity;
 
 public class PatientInformationFragment extends Fragment {
@@ -31,6 +42,9 @@ public class PatientInformationFragment extends Fragment {
     private ImageButton dateRangeButton, modifyButton;
     private TextView patientNameText, patientInfoText, dateRangeText;
 
+    private PatientsAdapter patientsAdapter;
+
+    private Handler handler = new Handler(Looper.getMainLooper());
 
     public PatientInformationFragment() {
         // Required empty public constructor
@@ -53,6 +67,13 @@ public class PatientInformationFragment extends Fragment {
         patientInfoText = view.findViewById(R.id.tv_content_patient_info_fragment);
         dateRangeText = view.findViewById(R.id.tv_date_range_patient_info_fragment);
 
+        patientsAdapter = new PatientsAdapter(context);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        patientsRV.setLayoutManager(linearLayoutManager);
+        patientsRV.setAdapter(patientsAdapter);
+
+
 
         patientSearchField.addTextChangedListener(new TextWatcher() {
             @Override
@@ -69,8 +90,18 @@ public class PatientInformationFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
 
+                patientsAdapter.search(s.toString());
 
+            }
+        });
 
+        patientSearchField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    patientsRV.setVisibility(View.VISIBLE);
+                    patientsRV.setClickable(true);
+                }
             }
         });
 
@@ -97,6 +128,34 @@ public class PatientInformationFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        Thread thread = new Thread() {
+
+            @Override
+            public void run() {
+                super.run();
+                Looper.prepare();
+
+                PatientDatabase database = Room.databaseBuilder(context, PatientDatabase.class, RoomNames.ROOM_PATIENT_DB_NAME).build();
+                PatientDao patientDao = database.patientDao();
+                List<Patient> patientList = patientDao.selectAllPatient();
+                database.close();
+
+                patientsAdapter.setPatients(patientList);
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        patientsAdapter.notifyDataSetChanged();
+                    }
+                });
+
+                Looper.loop();
+            }
+        };
+
+        thread.start();
+
     }
 
     @Override

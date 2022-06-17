@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/constraint_layout_patient_box"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginHorizontal="20dp"
+    android:layout_marginBottom="10dp"
+
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/tv_name_patient_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        android:text="NAME"
+
+        android:fontFamily="@font/nanum_gothic"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+
+        />
+
+    <TextView
+        android:id="@+id/tv_birth_patient_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintTop_toBottomOf="@id/tv_name_patient_box"
+        app:layout_constraintStart_toStartOf="parent"
+
+        android:fontFamily="@font/nanum_gothic"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:text="yyyy.MM.dd"
+        />
+
+    <TextView
+        android:id="@+id/tv_chart_number_patient_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:fontFamily="@font/nanum_gothic"
+        android:textColor="@color/gray_dark"
+        android:textSize="12sp"
+
+        app:layout_constraintTop_toBottomOf="@id/tv_birth_patient_box"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        android:text="0001"
+        android:layout_marginTop="10dp"
+        />
+
+    <ImageButton
+        android:id="@+id/img_btn_remove_patient_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/person_remove"
+        android:background="?attr/selectableItemBackgroundBorderless"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="10dp"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
