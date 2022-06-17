@@ -23,15 +23,21 @@ import java.util.TimerTask;
 import kr.co.theresearcher.spirokitfortab.Fluid;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.bluetooth.SpiroKitBluetoothLeService;
+import kr.co.theresearcher.spirokitfortab.graph.TimerProgressView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowResultView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowRunView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeTimeResultView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeTimeRunView;
+import kr.co.theresearcher.spirokitfortab.graph.WeakFlowProgressView;
 
 public class MeasurementFvcActivity extends AppCompatActivity {
 
     private SpiroKitBluetoothLeService mService;
     private FrameLayout realTimeVolumeFlowGraphLayout, realTimeVolumeTimeGraphLayout;
+    private FrameLayout resultVolumeFlowGraphLayout, resultVolumeTimeGraphLayout;
+    private FrameLayout timerFrameLayout, weakFlowFrameLayout;
+    private TimerProgressView timerProgressView;
+    private WeakFlowProgressView weakFlowProgressView;
     private VolumeFlowRunView volumeFlowRunView;
     private VolumeTimeRunView volumeTimeRunView;
     private List<VolumeFlowResultView> volumeFlowResultViewList = new ArrayList<>();
@@ -126,6 +132,13 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
         realTimeVolumeFlowGraphLayout = findViewById(R.id.frame_volume_flow_graph_meas);
         realTimeVolumeTimeGraphLayout = findViewById(R.id.frame_volume_time_graph_meas);
+
+        resultVolumeFlowGraphLayout = findViewById(R.id.frame_volume_flow_graph_result_fvc);
+        resultVolumeTimeGraphLayout = findViewById(R.id.frame_volume_time_graph_result_fvc);
+
+        timerFrameLayout = findViewById(R.id.frame_expiratory_timer_marking);
+        weakFlowFrameLayout = findViewById(R.id.frame_weak_expiratory_marking);
+
         rv = findViewById(R.id.rv_meas);
         retestButton = findViewById(R.id.btn_retest_meas);
         startStopButton = findViewById(R.id.btn_start_stop_meas);
@@ -178,6 +191,51 @@ public class MeasurementFvcActivity extends AppCompatActivity {
             }
         });
 
+        timerFrameLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                timerFrameLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                int width = timerFrameLayout.getWidth();
+                int height = timerFrameLayout.getHeight();
+
+                timerProgressView = new TimerProgressView(MeasurementFvcActivity.this);
+                timerProgressView.setId(View.generateViewId());
+                timerProgressView.setSize(width, height);
+                timerProgressView.setMax(16f);
+                timerProgressView.setNumber(16);
+                timerProgressView.setInvisibleLabels(0,1,2,3,4,5,7,8,9,10,11,12,13,14);
+                timerProgressView.setInvisibleLines();
+                timerProgressView.commit();
+
+                timerFrameLayout.addView(timerProgressView);
+
+            }
+        });
+
+        weakFlowFrameLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                weakFlowFrameLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                int width = weakFlowFrameLayout.getWidth();
+                int height = weakFlowFrameLayout.getHeight();
+
+                weakFlowProgressView = new WeakFlowProgressView(MeasurementFvcActivity.this);
+                weakFlowProgressView.setId(View.generateViewId());
+                weakFlowProgressView.setSize(width, height);
+                weakFlowProgressView.setMax(1000f);
+                weakFlowProgressView.setNumber(10);
+                weakFlowProgressView.setInvisibleLabels(0,1,2,3,4,6,7,8,9);
+                weakFlowProgressView.setInvisibleLines(0,1,2,3,4,6,7,8,9);
+                weakFlowProgressView.commit();
+
+                weakFlowFrameLayout.addView(weakFlowProgressView);
+
+            }
+        });
+
+
         retestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -188,8 +246,14 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        realTimeVolumeFlowGraphLayout.removeAllViews();
-                        realTimeVolumeTimeGraphLayout.removeAllViews();
+
+                        volumeFlowRunView.clear();
+                        volumeTimeRunView.clear();
+
+                        volumeFlowRunView.postInvalidate();
+                        volumeTimeRunView.postInvalidate();
+
+
                     }
                 });
             }

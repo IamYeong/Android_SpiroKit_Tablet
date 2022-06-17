@@ -61,7 +61,7 @@ public class VolumeTimeRunView extends View {
 
         for (int i = 1; i < xMarking; i++) {
             canvas.drawLine((float)xPadding * (float)i, canvasHeight, ((float)xPadding * (float)i), (canvasHeight) - 20f, linePaint); // 중앙에 x축 눈금 그리기
-            canvas.drawText(Float.toString(Fluid.autoRound(1, xValueMargin + ((float)xInterval * (float) i))), ((float)xPadding * (float)i) - 5f, (canvasHeight) - 25f, labelPaint);
+            canvas.drawText(Float.toString(Fluid.autoRound(1, ((float)xInterval * (float) i) - xValueMargin)), ((float)xPadding * (float)i) - 5f, (canvasHeight) - 25f, labelPaint);
             //canvas.drawText(Float.toString(Fluid.autoRound(1, maxX - (xInterval * (double) i))), (xPadding * (float)i) - 20f, (canvasHeight) - 25f, labelPaint);
         }
 

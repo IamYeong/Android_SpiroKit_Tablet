@@ -74,6 +74,7 @@
         >
 
         <FrameLayout
+            android:id="@+id/frame_volume_flow_graph_result_fvc"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -84,6 +85,7 @@
             />
 
         <FrameLayout
+            android:id="@+id/frame_volume_time_graph_result_fvc"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -133,7 +135,7 @@
             <ProgressBar
                 android:id="@+id/progressbar_expiratory_timer"
                 android:layout_width="match_parent"
-                android:layout_height="25dp"
+                android:layout_height="15dp"
                 android:max="160"
                 android:progress="50"
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
@@ -144,7 +146,7 @@
             <FrameLayout
                 android:id="@+id/frame_expiratory_timer_marking"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="30dp"
                 android:layout_marginHorizontal="20dp"
                 />
 
@@ -175,7 +177,7 @@
             <ProgressBar
                 android:id="@+id/progressbar_weak_expiratory"
                 android:layout_width="match_parent"
-                android:layout_height="25dp"
+                android:layout_height="15dp"
                 android:max="160"
                 android:progress="0"
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
@@ -186,7 +188,7 @@
             <FrameLayout
                 android:id="@+id/frame_weak_expiratory_marking"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="30dp"
                 android:layout_marginHorizontal="20dp"
                 />
 
