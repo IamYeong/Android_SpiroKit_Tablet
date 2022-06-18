@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
 import org.json.JSONArray;
@@ -70,11 +71,13 @@ public class MeasurementFvcActivity extends AppCompatActivity {
     private RecyclerView rv;
     private Button retestButton, completeButton, startStopButton, preSaveButton, postSaveButton;
     private ProgressBar timerProgressBar, weakFlowProgressBar;
+    private ImageButton backButton;
 
     private boolean isStart = false;
     private int dataReceivedCount = 0;
     private boolean flowToggle = false;
     private long startTimestamp;
+    private boolean saveSomething = false;
 
     private int testOrder = 1;
 
@@ -160,6 +163,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_measurement_fvc);
 
+        backButton = findViewById(R.id.img_btn_back_meas);
         realTimeVolumeFlowGraphLayout = findViewById(R.id.frame_volume_flow_graph_meas);
         realTimeVolumeTimeGraphLayout = findViewById(R.id.frame_volume_time_graph_meas);
 
@@ -179,6 +183,19 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
         timerProgressBar = findViewById(R.id.progressbar_expiratory_timer);
         weakFlowProgressBar = findViewById(R.id.progressbar_weak_expiratory);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (saveSomething) {
+                    removeThisData();
+                } else {
+
+                }
+
+            }
+        });
 
         realTimeVolumeFlowGraphLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -275,6 +292,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                saveSomething = true;
                 saveData(false);
 
             }
@@ -284,7 +302,10 @@ public class MeasurementFvcActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                saveData(true);
+                if (saveSomething) saveData(true);
+                else {
+
+                }
 
             }
         });
@@ -613,8 +634,30 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
     }
 
-    private void addResult() {
+    private void removeThisData() {
+
+        String dirName = simpleDateFormat.format(startTimestamp);
+        File dir = getExternalFilesDir("data/"
+        + SharedPreferencesManager.getOfficeID(MeasurementFvcActivity.this) + "/"
+        + SharedPreferencesManager.getPatientId(MeasurementFvcActivity.this) + "/"
+        + dirName);
+
+        deleteFileWithChildren(dir);
 
     }
+
+    private void deleteFileWithChildren(File fileOrDirectory) {
+
+        if (fileOrDirectory.isDirectory()) {
+            File[] files = fileOrDirectory.listFiles();
+            for (File file : files) {
+                deleteFileWithChildren(file);
+            }
+        }
+
+        fileOrDirectory.delete();
+
+    }
+
 
 }
