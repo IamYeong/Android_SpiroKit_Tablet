@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<androidx.cardview.widget.CardView android:id="@+id/card_fvc_result"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:layout_marginVertical="10dp"
     android:layout_marginStart="20dp"
-    >
+    app:cardCornerRadius="20dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -26,7 +27,6 @@
 
         android:background="@drawable/item_selected_fvc_result_stroke"
         >
-
 
         <TextView
             android:id="@+id/tv_fvc_order"
@@ -54,10 +54,12 @@
             android:layout_marginVertical="5dp"
             android:layout_marginHorizontal="20dp"
 
+            android:layout_gravity="center_horizontal"
+
             />
 
         <TableLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:stretchColumns="4"
@@ -69,26 +71,92 @@
                 >
 
                 <TextView
+
                     android:layout_weight="1"
-                    android:background="?attr/borderRoundPercent"
+
+                    android:textSize="12sp"
 
                     />
 
                 <TextView
                     android:layout_weight="1"
-                    android:background="?attr/borderRoundPercent"
+
+                    android:text="@string/meas"
+                    />
+
+                <TextView
+                    android:layout_weight="1"
+
+                    android:text="@string/pred"
+                    />
+
+                <TextView
+                    android:layout_weight="1"
+
+                    android:text="@string/percent"
+                    />
+
+
+            </TableRow>
+
+            <TableRow
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                >
+
+                <TextView
+                    android:layout_weight="1"
+
+                    android:text="@string/fvc"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_fvc_result_table"
+                    android:layout_weight="1"
+
 
                     />
 
                 <TextView
                     android:layout_weight="1"
-                    android:background="?attr/borderRoundPercent"
+
 
                     />
 
                 <TextView
                     android:layout_weight="1"
-                    android:background="?attr/borderRoundPercent"
+
+
+                    />
+
+
+            </TableRow>
+            <TableRow
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                >
+
+                <TextView
+                    android:layout_weight="1"
+
+                    android:text="@string/fev1"
+                    />
+
+                <TextView
+                    android:layout_weight="1"
+
+
+                    />
+
+                <TextView
+                    android:layout_weight="1"
+
+
+                    />
+
+                <TextView
+                    android:layout_weight="1"
+
 
                     />
 
@@ -102,56 +170,25 @@
 
                 <TextView
                     android:layout_weight="1"
-                    android:background="?attr/borderRoundPercent"
+
+                    android:text="@string/fev1percent"
+                    />
+
+                <TextView
+                    android:layout_weight="1"
+
 
                     />
 
                 <TextView
                     android:layout_weight="1"
-                    android:background="?attr/borderRoundPercent"
+
 
                     />
 
                 <TextView
                     android:layout_weight="1"
-                    android:background="?attr/borderRoundPercent"
 
-                    />
-
-                <TextView
-                    android:layout_weight="1"
-                    android:background="?attr/borderRoundPercent"
-
-                    />
-
-
-            </TableRow>
-            <TableRow
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                >
-
-                <TextView
-                    android:layout_weight="1"
-                    android:background="?attr/borderRoundPercent"
-
-                    />
-
-                <TextView
-                    android:layout_weight="1"
-                    android:background="?attr/borderRoundPercent"
-
-                    />
-
-                <TextView
-                    android:layout_weight="1"
-                    android:background="?attr/borderRoundPercent"
-
-                    />
-
-                <TextView
-                    android:layout_weight="1"
-                    android:background="?attr/borderRoundPercent"
 
                     />
 
@@ -165,25 +202,25 @@
 
                 <TextView
                     android:layout_weight="1"
-                    android:background="?attr/borderRoundPercent"
+
+                    android:text="@string/pef"
+                    />
+
+                <TextView
+                    android:layout_weight="1"
+
 
                     />
 
                 <TextView
                     android:layout_weight="1"
-                    android:background="?attr/borderRoundPercent"
+
 
                     />
 
                 <TextView
                     android:layout_weight="1"
-                    android:background="?attr/borderRoundPercent"
 
-                    />
-
-                <TextView
-                    android:layout_weight="1"
-                    android:background="?attr/borderRoundPercent"
 
                     />
 

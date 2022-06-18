@@ -16,23 +16,25 @@ public class VolumeFlowResultView extends View {
 
     private float canvasWidth, canvasHeight;
 
-    private double maxX, minX;
-    private double maxY, minY;
+    private float maxX, minX;
+    private float maxY, minY;
     private float xStartPosition;
     //private float yStartPosition;
-    private double x = 0d;
-    private double y = 0d;
-    private List<ResultCoordinate> values;
+    private float x = 0f;
+    private float y = 0f;
+    private List<Coordinate> values;
 
     private Path path;
     private Paint labelPaint, linePaint, pathPaint;
 
-    private double xInterval, yInterval;
+    private float xInterval, yInterval;
     private float xPadding, yPadding;
     private int xMarking, yMarking;
+    private float xValueMargin, yValueMargin;
 
     public VolumeFlowResultView(Context context) {
         super(context);
+
         values = new ArrayList<>();
         labelPaint = new Paint();
         linePaint = new Paint();
@@ -42,28 +44,25 @@ public class VolumeFlowResultView extends View {
         setLabelPaint();
         setLinePaint();
         setPathPaint();
-
     }
+
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-
-
         //X 축 중앙선
         canvas.drawLine(0f, canvasHeight * 0.5f, canvasWidth, canvasHeight * 0.5f, linePaint);
         //Y 축 측면선
-        canvas.drawLine(0f, canvasHeight, 0f, 0f, linePaint);
+        //canvas.drawLine(0f, canvasHeight, 0f, 0f, linePaint);
 
         //경로 그리기
         canvas.drawPath(path, pathPaint);
 
-
         for (int i = 1; i < xMarking; i++) {
-            canvas.drawLine((float)xPadding * (float)i, canvasHeight * 0.5f, ((float)xPadding * (float)i), (canvasHeight * 0.5f) - 20f, linePaint); // 중앙에 x축 눈금 그리기
-            canvas.drawText(Float.toString(Fluid.autoRound(1, (xInterval * (double) i))), ((float)xPadding * (float)i) - 20f, (canvasHeight * 0.5f) - 25f, labelPaint);
-            //canvas.drawText(Float.toString(Fluid.autoRound(1, maxX - (xInterval * (double) i))), (xPadding * (float)i) - 20f, (canvasHeight * 0.5f) - 25f, labelPaint);
+            canvas.drawLine((float)xPadding * (float)i, canvasHeight, ((float)xPadding * (float)i), (canvasHeight) - 20f, linePaint); // 중앙에 x축 눈금 그리기
+            //canvas.drawText(Float.toString(Fluid.autoRound(1, ((float)xInterval * (float) i))), ((float)xPadding * (float)i) - 20f, (canvasHeight * 0.5f) - 25f, labelPaint);
+            canvas.drawText(Float.toString(Fluid.autoRound(1, maxX - (xInterval * (double) i))), (xPadding * (float)i) - 5f, (canvasHeight) - 25f, labelPaint);
         }
 
         for (int i = 1; i < yMarking; i++) {
@@ -85,103 +84,120 @@ public class VolumeFlowResultView extends View {
         xPadding = canvasWidth / (float)xMarking;
         yPadding = canvasHeight / (float)yMarking;
 
-        this.x = maxX - findOffset();
+        xValueMargin = (maxX - minX) * 0.05f;
+        yValueMargin = (maxY - minY) * 0.05f;
+
+        this.x = (maxX - (float)findOffset()) - xValueMargin;
         path.reset();
         path.moveTo(xToPosition(this.x), yToPosition(0d));
 
 
     }
 
-    public void setX(double max, double min) {
+    public void clear() {
+        values.clear();
+        commit();
+
+    }
+
+    public void setX(float max, float min) {
 
         maxX = max;
         minX = min;
 
     }
 
-    public void setY(double max, double min) {
+    public void setY(float max, float min) {
 
         maxY = max;
         minY = min;
 
     }
 
-    public void setValue(double x, double y) {
+    public void setValue(float x, float y) {
 
         boolean isOver = false;
         if (y >= 0d) this.x -= x;
         else this.x += x;
-        values.add(new ResultCoordinate(x, y));
+        values.add(new Coordinate(x, y));
 
-        if ((this.x > maxX)) {
-
-            isOver = true;
-            //System.out.println("X OVER");
-
-            maxY *= this.x / (maxX - minX);
-            minY *= this.x / (maxX - minX);
-            maxX += x;
-
-        }
-
-        if (this.x < minX) {
+        if ((this.x > (maxX - xValueMargin)) || (this.x < (xValueMargin - minX))) {
 
             isOver = true;
 
             maxY *= (x + (maxX - minX)) / (maxX - minX);
             minY *= (x + (maxX - minX)) / (maxX - minX);
-            maxX += x;
-            this.x = 0d;
+            maxX += (x * 2f);
+
         }
 
-        if (y > maxY) {
+        if (y > (maxY - yValueMargin)) {
 
             isOver = true;
-            //System.out.println("Y max over");
 
-            maxX *= y / maxY;
-            minY *= y / maxY;
-            maxY = y;
+            maxX *= y / (maxY - yValueMargin);
+            minY *= y / (maxY - yValueMargin);
+            maxY *= y / (maxY - yValueMargin);
 
         }
 
-        if (y < minY) {
+        if (y < (minY + yValueMargin)) {
 
             isOver = true;
-            //System.out.println("Y min over");
 
-            maxX *= Math.abs(y / minY);
-            maxY *= Math.abs(y / minY);
-            minY = y;
+
+            maxY *= Math.abs(y / (minY + yValueMargin));
+            maxX *= Math.abs(y / (minY + yValueMargin));
+            minY *= Math.abs(y / (minY + yValueMargin));
 
         }
 
-    }
+        //Log.d(getClass().getSimpleName(), this.x + ", " + y + "___" + xValueMargin + ", " + (yValueMargin));
 
-    public void apply() {
+        if (isOver) {
 
-        //초깃값을 어떻게 찾아낼 것인가
+            //this.x = (maxX - minX) * xStartPosition;
+            commit();
 
-        commit();
+            for (int i = 0; i < values.size(); i++) {
 
-        for (int i = 0; i < values.size(); i++) {
+                this.y = values.get(i).getY();
 
-            this.y = values.get(i).getY();
+                if (this.y >= 0d) {
+                    this.x -= values.get(i).getX();
 
-            if (this.y >= 0d) {
-                this.x -= values.get(i).getX();
+                } else {
+                    this.x += values.get(i).getX();
 
-            } else {
-                this.x += values.get(i).getX();
+                }
+                path.lineTo(xToPosition(this.x), yToPosition(this.y));
 
             }
-            path.lineTo(xToPosition(this.x), yToPosition(this.y));
 
+        } else {
+            path.lineTo(xToPosition(this.x), yToPosition(y));
         }
+
 
     }
 
-    //원래 폐에 얼만큼의 공기를 가지고 있었는지 유추하는 함수
+    public void setCanvasSize(float width, float height) {
+
+        this.canvasWidth = width;
+        this.canvasHeight = height;
+
+    }
+
+    public void setxStartPosition(float xStartPosition) {
+        this.xStartPosition = xStartPosition;
+    }
+
+
+    public void setMarkingCount(int horizontalNum, int verticalNum) {
+        xMarking = horizontalNum;
+        yMarking = verticalNum;
+    }
+
     private double findOffset() {
 
         double offset = 0d;
@@ -204,25 +220,9 @@ public class VolumeFlowResultView extends View {
 
         return offset;
 
-    }
-
-
-    public void setCanvasSize(float width, float height) {
-
-        this.canvasWidth = width;
-        this.canvasHeight = height;
 
     }
 
-    public void setxStartPosition(float xStartPosition) {
-        this.xStartPosition = xStartPosition;
-    }
-
-
-    public void setMarkingCount(int horizontalNum, int verticalNum) {
-        xMarking = horizontalNum;
-        yMarking = verticalNum;
-    }
 
     private float xToPosition(double value) {
         return ((float)(1d - (value / (maxX - minX)))) * canvasWidth;
@@ -237,21 +237,21 @@ public class VolumeFlowResultView extends View {
     private void setLabelPaint() {
 
         labelPaint.setColor(getContext().getColor(R.color.secondary_color));
-        labelPaint.setTextSize(30f);
+        labelPaint.setTextSize(20f);
 
     }
 
     private void setLinePaint() {
 
         linePaint.setColor(getContext().getColor(R.color.secondary_color));
-        linePaint.setStrokeWidth(3f);
+        linePaint.setStrokeWidth(2f);
 
     }
 
     private void setPathPaint() {
 
         pathPaint.setAntiAlias(true);
-        pathPaint.setStrokeWidth(6f);
+        pathPaint.setStrokeWidth(3f);
         pathPaint.setStyle(Paint.Style.STROKE);
         pathPaint.setColor(getContext().getColor(R.color.primary_color));
 

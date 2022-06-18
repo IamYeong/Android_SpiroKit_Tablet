@@ -1,6 +1,7 @@
 package kr.co.theresearcher.spirokitfortab.measurement.fvc;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
@@ -19,14 +20,18 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.Buffer;
@@ -42,12 +47,15 @@ import kr.co.theresearcher.spirokitfortab.Fluid;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.bluetooth.SpiroKitBluetoothLeService;
+import kr.co.theresearcher.spirokitfortab.calc.CalcSpiroKitE;
 import kr.co.theresearcher.spirokitfortab.db.RoomNames;
 import kr.co.theresearcher.spirokitfortab.db.meas_group.MeasGroup;
 import kr.co.theresearcher.spirokitfortab.db.measurement.Measurement;
 import kr.co.theresearcher.spirokitfortab.db.measurement.MeasurementDao;
 import kr.co.theresearcher.spirokitfortab.db.measurement.MeasurementDatabase;
 import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
+import kr.co.theresearcher.spirokitfortab.graph.Coordinate;
+import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
 import kr.co.theresearcher.spirokitfortab.graph.TimerProgressView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowResultView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowRunView;
@@ -65,13 +73,15 @@ public class MeasurementFvcActivity extends AppCompatActivity {
     private WeakFlowProgressView weakFlowProgressView;
     private VolumeFlowRunView volumeFlowRunView;
     private VolumeTimeRunView volumeTimeRunView;
-    private List<VolumeFlowRunView> volumeFlowResultViewList = new ArrayList<>();
-    private List<VolumeTimeRunView> volumeTimeResultViewList = new ArrayList<>();
+    private List<VolumeFlowResultView> volumeFlowResultViewList = new ArrayList<>();
+    private List<VolumeTimeResultView> volumeTimeResultViewList = new ArrayList<>();
     private List<Integer> pulseWidthList = new ArrayList<>();
     private RecyclerView rv;
     private Button retestButton, completeButton, startStopButton, preSaveButton, postSaveButton;
     private ProgressBar timerProgressBar, weakFlowProgressBar;
     private ImageButton backButton;
+    private FvcResultAdapter resultAdapter;
+    private TextView patientNameText;
 
     private boolean isStart = false;
     private int dataReceivedCount = 0;
@@ -87,7 +97,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
     private Handler handler = new Handler(Looper.getMainLooper());
 
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd_hhmmssSS", Locale.getDefault());
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd_HHmmssSS", Locale.getDefault());
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -163,6 +173,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_measurement_fvc);
 
+        patientNameText = findViewById(R.id.tv_patient_name_meas);
         backButton = findViewById(R.id.img_btn_back_meas);
         realTimeVolumeFlowGraphLayout = findViewById(R.id.frame_volume_flow_graph_meas);
         realTimeVolumeTimeGraphLayout = findViewById(R.id.frame_volume_time_graph_meas);
@@ -184,6 +195,16 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         timerProgressBar = findViewById(R.id.progressbar_expiratory_timer);
         weakFlowProgressBar = findViewById(R.id.progressbar_weak_expiratory);
 
+        resultAdapter = new FvcResultAdapter(MeasurementFvcActivity.this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+
+        resultAdapter.addFvcResult(new ResultFVC());
+        rv.setLayoutManager(linearLayoutManager);
+        rv.setAdapter(resultAdapter);
+
+        patientNameText.setText(SharedPreferencesManager.getPatientName(this));
+
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -192,6 +213,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                     removeThisData();
                 } else {
 
+                    finish();
                 }
 
             }
@@ -284,6 +306,53 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                 weakFlowProgressView.commit();
 
                 weakFlowFrameLayout.addView(weakFlowProgressView);
+
+            }
+        });
+
+        resultVolumeFlowGraphLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                resultVolumeFlowGraphLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                int width = resultVolumeFlowGraphLayout.getWidth();
+                int height = resultVolumeFlowGraphLayout.getHeight();
+
+                volumeFlowRunView = new VolumeFlowRunView(MeasurementFvcActivity.this);
+                volumeFlowRunView.setId(View.generateViewId());
+                volumeFlowRunView.setCanvasSize(width, height);
+                volumeFlowRunView.setX(2f, 0f);
+                volumeFlowRunView.setY(1.25f, -1.25f);
+                volumeFlowRunView.setxStartPosition(0.5f);
+                volumeFlowRunView.setMarkingCount(6, 10);
+
+                volumeFlowRunView.commit();
+
+                resultVolumeFlowGraphLayout.addView(volumeFlowRunView);
+
+            }
+        });
+
+        resultVolumeTimeGraphLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                resultVolumeTimeGraphLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                int width = resultVolumeTimeGraphLayout.getWidth();
+                int height = resultVolumeTimeGraphLayout.getHeight();
+
+                volumeTimeRunView = new VolumeTimeRunView(MeasurementFvcActivity.this);
+                volumeTimeRunView.setId(View.generateViewId());
+
+                volumeTimeRunView.setCanvasSize(width, height);
+                volumeTimeRunView.setX(0.8f, 0f);
+                volumeTimeRunView.setY(0.4f, 0f);
+                volumeTimeRunView.setMarkingCount(8, 6);
+                volumeTimeRunView.setxStartPosition(0f);
+
+                volumeTimeRunView.commit();
+
+                resultVolumeTimeGraphLayout.addView(volumeTimeRunView);
 
             }
         });
@@ -580,7 +649,6 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                     bufferedWriter.close();
                     //CSV 파일 저장================
 
-
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("pid", SharedPreferencesManager.getPatientId(MeasurementFvcActivity.this));
                     jsonObject.put("isPost", isPost);
@@ -601,6 +669,8 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
                     jsonObject = null;
 
+                    addResult(testOrder);
+
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -615,6 +685,13 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                             volumeFlowRunView.postInvalidate();
                             volumeTimeRunView.postInvalidate();
 
+                            resultAdapter.notifyDataSetChanged();
+                            resultVolumeFlowGraphLayout.removeAllViews();
+                            resultVolumeTimeGraphLayout.removeAllViews();
+                            resultVolumeFlowGraphLayout.addView(volumeFlowResultViewList.get(testOrder - 1));
+                            resultVolumeTimeGraphLayout.addView(volumeTimeResultViewList.get(testOrder - 1));
+
+                            testOrder++;
 
                         }
                     });
@@ -626,7 +703,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
                 }
 
-                testOrder++;
+
                 Looper.loop();
             }
         };
@@ -656,6 +733,98 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         }
 
         fileOrDirectory.delete();
+
+    }
+
+    private void addResult(int order) {
+
+        //여기서는 어댑터에 추가랑 뷰배열에 추가만 해두고
+        //핸들러에서 notify 수행, addVIew 하면 될 듯.
+
+        List<Integer> pulseWidths = new ArrayList<>();
+        try {
+            FileReader fileReader = new FileReader(
+                    getExternalFilesDir("data/" +
+                            SharedPreferencesManager.getOfficeID(this) + "/"
+                            + SharedPreferencesManager.getPatientId(this) + "/"
+                            + simpleDateFormat.format(startTimestamp)
+                            + "/" + testOrder + "/" + testOrder + ".csv")
+            );
+
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+            String line = "";
+            while ((line = bufferedReader.readLine()) != null) {
+
+                pulseWidths.add(Integer.parseInt(line));
+
+            }
+
+        } catch (FileNotFoundException e) {
+
+        } catch (IOException e) {
+
+        }
+
+        CalcSpiroKitE calc = new CalcSpiroKitE(pulseWidths);
+        calc.measure();
+
+        volumeFlowResultViewList.add(createVolumeFlowGraph(calc.getVolumeFlowGraph()));
+        volumeTimeResultViewList.add(createVolumeTimeGraph(calc.getForcedVolumeTimeGraph()));
+
+        ResultFVC resultFVC = new ResultFVC();
+        resultFVC.setFvc(calc.getFVC());
+        //...
+
+        resultAdapter.addFvcResult(resultFVC);
+
+    }
+
+    private VolumeTimeResultView createVolumeTimeGraph(List<ResultCoordinate> coordinates) {
+
+        VolumeTimeResultView volumeTimeResultView = new VolumeTimeResultView(this);
+        volumeTimeResultView.setId(View.generateViewId());
+        volumeTimeResultView.setCanvasSize(resultVolumeTimeGraphLayout.getWidth(), resultVolumeTimeGraphLayout.getHeight());
+        volumeTimeResultView.setX(0.8f, 0f);
+        volumeTimeResultView.setY(0.4f, 0f);
+        volumeTimeResultView.setMarkingCount(6, 8);
+        volumeTimeResultView.commit();
+
+        for (int i = 0; i < coordinates.size(); i++) {
+
+            double x = coordinates.get(i).getX();
+            double y = coordinates.get(i).getY();
+
+            //여기서 flow 는 호기일 때만 그려지기 때문에 판단용이라서 없애도 되지만
+            //다른 그래프에 쓰일 가능성도 있기 때문에 메서드를 수정하진 않았음.
+            volumeTimeResultView.setValue((float)x, (float)y, 1f);
+
+        }
+
+        return volumeTimeResultView;
+    }
+
+    private VolumeFlowResultView createVolumeFlowGraph(List<ResultCoordinate> coordinates) {
+
+        VolumeFlowResultView volumeFlowResultView = new VolumeFlowResultView(this);
+        volumeFlowResultView.setId(View.generateViewId());
+        volumeFlowResultView.setCanvasSize(resultVolumeFlowGraphLayout.getWidth(), resultVolumeFlowGraphLayout.getHeight());
+        volumeFlowResultView.setX(2f, 0f);
+        volumeFlowResultView.setY(1.25f, -1.25f);
+        //startPosition 없어도 됨.
+        volumeFlowResultView.setMarkingCount(6, 8);
+        volumeFlowResultView.commit();
+
+        for (int i = 0; i < coordinates.size(); i++) {
+
+            double x = coordinates.get(i).getX();
+            double y = coordinates.get(i).getY();
+
+            volumeFlowResultView.setValue((float)x, (float)y);
+
+        }
+
+        return volumeFlowResultView;
 
     }
 

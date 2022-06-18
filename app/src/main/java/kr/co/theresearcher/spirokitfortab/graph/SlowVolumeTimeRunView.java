@@ -12,7 +12,7 @@ import java.util.List;
 import kr.co.theresearcher.spirokitfortab.Fluid;
 import kr.co.theresearcher.spirokitfortab.R;
 
-public class VolumeTimeSvcRunView extends View {
+public class SlowVolumeTimeRunView extends View {
 
     private List<Coordinate> values;
 
@@ -32,7 +32,7 @@ public class VolumeTimeSvcRunView extends View {
     private Path path;
 
 
-    public VolumeTimeSvcRunView(Context context) {
+    public SlowVolumeTimeRunView(Context context) {
         super(context);
 
         values = new ArrayList<>();
@@ -200,22 +200,22 @@ public class VolumeTimeSvcRunView extends View {
 
     private void setLabelPaint() {
 
-        labelPaint.setColor(getContext().getColor(R.color.primary_color));
-        labelPaint.setTextSize(30f);
+        labelPaint.setColor(getContext().getColor(R.color.secondary_color));
+        labelPaint.setTextSize(20f);
 
     }
 
     private void setLinePaint() {
 
-        linePaint.setColor(getContext().getColor(R.color.primary_color));
-        linePaint.setStrokeWidth(3f);
+        linePaint.setColor(getContext().getColor(R.color.secondary_color));
+        linePaint.setStrokeWidth(2f);
 
     }
 
     private void setPathPaint() {
 
         pathPaint.setAntiAlias(true);
-        pathPaint.setStrokeWidth(6f);
+        pathPaint.setStrokeWidth(3f);
         pathPaint.setStyle(Paint.Style.STROKE);
         pathPaint.setColor(getContext().getColor(R.color.primary_color));
 

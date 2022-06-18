@@ -96,7 +96,7 @@ public class CalcSpiroKitE {
 
         }
 
-        measuredPulseWidth.add(0);
+        measuredPulseWidth.add(100_000_000);
         for (int i = startIndex; i <= endIndex; i++) {
             measuredPulseWidth.add(pulseWidth.get(i));
         }
@@ -156,6 +156,33 @@ public class CalcSpiroKitE {
         }
 
         return volumeTimes;
+    }
+
+    public List<ResultCoordinate> getForcedVolumeTimeGraph() {
+
+        List<ResultCoordinate> volumeTimes = new ArrayList<>();
+
+        for (int i = 0; i < measuredPulseWidth.size() - 1; i++) {
+
+            if (measuredPulseWidth.get(i) < 100_000_000) {
+
+                int pw = measuredPulseWidth.get(i);
+                int prePW = measuredPulseWidth.get(i - 1);
+
+                double time = pw * HERTZ_80MHZ;
+                double volume = Fluid.calcVolume(
+                        Fluid.conversionLiterPerSecond(Fluid.calcRevolutionPerSecond(prePW * HERTZ_80MHZ)),
+                        Fluid.conversionLiterPerSecond(Fluid.calcRevolutionPerSecond(pw * HERTZ_80MHZ)),
+                        pw * HERTZ_80MHZ
+                );
+
+                volumeTimes.add(new ResultCoordinate(time, volume));
+            }
+
+        }
+
+        return volumeTimes;
+
     }
 
     public List<ResultCoordinate> getVolumeFlowGraph() {

@@ -4,76 +4,105 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".main.result.fvc.FvcResultFragment">
+    tools:context=".main.result.fvc.FvcResultFragment"
+    android:background="@color/gray_background"
+    >
 
-    <View
-        android:id="@+id/view_line_center_result"
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/rv_result"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
-
-    <TextView
-        android:id="@+id/tv_volume_flow_title_result"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:fontFamily="@font/nanum_gothic_bold"
-        android:textSize="15sp"
-        android:text="@string/volume_flow_graph"
-
-        android:layout_margin="20dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
-
-    <FrameLayout
-        android:id="@+id/frame_volume_flow_graph_result"
+    <androidx.cardview.widget.CardView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/tv_volume_flow_title_result"
-        app:layout_constraintBottom_toTopOf="@id/rv_result"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/view_line_center_result"
-        android:layout_margin="20dp"
-        />
-
-    <TextView
-        android:id="@+id/tv_volume_time_title_result"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:fontFamily="@font/nanum_gothic_bold"
-        android:textSize="15sp"
-        android:text="@string/volume_flow_graph"
-
-        android:layout_margin="20dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/view_line_center_result"
-        />
-
-    <FrameLayout
-        android:id="@+id/frame_volume_time_graph_result"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/tv_volume_flow_title_result"
-        app:layout_constraintBottom_toTopOf="@id/rv_result"
-        app:layout_constraintStart_toEndOf="@id/view_line_center_result"
+        app:layout_constraintBottom_toTopOf="@id/rv_result_fvc_fragment"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="20dp"
-        />
+
+        android:layout_marginVertical="20dp"
+        android:layout_marginHorizontal="20dp"
+
+        app:cardCornerRadius="20dp"
+        android:elevation="10dp"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <View
+                android:id="@+id/view_line_center_result"
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+
+            <TextView
+                android:id="@+id/tv_volume_flow_title_result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:fontFamily="@font/nanum_gothic_bold"
+                android:textSize="15sp"
+                android:text="@string/volume_flow_graph"
+
+                android:layout_margin="20dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+
+            <FrameLayout
+                android:id="@+id/frame_volume_flow_graph_result_fragment"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_volume_flow_title_result"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/view_line_center_result"
+                android:layout_margin="20dp"
+                android:background="@drawable/graph_out_line"
+                />
+
+            <TextView
+                android:id="@+id/tv_volume_time_title_result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:fontFamily="@font/nanum_gothic_bold"
+                android:textSize="15sp"
+                android:text="@string/volume_flow_graph"
+
+                android:layout_margin="20dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@id/view_line_center_result"
+                />
+
+            <FrameLayout
+                android:id="@+id/frame_volume_time_graph_result_fragment"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_volume_flow_title_result"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/view_line_center_result"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_margin="20dp"
+                android:background="@drawable/graph_out_line"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.cardview.widget.CardView>
 
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_result"
+        android:id="@+id/rv_result_fvc_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@color/secondary_color"
+        android:background="@color/gray_background"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
