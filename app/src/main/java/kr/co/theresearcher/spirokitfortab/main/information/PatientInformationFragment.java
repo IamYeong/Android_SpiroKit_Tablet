@@ -28,6 +28,9 @@ import java.util.List;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.db.RoomNames;
+import kr.co.theresearcher.spirokitfortab.db.measurement.Measurement;
+import kr.co.theresearcher.spirokitfortab.db.measurement.MeasurementDao;
+import kr.co.theresearcher.spirokitfortab.db.measurement.MeasurementDatabase;
 import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
 import kr.co.theresearcher.spirokitfortab.db.patient.PatientDao;
 import kr.co.theresearcher.spirokitfortab.db.patient.PatientDatabase;
@@ -46,6 +49,8 @@ public class PatientInformationFragment extends Fragment {
     private TextView patientNameText, patientInfoText, dateRangeText;
 
     private PatientsAdapter patientsAdapter;
+    private MeasurementAdapter measurementAdapter;
+
 
     private Handler handler = new Handler(Looper.getMainLooper());
 
@@ -70,8 +75,8 @@ public class PatientInformationFragment extends Fragment {
         patientInfoText = view.findViewById(R.id.tv_content_patient_info_fragment);
         dateRangeText = view.findViewById(R.id.tv_date_range_patient_info_fragment);
 
-        patientsAdapter = new PatientsAdapter(context);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+        patientsAdapter = new PatientsAdapter(container.getContext());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(container.getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         patientsAdapter.setSimpleSelectedListener(new OnItemSimpleSelectedListener() {
             @Override
@@ -82,12 +87,43 @@ public class PatientInformationFragment extends Fragment {
                 patientsRV.setVisibility(View.INVISIBLE);
                 patientsRV.setClickable(false);
 
+                Thread thread = new Thread() {
+                    @Override
+                    public void run() {
+                        super.run();
+                        Looper.prepare();
+
+                        MeasurementDatabase measurementDatabase = Room.databaseBuilder(context, MeasurementDatabase.class, RoomNames.ROOM_MEASUREMENT_DB_NAME)
+                                .build();
+                        MeasurementDao measurementDao = measurementDatabase.measurementDao();
+                        List<Measurement> measurements = measurementDao.selectByPatientID(SharedPreferencesManager.getPatientId(context));
+                        measurementDatabase.close();
+
+                        measurementAdapter.setMeasurements(measurements);
+
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                measurementAdapter.notifyDataSetChanged();
+                            }
+                        });
+
+                        Looper.loop();
+                    }
+                };
+                thread.start();
 
             }
         });
 
         patientsRV.setLayoutManager(linearLayoutManager);
         patientsRV.setAdapter(patientsAdapter);
+
+        measurementAdapter = new MeasurementAdapter(container.getContext());
+        linearLayoutManager = new LinearLayoutManager(container.getContext());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        measurementsRV.setLayoutManager(linearLayoutManager);
+        measurementsRV.setAdapter(measurementAdapter);
 
         patientSearchField.addTextChangedListener(new TextWatcher() {
             @Override
@@ -157,10 +193,19 @@ public class PatientInformationFragment extends Fragment {
 
                 patientsAdapter.setPatients(patientList);
 
+                MeasurementDatabase measurementDatabase = Room.databaseBuilder(context, MeasurementDatabase.class, RoomNames.ROOM_MEASUREMENT_DB_NAME)
+                        .build();
+                MeasurementDao measurementDao = measurementDatabase.measurementDao();
+                List<Measurement> measurements = measurementDao.selectByPatientID(SharedPreferencesManager.getPatientId(context));
+                measurementDatabase.close();
+
+                measurementAdapter.setMeasurements(measurements);
+
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
                         patientsAdapter.notifyDataSetChanged();
+                        measurementAdapter.notifyDataSetChanged();
                     }
                 });
 
