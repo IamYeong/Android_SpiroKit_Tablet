@@ -196,6 +196,9 @@
 
     <!-- 결과 화면 -->
 
+    <string name="pre">PRE</string>
+    <string name="post">POST</string>
+
     <string name="result_order">%1$d차 검사(%2$s)</string>
     <string name="date_is">날짜 : %1$s</string>
     <string name="fvc_with_unit">FVC : %.3f L</string>
@@ -204,8 +207,8 @@
     <string name="pef_with_unit">PEF : %.3f l/s</string>
 
     <string name="liter_with_parameter">%.3f L</string>
-    <string name="percent_with_parameter">%1$.3f %2$s</string>
-    <string name="lps_with_parameter">%1$.3f l/s</string>
+    <string name="percent_with_parameter">%.3f %2$s</string>
+    <string name="lps_with_parameter">%.3f l/s</string>
 
     <string name="meas">Meas</string>
     <string name="pred">Pred</string>

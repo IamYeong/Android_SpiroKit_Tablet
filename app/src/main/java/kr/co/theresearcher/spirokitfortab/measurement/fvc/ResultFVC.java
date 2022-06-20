@@ -11,11 +11,28 @@ public class ResultFVC {
     private double pefPredict;
     private double fev1PercentPredict;
     private boolean isSelected;
+    private boolean isPost;
+    private long timestamp;
 
     public ResultFVC() {
 
     }
 
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public boolean isPost() {
+        return isPost;
+    }
+
+    public void setPost(boolean post) {
+        isPost = post;
+    }
 
     public boolean isSelected() {
         return isSelected;

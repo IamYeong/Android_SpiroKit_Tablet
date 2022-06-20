@@ -11,8 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.db.measurement.Measurement;
@@ -23,6 +25,7 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
     private List<Measurement> measurements;
     private List<Measurement> searchResults;
     private OnMeasSelectedListener selectedListener;
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.getDefault());
 
     public MeasurementAdapter(Context context) {
         this.context = context;
@@ -60,6 +63,7 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
 
         Measurement measurement = searchResults.get(holder.getAdapterPosition());
 
+        holder.getMeasTitle().setText(simpleDateFormat.format(measurement.getMeasDate()));
 
         holder.getConstraintLayout().setOnClickListener(new View.OnClickListener() {
             @Override

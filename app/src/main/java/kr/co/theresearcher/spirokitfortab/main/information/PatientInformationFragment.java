@@ -318,7 +318,7 @@ public class PatientInformationFragment extends Fragment {
         }
         info.append(getString(R.string.start_smoke_for_input, simpleDateFormat.format(SharedPreferencesManager.getPatientStartSmokingDate(context)))).append("\n");
         info.append(getString(R.string.stop_smoke_for_input, simpleDateFormat.format(SharedPreferencesManager.getPatientNoSmokingDate(context)))).append("\n");
-        info.append(getString(R.string.smoke_amount_per_day, SharedPreferencesManager.getPatientSmokingAmount(context)));
+        info.append(getString(R.string.smoke_amount_per_day, SharedPreferencesManager.getPatientSmokingAmount(context))).append("\n");
 
         if (SharedPreferencesManager.getPatientIsSmoking(context)) info.append(getString(R.string.is_smoke_for_input, getString(R.string.smoking))).append("\n");
         else info.append(getString(R.string.is_smoke_for_input, getString(R.string.no_smoking))).append("\n");

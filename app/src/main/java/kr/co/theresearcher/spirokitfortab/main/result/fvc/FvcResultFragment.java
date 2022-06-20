@@ -39,6 +39,7 @@ import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowResultView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowRunView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeTimeResultView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeTimeResultView;
+import kr.co.theresearcher.spirokitfortab.main.result.OnOrderSelectedListener;
 import kr.co.theresearcher.spirokitfortab.measurement.fvc.FvcResultAdapter;
 import kr.co.theresearcher.spirokitfortab.measurement.fvc.MeasurementFvcActivity;
 import kr.co.theresearcher.spirokitfortab.measurement.fvc.ResultFVC;
@@ -75,6 +76,15 @@ public class FvcResultFragment extends Fragment {
         volumeTimeLayout = view.findViewById(R.id.frame_volume_time_graph_result_fragment);
 
         adapter = new FvcResultAdapter(context);
+        adapter.setOnOrderSelectedListener(new OnOrderSelectedListener() {
+            @Override
+            public void onOrderSelected(int order) {
+
+                selectData(order);
+
+            }
+        });
+
         adapter.addFvcResult(new ResultFVC());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -199,6 +209,8 @@ public class FvcResultFragment extends Fragment {
 
     private void startDrawing(int width, int height) {
 
+        adapter.clear();
+
         Thread thread = new Thread() {
 
             @Override
@@ -244,6 +256,20 @@ public class FvcResultFragment extends Fragment {
                         double fev1 = calc.getFev1();
                         double pef = calc.getPef();
 
+                        double fvcP = calc.getFVCp(
+                                SharedPreferencesManager.getPatientBirth(context),
+                                SharedPreferencesManager.getPatientHeight(context),
+                                SharedPreferencesManager.getPatientWeight(context),
+                                SharedPreferencesManager.getPatientGender(context)
+                        );
+
+                        double fev1P = calc.getFEV1p(
+                                SharedPreferencesManager.getPatientBirth(context),
+                                SharedPreferencesManager.getPatientHeight(context),
+                                SharedPreferencesManager.getPatientWeight(context),
+                                SharedPreferencesManager.getPatientGender(context)
+                        );
+
                         System.out.println(fvc + ", " + fev1 + ", " + pef);
 
                         List<ResultCoordinate> volumeFlowGraph = calc.getVolumeFlowGraph();
@@ -261,8 +287,21 @@ public class FvcResultFragment extends Fragment {
 
                         ResultFVC resultFVC = new ResultFVC();
                         resultFVC.setFvc(fvc);
+                        resultFVC.setFvcPredict(fvcP);
+
                         resultFVC.setFev1(fev1);
+                        resultFVC.setFev1Predict(fev1P);
+
+                        resultFVC.setFev1percent((fev1 / fvc) * 100f);
+                        resultFVC.setFev1PercentPredict((fev1P / fvcP) * 100f);
+
                         resultFVC.setPef(pef);
+
+                        resultFVC.setTimestamp(timestamp);
+                        resultFVC.setPost(isPost);
+
+                        if (i == 0) resultFVC.setSelected(true);
+                        else resultFVC.setSelected(false);
 
                         adapter.addFvcResult(resultFVC);
 

@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView android:id="@+id/card_fvc_result"
+<androidx.cardview.widget.CardView
+    android:id="@+id/card_fvc_result"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:layout_marginVertical="10dp"
     android:layout_marginStart="20dp"
     app:cardCornerRadius="20dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardBackgroundColor="@color/white"
+    >
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -25,11 +28,10 @@
         android:orientation="vertical"
         android:layout_gravity="center"
 
-        android:background="@drawable/item_selected_fvc_result_stroke"
         >
 
         <TextView
-            android:id="@+id/tv_fvc_order"
+            android:id="@+id/tv_fvc_order_table"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
@@ -44,7 +46,7 @@
             />
 
         <TextView
-            android:id="@+id/tv_fvc_date"
+            android:id="@+id/tv_fvc_date_table"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/gray_dark"
@@ -111,19 +113,21 @@
                     />
 
                 <TextView
-                    android:id="@+id/tv_fvc_result_table"
+                    android:id="@+id/tv_fvc_meas_result_table"
                     android:layout_weight="1"
 
 
                     />
 
                 <TextView
+                    android:id="@+id/tv_fvc_pred_result_table"
                     android:layout_weight="1"
 
 
                     />
 
                 <TextView
+                    android:id="@+id/tv_fvc_compare_result_table"
                     android:layout_weight="1"
 
 
@@ -143,18 +147,21 @@
                     />
 
                 <TextView
+                    android:id="@+id/tv_fev1_meas_result_table"
                     android:layout_weight="1"
 
 
                     />
 
                 <TextView
+                    android:id="@+id/tv_fev1_pred_result_table"
                     android:layout_weight="1"
 
 
                     />
 
                 <TextView
+                    android:id="@+id/tv_fev1_compare_result_table"
                     android:layout_weight="1"
 
 
@@ -175,18 +182,21 @@
                     />
 
                 <TextView
+                    android:id="@+id/tv_fev1_per_meas_result_table"
                     android:layout_weight="1"
 
 
                     />
 
                 <TextView
+                    android:id="@+id/tv_fev1_per_pred_result_table"
                     android:layout_weight="1"
 
 
                     />
 
                 <TextView
+                    android:id="@+id/tv_fev1_per_compare_result_table"
                     android:layout_weight="1"
 
 
@@ -207,18 +217,21 @@
                     />
 
                 <TextView
+                    android:id="@+id/tv_pef_meas_result_table"
                     android:layout_weight="1"
 
 
                     />
 
                 <TextView
+                    android:id="@+id/tv_pef_pred_result_table"
                     android:layout_weight="1"
 
 
                     />
 
                 <TextView
+                    android:id="@+id/tv_pef_compare_result_table"
                     android:layout_weight="1"
 
 
