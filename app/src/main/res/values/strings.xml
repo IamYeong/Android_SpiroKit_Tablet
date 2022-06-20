@@ -154,6 +154,9 @@
     <string name="is_smoke_for_input">* 현재 흡연 여부 : %1$s</string>
     <string name="match_doctor_for_input">* 담당의 : %1$s</string>
 
+    <string name="match_doctor_result_input">주치의 : %1$s</string>
+    <string name="meas_doctor_result_input">검사자 : %1$s</string>
+
 
     <!-- 검사 화면 -->
     <string name="retest">재측정</string>

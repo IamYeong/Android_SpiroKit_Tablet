@@ -29,10 +29,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.calc.CalcSpiroKitE;
+import kr.co.theresearcher.spirokitfortab.db.meas_group.MeasGroup;
 import kr.co.theresearcher.spirokitfortab.db.measurement.Measurement;
 import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowResultView;
@@ -51,6 +53,8 @@ public class FvcResultFragment extends Fragment {
     private RecyclerView rv;
     private FvcResultAdapter adapter;
     private FrameLayout volumeFlowLayout, volumeTimeLayout;
+
+    private TextView measGroupText, matchDoctorText, measDoctorText;
 
     private List<VolumeFlowResultView> volumeFlowResultViews = new ArrayList<>();
     private List<VolumeTimeResultView> volumeTimeResultViews = new ArrayList<>();
@@ -74,6 +78,16 @@ public class FvcResultFragment extends Fragment {
         rv = view.findViewById(R.id.rv_result_fvc_fragment);
         volumeFlowLayout = view.findViewById(R.id.frame_volume_flow_graph_result_fragment);
         volumeTimeLayout = view.findViewById(R.id.frame_volume_time_graph_result_fragment);
+
+        measGroupText = view.findViewById(R.id.tv_meas_group_main_result);
+        matchDoctorText = view.findViewById(R.id.tv_match_doctor_main_result);
+        measDoctorText = view.findViewById(R.id.tv_meas_doctor_main_result);
+
+        MeasGroup[] measGroups = MeasGroup.values();
+        measGroupText.setText(measGroups[measurement.getMeasurementID()].toString().toUpperCase(Locale.ROOT) + getString(R.string.measurement));
+
+        matchDoctorText.setText(getString(R.string.match_doctor_result_input, "TEST"));
+        measDoctorText.setText(getString(R.string.meas_doctor_result_input, "TEST"));
 
         adapter = new FvcResultAdapter(context);
         adapter.setOnOrderSelectedListener(new OnOrderSelectedListener() {
