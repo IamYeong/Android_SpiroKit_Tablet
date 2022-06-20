@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="result_table_selected">
 
+        <item name="android:textColor">@color/white</item>
+
+    </style>
+
+    <style name="result_table_unselected">
+
+        <item name="android:textColor">@color/black</item>
+
+    </style>
 
 </resources>

@@ -64,8 +64,11 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
 
         if (resultFVC.isSelected()) {
             holder.getFvcCardView().setCardBackgroundColor(ColorStateList.valueOf(context.getColor(R.color.primary_color)));
+            holder.setAllTextsColor(context.getColor(R.color.white));
+
         } else {
             holder.getFvcCardView().setCardBackgroundColor(ColorStateList.valueOf(context.getColor(R.color.white)));
+            holder.setAllTextsColor(context.getColor(R.color.gray_dark));
         }
 
         if (resultFVC.isPost()) {
@@ -114,35 +117,59 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
 
 class FvcResultViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView fvcText, fev1Text, fev1PercentText, pefText
-            , fvcPredText, fev1PredText, fev1PercentPredText, pefPredtext
-            , fvcCompareText, fev1CompareText, fev1PercentCompareText, pefCompareText
-            , orderText, dateText;
+    private List<TextView> defaultTexts;
+    private List<TextView> texts;
 
     private CardView fvcCardView;
 
     public FvcResultViewHolder(@NonNull View itemView) {
         super(itemView);
 
-        orderText = itemView.findViewById(R.id.tv_fvc_order_table);
-        dateText = itemView.findViewById(R.id.tv_fvc_date_table);
+        texts = new ArrayList<>();
+        defaultTexts = new ArrayList<>();
+
+        defaultTexts.add(itemView.findViewById(R.id.tv_fvc_table_row));
+        defaultTexts.add(itemView.findViewById(R.id.tv_fev1_table_row));
+        defaultTexts.add(itemView.findViewById(R.id.tv_fev1_per_table_row));
+        defaultTexts.add(itemView.findViewById(R.id.tv_pef_table_row));
+
+        defaultTexts.add(itemView.findViewById(R.id.tv_meas_table_column));
+        defaultTexts.add(itemView.findViewById(R.id.tv_pred_table_column));
+        defaultTexts.add(itemView.findViewById(R.id.tv_percent_table_column));
+
         fvcCardView = itemView.findViewById(R.id.card_fvc_result);
 
-        fvcText = itemView.findViewById(R.id.tv_fvc_meas_result_table);
-        fvcPredText = itemView.findViewById(R.id.tv_fvc_pred_result_table);
-        fvcCompareText = itemView.findViewById(R.id.tv_fvc_compare_result_table);
+        texts.add(itemView.findViewById(R.id.tv_fvc_order_table));
+        texts.add(itemView.findViewById(R.id.tv_fvc_date_table));
 
-        fev1Text = itemView.findViewById(R.id.tv_fev1_meas_result_table);
-        fev1PredText = itemView.findViewById(R.id.tv_fev1_pred_result_table);
-        fev1CompareText = itemView.findViewById(R.id.tv_fev1_compare_result_table);
+        texts.add(itemView.findViewById(R.id.tv_fvc_meas_result_table));
+        texts.add(itemView.findViewById(R.id.tv_fvc_pred_result_table));
+        texts.add(itemView.findViewById(R.id.tv_fvc_compare_result_table));
 
-        fev1PercentText = itemView.findViewById(R.id.tv_fev1_per_meas_result_table);
-        fev1PercentPredText = itemView.findViewById(R.id.tv_fev1_per_pred_result_table);
-        fev1PercentCompareText = itemView.findViewById(R.id.tv_fev1_per_compare_result_table);
+        texts.add(itemView.findViewById(R.id.tv_fev1_meas_result_table));
+        texts.add(itemView.findViewById(R.id.tv_fev1_pred_result_table));
+        texts.add(itemView.findViewById(R.id.tv_fev1_compare_result_table));
 
-        pefText = itemView.findViewById(R.id.tv_pef_meas_result_table);
-        pefPredtext = itemView.findViewById(R.id.tv_pef_pred_result_table);
-        pefCompareText = itemView.findViewById(R.id.tv_pef_compare_result_table);
+        texts.add(itemView.findViewById(R.id.tv_fev1_per_meas_result_table));
+        texts.add(itemView.findViewById(R.id.tv_fev1_per_pred_result_table));
+        texts.add(itemView.findViewById(R.id.tv_fev1_per_compare_result_table));
+
+        texts.add(itemView.findViewById(R.id.tv_pef_meas_result_table));
+        texts.add(itemView.findViewById(R.id.tv_pef_pred_result_table));
+        texts.add(itemView.findViewById(R.id.tv_pef_compare_result_table));
+
+    }
+
+    public void setAllTextsColor(int color) {
+
+        for (int i = 0; i < texts.size(); i++) {
+            texts.get(i).setTextColor(color);
+
+        }
+
+        for (int i = 0; i < defaultTexts.size(); i++) {
+            defaultTexts.get(i).setTextColor(color);
+        }
 
     }
 
@@ -155,114 +182,66 @@ class FvcResultViewHolder extends RecyclerView.ViewHolder {
     }
 
     public TextView getFvcText() {
-        return fvcText;
+        return texts.get(2);
     }
 
-    public void setFvcText(TextView fvcText) {
-        this.fvcText = fvcText;
-    }
 
     public TextView getFev1Text() {
-        return fev1Text;
+        return texts.get(5);
     }
 
-    public void setFev1Text(TextView fev1Text) {
-        this.fev1Text = fev1Text;
-    }
 
     public TextView getFev1PercentText() {
-        return fev1PercentText;
+        return texts.get(8);
     }
 
-    public void setFev1PercentText(TextView fev1PercentText) {
-        this.fev1PercentText = fev1PercentText;
-    }
 
     public TextView getPefText() {
-        return pefText;
+        return texts.get(11);
     }
 
-    public void setPefText(TextView pefText) {
-        this.pefText = pefText;
-    }
 
     public TextView getFvcPredText() {
-        return fvcPredText;
+        return texts.get(3);
     }
 
-    public void setFvcPredText(TextView fvcPredText) {
-        this.fvcPredText = fvcPredText;
-    }
 
     public TextView getFev1PredText() {
-        return fev1PredText;
+        return texts.get(6);
     }
 
-    public void setFev1PredText(TextView fev1PredText) {
-        this.fev1PredText = fev1PredText;
-    }
 
     public TextView getFev1PercentPredText() {
-        return fev1PercentPredText;
-    }
-
-    public void setFev1PercentPredText(TextView fev1PercentPredText) {
-        this.fev1PercentPredText = fev1PercentPredText;
+        return texts.get(9);
     }
 
     public TextView getPefPredtext() {
-        return pefPredtext;
-    }
-
-    public void setPefPredtext(TextView pefPredtext) {
-        this.pefPredtext = pefPredtext;
+        return texts.get(12);
     }
 
     public TextView getFvcCompareText() {
-        return fvcCompareText;
-    }
-
-    public void setFvcCompareText(TextView fvcCompareText) {
-        this.fvcCompareText = fvcCompareText;
+        return texts.get(4);
     }
 
     public TextView getFev1CompareText() {
-        return fev1CompareText;
-    }
-
-    public void setFev1CompareText(TextView fev1CompareText) {
-        this.fev1CompareText = fev1CompareText;
+        return texts.get(7);
     }
 
     public TextView getFev1PercentCompareText() {
-        return fev1PercentCompareText;
-    }
-
-    public void setFev1PercentCompareText(TextView fev1PercentCompareText) {
-        this.fev1PercentCompareText = fev1PercentCompareText;
+        return texts.get(10);
     }
 
     public TextView getPefCompareText() {
-        return pefCompareText;
+        return texts.get(13);
     }
 
-    public void setPefCompareText(TextView pefCompareText) {
-        this.pefCompareText = pefCompareText;
-    }
 
     public TextView getOrderText() {
-        return orderText;
-    }
-
-    public void setOrderText(TextView orderText) {
-        this.orderText = orderText;
+        return texts.get(0);
     }
 
     public TextView getDateText() {
-        return dateText;
+        return texts.get(1);
     }
 
-    public void setDateText(TextView dateText) {
-        this.dateText = dateText;
-    }
 }

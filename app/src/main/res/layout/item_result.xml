@@ -65,6 +65,9 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:stretchColumns="4"
+
+            style="@style/result_table_selected"
+
             >
 
             <TableRow
@@ -81,18 +84,21 @@
                     />
 
                 <TextView
+                    android:id="@+id/tv_meas_table_column"
                     android:layout_weight="1"
 
                     android:text="@string/meas"
                     />
 
                 <TextView
+                    android:id="@+id/tv_pred_table_column"
                     android:layout_weight="1"
 
                     android:text="@string/pred"
                     />
 
                 <TextView
+                    android:id="@+id/tv_percent_table_column"
                     android:layout_weight="1"
 
                     android:text="@string/percent"
@@ -107,6 +113,7 @@
                 >
 
                 <TextView
+                    android:id="@+id/tv_fvc_table_row"
                     android:layout_weight="1"
 
                     android:text="@string/fvc"
@@ -141,6 +148,7 @@
                 >
 
                 <TextView
+                    android:id="@+id/tv_fev1_table_row"
                     android:layout_weight="1"
 
                     android:text="@string/fev1"
@@ -176,6 +184,7 @@
                 >
 
                 <TextView
+                    android:id="@+id/tv_fev1_per_table_row"
                     android:layout_weight="1"
 
                     android:text="@string/fev1percent"
@@ -211,6 +220,7 @@
                 >
 
                 <TextView
+                    android:id="@+id/tv_pef_table_row"
                     android:layout_weight="1"
 
                     android:text="@string/pef"
@@ -233,7 +243,6 @@
                 <TextView
                     android:id="@+id/tv_pef_compare_result_table"
                     android:layout_weight="1"
-
 
                     />
 
