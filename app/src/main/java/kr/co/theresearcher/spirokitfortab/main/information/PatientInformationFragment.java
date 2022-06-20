@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -34,13 +35,16 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.calc.CalcSpiroKitE;
 import kr.co.theresearcher.spirokitfortab.db.RoomNames;
+import kr.co.theresearcher.spirokitfortab.db.human_race.HumanRace;
 import kr.co.theresearcher.spirokitfortab.db.meas_group.MeasGroup;
 import kr.co.theresearcher.spirokitfortab.db.measurement.Measurement;
 import kr.co.theresearcher.spirokitfortab.db.measurement.MeasurementDao;
@@ -72,6 +76,8 @@ public class PatientInformationFragment extends Fragment {
     private MeasurementAdapter measurementAdapter;
 
     private OnMeasurementSelectedListener measurementSelectedListener;
+    private ImageButton informationExpandButton;
+    private boolean isExpanded = true;
 
     private Handler handler = new Handler(Looper.getMainLooper());
 
@@ -98,6 +104,7 @@ public class PatientInformationFragment extends Fragment {
         patientNameText = view.findViewById(R.id.tv_name_patient_info_fragment);
         patientInfoText = view.findViewById(R.id.tv_content_patient_info_fragment);
         dateRangeText = view.findViewById(R.id.tv_date_range_patient_info_fragment);
+        informationExpandButton = view.findViewById(R.id.img_btn_expand_patient_info);
 
         volumeFlowLayout = view.findViewById(R.id.frame_volume_flow_graph_result_fragment);
         volumeTimeLayout = view.findViewById(R.id.frame_volume_time_graph_result_fragment);
@@ -109,7 +116,8 @@ public class PatientInformationFragment extends Fragment {
             @Override
             public void onSimpleSelected() {
 
-                updatePatientInformation();
+                if (isExpanded) updatePatientInformation();
+                else updatePatientSimpleInfo();
 
                 patientsRV.setVisibility(View.INVISIBLE);
                 patientsRV.setClickable(false);
@@ -202,6 +210,22 @@ public class PatientInformationFragment extends Fragment {
             }
         });
 
+        informationExpandButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (isExpanded) {
+                    updatePatientSimpleInfo();
+                    informationExpandButton.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.ic_baseline_keyboard_arrow_down_30_black));
+                } else {
+                    updatePatientInformation();
+                    informationExpandButton.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.ic_baseline_keyboard_arrow_up_30_black));
+                }
+
+                isExpanded = !isExpanded;
+
+            }
+        });
 
 
         return view;
@@ -244,6 +268,8 @@ public class PatientInformationFragment extends Fragment {
                     public void run() {
                         patientsAdapter.notifyDataSetChanged();
                         measurementAdapter.notifyDataSetChanged();
+                        if (isExpanded) updatePatientInformation();
+                        else updatePatientSimpleInfo();
                     }
                 });
 
@@ -267,16 +293,61 @@ public class PatientInformationFragment extends Fragment {
 
     private void updatePatientInformation() {
 
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+
         patientNameText.setText(SharedPreferencesManager.getPatientName(context));
         StringBuilder info = new StringBuilder();
 
-        info.append(getString(R.string.chart_number_colon, SharedPreferencesManager.getPatientChartNumber(context))).append("\n");
+        info.append(getString(R.string.chart_number_for_input, SharedPreferencesManager.getPatientChartNumber(context))).append("\n");
+        if (SharedPreferencesManager.getPatientGender(context)) {
+            info.append(getString(R.string.gender_for_input, getString(R.string.male))).append("\n");
+        } else {
+            info.append(getString(R.string.gender_for_input, getString(R.string.female))).append("\n");
+        }
+        info.append(getString(R.string.height_for_input, SharedPreferencesManager.getPatientHeight(context))).append("\n");
+        info.append(getString(R.string.weight_for_input, SharedPreferencesManager.getPatientWeight(context))).append("\n");
+        info.append(getString(R.string.birth_for_input, simpleDateFormat.format(SharedPreferencesManager.getPatientBirth(context)))).append("\n");
 
+        HumanRace[] humanRaces = HumanRace.values();
+        int raceId = SharedPreferencesManager.getPatientHumanRaceId(context);
+        for (int i = 0; i < humanRaces.length; i++) {
+            if (i == raceId) {
+                info.append(getString(R.string.human_race_for_input, humanRaces[i].getValue())).append("\n");
+                break;
+            }
+        }
+        info.append(getString(R.string.start_smoke_for_input, simpleDateFormat.format(SharedPreferencesManager.getPatientStartSmokingDate(context)))).append("\n");
+        info.append(getString(R.string.stop_smoke_for_input, simpleDateFormat.format(SharedPreferencesManager.getPatientNoSmokingDate(context)))).append("\n");
+        info.append(getString(R.string.smoke_amount_per_day, SharedPreferencesManager.getPatientSmokingAmount(context)));
+
+        if (SharedPreferencesManager.getPatientIsSmoking(context)) info.append(getString(R.string.is_smoke_for_input, getString(R.string.smoking))).append("\n");
+        else info.append(getString(R.string.is_smoke_for_input, getString(R.string.no_smoking))).append("\n");
+
+        info.append(getString(R.string.match_doctor_for_input, ""));
+
+        patientInfoText.setText(info.toString());
 
 
     }
 
+    private void updatePatientSimpleInfo() {
 
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+
+        patientNameText.setText(SharedPreferencesManager.getPatientName(context));
+        StringBuilder info = new StringBuilder();
+
+        info.append(getString(R.string.chart_number_for_input, SharedPreferencesManager.getPatientChartNumber(context))).append("\n");
+        if (SharedPreferencesManager.getPatientGender(context)) {
+            info.append(getString(R.string.gender_for_input, getString(R.string.male))).append("\n");
+        } else {
+            info.append(getString(R.string.gender_for_input, getString(R.string.female))).append("\n");
+        }
+        info.append(getString(R.string.height_for_input, SharedPreferencesManager.getPatientHeight(context))).append("\n");
+        info.append(getString(R.string.weight_for_input, SharedPreferencesManager.getPatientWeight(context))).append("\n");
+        info.append(getString(R.string.birth_for_input, simpleDateFormat.format(SharedPreferencesManager.getPatientBirth(context)))).append("\n");
+        patientInfoText.setText(info.toString());
+    }
 
 
 }

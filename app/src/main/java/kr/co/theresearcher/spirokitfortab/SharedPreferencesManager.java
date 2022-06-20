@@ -215,8 +215,8 @@ public class SharedPreferencesManager {
         return editor.commit();
     }
 
-    public static int getPatientSmokingAmount(Context context) {
-        return getPreferences(context).getInt(INPUT_PATIENT_ + "pack", 0);
+    public static float getPatientSmokingAmount(Context context) {
+        return getPreferences(context).getFloat(INPUT_PATIENT_ + "pack", 0f);
     }
 
     public static boolean setBluetoothDeviceMacAddress(Context context, String address) {

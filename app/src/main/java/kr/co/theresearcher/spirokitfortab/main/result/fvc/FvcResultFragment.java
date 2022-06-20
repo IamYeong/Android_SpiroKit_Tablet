@@ -53,7 +53,6 @@ public class FvcResultFragment extends Fragment {
 
     private List<VolumeFlowResultView> volumeFlowResultViews = new ArrayList<>();
     private List<VolumeTimeResultView> volumeTimeResultViews = new ArrayList<>();
-    private List<ResultFVC> fvcResults = new ArrayList<>();
     private Measurement measurement;
     private Handler handler = new Handler(Looper.getMainLooper());
 
@@ -64,7 +63,6 @@ public class FvcResultFragment extends Fragment {
     public void setMeasurement(Measurement measurement) {
         this.measurement = measurement;
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -149,11 +147,11 @@ public class FvcResultFragment extends Fragment {
     }
 
 
-    private VolumeTimeResultView createVolumeTimeGraph(List<ResultCoordinate> coordinates) {
+    private VolumeTimeResultView createVolumeTimeGraph(List<ResultCoordinate> coordinates, int width, int height) {
 
         VolumeTimeResultView volumeTimeResultView = new VolumeTimeResultView(context);
         volumeTimeResultView.setId(View.generateViewId());
-        volumeTimeResultView.setCanvasSize(volumeTimeLayout.getWidth(), volumeTimeLayout.getHeight());
+        volumeTimeResultView.setCanvasSize(width, height);
         volumeTimeResultView.setX(0.8f, 0f);
         volumeTimeResultView.setY(0.4f, 0f);
         volumeTimeResultView.setMarkingCount(6, 8);
@@ -173,13 +171,13 @@ public class FvcResultFragment extends Fragment {
         return volumeTimeResultView;
     }
 
-    private VolumeFlowResultView createVolumeFlowGraph(List<ResultCoordinate> coordinates) {
+    private VolumeFlowResultView createVolumeFlowGraph(List<ResultCoordinate> coordinates, int width, int height) {
 
         System.out.println("createVolumeFlowGraph()");
 
         VolumeFlowResultView volumeFlowResultView = new VolumeFlowResultView(context);
         volumeFlowResultView.setId(View.generateViewId());
-        volumeFlowResultView.setCanvasSize(volumeFlowLayout.getWidth(), volumeTimeLayout.getHeight());
+        volumeFlowResultView.setCanvasSize(width, height);
         volumeFlowResultView.setX(2f, 0f);
         volumeFlowResultView.setY(1.25f, -1.25f);
         //startPosition 없어도 됨.
@@ -254,8 +252,8 @@ public class FvcResultFragment extends Fragment {
                         System.out.println(volumeFlowGraph.size());
                         System.out.println(volumeTimeGraph.size());
 
-                        volumeFlowResultViews.add(createVolumeFlowGraph(volumeFlowGraph));
-                        volumeTimeResultViews.add(createVolumeTimeGraph(volumeTimeGraph));
+                        volumeFlowResultViews.add(createVolumeFlowGraph(volumeFlowGraph, width, height));
+                        volumeTimeResultViews.add(createVolumeTimeGraph(volumeTimeGraph, width, height));
 
                         System.out.println(volumeFlowResultViews.size());
                         System.out.println(volumeTimeResultViews.size());
@@ -266,14 +264,16 @@ public class FvcResultFragment extends Fragment {
                         resultFVC.setFev1(fev1);
                         resultFVC.setPef(pef);
 
-                        fvcResults.add(resultFVC);
+                        adapter.addFvcResult(resultFVC);
 
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
                                 adapter.notifyDataSetChanged();
                                 volumeFlowLayout.removeAllViews();
+                                volumeTimeLayout.removeAllViews();
                                 volumeFlowLayout.addView(volumeFlowResultViews.get(0));
+                                volumeTimeLayout.addView(volumeTimeResultViews.get(0));
                             }
                         });
 

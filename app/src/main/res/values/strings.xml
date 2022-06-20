@@ -142,6 +142,18 @@
 
     <string name="measurement">검사</string>
 
+    <string name="chart_number_for_input">* 차트넘버 : %1$s</string>
+    <string name="gender_for_input">* 성별 : %1$s</string>
+    <string name="weight_for_input">* 체중(kg) : %1$d kg</string>
+    <string name="height_for_input">* 신장(cm) : %1$d cm</string>
+    <string name="birth_for_input">* 생년월일 : %1$s</string>
+    <string name="human_race_for_input">* 인종 : %1$s</string>
+    <string name="start_smoke_for_input">* 흡연시작일 : %1$s</string>
+    <string name="stop_smoke_for_input">* 금연일 : %1$s</string>
+    <string name="smoke_amount_per_day">* 하루흡연량 : %.2f 갑</string>
+    <string name="is_smoke_for_input">* 현재 흡연 여부 : %1$s</string>
+    <string name="match_doctor_for_input">* 담당의 : %1$s</string>
+
 
     <!-- 검사 화면 -->
     <string name="retest">재측정</string>

@@ -56,6 +56,8 @@ public class VolumeTimeResultView extends View {
         //canvas.drawLine(0f, canvasHeight, 0f, 0f, linePaint);
 
         //경로 그리기
+        //마지막 평평한 그래프경로 추가
+        path.lineTo(canvasWidth - (canvasWidth * 0.05f), yToPosition(y));
         canvas.drawPath(path, pathPaint);
 
 
