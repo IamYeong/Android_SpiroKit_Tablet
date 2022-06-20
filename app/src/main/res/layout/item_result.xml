@@ -63,7 +63,7 @@
         <TableLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
+            android:paddingHorizontal="20dp"
             android:stretchColumns="4"
 
             style="@style/result_table_selected"
@@ -76,32 +76,46 @@
                 >
 
                 <TextView
-
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-
                     android:textSize="12sp"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:text=""
+                    android:paddingVertical="5dp"
+                    android:paddingHorizontal="5dp"
 
                     />
 
                 <TextView
                     android:id="@+id/tv_meas_table_column"
-                    android:layout_weight="1"
 
+                    android:layout_weight="1"
+                    android:layout_gravity="center_horizontal|center_vertical"
                     android:text="@string/meas"
+
+                    android:paddingHorizontal="5dp"
+
+
                     />
 
                 <TextView
                     android:id="@+id/tv_pred_table_column"
                     android:layout_weight="1"
-
+                    android:layout_gravity="center_horizontal|center_vertical"
                     android:text="@string/pred"
+
+                    android:paddingHorizontal="5dp"
                     />
 
                 <TextView
                     android:id="@+id/tv_percent_table_column"
                     android:layout_weight="1"
-
+                    android:layout_gravity="center_horizontal|center_vertical"
                     android:text="@string/percent"
+
+                    android:paddingHorizontal="5dp"
+
                     />
 
 
@@ -115,29 +129,40 @@
                 <TextView
                     android:id="@+id/tv_fvc_table_row"
                     android:layout_weight="1"
-
                     android:text="@string/fvc"
+
+                    android:paddingVertical="5dp"
                     />
 
                 <TextView
                     android:id="@+id/tv_fvc_meas_result_table"
                     android:layout_weight="1"
+                    android:layout_gravity="center_horizontal|center_vertical"
 
+                    android:paddingHorizontal="3dp"
 
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     />
 
                 <TextView
                     android:id="@+id/tv_fvc_pred_result_table"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:paddingHorizontal="3dp"
 
 
                     />
 
                 <TextView
                     android:id="@+id/tv_fvc_compare_result_table"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-
-
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:paddingHorizontal="3dp"
                     />
 
 
@@ -152,27 +177,35 @@
                     android:layout_weight="1"
 
                     android:text="@string/fev1"
+                    android:paddingVertical="5dp"
                     />
 
                 <TextView
                     android:id="@+id/tv_fev1_meas_result_table"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:paddingHorizontal="3dp"
 
                     />
 
                 <TextView
                     android:id="@+id/tv_fev1_pred_result_table"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-
-
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:paddingHorizontal="3dp"
                     />
 
                 <TextView
                     android:id="@+id/tv_fev1_compare_result_table"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-
-
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:paddingHorizontal="3dp"
                     />
 
 
@@ -188,27 +221,35 @@
                     android:layout_weight="1"
 
                     android:text="@string/fev1percent"
+
+                    android:paddingVertical="5dp"
                     />
 
                 <TextView
                     android:id="@+id/tv_fev1_per_meas_result_table"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-
-
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:paddingHorizontal="3dp"
                     />
 
                 <TextView
                     android:id="@+id/tv_fev1_per_pred_result_table"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-
-
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:paddingHorizontal="3dp"
                     />
 
                 <TextView
                     android:id="@+id/tv_fev1_per_compare_result_table"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-
-
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:paddingHorizontal="3dp"
                     />
 
 
@@ -224,25 +265,35 @@
                     android:layout_weight="1"
 
                     android:text="@string/pef"
+
+                    android:paddingVertical="5dp"
                     />
 
                 <TextView
                     android:id="@+id/tv_pef_meas_result_table"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-
-
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:paddingHorizontal="3dp"
                     />
 
                 <TextView
                     android:id="@+id/tv_pef_pred_result_table"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-
-
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:paddingHorizontal="3dp"
                     />
 
                 <TextView
                     android:id="@+id/tv_pef_compare_result_table"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:paddingHorizontal="3dp"
 
                     />
 

@@ -28,6 +28,7 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
     private OnOrderSelectedListener orderSelectedListener;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd (HH:mm)", Locale.getDefault());
 
+    private boolean nothing = true;
 
     public FvcResultAdapter(Context context) {
         this.fvcResults = new ArrayList<>();
@@ -39,10 +40,19 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
     }
 
     public void setFvcResults(List<ResultFVC> results) {
+        if (nothing) this.fvcResults.clear();
+        nothing = false;
         this.fvcResults.addAll(results);
     }
 
+
     public void addFvcResult(ResultFVC resultFVC) {
+        if (nothing) this.fvcResults.clear();
+        nothing = false;
+        this.fvcResults.add(resultFVC);
+    }
+
+    public void addEmptyObject(ResultFVC resultFVC) {
         this.fvcResults.add(resultFVC);
     }
 
@@ -61,6 +71,7 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
     public void onBindViewHolder(@NonNull FvcResultViewHolder holder, int position) {
 
         ResultFVC resultFVC = fvcResults.get(holder.getAdapterPosition());
+
 
         if (resultFVC.isSelected()) {
             holder.getFvcCardView().setCardBackgroundColor(ColorStateList.valueOf(context.getColor(R.color.primary_color)));
@@ -106,6 +117,7 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
 
             }
         });
+
 
     }
 

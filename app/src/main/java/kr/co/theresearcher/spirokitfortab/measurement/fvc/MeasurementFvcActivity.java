@@ -19,6 +19,7 @@ import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -62,6 +63,7 @@ import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowRunView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeTimeResultView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeTimeRunView;
 import kr.co.theresearcher.spirokitfortab.graph.WeakFlowProgressView;
+import kr.co.theresearcher.spirokitfortab.main.result.OnOrderSelectedListener;
 
 public class MeasurementFvcActivity extends AppCompatActivity {
 
@@ -82,6 +84,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
     private ImageButton backButton;
     private FvcResultAdapter resultAdapter;
     private TextView patientNameText;
+    private ImageView emptyImage;
 
     private boolean isStart = false;
     private int dataReceivedCount = 0;
@@ -187,6 +190,8 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         preSaveButton = findViewById(R.id.btn_pre_save_fvc_meas);
         postSaveButton = findViewById(R.id.btn_post_save_fvc_meas);
 
+        emptyImage = findViewById(R.id.img_empty_list_fvc_meas);
+
         rv = findViewById(R.id.rv_meas);
         retestButton = findViewById(R.id.btn_retest_meas);
         startStopButton = findViewById(R.id.btn_start_stop_meas);
@@ -196,10 +201,19 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         weakFlowProgressBar = findViewById(R.id.progressbar_weak_expiratory);
 
         resultAdapter = new FvcResultAdapter(MeasurementFvcActivity.this);
+        resultAdapter.setOnOrderSelectedListener(new OnOrderSelectedListener() {
+            @Override
+            public void onOrderSelected(int order) {
+
+                selectData(order);
+
+            }
+        });
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
-        resultAdapter.addFvcResult(new ResultFVC());
+        resultAdapter.addEmptyObject(new ResultFVC());
         rv.setLayoutManager(linearLayoutManager);
         rv.setAdapter(resultAdapter);
 
@@ -669,7 +683,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
                     jsonObject = null;
 
-                    addResult(testOrder);
+                    addResult(testOrder, date, isPost);
 
                     handler.post(new Runnable() {
                         @Override
@@ -690,6 +704,8 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                             resultVolumeTimeGraphLayout.removeAllViews();
                             resultVolumeFlowGraphLayout.addView(volumeFlowResultViewList.get(testOrder - 1));
                             resultVolumeTimeGraphLayout.addView(volumeTimeResultViewList.get(testOrder - 1));
+
+                            emptyImage.setVisibility(View.GONE);
 
                             testOrder++;
 
@@ -736,7 +752,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
     }
 
-    private void addResult(int order) {
+    private void addResult(int order, long timestamp, boolean isPost) {
 
         //여기서는 어댑터에 추가랑 뷰배열에 추가만 해두고
         //핸들러에서 notify 수행, addVIew 하면 될 듯.
@@ -769,12 +785,43 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         CalcSpiroKitE calc = new CalcSpiroKitE(pulseWidths);
         calc.measure();
 
+        double fvc = calc.getFVC();
+        double fev1 = calc.getFev1();
+        double pef = calc.getPef();
+
+        double fvcP = calc.getFVCp(
+                SharedPreferencesManager.getPatientBirth(this),
+                SharedPreferencesManager.getPatientHeight(this),
+                SharedPreferencesManager.getPatientWeight(this),
+                SharedPreferencesManager.getPatientGender(this)
+        );
+
+        double fev1P = calc.getFEV1p(
+                SharedPreferencesManager.getPatientBirth(this),
+                SharedPreferencesManager.getPatientHeight(this),
+                SharedPreferencesManager.getPatientWeight(this),
+                SharedPreferencesManager.getPatientGender(this)
+        );
+
         volumeFlowResultViewList.add(createVolumeFlowGraph(calc.getVolumeFlowGraph()));
         volumeTimeResultViewList.add(createVolumeTimeGraph(calc.getForcedVolumeTimeGraph()));
 
         ResultFVC resultFVC = new ResultFVC();
         resultFVC.setFvc(calc.getFVC());
-        //...
+
+        resultFVC.setFvc(fvc);
+        resultFVC.setFvcPredict(fvcP);
+
+        resultFVC.setFev1(fev1);
+        resultFVC.setFev1Predict(fev1P);
+
+        resultFVC.setFev1percent((fev1 / fvc) * 100f);
+        resultFVC.setFev1PercentPredict((fev1P / fvcP) * 100f);
+
+        resultFVC.setPef(pef);
+
+        resultFVC.setTimestamp(timestamp);
+        resultFVC.setPost(isPost);
 
         resultAdapter.addFvcResult(resultFVC);
 
@@ -828,5 +875,14 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
     }
 
+    private void selectData(int order) {
+
+        resultVolumeFlowGraphLayout.removeAllViews();
+        resultVolumeTimeGraphLayout.removeAllViews();
+
+        resultVolumeFlowGraphLayout.addView(volumeFlowResultViewList.get(order));
+        resultVolumeTimeGraphLayout.addView(volumeTimeResultViewList.get(order));
+
+    }
 
 }

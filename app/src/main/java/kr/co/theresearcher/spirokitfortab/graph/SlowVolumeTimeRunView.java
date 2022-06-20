@@ -90,7 +90,7 @@ public class SlowVolumeTimeRunView extends View {
             isOver = true;
 
             minY *= ((y + this.y) / maxY);
-            maxY += y;
+            maxY *= ((y + this.y) / maxY);
 
         }
 
@@ -98,7 +98,7 @@ public class SlowVolumeTimeRunView extends View {
             isOver = true;
 
             maxY *= Math.abs(y + this.y) / Math.abs(minY);
-            minY += y;
+            minY *= Math.abs(y + this.y) / Math.abs(minY);
 
         }
 

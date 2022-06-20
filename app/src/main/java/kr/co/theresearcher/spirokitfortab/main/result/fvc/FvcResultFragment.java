@@ -308,6 +308,7 @@ public class FvcResultFragment extends Fragment {
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
+
                                 adapter.notifyDataSetChanged();
                                 volumeFlowLayout.removeAllViews();
                                 volumeTimeLayout.removeAllViews();
