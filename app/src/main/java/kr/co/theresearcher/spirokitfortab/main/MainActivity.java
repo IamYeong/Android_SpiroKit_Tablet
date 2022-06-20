@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
@@ -32,6 +33,9 @@ import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.bluetooth.SpiroKitBluetoothLeService;
 import kr.co.theresearcher.spirokitfortab.db.RoomNames;
+import kr.co.theresearcher.spirokitfortab.db.measurement.Measurement;
+import kr.co.theresearcher.spirokitfortab.db.measurement.MeasurementDao;
+import kr.co.theresearcher.spirokitfortab.db.measurement.MeasurementDatabase;
 import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
 import kr.co.theresearcher.spirokitfortab.db.patient.PatientDao;
 import kr.co.theresearcher.spirokitfortab.db.patient.PatientDatabase;
@@ -49,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView bleConnectionImage;
 
     private SpiroKitBluetoothLeService mService;
+    private Handler handler = new Handler(Looper.getMainLooper());
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -126,8 +131,37 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
 
-        setFragment(R.id.fragment_container_patient_info_main, new PatientInformationFragment());
-        setFragment(R.id.fragment_container_result_main, new FvcResultFragment());
+        PatientInformationFragment informationFragment = new PatientInformationFragment();
+        informationFragment.setMeasurementSelectedListener(new OnMeasurementSelectedListener() {
+            @Override
+            public void onMeasurementSelected(Measurement measurement) {
+
+                int meas = measurement.getMeasurementID();
+                Log.d(getClass().getSimpleName(), "MEAS ID : " + meas);
+
+                switch (meas) {
+
+                    case 0 :
+                        FvcResultFragment fvcResultFragment = new FvcResultFragment();
+                        fvcResultFragment.setMeasurement(measurement);
+
+                        replaceFragment(R.id.fragment_container_result_main, fvcResultFragment);
+                        break;
+
+                    case 1  :
+
+                        break;
+
+                    case 2 :
+
+                        break;
+
+                }
+
+            }
+        });
+
+        setFragment(R.id.fragment_container_patient_info_main, informationFragment);
 
         settingButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,6 +191,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void replaceFragment(int containerID, Fragment fragment) {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(containerID, fragment);
+        fragmentTransaction.commit();
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -176,6 +216,35 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         bindService(new Intent(getApplicationContext(), SpiroKitBluetoothLeService.class), serviceConnection ,Context.BIND_AUTO_CREATE);
+
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                Looper.prepare();
+
+                MeasurementDatabase database = Room.databaseBuilder(MainActivity.this, MeasurementDatabase.class, RoomNames.ROOM_MEASUREMENT_DB_NAME)
+                        .build();
+                MeasurementDao measurementDao = database.measurementDao();
+                List<Measurement> measurements = measurementDao.selectByPatientID(SharedPreferencesManager.getPatientId(MainActivity.this));
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        FvcResultFragment fvcResultFragment = new FvcResultFragment();
+                        fvcResultFragment.setMeasurement(measurements.get(measurements.size() - 1));
+
+                        replaceFragment(R.id.fragment_container_result_main, fvcResultFragment);
+                    }
+                });
+
+
+                Looper.loop();
+
+            }
+        };
+
+        thread.start();
 
 
     }

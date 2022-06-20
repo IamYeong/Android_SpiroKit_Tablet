@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.os.ParcelUuid;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -35,6 +36,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
@@ -268,9 +270,8 @@ public class SettingActivity extends AppCompatActivity {
 
         ScanFilter scanFilter = new ScanFilter.Builder()
                 //.setDeviceAddress(MAC_ADDRESS)
-                //.setDeviceName(context.getString(R.string.device_name))
-                .setDeviceName(BluetoothAttributes.BLUETOOTH_LE_DEVICE_NAME)
-                //.setServiceUuid(ParcelUuid.fromString(BluetoothAttributes.TR_SERVICE_UUID.toString()))
+                //.setDeviceName(BluetoothAttributes.BLU
+                //.setServiceUuid(ParcelUuid.fromString(BluetoothAttributes.BLUETOOTH_LE_SERVICE_UUID))
                 .build();
 
         scanSettings = new ScanSettings.Builder()
@@ -286,9 +287,10 @@ public class SettingActivity extends AppCompatActivity {
                 super.onScanResult(callbackType, result);
                 //조건에 해당하는 기기를 찾음.
 
-                //애초에 이름으로 필터링 했으므로 null 확률이 없음.
-                adapter.addResult(result);
+                String name = result.getDevice().getName();
 
+                if (name == null) return;
+                adapter.addResult(result);
 
             }
 

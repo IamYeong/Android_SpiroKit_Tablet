@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,29 +15,47 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
+import kr.co.theresearcher.spirokitfortab.calc.CalcSpiroKitE;
 import kr.co.theresearcher.spirokitfortab.db.RoomNames;
+import kr.co.theresearcher.spirokitfortab.db.meas_group.MeasGroup;
 import kr.co.theresearcher.spirokitfortab.db.measurement.Measurement;
 import kr.co.theresearcher.spirokitfortab.db.measurement.MeasurementDao;
 import kr.co.theresearcher.spirokitfortab.db.measurement.MeasurementDatabase;
 import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
 import kr.co.theresearcher.spirokitfortab.db.patient.PatientDao;
 import kr.co.theresearcher.spirokitfortab.db.patient.PatientDatabase;
+import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
+import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowResultView;
+import kr.co.theresearcher.spirokitfortab.graph.VolumeTimeResultView;
+import kr.co.theresearcher.spirokitfortab.main.OnMeasurementSelectedListener;
 import kr.co.theresearcher.spirokitfortab.main.patients.OnItemSimpleSelectedListener;
 import kr.co.theresearcher.spirokitfortab.main.patients.PatientsAdapter;
 import kr.co.theresearcher.spirokitfortab.measurement.fvc.MeasurementFvcActivity;
+import kr.co.theresearcher.spirokitfortab.measurement.fvc.ResultFVC;
 
 public class PatientInformationFragment extends Fragment {
 
@@ -47,10 +66,12 @@ public class PatientInformationFragment extends Fragment {
     private RecyclerView patientsRV, measurementsRV;
     private ImageButton dateRangeButton, modifyButton;
     private TextView patientNameText, patientInfoText, dateRangeText;
+    private FrameLayout volumeFlowLayout, volumeTimeLayout;
 
     private PatientsAdapter patientsAdapter;
     private MeasurementAdapter measurementAdapter;
 
+    private OnMeasurementSelectedListener measurementSelectedListener;
 
     private Handler handler = new Handler(Looper.getMainLooper());
 
@@ -58,6 +79,9 @@ public class PatientInformationFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public void setMeasurementSelectedListener(OnMeasurementSelectedListener listener) {
+        this.measurementSelectedListener = listener;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,6 +98,9 @@ public class PatientInformationFragment extends Fragment {
         patientNameText = view.findViewById(R.id.tv_name_patient_info_fragment);
         patientInfoText = view.findViewById(R.id.tv_content_patient_info_fragment);
         dateRangeText = view.findViewById(R.id.tv_date_range_patient_info_fragment);
+
+        volumeFlowLayout = view.findViewById(R.id.frame_volume_flow_graph_result_fragment);
+        volumeTimeLayout = view.findViewById(R.id.frame_volume_time_graph_result_fragment);
 
         patientsAdapter = new PatientsAdapter(container.getContext());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(container.getContext());
@@ -120,8 +147,19 @@ public class PatientInformationFragment extends Fragment {
         patientsRV.setAdapter(patientsAdapter);
 
         measurementAdapter = new MeasurementAdapter(container.getContext());
+        measurementAdapter.setSelectedListener(new OnMeasSelectedListener() {
+            @Override
+            public void onMeasSelected(Measurement meas) {
+
+                measurementSelectedListener.onMeasurementSelected(meas);
+
+            }
+        });
+
+
         linearLayoutManager = new LinearLayoutManager(container.getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
         measurementsRV.setLayoutManager(linearLayoutManager);
         measurementsRV.setAdapter(measurementAdapter);
 
@@ -237,5 +275,8 @@ public class PatientInformationFragment extends Fragment {
 
 
     }
+
+
+
 
 }

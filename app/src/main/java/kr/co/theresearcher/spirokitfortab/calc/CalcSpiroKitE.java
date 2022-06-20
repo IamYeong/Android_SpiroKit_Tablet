@@ -31,7 +31,6 @@ public class CalcSpiroKitE {
         pulseWidth = new ArrayList<>();
         pulseWidth.addAll(pulseWidthList);
 
-        measure();
     }
 
     public void measure() {
@@ -107,29 +106,30 @@ public class CalcSpiroKitE {
 
         List<ResultCoordinate> flowTimes = new ArrayList<>();
 
-        for (int i = 0; i < measuredPulseWidth.size(); i++) {
+        for (int i = 0; i < pulseWidth.size(); i++) {
 
             double time = 0f;
             double rps = 0f;
             double lps = 0f;
 
-            int pulseWidth = measuredPulseWidth.get(i);
+            int pw = pulseWidth.get(i);
 
-            if (pulseWidth > 100_000_000) {
+            if (pw > 100_000_000) {
 
-                time = Fluid.getTimeFromPulseWidthForE(pulseWidth);
+                pw -= 100_000_000;
+                time = Fluid.getTimeFromPulseWidthForE(pw);
                 rps = Fluid.calcRevolutionPerSecond(time);
                 lps = -1f * Fluid.conversionLiterPerSecond(rps);
 
-            } else if (pulseWidth > 0) {
+            } else if (pw > 0) {
 
-                time = Fluid.getTimeFromPulseWidthForE(pulseWidth);
+                time = Fluid.getTimeFromPulseWidthForE(pw);
                 rps = Fluid.calcRevolutionPerSecond(time);
                 lps = Fluid.conversionLiterPerSecond(rps);
 
             }
 
-            ResultCoordinate coordinate = new ResultCoordinate(lps, time);
+            ResultCoordinate coordinate = new ResultCoordinate(time, lps);
             flowTimes.add(coordinate);
 
         }
