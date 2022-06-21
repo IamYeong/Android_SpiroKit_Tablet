@@ -7,9 +7,27 @@ public class ResultSVC {
     private double erv;
     private double irv;
     private double vt;
+    private long timestamp;
+    private boolean isSelected;
 
     public ResultSVC() {
 
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 
     public double getVc() {

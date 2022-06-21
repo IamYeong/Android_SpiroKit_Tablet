@@ -25,6 +25,17 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -35,13 +46,19 @@ import kr.co.theresearcher.spirokitfortab.Fluid;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.bluetooth.SpiroKitBluetoothLeService;
+import kr.co.theresearcher.spirokitfortab.calc.CalcSpiroKitE;
+import kr.co.theresearcher.spirokitfortab.calc.CalcSvcSpiroKitE;
 import kr.co.theresearcher.spirokitfortab.db.RoomNames;
 import kr.co.theresearcher.spirokitfortab.db.meas_group.MeasGroup;
 import kr.co.theresearcher.spirokitfortab.db.measurement.Measurement;
 import kr.co.theresearcher.spirokitfortab.db.measurement.MeasurementDao;
 import kr.co.theresearcher.spirokitfortab.db.measurement.MeasurementDatabase;
+import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
+import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
 import kr.co.theresearcher.spirokitfortab.graph.SlowVolumeTimeRunView;
 import kr.co.theresearcher.spirokitfortab.main.result.OnOrderSelectedListener;
+import kr.co.theresearcher.spirokitfortab.measurement.fvc.MeasurementFvcActivity;
+import kr.co.theresearcher.spirokitfortab.measurement.fvc.ResultFVC;
 
 public class MeasurementSvcActivity extends AppCompatActivity {
 
@@ -59,8 +76,11 @@ public class MeasurementSvcActivity extends AppCompatActivity {
     private List<Integer> pulseWidthList = new ArrayList<>();
     private SlowVolumeTimeRunView graphView;
 
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd_HHmmssSS", Locale.getDefault());
+
     private boolean isStart = false;
     private double timerCount = 0d;
+    private int testOrder = 1;
 
     private Handler handler = new Handler(Looper.getMainLooper());
 
@@ -189,6 +209,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                removeThisData();
                 finish();
             }
         });
@@ -339,12 +360,128 @@ public class MeasurementSvcActivity extends AppCompatActivity {
                 Looper.prepare();
 
 
+                try {
+
+                    long date = Calendar.getInstance().getTime().getTime();
+
+                    File csvFile = new File(getExternalFilesDir("data/" + SharedPreferencesManager.getOfficeID(MeasurementSvcActivity.this)
+                            + "/" + SharedPreferencesManager.getPatientId(MeasurementSvcActivity.this) + "/" + simpleDateFormat.format(startTimestamp)
+                            + "/" + testOrder), testOrder + ".csv");
+
+                    FileWriter fileWriter = new FileWriter(csvFile);
+                    BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+                    for (int i = 0; i < pulseWidthList.size(); i++) {
+
+                        bufferedWriter.write(Integer.toString(pulseWidthList.get(i)));
+                        bufferedWriter.write("\n");
+
+                    }
+                    pulseWidthList.clear();
+                    bufferedWriter.close();
+                    //CSV 파일 저장================
+
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("pid", SharedPreferencesManager.getPatientId(MeasurementSvcActivity.this));
+                    jsonObject.put("isPost", false);
+                    jsonObject.put("order", testOrder);
+                    jsonObject.put("ts", date);
+                    jsonObject.put("meas", MeasGroup.svc);
+
+
+                    File jsonFile = new File(getExternalFilesDir("data/" + SharedPreferencesManager.getOfficeID(MeasurementSvcActivity.this)
+                            + "/" + SharedPreferencesManager.getPatientId(MeasurementSvcActivity.this) + "/" + simpleDateFormat.format(startTimestamp)
+                            + "/" + testOrder), testOrder + ".json");
+
+                    FileOutputStream fileOutputStream = new FileOutputStream(jsonFile);
+                    fileOutputStream.write(jsonObject.toString().getBytes());
+
+                    fileOutputStream.close();
+                    //Json 파일 저장===================
+
+                    jsonObject = null;
+
+                    addResult(testOrder, date, false);
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            ConfirmDialog confirmDialog = new ConfirmDialog(MeasurementSvcActivity.this);
+                            confirmDialog.setTitle(getString(R.string.success_data_save));
+                            confirmDialog.show();
+
+                            isStart = true;
+
+                            graphView.clear();
+                            graphView.postInvalidate();
+
+                            adapter.notifyDataSetChanged();
+
+                            resultGraphLayout.removeAllViews();
+                            resultGraphLayout.addView(volumeTimeRunViews.get(testOrder - 1));
+
+                            //emptyImage.setVisibility(View.GONE);
+
+                            testOrder++;
+
+                        }
+                    });
+
+
+                } catch (JSONException e) {
+
+                } catch (IOException e) {
+
+                }
+
 
                 Looper.loop();
             }
         };
 
         thread.start();
+
+    }
+
+    private void addResult(int order, long timestamp, boolean isPost) {
+
+        //여기서는 어댑터에 추가랑 뷰배열에 추가만 해두고
+        //핸들러에서 notify 수행, addVIew 하면 될 듯.
+
+        List<Integer> pulseWidths = new ArrayList<>();
+        try {
+            FileReader fileReader = new FileReader(
+                    getExternalFilesDir("data/" +
+                            SharedPreferencesManager.getOfficeID(this) + "/"
+                            + SharedPreferencesManager.getPatientId(this) + "/"
+                            + simpleDateFormat.format(startTimestamp)
+                            + "/" + testOrder + "/" + testOrder + ".csv")
+            );
+
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+            String line = "";
+            while ((line = bufferedReader.readLine()) != null) {
+
+                pulseWidths.add(Integer.parseInt(line));
+
+            }
+
+        } catch (FileNotFoundException e) {
+
+        } catch (IOException e) {
+
+        }
+
+        CalcSvcSpiroKitE calc = new CalcSvcSpiroKitE(pulseWidths);
+        calc.measure();
+
+        volumeTimeRunViews.add(createVolumeTimeGraph(calc.getVolumeTimeGraph()));
+
+        ResultSVC resultSVC = new ResultSVC();
+        resultSVC.setVc(calc.getVC());
+
+        adapter.addResult(resultSVC);
 
     }
 
@@ -355,6 +492,57 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
 
     }
+
+    private void removeThisData() {
+
+        String dirName = simpleDateFormat.format(startTimestamp);
+        File dir = getExternalFilesDir("data/"
+                + SharedPreferencesManager.getOfficeID(MeasurementSvcActivity.this) + "/"
+                + SharedPreferencesManager.getPatientId(MeasurementSvcActivity.this) + "/"
+                + dirName);
+
+        deleteFileWithChildren(dir);
+
+    }
+
+    private void deleteFileWithChildren(File fileOrDirectory) {
+
+        if (fileOrDirectory.isDirectory()) {
+            File[] files = fileOrDirectory.listFiles();
+            for (File file : files) {
+                deleteFileWithChildren(file);
+            }
+        }
+
+        fileOrDirectory.delete();
+
+    }
+
+    private SlowVolumeTimeRunView createVolumeTimeGraph(List<ResultCoordinate> coordinates) {
+
+        SlowVolumeTimeRunView graphView = new SlowVolumeTimeRunView(MeasurementSvcActivity.this);
+        graphView.setId(View.generateViewId());
+        graphView.setCanvasSize(resultGraphLayout.getWidth(), resultGraphLayout.getHeight());
+        graphView.setMarkingCount(10, 8);
+        graphView.setX(60f, 0f);
+        graphView.setY(0.1f, -0.1f);
+
+        graphView.commit();
+
+        for (int i = 0; i < coordinates.size(); i++) {
+
+            double x = coordinates.get(i).getX();
+            double y = coordinates.get(i).getY();
+
+            graphView.setValue((float)x, (float)y);
+
+        }
+
+        return graphView;
+
+    }
+
+
 
     private void deleteDirs() {
 

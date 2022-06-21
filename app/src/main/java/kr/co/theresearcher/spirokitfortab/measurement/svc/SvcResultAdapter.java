@@ -65,6 +65,8 @@ public class SvcResultAdapter extends RecyclerView.Adapter<SvcResultViewHolder> 
 
         ResultSVC resultSVC = results.get(holder.getAdapterPosition());
 
+        holder.getVcText().setText(context.getString(R.string.liter_with_parameter, resultSVC.getVc()));
+
         holder.getSvcCard().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
