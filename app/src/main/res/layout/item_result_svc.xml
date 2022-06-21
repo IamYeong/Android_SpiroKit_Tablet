@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    android:id="@+id/card_svc_result"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginVertical="10dp"
+    android:layout_marginStart="20dp"
+    app:cardCornerRadius="20dp"
+    app:cardBackgroundColor="@color/white"
+    >
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_close_30_black"
+        android:background="?attr/selectableItemBackgroundBorderless"
+
+        android:layout_gravity="top|end"
+        android:layout_margin="10dp"
+        />
+
+    <LinearLayout
+        android:id="@+id/linear_svc_result"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:paddingHorizontal="30dp"
+        >
+
+        <TextView
+            android:id="@+id/tv_svc_order_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginHorizontal="20dp"
+
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/nanum_gothic_bold"
+
+            android:text="1차 검사 (Pre)"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_svc_date_table"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray_dark"
+            android:text="2022.04.29 (17:20)"
+            android:textSize="12sp"
+
+            android:layout_marginVertical="5dp"
+            android:layout_marginHorizontal="20dp"
+
+            android:layout_gravity="center_horizontal"
+
+            />
+
+        <TextView
+            android:id="@+id/tv_vc_svc_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textSize="15sp"
+            android:textColor="@color/black"
+
+            android:layout_marginVertical="5dp"
+            android:text="SVC : 0.000 L"
+            />
+
+
+    </LinearLayout>
+
+
+
+</androidx.cardview.widget.CardView>

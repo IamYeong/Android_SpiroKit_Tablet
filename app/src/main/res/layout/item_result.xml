@@ -11,6 +11,8 @@
     app:cardBackgroundColor="@color/white"
     >
 
+
+
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -22,11 +24,13 @@
         />
 
     <LinearLayout
-        android:id="@+id/linear_fvc_result"
+        android:id="@+id/linear_svc_result"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_gravity="center"
+
+
 
         >
 
@@ -87,7 +91,7 @@
                     />
 
                 <TextView
-                    android:id="@+id/tv_meas_table_column"
+                    android:id="@+id/tv_fvc_meas_table_column"
 
                     android:layout_weight="1"
                     android:layout_gravity="center_horizontal|center_vertical"
@@ -98,7 +102,7 @@
                     />
 
                 <TextView
-                    android:id="@+id/tv_pred_table_column"
+                    android:id="@+id/tv_fvc_pred_table_column"
                     android:layout_weight="1"
                     android:layout_gravity="center_horizontal|center_vertical"
                     android:text="@string/pred"
@@ -107,7 +111,7 @@
                     />
 
                 <TextView
-                    android:id="@+id/tv_percent_table_column"
+                    android:id="@+id/tv_fvc_percent_table_column"
                     android:layout_weight="1"
                     android:layout_gravity="center_horizontal|center_vertical"
                     android:text="@string/percent"

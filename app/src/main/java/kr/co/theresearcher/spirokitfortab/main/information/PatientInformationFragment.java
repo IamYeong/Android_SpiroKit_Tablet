@@ -52,6 +52,7 @@ import kr.co.theresearcher.spirokitfortab.db.measurement.MeasurementDatabase;
 import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
 import kr.co.theresearcher.spirokitfortab.db.patient.PatientDao;
 import kr.co.theresearcher.spirokitfortab.db.patient.PatientDatabase;
+import kr.co.theresearcher.spirokitfortab.dialog.MeasSelectionDialog;
 import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowResultView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeTimeResultView;
@@ -205,8 +206,10 @@ public class PatientInformationFragment extends Fragment {
         startMeasButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, MeasurementFvcActivity.class);
-                startActivity(intent);
+
+                MeasSelectionDialog dialog = new MeasSelectionDialog(context);
+                dialog.show();
+
             }
         });
 

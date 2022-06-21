@@ -19,7 +19,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -135,17 +137,22 @@ public class MainActivity extends AppCompatActivity {
         patientInfoContainer = findViewById(R.id.fragment_container_patient_info_main);
         resultContainer = findViewById(R.id.fragment_container_result_main);
 
-        /*
-        int displayWidth;
-        int displayHeight;
-        displayWidth = displayHeight / 5;
+
+        Display display = getWindowManager().getDefaultDisplay();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        display.getRealMetrics(displayMetrics);
+
+        float density = getResources().getDisplayMetrics().density;
+        float displayWidth = displayMetrics.heightPixels / density;
+        float displayHeight = displayMetrics.widthPixels / density;
+
+        Log.d(getClass().getSimpleName(), "Density : " + density + ", Width : " + displayWidth + ", Height : " + displayHeight);
 
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(
-
+                (int)(displayHeight / 3f), ViewGroup.LayoutParams.MATCH_PARENT
         );
         patientInfoContainer.setLayoutParams(layoutParams);
 
-         */
 
         fragmentManager = getSupportFragmentManager();
 

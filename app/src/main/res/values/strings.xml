@@ -7,6 +7,12 @@
     <string name="pef" translatable="false">PEF</string>
     <string name="fev1percent" translatable="false">FEV1%</string>
 
+    <string name="svc" translatable="false">SVC</string>
+    <string name="vc" translatable="false">VC</string>
+    <string name="erv" translatable="false">ERV</string>
+    <string name="ic" translatable="false">IC</string>
+    <string name="irv" translatable="false">IRV</string>
+
     <string name="unit_lps" translatable="false">l/s</string>
     <string name="unit_liter" translatable="false">L</string>
     <string name="unit_second" translatable="false">S</string>
@@ -82,6 +88,7 @@
     <string name="smoking_is_now">현재 흡연 여부</string>
     <string name="smoking_no_when">금연 시기</string>
     <string name="match_doctor">담당의사</string>
+    <string name="meas_doctor">검사자</string>
 
     <string name="male">남</string>
     <string name="female">여</string>
@@ -136,7 +143,6 @@
     <string name="scan_info">디바이스와 전원을 켜신 후 스캔버튼을 눌러 주시기 바랍니다.\n연결이 원활하지 않을 경우 디바이스를 껐다가 다시 켜신 후 연결을 시도해주세요.</string>
     <string name="can_not_ble">BLE 연동이 불가한 디바이스입니다</string>
     <string name="must_be_enable_ble">블루투스가 켜져있어야만\n스파이로킷 스캔 및 연동이 가능합니다</string>
-
 
     <!-- 환자정보 화면 -->
 

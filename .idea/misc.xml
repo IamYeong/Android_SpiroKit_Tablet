@@ -33,6 +33,9 @@
         <entry key="app/src/main/res/drawable/item_img_btn_bg_gray.xml" value="0.328" />
         <entry key="app/src/main/res/drawable/item_loading.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/item_selected_fvc_result_stroke.xml" value="0.2615" />
+        <entry key="app/src/main/res/drawable/item_selected_meas.xml" value="0.3375" />
+        <entry key="app/src/main/res/drawable/item_selected_result.xml" value="0.3375" />
+        <entry key="app/src/main/res/drawable/item_text_outline_black.xml" value="0.3375" />
         <entry key="app/src/main/res/drawable/person_add.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/progressbar_secondary_color_style.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/spinner_background_white.xml" value="0.328" />
@@ -50,12 +53,13 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.15" />
         <entry key="app/src/main/res/layout/activity_measurement_fvc.xml" value="0.16" />
         <entry key="app/src/main/res/layout/activity_measurement_mvv.xml" value="0.20442708333333334" />
-        <entry key="app/src/main/res/layout/activity_measurement_svc.xml" value="0.16" />
+        <entry key="app/src/main/res/layout/activity_measurement_svc.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_patient_insert.xml" value="0.16" />
         <entry key="app/src/main/res/layout/activity_setting.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.12" />
         <entry key="app/src/main/res/layout/dialog_confirm.xml" value="0.16276041666666666" />
         <entry key="app/src/main/res/layout/dialog_loading.xml" value="0.16276041666666666" />
+        <entry key="app/src/main/res/layout/dialog_meas_selection.xml" value="0.16770833333333332" />
         <entry key="app/src/main/res/layout/dialog_selection.xml" value="0.16276041666666666" />
         <entry key="app/src/main/res/layout/dialog_text_input.xml" value="0.16276041666666666" />
         <entry key="app/src/main/res/layout/fragment_fvc_value_list.xml" value="0.16276041666666666" />
@@ -64,7 +68,8 @@
         <entry key="app/src/main/res/layout/fragment_result.xml" value="0.17" />
         <entry key="app/src/main/res/layout/item_measurement_box.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_patient_box.xml" value="0.16276041666666666" />
-        <entry key="app/src/main/res/layout/item_result.xml" value="1.0" />
+        <entry key="app/src/main/res/layout/item_result.xml" value="0.20767195767195767" />
+        <entry key="app/src/main/res/layout/item_result_svc.xml" value="0.16770833333333332" />
         <entry key="app/src/main/res/layout/item_scan_result.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_setting_app_version.xml" value="0.16276041666666666" />
         <entry key="app/src/main/res/layout/item_setting_auto_pairing.xml" value="0.16276041666666666" />

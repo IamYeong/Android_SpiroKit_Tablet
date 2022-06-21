@@ -145,9 +145,9 @@ class FvcResultViewHolder extends RecyclerView.ViewHolder {
         defaultTexts.add(itemView.findViewById(R.id.tv_fev1_per_table_row));
         defaultTexts.add(itemView.findViewById(R.id.tv_pef_table_row));
 
-        defaultTexts.add(itemView.findViewById(R.id.tv_meas_table_column));
-        defaultTexts.add(itemView.findViewById(R.id.tv_pred_table_column));
-        defaultTexts.add(itemView.findViewById(R.id.tv_percent_table_column));
+        defaultTexts.add(itemView.findViewById(R.id.tv_fvc_meas_table_column));
+        defaultTexts.add(itemView.findViewById(R.id.tv_fvc_pred_table_column));
+        defaultTexts.add(itemView.findViewById(R.id.tv_fvc_percent_table_column));
 
         fvcCardView = itemView.findViewById(R.id.card_fvc_result);
 

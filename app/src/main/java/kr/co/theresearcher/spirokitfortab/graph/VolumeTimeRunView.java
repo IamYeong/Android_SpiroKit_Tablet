@@ -58,7 +58,6 @@ public class VolumeTimeRunView extends View {
         //경로 그리기
         canvas.drawPath(path, pathPaint);
 
-
         for (int i = 1; i < xMarking; i++) {
             canvas.drawLine((float)xPadding * (float)i, canvasHeight, ((float)xPadding * (float)i), (canvasHeight) - 20f, linePaint); // 중앙에 x축 눈금 그리기
             canvas.drawText(Float.toString(Fluid.autoRound(1, ((float)xInterval * (float) i) - xValueMargin)), ((float)xPadding * (float)i) - 5f, (canvasHeight) - 25f, labelPaint);
@@ -69,7 +68,6 @@ public class VolumeTimeRunView extends View {
 
             canvas.drawLine(0f, yPadding * (float)i, 20f, yPadding * (float)i,linePaint);
             canvas.drawText(Float.toString(Fluid.autoRound(1, (maxY - (yInterval * (double)i)))), 25f, (yPadding * (float)i) + 10f, labelPaint);
-
 
         }
 
