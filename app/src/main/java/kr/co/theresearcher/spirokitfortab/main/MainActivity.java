@@ -46,6 +46,7 @@ import kr.co.theresearcher.spirokitfortab.db.patient.PatientDatabase;
 import kr.co.theresearcher.spirokitfortab.main.information.PatientInformationFragment;
 import kr.co.theresearcher.spirokitfortab.main.patients.PatientsFragment;
 import kr.co.theresearcher.spirokitfortab.main.result.fvc.FvcResultFragment;
+import kr.co.theresearcher.spirokitfortab.main.result.svc.SvcResultFragment;
 import kr.co.theresearcher.spirokitfortab.patient_input.PatientInsertActivity;
 import kr.co.theresearcher.spirokitfortab.setting.SettingActivity;
 
@@ -137,7 +138,6 @@ public class MainActivity extends AppCompatActivity {
         patientInfoContainer = findViewById(R.id.fragment_container_patient_info_main);
         resultContainer = findViewById(R.id.fragment_container_result_main);
 
-
         Display display = getWindowManager().getDefaultDisplay();
         DisplayMetrics displayMetrics = new DisplayMetrics();
         display.getRealMetrics(displayMetrics);
@@ -161,27 +161,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onMeasurementSelected(Measurement measurement) {
 
-                int meas = measurement.getMeasurementID();
-                Log.d(getClass().getSimpleName(), "MEAS ID : " + meas);
-
-                switch (meas) {
-
-                    case 0 :
-                        FvcResultFragment fvcResultFragment = new FvcResultFragment();
-                        fvcResultFragment.setMeasurement(measurement);
-
-                        replaceFragment(R.id.fragment_container_result_main, fvcResultFragment);
-                        break;
-
-                    case 1  :
-
-                        break;
-
-                    case 2 :
-
-                        break;
-
-                }
+                setFragmentByMeasGroup(measurement);
 
             }
         });
@@ -256,10 +236,7 @@ public class MainActivity extends AppCompatActivity {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        FvcResultFragment fvcResultFragment = new FvcResultFragment();
-                        fvcResultFragment.setMeasurement(measurements.get(measurements.size() - 1));
-
-                        replaceFragment(R.id.fragment_container_result_main, fvcResultFragment);
+                        setFragmentByMeasGroup(measurements.get(measurements.size() - 1));
                     }
                 });
 
@@ -273,4 +250,30 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    private void setFragmentByMeasGroup(Measurement measurement) {
+
+
+        switch (measurement.getMeasurementID()) {
+
+            case 0 :
+                FvcResultFragment fvcResultFragment = new FvcResultFragment(measurement);
+                replaceFragment(R.id.fragment_container_result_main, fvcResultFragment);
+                break;
+
+            case 1  :
+                SvcResultFragment svcResultFragment = new SvcResultFragment(measurement);
+                replaceFragment(R.id.fragment_container_result_main, svcResultFragment);
+
+                break;
+
+            case 2 :
+
+                break;
+
+        }
+
+
+    }
+
 }

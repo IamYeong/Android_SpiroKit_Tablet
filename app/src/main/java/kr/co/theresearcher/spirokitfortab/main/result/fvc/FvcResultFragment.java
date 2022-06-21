@@ -61,11 +61,7 @@ public class FvcResultFragment extends Fragment {
     private Measurement measurement;
     private Handler handler = new Handler(Looper.getMainLooper());
 
-    public FvcResultFragment() {
-        // Required empty public constructor
-    }
-
-    public void setMeasurement(Measurement measurement) {
+    public FvcResultFragment(Measurement measurement) {
         this.measurement = measurement;
     }
 

@@ -160,6 +160,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         resultGraphLayout = findViewById(R.id.frame_volume_time_graph_result_svc);
         startButton = findViewById(R.id.btn_start_stop_svc_meas);
         saveButton = findViewById(R.id.btn_save_svc_meas);
+        completeButton = findViewById(R.id.btn_complete_svc_meas);
 
         backButton = findViewById(R.id.img_btn_back_svc_meas);
 
@@ -195,6 +196,13 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         resultGraphLayout.setLayoutParams(layoutParams);
 
          */
+
+        completeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                complete();
+            }
+        });
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override

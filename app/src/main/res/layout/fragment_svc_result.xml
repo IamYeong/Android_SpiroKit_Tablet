@@ -1,14 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".main.result.svc.SvcResultFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <androidx.cardview.widget.CardView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/rv_result_svc_fragment"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
 
-</FrameLayout>
+        android:layout_marginVertical="20dp"
+        android:layout_marginHorizontal="20dp"
+
+        app:cardCornerRadius="20dp"
+        android:elevation="10dp"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+
+            <TextView
+                android:id="@+id/tv_meas_group_main_svc_result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nanum_gothic"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_margin="20dp"
+
+                android:text="TEST"
+                />
+
+            <TextView
+                android:id="@+id/tv_match_doctor_main_svc_result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nanum_gothic"
+                android:textColor="@color/gray_dark"
+                android:textSize="12sp"
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+
+                android:text="주치의 : "
+
+                android:layout_margin="20dp"
+                />
+
+            <TextView
+                android:id="@+id/tv_meas_doctor_main_svc_result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nanum_gothic"
+                android:textColor="@color/gray_dark"
+                android:textSize="12sp"
+
+                app:layout_constraintTop_toBottomOf="@id/tv_match_doctor_main_svc_result"
+                app:layout_constraintEnd_toEndOf="parent"
+
+                android:text="검사자 : "
+                android:layout_margin="20dp"
+                />
+
+
+            <TextView
+                android:id="@+id/tv_volume_flow_title_result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:fontFamily="@font/nanum_gothic_bold"
+                android:textSize="15sp"
+                android:text="@string/volume_flow_graph"
+
+                android:layout_margin="20dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_meas_group_main_svc_result"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+
+            <FrameLayout
+                android:id="@+id/frame_svc_graph_result_fragment"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_volume_flow_title_result"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_margin="20dp"
+                android:background="@drawable/graph_out_line"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_result_svc_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/gray_background"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
