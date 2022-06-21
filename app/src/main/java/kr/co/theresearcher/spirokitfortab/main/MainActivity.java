@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.room.Room;
@@ -20,6 +21,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -51,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton settingButton, insertPatientButton;
     private Button measButton;
     private ImageView bleConnectionImage;
+    private FragmentContainerView patientInfoContainer, resultContainer;
 
     private SpiroKitBluetoothLeService mService;
     private Handler handler = new Handler(Looper.getMainLooper());
@@ -128,6 +131,21 @@ public class MainActivity extends AppCompatActivity {
         settingButton = findViewById(R.id.img_btn_setting_main);
         insertPatientButton = findViewById(R.id.img_btn_insert_patient_main);
         bleConnectionImage = findViewById(R.id.img_ble_connection_main);
+
+        patientInfoContainer = findViewById(R.id.fragment_container_patient_info_main);
+        resultContainer = findViewById(R.id.fragment_container_result_main);
+
+        /*
+        int displayWidth;
+        int displayHeight;
+        displayWidth = displayHeight / 5;
+
+        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(
+
+        );
+        patientInfoContainer.setLayoutParams(layoutParams);
+
+         */
 
         fragmentManager = getSupportFragmentManager();
 

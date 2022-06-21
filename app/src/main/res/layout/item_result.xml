@@ -63,11 +63,10 @@
         <TableLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="20dp"
+            android:layout_marginHorizontal="20dp"
             android:stretchColumns="4"
 
-            style="@style/result_table_selected"
-
+            android:layout_margin="20dp"
             >
 
             <TableRow
@@ -80,7 +79,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:textSize="12sp"
-                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_gravity="center_vertical"
                     android:text=""
                     android:paddingVertical="5dp"
                     android:paddingHorizontal="5dp"
@@ -95,7 +94,6 @@
                     android:text="@string/meas"
 
                     android:paddingHorizontal="5dp"
-
 
                     />
 
@@ -132,17 +130,20 @@
                     android:text="@string/fvc"
 
                     android:paddingVertical="5dp"
+
                     />
 
                 <TextView
                     android:id="@+id/tv_fvc_meas_result_table"
                     android:layout_weight="1"
-                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_gravity="center_vertical"
 
-                    android:paddingHorizontal="3dp"
+                    android:paddingHorizontal="5dp"
 
-                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+
+                    android:foreground="@drawable/table_cell_outline"
+                    android:gravity="center"
                     />
 
                 <TextView
@@ -150,10 +151,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_gravity="center_vertical"
                     android:paddingHorizontal="3dp"
 
-
+                    android:background="@drawable/table_cell_outline"
+                    android:gravity="center"
                     />
 
                 <TextView
@@ -161,12 +163,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_gravity="center_vertical"
                     android:paddingHorizontal="3dp"
+
+                    android:background="@drawable/table_cell_under_line"
+                    android:gravity="center"
                     />
 
 
             </TableRow>
+
             <TableRow
                 android:layout_weight="1"
                 android:gravity="center_vertical"
@@ -178,6 +184,7 @@
 
                     android:text="@string/fev1"
                     android:paddingVertical="5dp"
+
                     />
 
                 <TextView
@@ -185,9 +192,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_gravity="center_vertical"
                     android:paddingHorizontal="3dp"
 
+                    android:background="@drawable/table_cell_outline"
+                    android:gravity="center"
                     />
 
                 <TextView
@@ -195,8 +204,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_gravity="center_vertical"
                     android:paddingHorizontal="3dp"
+
+                    android:background="@drawable/table_cell_outline"
+                    android:gravity="center"
                     />
 
                 <TextView
@@ -204,8 +216,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_gravity="center_vertical"
                     android:paddingHorizontal="3dp"
+
+                    android:background="@drawable/table_cell_under_line"
+                    android:gravity="center"
                     />
 
 
@@ -223,6 +238,7 @@
                     android:text="@string/fev1percent"
 
                     android:paddingVertical="5dp"
+
                     />
 
                 <TextView
@@ -230,8 +246,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:paddingHorizontal="3dp"
+                    android:layout_gravity="center_vertical"
+                    android:paddingHorizontal="5dp"
+                    android:background="@drawable/table_cell_outline"
+                    android:gravity="center"
                     />
 
                 <TextView
@@ -239,8 +257,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_gravity="center_vertical"
                     android:paddingHorizontal="3dp"
+
+                    android:background="@drawable/table_cell_outline"
+                    android:gravity="center"
                     />
 
                 <TextView
@@ -248,8 +269,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_gravity="center_vertical"
                     android:paddingHorizontal="3dp"
+
+                    android:background="@drawable/table_cell_under_line"
+                    android:gravity="center"
                     />
 
 
@@ -267,6 +291,7 @@
                     android:text="@string/pef"
 
                     android:paddingVertical="5dp"
+
                     />
 
                 <TextView
@@ -274,8 +299,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_gravity="center_vertical"
                     android:paddingHorizontal="3dp"
+
+                    android:background="@drawable/table_cell_side_line"
+                    android:gravity="center"
                     />
 
                 <TextView
@@ -283,8 +311,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_gravity="center_vertical"
                     android:paddingHorizontal="3dp"
+
+                    android:background="@drawable/table_cell_side_line"
+                    android:gravity="center"
                     />
 
                 <TextView
@@ -292,9 +323,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_gravity="center_vertical"
                     android:paddingHorizontal="3dp"
 
+                    android:gravity="center"
                     />
 
 
