@@ -79,6 +79,7 @@ public class PatientInformationFragment extends Fragment {
     private OnMeasurementSelectedListener measurementSelectedListener;
     private ImageButton informationExpandButton;
     private boolean isExpanded = true;
+    private boolean isFocused = true;
 
     private Handler handler = new Handler(Looper.getMainLooper());
 
@@ -160,6 +161,11 @@ public class PatientInformationFragment extends Fragment {
             @Override
             public void onMeasSelected(Measurement meas) {
 
+                isFocused = false;
+
+                patientsRV.setVisibility(View.INVISIBLE);
+                patientsRV.setClickable(false);
+
                 measurementSelectedListener.onMeasurementSelected(meas);
 
             }
@@ -195,10 +201,25 @@ public class PatientInformationFragment extends Fragment {
         patientSearchField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
+
+                Log.d(getClass().getSimpleName(), "Has Focus : " + hasFocus);
+            }
+        });
+
+        patientSearchField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                isFocused = !isFocused;
+
+                if (isFocused) {
                     patientsRV.setVisibility(View.VISIBLE);
                     patientsRV.setClickable(true);
+                } else {
+                    patientsRV.setVisibility(View.INVISIBLE);
+                    patientsRV.setClickable(false);
                 }
+
             }
         });
 
@@ -340,6 +361,8 @@ public class PatientInformationFragment extends Fragment {
         patientNameText.setText(SharedPreferencesManager.getPatientName(context));
         StringBuilder info = new StringBuilder();
 
+        /*
+
         info.append(getString(R.string.chart_number_for_input, SharedPreferencesManager.getPatientChartNumber(context))).append("\n");
         if (SharedPreferencesManager.getPatientGender(context)) {
             info.append(getString(R.string.gender_for_input, getString(R.string.male))).append("\n");
@@ -349,6 +372,8 @@ public class PatientInformationFragment extends Fragment {
         info.append(getString(R.string.height_for_input, SharedPreferencesManager.getPatientHeight(context))).append("\n");
         info.append(getString(R.string.weight_for_input, SharedPreferencesManager.getPatientWeight(context))).append("\n");
         info.append(getString(R.string.birth_for_input, simpleDateFormat.format(SharedPreferencesManager.getPatientBirth(context)))).append("\n");
+
+         */
         patientInfoText.setText(info.toString());
     }
 

@@ -70,7 +70,7 @@
         <entry key="app/src/main/res/layout/item_measurement_box.xml" value="0.22" />
         <entry key="app/src/main/res/layout/item_patient_box.xml" value="0.16276041666666666" />
         <entry key="app/src/main/res/layout/item_result.xml" value="0.20767195767195767" />
-        <entry key="app/src/main/res/layout/item_result_svc.xml" value="0.16770833333333332" />
+        <entry key="app/src/main/res/layout/item_result_svc.xml" value="0.5" />
         <entry key="app/src/main/res/layout/item_scan_result.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_setting_app_version.xml" value="0.16276041666666666" />
         <entry key="app/src/main/res/layout/item_setting_auto_pairing.xml" value="0.16276041666666666" />

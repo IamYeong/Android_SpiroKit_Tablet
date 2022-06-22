@@ -115,6 +115,8 @@
                     android:text="@string/measurement"
                     android:textSize="15sp"
                     android:background="@drawable/button_out_line_highlight"
+
+                    android:layout_marginTop="10dp"
                     />
 
 

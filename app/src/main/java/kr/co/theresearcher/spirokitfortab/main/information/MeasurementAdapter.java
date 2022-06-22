@@ -47,6 +47,10 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
         this.measurements.addAll(measurementList);
         this.searchResults.addAll(measurementList);
 
+        if (searchResults.size() > 0) {
+            searchResults.get(searchResults.size() - 1).setSelected(true);
+        }
+
     }
 
     public void addMeasurement(Measurement measurement) {
