@@ -5,10 +5,12 @@ import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -72,14 +74,15 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
 
         ResultFVC resultFVC = fvcResults.get(holder.getAdapterPosition());
 
-
         if (resultFVC.isSelected()) {
-            holder.getFvcCardView().setCardBackgroundColor(ColorStateList.valueOf(context.getColor(R.color.primary_color)));
-            holder.setAllTextsColor(context.getColor(R.color.white));
+            //holder.getFvcCardView().setCardBackgroundColor(ColorStateList.valueOf(context.getColor(R.color.primary_color)));
+            //holder.setAllTextsColor(context.getColor(R.color.white));
+
+            holder.getLinearLayout().setBackground(AppCompatResources.getDrawable(context, R.drawable.item_selected_result));
 
         } else {
-            holder.getFvcCardView().setCardBackgroundColor(ColorStateList.valueOf(context.getColor(R.color.white)));
-            holder.setAllTextsColor(context.getColor(R.color.gray_dark));
+            holder.getLinearLayout().setBackgroundResource(0);
+
         }
 
         if (resultFVC.isPost()) {
@@ -133,6 +136,7 @@ class FvcResultViewHolder extends RecyclerView.ViewHolder {
     private List<TextView> texts;
 
     private CardView fvcCardView;
+    private LinearLayout linearLayout;
 
     public FvcResultViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -170,6 +174,8 @@ class FvcResultViewHolder extends RecyclerView.ViewHolder {
         texts.add(itemView.findViewById(R.id.tv_pef_pred_result_table));
         texts.add(itemView.findViewById(R.id.tv_pef_compare_result_table));
 
+        linearLayout = itemView.findViewById(R.id.linear_fvc_result);
+
     }
 
     public void setAllTextsColor(int color) {
@@ -183,6 +189,14 @@ class FvcResultViewHolder extends RecyclerView.ViewHolder {
             defaultTexts.get(i).setTextColor(color);
         }
 
+    }
+
+    public LinearLayout getLinearLayout() {
+        return linearLayout;
+    }
+
+    public void setLinearLayout(LinearLayout linearLayout) {
+        this.linearLayout = linearLayout;
     }
 
     public CardView getFvcCardView() {

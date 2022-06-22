@@ -9,9 +9,18 @@ public class ResultSVC {
     private double vt;
     private long timestamp;
     private boolean isSelected;
+    private boolean isPost;
 
     public ResultSVC() {
 
+    }
+
+    public boolean isPost() {
+        return isPost;
+    }
+
+    public void setPost(boolean post) {
+        isPost = post;
     }
 
     public boolean isSelected() {

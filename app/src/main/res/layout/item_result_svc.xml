@@ -9,6 +9,7 @@
     android:layout_marginStart="20dp"
     app:cardCornerRadius="20dp"
     app:cardBackgroundColor="@color/white"
+
     >
 
     <ImageButton
@@ -28,6 +29,8 @@
         android:orientation="vertical"
         android:layout_gravity="center"
         android:paddingHorizontal="30dp"
+
+        android:background="@drawable/item_selected_result"
         >
 
         <TextView

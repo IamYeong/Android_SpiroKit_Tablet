@@ -24,13 +24,13 @@
         />
 
     <LinearLayout
-        android:id="@+id/linear_svc_result"
+        android:id="@+id/linear_fvc_result"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_gravity="center"
 
-
+        android:background="@drawable/item_selected_result"
 
         >
 

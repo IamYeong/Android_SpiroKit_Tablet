@@ -4,16 +4,35 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/item_selected_meas"
+    android:layout_marginBottom="10dp"
+    >
+
+    <TextView
+        android:id="@+id/tv_group_measurement_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:fontFamily="@font/nanum_gothic"
+        android:textColor="@color/secondary_color"
+        android:text="@string/fvc"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        />
 
     <TextView
         android:id="@+id/tv_measurement_box"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_group_measurement_box"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_margin="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="20dp"
+
 
         android:fontFamily="@font/nanum_gothic"
         android:textSize="15sp"

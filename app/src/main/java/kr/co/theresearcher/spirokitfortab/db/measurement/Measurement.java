@@ -2,6 +2,7 @@ package kr.co.theresearcher.spirokitfortab.db.measurement;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity
@@ -23,11 +24,22 @@ public class Measurement {
     @ColumnInfo(name = "MEASUREMENT_PATH_NAME")
     private String path;
 
+    @Ignore
+    private boolean isSelected;
+
     public Measurement(int patientID, int measurementID, long measDate, String path) {
         this.patientID = patientID;
         this.measurementID = measurementID;
         this.measDate = measDate;
         this.path = path;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 
     public int getId() {

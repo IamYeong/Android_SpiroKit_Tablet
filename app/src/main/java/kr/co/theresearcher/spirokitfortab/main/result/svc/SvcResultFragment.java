@@ -94,7 +94,6 @@ public class SvcResultFragment extends Fragment {
 
                 startDrawing(width, height);
 
-
             }
         });
 
@@ -176,6 +175,7 @@ public class SvcResultFragment extends Fragment {
                         resultSVC.setTimestamp(timestamp);
                         resultSVC.setVc(vc);
                         resultSVC.setSelected(false);
+                        resultSVC.setPost(isPost);
 
                         if (i == 0) resultSVC.setSelected(true);
                         else resultSVC.setSelected(false);

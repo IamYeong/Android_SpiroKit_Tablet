@@ -5,9 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.Locale;
 
 import kr.co.theresearcher.spirokitfortab.R;
+import kr.co.theresearcher.spirokitfortab.db.meas_group.MeasGroup;
 import kr.co.theresearcher.spirokitfortab.db.measurement.Measurement;
 
 public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHolder> {
@@ -63,12 +66,28 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
 
         Measurement measurement = searchResults.get(holder.getAdapterPosition());
 
+        if (measurement.isSelected()) {
+
+            holder.getConstraintLayout().setBackground(AppCompatResources.getDrawable(context, R.drawable.item_selected_meas));
+
+        } else {
+
+            holder.getConstraintLayout().setBackgroundResource(0);
+
+        }
+
         holder.getMeasTitle().setText(simpleDateFormat.format(measurement.getMeasDate()));
+        MeasGroup[] measGroups = MeasGroup.values();
+        holder.getGroupText().setText(measGroups[measurement.getMeasurementID()].toString().toUpperCase(Locale.ROOT));
 
         holder.getConstraintLayout().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                for (Measurement meas : searchResults) meas.setSelected(false);
+                searchResults.get(holder.getAdapterPosition()).setSelected(true);
                 selectedListener.onMeasSelected(measurement);
+                notifyDataSetChanged();
             }
         });
 
@@ -82,7 +101,7 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
 
 class MeasurementViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView measTitle;
+    private TextView measTitle, groupText;
     private ImageButton removeButton;
     private ConstraintLayout constraintLayout;
 
@@ -92,7 +111,16 @@ class MeasurementViewHolder extends RecyclerView.ViewHolder {
         measTitle = itemView.findViewById(R.id.tv_measurement_box);
         removeButton = itemView.findViewById(R.id.img_btn_remove_meas_box);
         constraintLayout = itemView.findViewById(R.id.constraint_layout_meas_box);
+        groupText = itemView.findViewById(R.id.tv_group_measurement_box);
 
+    }
+
+    public TextView getGroupText() {
+        return groupText;
+    }
+
+    public void setGroupText(TextView groupText) {
+        this.groupText = groupText;
     }
 
     public ConstraintLayout getConstraintLayout() {
