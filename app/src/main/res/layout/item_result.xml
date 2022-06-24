@@ -34,35 +34,49 @@
 
         >
 
-        <TextView
-            android:id="@+id/tv_fvc_order_table"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:text="1차 검사 (Pre)"
+            android:orientation="horizontal"
 
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:layout_marginHorizontal="20dp"
 
             android:layout_gravity="center_horizontal"
-            android:fontFamily="@font/nanum_gothic_bold"
-            android:textSize="15sp"
-            />
+            >
 
-        <TextView
-            android:id="@+id/tv_fvc_date_table"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/gray_dark"
-            android:text="2022.04.29 (17:20)"
-            android:textSize="12sp"
+            <TextView
+                android:id="@+id/tv_fvc_order_table"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="1차 검사 (Pre)"
 
-            android:layout_marginVertical="5dp"
-            android:layout_marginHorizontal="20dp"
+                android:fontFamily="@font/nanum_gothic_bold"
+                android:textSize="15sp"
 
-            android:layout_gravity="center_horizontal"
+                android:maxLines="1"
 
-            />
+                android:layout_gravity="end|center_vertical"
+                />
+
+            <TextView
+                android:id="@+id/tv_fvc_date_table"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/gray_dark"
+                android:text="17:20"
+                android:textSize="12sp"
+
+                android:layout_marginVertical="5dp"
+                android:layout_marginHorizontal="20dp"
+
+                android:layout_gravity="start|center_vertical"
+
+                android:maxLines="1"
+                />
+
+        </LinearLayout>
 
         <TableLayout
             android:layout_width="wrap_content"
@@ -70,7 +84,7 @@
             android:layout_marginHorizontal="20dp"
             android:stretchColumns="4"
 
-            android:layout_margin="20dp"
+            android:layout_marginVertical="10dp"
             >
 
             <TableRow

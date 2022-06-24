@@ -148,25 +148,10 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(getClass().getSimpleName(), "Density : " + density + ", Width : " + displayWidth + ", Height : " + displayHeight);
 
-        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(
-                (int)(displayHeight / 3f), ViewGroup.LayoutParams.MATCH_PARENT
-        );
+        ViewGroup.LayoutParams layoutParams = (ViewGroup.LayoutParams) patientInfoContainer.getLayoutParams();
+        layoutParams.width = (int)(displayHeight / 3f);
         patientInfoContainer.setLayoutParams(layoutParams);
 
-
-        fragmentManager = getSupportFragmentManager();
-
-        PatientInformationFragment informationFragment = new PatientInformationFragment();
-        informationFragment.setMeasurementSelectedListener(new OnMeasurementSelectedListener() {
-            @Override
-            public void onMeasurementSelected(Measurement measurement) {
-
-                setFragmentByMeasGroup(measurement);
-
-            }
-        });
-
-        setFragment(R.id.fragment_container_patient_info_main, informationFragment);
 
         settingButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,6 +168,19 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        PatientInformationFragment informationFragment = new PatientInformationFragment();
+        informationFragment.setMeasurementSelectedListener(new OnMeasurementSelectedListener() {
+            @Override
+            public void onMeasurementSelected(Measurement measurement) {
+
+                setFragmentByMeasGroup(measurement);
+
+            }
+        });
+
+        fragmentManager = getSupportFragmentManager();
+        setFragment(R.id.fragment_container_patient_info_main, informationFragment);
 
         startService(new Intent(getApplicationContext(), SpiroKitBluetoothLeService.class));
 

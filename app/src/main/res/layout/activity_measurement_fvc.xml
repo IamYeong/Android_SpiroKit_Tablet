@@ -128,7 +128,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_margin="20dp"
+                android:layout_margin="10dp"
                 android:background="@drawable/graph_out_line"
                 />
 
@@ -169,7 +169,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_margin="20dp"
+                android:layout_margin="10dp"
 
                 android:background="@drawable/graph_out_line"
                 />
@@ -282,8 +282,8 @@
         android:background="@color/white"
         />
 
-    <ImageView
-        android:id="@+id/img_empty_list_fvc_meas"
+    <TextView
+        android:id="@+id/tv_empty_list_fvc_meas"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="@id/rv_meas"
@@ -291,8 +291,13 @@
         app:layout_constraintEnd_toEndOf="@id/rv_meas"
         app:layout_constraintStart_toStartOf="@id/rv_meas"
 
-        android:background="@color/primary_color"
-        android:src="@drawable/ic_launcher_foreground"
+        android:background="@color/white"
+        android:text="@string/nothing_result"
+        android:textColor="@color/gray_dark"
+        android:textAlignment="center"
+        android:textSize="20sp"
+
+        android:gravity="center"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

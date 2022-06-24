@@ -1,11 +1,13 @@
 package kr.co.theresearcher.spirokitfortab.main.information;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.util.Pair;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,6 +28,10 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,6 +43,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -80,6 +87,11 @@ public class PatientInformationFragment extends Fragment {
     private ImageButton informationExpandButton;
     private boolean isExpanded = true;
     private boolean isFocused = true;
+
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+    private long minDate = Calendar.getInstance().getTime().getTime();
+    private long maxDate = Calendar.getInstance().getTime().getTime();
+
 
     private Handler handler = new Handler(Looper.getMainLooper());
 
@@ -251,6 +263,40 @@ public class PatientInformationFragment extends Fragment {
             }
         });
 
+        dateRangeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MaterialDatePicker<Pair<Long, Long>> materialDatePicker = MaterialDatePicker.Builder.dateRangePicker()
+                        .setTitleText(getString(R.string.select_test_date))
+
+
+                        .build();
+
+                materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>() {
+                    @Override
+                    public void onPositiveButtonClick(Pair<Long, Long> selection) {
+
+                        System.out.println(simpleDateFormat.format(selection.first));
+                        System.out.println(simpleDateFormat.format(selection.second));
+
+                        if (!measurementAdapter.searchMeasInRange(selection.first, selection.second)) {
+                            //Toast.makeText(context, getString(R.string.time_select_error), Toast.LENGTH_SHORT).show();
+                            measurementAdapter.initializing();
+                            measurementAdapter.notifyDataSetChanged();
+                        } else {
+                            measurementAdapter.notifyDataSetChanged();
+                            dateRangeText.setText(getString(R.string.date_to_date, simpleDateFormat.format(selection.first), simpleDateFormat.format(selection.second)));
+                            //testsPeriodText.setText(simpleDateFormat.format(selection.first) + " ~ " + simpleDateFormat.format(selection.second));
+                        }
+
+                    }
+                });
+
+                materialDatePicker.show(getActivity().getSupportFragmentManager(), "DATE_PICKER");
+
+            }
+        });
+
 
         return view;
     }
@@ -285,6 +331,12 @@ public class PatientInformationFragment extends Fragment {
                 List<Measurement> measurements = measurementDao.selectByPatientID(SharedPreferencesManager.getPatientId(context));
                 measurementDatabase.close();
 
+
+                for (Measurement measurement : measurements) {
+                    if (minDate > measurement.getMeasDate()) minDate = measurement.getMeasDate();
+                    if (maxDate < measurement.getMeasDate()) maxDate = measurement.getMeasDate();
+                }
+
                 measurementAdapter.setMeasurements(measurements);
 
                 handler.post(new Runnable() {
@@ -294,6 +346,7 @@ public class PatientInformationFragment extends Fragment {
                         measurementAdapter.notifyDataSetChanged();
                         if (isExpanded) updatePatientInformation();
                         else updatePatientSimpleInfo();
+                        dateRangeText.setText(getString(R.string.date_to_date, simpleDateFormat.format(minDate), simpleDateFormat.format(maxDate)));
                     }
                 });
 

@@ -28,7 +28,7 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
     private Context context;
     private List<ResultFVC> fvcResults;
     private OnOrderSelectedListener orderSelectedListener;
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd (HH:mm)", Locale.getDefault());
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
     private boolean nothing = true;
 
@@ -91,7 +91,7 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
             holder.getOrderText().setText(context.getString(R.string.result_order, holder.getAdapterPosition() + 1, context.getString(R.string.pre)));
         }
 
-        holder.getDateText().setText(context.getString(R.string.date_is, simpleDateFormat.format(resultFVC.getTimestamp())));
+        holder.getDateText().setText(context.getString(R.string.time_is, simpleDateFormat.format(resultFVC.getTimestamp())));
 
         holder.getFvcText().setText(context.getString(R.string.liter_with_parameter, resultFVC.getFvc()));
         holder.getFvcPredText().setText(context.getString(R.string.liter_with_parameter, resultFVC.getFvcPredict()));

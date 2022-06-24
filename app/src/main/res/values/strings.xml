@@ -71,6 +71,9 @@
     <string name="chart_number_colon">차트넘버 : %1$s</string>
     <string name="delete_select_patients">선택한 환자 정보를 모두 지우시겠습니까?</string>
 
+    <string name="nothing_patients">환자정보를 추가한 후 사용해보세요</string>
+    <string name="nothing_measurements">검사 후 결과를 확인해보세요</string>
+
     <!-- 환자추가 / 수정 -->
     <string name="patient_add">환자정보 추가</string>
     <string name="patient_edit">환자정보 수정</string>
@@ -189,6 +192,10 @@
     <string name="pre_save">PRE 저장</string>
     <string name="post_save">POST 저장</string>
 
+    <string name="spirokit_initializing">스파이로킷 동작 준비 중입니다</string>
+    <string name="spirokit_terminating">스파이로킷 종료 중입니다</string>
+    <string name="nothing_result">측정 후 저장하면 결과확인이 즉시 가능합니다</string>
+
     <!-- 연결 화면 -->
     <string name="connect_device">디바이스 연결</string>
     <string name="device">디바이스</string>
@@ -211,6 +218,7 @@
 
     <string name="result_order">%1$d차 검사(%2$s)</string>
     <string name="date_is">날짜 : %1$s</string>
+    <string name="time_is">시간 : %1$s</string>
     <string name="fvc_with_unit">FVC : %.3f L</string>
     <string name="fev1_with_unit">FEV1 : %.3f L</string>
     <string name="fev1_percent_with_unit">FEV1%1$s : %2$.3f %3$s</string>

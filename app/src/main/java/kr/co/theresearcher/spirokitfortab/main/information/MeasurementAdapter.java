@@ -36,6 +36,32 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
         searchResults = new ArrayList<>();
     }
 
+    public boolean searchMeasInRange(long from, long to) {
+
+        if (from > to) return false;
+        if (from < 0) return false;
+
+        searchResults.clear();
+
+        for (Measurement measurement : measurements) {
+
+            if ((measurement.getMeasDate() >= from) && (measurement.getMeasDate() <= to)) {
+                searchResults.add(measurement);
+            }
+
+        }
+
+        return true;
+
+    }
+
+    public void initializing() {
+
+        searchResults.clear();
+        searchResults.addAll(measurements);
+
+    }
+
     public void setSelectedListener(OnMeasSelectedListener listener) {
         this.selectedListener = listener;
     }

@@ -30,6 +30,9 @@ public class SharedPreferencesManager {
     public static final String OFFICE_ID =
             "kr.co.theresearcher.office.id";
 
+    public static final String OPERATOR_ID =
+            "kr.co.theresearcher.operator.id";
+
 
     public static SharedPreferences getPreferences(Context context) {
         return context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
@@ -219,6 +222,18 @@ public class SharedPreferencesManager {
         return getPreferences(context).getFloat(INPUT_PATIENT_ + "pack", 0f);
     }
 
+    public static boolean setPatientMatchDoctor(Context context, String doctor) {
+
+        SharedPreferences sharedPreferences = getPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();;
+        editor.putString(INPUT_PATIENT_ + "match_doctor", doctor);
+        return editor.commit();
+    }
+
+    public static String getPatientMatchDoctor(Context context) {
+        return getPreferences(context).getString(INPUT_PATIENT_ + "match_doctor", "");
+    }
+
     public static boolean setBluetoothDeviceMacAddress(Context context, String address) {
         SharedPreferences sharedPreferences = getPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();;
@@ -249,6 +264,17 @@ public class SharedPreferencesManager {
         SharedPreferences sharedPreferences = getPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(OFFICE_ID, id);
+        return editor.commit();
+    }
+
+    public static int getOperatorID(Context context) {
+        return getPreferences(context).getInt(OPERATOR_ID, 0);
+    }
+
+    public static boolean setOperatorID(Context context, int id) {
+        SharedPreferences sharedPreferences = getPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(OPERATOR_ID, id);
         return editor.commit();
     }
 

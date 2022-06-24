@@ -14,16 +14,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,7 +34,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.Buffer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -55,7 +53,7 @@ import kr.co.theresearcher.spirokitfortab.db.measurement.Measurement;
 import kr.co.theresearcher.spirokitfortab.db.measurement.MeasurementDao;
 import kr.co.theresearcher.spirokitfortab.db.measurement.MeasurementDatabase;
 import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
-import kr.co.theresearcher.spirokitfortab.graph.Coordinate;
+import kr.co.theresearcher.spirokitfortab.dialog.LoadingDialog;
 import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
 import kr.co.theresearcher.spirokitfortab.graph.TimerProgressView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowResultView;
@@ -84,7 +82,8 @@ public class MeasurementFvcActivity extends AppCompatActivity {
     private ImageButton backButton;
     private FvcResultAdapter resultAdapter;
     private TextView patientNameText;
-    private ImageView emptyImage;
+    private TextView emptyText;
+    private LoadingDialog loadingDialog;
 
     private boolean isStart = false;
     private int dataReceivedCount = 0;
@@ -119,19 +118,56 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                 public void onReadCharacteristic(byte[] data) {
                     //testTitleText.setText("READ CHARACTERISTIC");
 
-                    if (!isStart) return;
-                    if (pulseWidthList.size() > 1000) return;
-
-                    dataReceivedCount++;
-
                     int value = conversionIntegerFromByteArray(data);
+
+                    //Log.d(getClass().getSimpleName(), "***********VALUE : " + value);
+
                     if (value > 10) {
+
+                        if (!isStart) return;
+                        if (pulseWidthList.size() > 1000) return;
+
+                        dataReceivedCount++;
 
                         pulseWidthList.add(value);
                         handleData(value);
 
                     } else {
 
+                        if (value == 2) {
+
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    if (loadingDialog.isShowing()) loadingDialog.dismiss();
+
+                                }
+                            }, 1000);
+
+                            if (!loadingDialog.isShowing()) {
+                                loadingDialog.setTitle(getString(R.string.spirokit_initializing));
+                                loadingDialog.show();
+                            }
+
+                        } else if (value == 3) {
+
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    if (loadingDialog.isShowing()) loadingDialog.dismiss();
+
+                                }
+                            }, 1000);
+
+                            if (!loadingDialog.isShowing()) {
+                                loadingDialog.setTitle(getString(R.string.spirokit_terminating));
+                                loadingDialog.show();
+                            }
+
+
+                        }
 
                     }
 
@@ -190,7 +226,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         preSaveButton = findViewById(R.id.btn_pre_save_fvc_meas);
         postSaveButton = findViewById(R.id.btn_post_save_fvc_meas);
 
-        emptyImage = findViewById(R.id.img_empty_list_fvc_meas);
+        emptyText = findViewById(R.id.tv_empty_list_fvc_meas);
 
         rv = findViewById(R.id.rv_meas);
         retestButton = findViewById(R.id.btn_retest_meas);
@@ -470,6 +506,8 @@ public class MeasurementFvcActivity extends AppCompatActivity {
             }
         });
 
+        loadingDialog = new LoadingDialog(this);
+
         startTimestamp = Calendar.getInstance().getTime().getTime();
 
     }
@@ -706,7 +744,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                             resultVolumeFlowGraphLayout.addView(volumeFlowResultViewList.get(testOrder - 1));
                             resultVolumeTimeGraphLayout.addView(volumeTimeResultViewList.get(testOrder - 1));
 
-                            emptyImage.setVisibility(View.GONE);
+                            emptyText.setVisibility(View.GONE);
 
                             testOrder++;
 
