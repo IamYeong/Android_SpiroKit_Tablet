@@ -47,6 +47,8 @@ public class Patient {
     @ColumnInfo(name = "PATIENT_DOCTOR_NAME")
     private String doctorName;
 
+    //오피스 ID 빠져있음
+
     public Patient(String chartNumber, String name, boolean gender, int weight, int height, int humanRaceId, long birthDate, long startSmokeDate, long stopSmokeDate, boolean isSmoke, float smokeAmountPack, String doctorName) {
         this.chartNumber = chartNumber;
         this.name = name;

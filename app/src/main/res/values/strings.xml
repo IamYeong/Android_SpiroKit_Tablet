@@ -131,6 +131,7 @@
     <string name="sleep_mode">슬립 모드(5분 후 기기 종료)</string>
     <string name="manual">매뉴얼</string>
     <string name="sync_with_server">서버 동기화</string>
+    <string name="operator_management">의료진 관리</string>
 
     <!-- 스캔 / 연결 화면 -->
     <string name="question_stop_scan_and_finish">기기 탐색을 멈추고 나가시겠습니까?</string>

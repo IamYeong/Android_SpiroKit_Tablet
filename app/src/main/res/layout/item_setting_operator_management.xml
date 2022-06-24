@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    android:id="@+id/card_operator_management"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="20dp"
+    app:cardCornerRadius="10dp"
+    android:elevation="20dp"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_gravity="start|center_vertical"
+        android:layout_margin="20dp"
+
+        android:fontFamily="@font/nanum_gothic"
+        android:text="@string/operator_management"
+        android:textSize="15sp"
+        android:textColor="@color/black"
+        />
+
+
+</androidx.cardview.widget.CardView>

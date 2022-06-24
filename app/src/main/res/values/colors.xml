@@ -15,6 +15,7 @@
     <color name="gray_dark">#FF888888</color>
     <color name="gray_light">#FFE2E2E2</color>
     <color name="gray_progress_not_fill">#C2CADB</color>
+    <color name="gray_disable">#e5e5ea</color>
 
     <color name="ble_connection">#FF00FF22</color>
 

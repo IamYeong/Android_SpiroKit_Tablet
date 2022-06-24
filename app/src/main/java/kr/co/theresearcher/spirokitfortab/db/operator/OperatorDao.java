@@ -17,6 +17,9 @@ public interface OperatorDao {
     @Query("SELECT * FROM OPERATOR WHERE OPERATOR_WORK_ID = :workID")
     List<Operator> selectByWorkID(int workID);
 
+    @Query("DELETE FROM OPERATOR")
+    void deleteAll();
+
     @Insert
     void insertOperator(Operator operator);
 

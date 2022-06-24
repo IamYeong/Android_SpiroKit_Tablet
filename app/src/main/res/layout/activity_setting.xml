@@ -278,14 +278,8 @@
                 />
 
             <include
-                layout="@layout/item_setting_manual"
+                layout="@layout/item_setting_operator_management"
                 />
-
-            <include
-                layout="@layout/item_setting_server_sync"
-                />
-
-
 
         </LinearLayout>
 

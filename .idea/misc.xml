@@ -54,6 +54,7 @@
         <entry key="app/src/main/res/layout/activity_measurement_fvc.xml" value="0.16" />
         <entry key="app/src/main/res/layout/activity_measurement_mvv.xml" value="0.20442708333333334" />
         <entry key="app/src/main/res/layout/activity_measurement_svc.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/activity_operator.xml" value="0.20442708333333334" />
         <entry key="app/src/main/res/layout/activity_patient_insert.xml" value="0.16" />
         <entry key="app/src/main/res/layout/activity_setting.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.12" />
@@ -68,6 +69,7 @@
         <entry key="app/src/main/res/layout/fragment_result.xml" value="0.17" />
         <entry key="app/src/main/res/layout/fragment_svc_result.xml" value="0.18" />
         <entry key="app/src/main/res/layout/item_measurement_box.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/item_operator_box.xml" value="0.20442708333333334" />
         <entry key="app/src/main/res/layout/item_patient_box.xml" value="0.16276041666666666" />
         <entry key="app/src/main/res/layout/item_result.xml" value="0.20767195767195767" />
         <entry key="app/src/main/res/layout/item_result_svc.xml" value="0.5" />
@@ -75,6 +77,7 @@
         <entry key="app/src/main/res/layout/item_setting_app_version.xml" value="0.16276041666666666" />
         <entry key="app/src/main/res/layout/item_setting_auto_pairing.xml" value="0.16276041666666666" />
         <entry key="app/src/main/res/layout/item_setting_manual.xml" value="0.16276041666666666" />
+        <entry key="app/src/main/res/layout/item_setting_operator_management.xml" value="0.20442708333333334" />
         <entry key="app/src/main/res/layout/item_setting_server_sync.xml" value="0.16276041666666666" />
         <entry key="app/src/main/res/layout/item_setting_sleep_mode.xml" value="0.16276041666666666" />
         <entry key="app/src/main/res/layout/item_setting_user.xml" value="0.16276041666666666" />

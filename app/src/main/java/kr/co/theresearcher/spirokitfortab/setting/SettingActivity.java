@@ -5,6 +5,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,11 +47,13 @@ import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
 import kr.co.theresearcher.spirokitfortab.dialog.LoadingDialog;
 import kr.co.theresearcher.spirokitfortab.dialog.OnSelectedInDialogListener;
 import kr.co.theresearcher.spirokitfortab.dialog.SelectionDialog;
+import kr.co.theresearcher.spirokitfortab.setting.operator.OperatorActivity;
 
 public class SettingActivity extends AppCompatActivity {
 
     private ImageButton backButton;
     private Button startScanButton, autoPairingButton, sleepModeButton, logoutButton, manualButton, syncButton;
+    private CardView operatorCard;
     private RecyclerView rv;
     private BluetoothScanResultsAdapter adapter;
     private TextView macAddressText;
@@ -166,6 +169,17 @@ public class SettingActivity extends AppCompatActivity {
         startScanButton = findViewById(R.id.btn_start_scan_setting);
         macAddressText = findViewById(R.id.tv_mac_address_setting);
         backButton = findViewById(R.id.img_btn_back_setting);
+
+        operatorCard = findViewById(R.id.card_operator_management);
+        operatorCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(SettingActivity.this, OperatorActivity.class);
+                startActivity(intent);
+
+            }
+        });
 
         rv = findViewById(R.id.rv_setting);
         adapter = new BluetoothScanResultsAdapter(SettingActivity.this);
