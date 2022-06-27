@@ -47,9 +47,13 @@ public class Patient {
     @ColumnInfo(name = "PATIENT_DOCTOR_NAME")
     private String doctorName;
 
+    @ColumnInfo(name = "PATIENT_OFFICE_ID")
+    private int officeID;
+
     //오피스 ID 빠져있음
 
-    public Patient(String chartNumber, String name, boolean gender, int weight, int height, int humanRaceId, long birthDate, long startSmokeDate, long stopSmokeDate, boolean isSmoke, float smokeAmountPack, String doctorName) {
+    public Patient(int officeID, String chartNumber, String name, boolean gender, int weight, int height, int humanRaceId, long birthDate, long startSmokeDate, long stopSmokeDate, boolean isSmoke, float smokeAmountPack, String doctorName) {
+        this.officeID = officeID;
         this.chartNumber = chartNumber;
         this.name = name;
         this.gender = gender;
@@ -66,6 +70,14 @@ public class Patient {
 
     public Patient() {
 
+    }
+
+    public int getOfficeID() {
+        return officeID;
+    }
+
+    public void setOfficeID(int officeID) {
+        this.officeID = officeID;
     }
 
     public int getId() {

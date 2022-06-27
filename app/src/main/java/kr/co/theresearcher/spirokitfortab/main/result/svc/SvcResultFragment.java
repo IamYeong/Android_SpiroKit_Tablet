@@ -92,6 +92,7 @@ public class SvcResultFragment extends Fragment implements Observer {
             @Override
             public void onChanged() {
 
+                svcResultAdapter.clear();
                 startDrawing(graphLayout.getWidth(), graphLayout.getHeight());
 
             }

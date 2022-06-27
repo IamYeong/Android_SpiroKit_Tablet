@@ -64,6 +64,7 @@ public class PatientInsertActivity extends AppCompatActivity {
         backButton = findViewById(R.id.img_btn_back_insert_patient);
 
         chartNumberField = findViewById(R.id.et_chart_number_insert_patient);
+        /*
         nameField = findViewById(R.id.et_name_insert_patient);
         heightField = findViewById(R.id.et_height_insert_patient);
         weightField = findViewById(R.id.et_weight_insert_patient);
@@ -89,6 +90,9 @@ public class PatientInsertActivity extends AppCompatActivity {
         humanRaceSpr = findViewById(R.id.spinner_human_race_insert_patient);
         matchDoctorSpr = findViewById(R.id.spinner_match_doctor_insert_patient);
 
+         */
+
+        /*
         heightField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -444,6 +448,8 @@ public class PatientInsertActivity extends AppCompatActivity {
             }
         });
 
+
+         */
 
     }
 

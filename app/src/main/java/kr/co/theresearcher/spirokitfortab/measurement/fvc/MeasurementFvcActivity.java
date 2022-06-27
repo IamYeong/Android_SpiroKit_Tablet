@@ -442,7 +442,9 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
                         MeasurementDatabase database = Room.databaseBuilder(MeasurementFvcActivity.this, MeasurementDatabase.class, RoomNames.ROOM_MEASUREMENT_DB_NAME).build();
                         MeasurementDao measurementDao = database.measurementDao();
-                        Measurement measurement = new Measurement(SharedPreferencesManager.getPatientId(MeasurementFvcActivity.this),
+                        Measurement measurement = new Measurement(
+                                SharedPreferencesManager.getOfficeID(MeasurementFvcActivity.this),
+                                SharedPreferencesManager.getPatientId(MeasurementFvcActivity.this),
                                 MeasGroup.fvc.ordinal(), startTimestamp, simpleDateFormat.format(startTimestamp));
                         measurementDao.insertMeasurement(measurement);
                         database.close();

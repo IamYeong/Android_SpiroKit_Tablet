@@ -162,7 +162,7 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsViewHolder> {
                                 super.run();
                                 Looper.prepare();
 
-                                removeThisData();
+                                removeThisData(patient.getId());
 
                                 PatientDatabase database = Room.databaseBuilder(context, PatientDatabase.class, RoomNames.ROOM_PATIENT_DB_NAME)
                                         .build();
@@ -200,11 +200,11 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsViewHolder> {
         return (searchResults != null ? searchResults.size() : 0);
     }
 
-    private void removeThisData() {
+    private void removeThisData(int pid) {
 
         File dir = context.getExternalFilesDir("data/"
                 + SharedPreferencesManager.getOfficeID(context) + "/"
-                + SharedPreferencesManager.getPatientId(context));
+                + pid);
 
         deleteFileWithChildren(dir);
 

@@ -74,6 +74,10 @@ public class SvcResultAdapter extends RecyclerView.Adapter<SvcResultViewHolder> 
         this.results.add(resultSVC);
     }
 
+    public void clear() {
+        results.clear();
+    }
+
 
     @NonNull
     @Override

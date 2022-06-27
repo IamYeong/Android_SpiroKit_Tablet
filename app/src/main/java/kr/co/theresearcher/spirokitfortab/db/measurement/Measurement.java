@@ -24,14 +24,26 @@ public class Measurement {
     @ColumnInfo(name = "MEASUREMENT_PATH_NAME")
     private String path;
 
+    @ColumnInfo(name = "MEASUREMENT_OFFICE_ID")
+    private int officeID;
+
     @Ignore
     private boolean isSelected;
 
-    public Measurement(int patientID, int measurementID, long measDate, String path) {
+    public Measurement(int officeID, int patientID, int measurementID, long measDate, String path) {
+        this.officeID = officeID;
         this.patientID = patientID;
         this.measurementID = measurementID;
         this.measDate = measDate;
         this.path = path;
+    }
+
+    public int getOfficeID() {
+        return officeID;
+    }
+
+    public void setOfficeID(int officeID) {
+        this.officeID = officeID;
     }
 
     public boolean isSelected() {

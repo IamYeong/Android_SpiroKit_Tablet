@@ -227,6 +227,7 @@ public class MainActivity extends AppCompatActivity {
 
         bindService(new Intent(getApplicationContext(), SpiroKitBluetoothLeService.class), serviceConnection ,Context.BIND_AUTO_CREATE);
 
+        /*
         Thread thread = new Thread() {
             @Override
             public void run() {
@@ -252,6 +253,8 @@ public class MainActivity extends AppCompatActivity {
         };
 
         thread.start();
+
+         */
 
     }
 

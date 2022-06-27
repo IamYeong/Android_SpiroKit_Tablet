@@ -571,6 +571,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
                 MeasurementDatabase database = Room.databaseBuilder(MeasurementSvcActivity.this, MeasurementDatabase.class, RoomNames.ROOM_MEASUREMENT_DB_NAME).build();
                 MeasurementDao measurementDao = database.measurementDao();
                 Measurement measurement = new Measurement(
+                        SharedPreferencesManager.getOfficeID(MeasurementSvcActivity.this),
                         SharedPreferencesManager.getPatientId(MeasurementSvcActivity.this),
                         MeasGroup.svc.ordinal(),
                         startTimestamp,
