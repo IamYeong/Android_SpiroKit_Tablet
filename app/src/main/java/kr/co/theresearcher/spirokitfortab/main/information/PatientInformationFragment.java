@@ -148,8 +148,19 @@ public class PatientInformationFragment extends Fragment implements Observer {
         volumeTimeLayout = view.findViewById(R.id.frame_volume_time_graph_result_fragment);
 
         patientsAdapter = new PatientsAdapter(container.getContext());
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(container.getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+        patientsAdapter.setOnItemChangedListener(new OnItemChangedListener() {
+            @Override
+            public void onChanged() {
+
+                selectPatients();
+
+            }
+        });
+
         patientsAdapter.setSimpleSelectedListener(new OnItemSimpleSelectedListener() {
             @Override
             public void onSimpleSelected() {
