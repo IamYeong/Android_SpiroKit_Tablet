@@ -23,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -89,6 +90,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
     private ImageButton informationExpandButton;
     private boolean isExpanded = true;
     private boolean isFocused = false;
+    private InputMethodManager inputMethodManager;
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
     private long minDate = Calendar.getInstance().getTime().getTime();
@@ -102,6 +104,31 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
+
+        if (isFocused) {
+
+
+            isFocused = false;
+            patientsRV.setVisibility(View.INVISIBLE);
+            patientsRV.setClickable(true);
+            patientSearchField.clearFocus();
+
+            inputMethodManager.hideSoftInputFromWindow(patientSearchField.getWindowToken(), 0);
+
+
+
+            /*
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+
+                }
+            });
+
+             */
+
+        }
+
         Log.d(getClass().getSimpleName(), "INFO FRAGMENT : TOUCH");
     }
 
@@ -114,6 +141,8 @@ public class PatientInformationFragment extends Fragment implements Observer {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_patient_information, container, false);
+
+        inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
 
         startMeasButton = view.findViewById(R.id.btn_test_start_patient_info);
         patientSearchField = view.findViewById(R.id.et_search_patient_info_fragment);
@@ -136,11 +165,15 @@ public class PatientInformationFragment extends Fragment implements Observer {
             @Override
             public void onSimpleSelected() {
 
-                if (isExpanded) updatePatientInformation();
-                else updatePatientSimpleInfo();
+                isFocused = false;
+                inputMethodManager.hideSoftInputFromWindow(patientSearchField.getWindowToken(), 0);
 
                 patientsRV.setVisibility(View.INVISIBLE);
                 patientsRV.setClickable(false);
+                patientSearchField.clearFocus();
+
+                if (isExpanded) updatePatientInformation();
+                else updatePatientSimpleInfo();
 
                 Thread thread = new Thread() {
                     @Override
@@ -179,11 +212,11 @@ public class PatientInformationFragment extends Fragment implements Observer {
             @Override
             public void onMeasSelected(Measurement meas) {
 
-                patientsRV.setVisibility(View.INVISIBLE);
-                patientsRV.setClickable(false);
-                patientSearchField.clearFocus();
+
 
                 measurementSelectedListener.onMeasurementSelected(meas);
+
+
 
             }
         });
@@ -223,26 +256,23 @@ public class PatientInformationFragment extends Fragment implements Observer {
             }
         });
 
-        patientSearchField.setOnClickListener(new View.OnClickListener() {
+        patientSearchField.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onTouch(View v, MotionEvent event) {
 
-                isFocused = !isFocused;
+                if (event.getAction() == MotionEvent.ACTION_UP) {
 
-                if (isFocused) {
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            patientSearchField.requestFocus();
-                        }
-                    });
-                } else {
-                    patientSearchField.clearFocus();
+                    Log.d(getClass().getSimpleName(), "Patient edit text click");
+
+
+                    isFocused = true;
+                    patientsRV.setVisibility(View.VISIBLE);
+                    patientsRV.setClickable(true);
+
+
                 }
 
-                //patientsRV.setVisibility(View.VISIBLE);
-                //patientsRV.setClickable(true);
-
+                return false;
             }
         });
 

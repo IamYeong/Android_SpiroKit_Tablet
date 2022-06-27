@@ -1,6 +1,7 @@
 package kr.co.theresearcher.spirokitfortab.main.patients;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,6 +108,7 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsViewHolder> {
             @Override
             public void onClick(View v) {
 
+                Log.d(getClass().getSimpleName(), patient.getName());
                 //선택 UI 처리 후 리스너로 전달, 리사이클러뷰 닫고 환자 정보 보여주면 됨.
 
                 SharedPreferencesManager.setPatientId(context, patient.getId());

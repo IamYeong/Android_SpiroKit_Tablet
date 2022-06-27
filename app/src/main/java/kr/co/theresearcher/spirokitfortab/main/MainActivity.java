@@ -291,9 +291,13 @@ public class MainActivity extends AppCompatActivity {
 
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
 
-            Log.d(getClass().getSimpleName(), "CHANGED : " + observer.hasChanged());
-            observer.notificationObservers(1);
-            Log.d(getClass().getSimpleName(), "DOWN EVENT!!!");
+            if (!(ev.getX() <= patientInfoContainer.getLayoutParams().width)) {
+                Log.d(getClass().getSimpleName(), "CHANGED : " + observer.hasChanged());
+                observer.notificationObservers(1);
+                Log.d(getClass().getSimpleName(), "DOWN EVENT!!!");
+            }
+
+
         }
 
 
