@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.calc.CalcSpiroKitE;
@@ -86,6 +87,16 @@ public class SvcResultFragment extends Fragment implements Observer {
                 selectResult(order);
             }
         });
+
+        svcResultAdapter.setOnItemChangedListener(new OnItemChangedListener() {
+            @Override
+            public void onChanged() {
+
+                startDrawing(graphLayout.getWidth(), graphLayout.getHeight());
+
+            }
+        });
+
         svcResultAdapter.addEmptyResult(new ResultSVC());
 
         rv.setLayoutManager(linearLayoutManager);

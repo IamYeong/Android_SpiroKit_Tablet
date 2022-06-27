@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,13 +25,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
+import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.calc.CalcSpiroKitE;
@@ -40,12 +39,9 @@ import kr.co.theresearcher.spirokitfortab.db.meas_group.MeasGroup;
 import kr.co.theresearcher.spirokitfortab.db.measurement.Measurement;
 import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowResultView;
-import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowRunView;
-import kr.co.theresearcher.spirokitfortab.graph.VolumeTimeResultView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeTimeResultView;
 import kr.co.theresearcher.spirokitfortab.main.result.OnOrderSelectedListener;
 import kr.co.theresearcher.spirokitfortab.measurement.fvc.FvcResultAdapter;
-import kr.co.theresearcher.spirokitfortab.measurement.fvc.MeasurementFvcActivity;
 import kr.co.theresearcher.spirokitfortab.measurement.fvc.ResultFVC;
 
 public class FvcResultFragment extends Fragment implements Observer {
@@ -62,6 +58,8 @@ public class FvcResultFragment extends Fragment implements Observer {
     private List<VolumeTimeResultView> volumeTimeResultViews = new ArrayList<>();
     private Measurement measurement;
     private Handler handler = new Handler(Looper.getMainLooper());
+
+
 
     public FvcResultFragment(Measurement measurement) {
         this.measurement = measurement;
@@ -95,11 +93,22 @@ public class FvcResultFragment extends Fragment implements Observer {
         measDoctorText.setText(getString(R.string.meas_doctor_result_input, "TEST"));
 
         adapter = new FvcResultAdapter(context);
+        adapter.setRootTimestamp(measurement.getMeasDate());
         adapter.setOnOrderSelectedListener(new OnOrderSelectedListener() {
             @Override
             public void onOrderSelected(int order) {
 
                 selectData(order);
+
+            }
+        });
+
+        adapter.setChangedListener(new OnItemChangedListener() {
+            @Override
+            public void onChanged() {
+
+                adapter.clear();
+                startDrawing(volumeFlowLayout.getWidth(), volumeFlowLayout.getHeight());
 
             }
         });

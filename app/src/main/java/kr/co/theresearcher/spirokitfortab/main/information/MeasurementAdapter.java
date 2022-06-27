@@ -1,6 +1,8 @@
 package kr.co.theresearcher.spirokitfortab.main.information;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,15 +14,24 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
 import kr.co.theresearcher.spirokitfortab.R;
+import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
+import kr.co.theresearcher.spirokitfortab.db.RoomNames;
 import kr.co.theresearcher.spirokitfortab.db.meas_group.MeasGroup;
 import kr.co.theresearcher.spirokitfortab.db.measurement.Measurement;
+import kr.co.theresearcher.spirokitfortab.db.measurement.MeasurementDao;
+import kr.co.theresearcher.spirokitfortab.db.measurement.MeasurementDatabase;
+import kr.co.theresearcher.spirokitfortab.dialog.OnSelectedInDialogListener;
+import kr.co.theresearcher.spirokitfortab.dialog.SelectionDialog;
 
 public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHolder> {
 
@@ -28,12 +39,19 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
     private List<Measurement> measurements;
     private List<Measurement> searchResults;
     private OnMeasSelectedListener selectedListener;
+    private OnItemChangedListener onItemChangedListener;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.getDefault());
+
+    private Handler handler = new Handler(Looper.getMainLooper());
 
     public MeasurementAdapter(Context context) {
         this.context = context;
         measurements = new ArrayList<>();
         searchResults = new ArrayList<>();
+    }
+
+    public void setOnItemChangedListener(OnItemChangedListener listener) {
+        this.onItemChangedListener = listener;
     }
 
     public boolean searchMeasInRange(long from, long to) {
@@ -121,11 +139,86 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
             }
         });
 
+        holder.getRemoveButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                SelectionDialog selectionDialog = new SelectionDialog(context);
+                selectionDialog.setTitle(context.getString(R.string.question_delete));
+                selectionDialog.setSelectedListener(new OnSelectedInDialogListener() {
+                    @Override
+                    public void onSelected(boolean select) {
+
+                        Thread thread = new Thread() {
+
+                            @Override
+                            public void run() {
+                                super.run();
+                                Looper.prepare();
+
+                                removeThisData(measurement.getMeasDate());
+
+                                MeasurementDatabase measurementDatabase = Room.databaseBuilder(context, MeasurementDatabase.class, RoomNames.ROOM_MEASUREMENT_DB_NAME)
+                                        .build();
+                                MeasurementDao measurementDao = measurementDatabase.measurementDao();
+                                measurementDao.deleteMeasurement(measurement);
+                                measurementDatabase.close();
+
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        onItemChangedListener.onChanged();
+                                    }
+                                });
+
+                                Looper.loop();
+                            }
+                        };
+
+                        thread.start();
+
+
+                    }
+                });
+
+                selectionDialog.show();
+
+
+            }
+        });
+
     }
 
     @Override
     public int getItemCount() {
         return (searchResults != null ? searchResults.size() : 0);
+    }
+
+    private void removeThisData(long timestamp) {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmssSS", Locale.getDefault());
+
+        String dirName = dateFormat.format(timestamp);
+        File dir = context.getExternalFilesDir("data/"
+                + SharedPreferencesManager.getOfficeID(context) + "/"
+                + SharedPreferencesManager.getPatientId(context) + "/"
+                + dirName);
+
+        deleteFileWithChildren(dir);
+
+    }
+
+    private void deleteFileWithChildren(File fileOrDirectory) {
+
+        if (fileOrDirectory.isDirectory()) {
+            File[] files = fileOrDirectory.listFiles();
+            for (File file : files) {
+                deleteFileWithChildren(file);
+            }
+        }
+
+        fileOrDirectory.delete();
+
     }
 }
 

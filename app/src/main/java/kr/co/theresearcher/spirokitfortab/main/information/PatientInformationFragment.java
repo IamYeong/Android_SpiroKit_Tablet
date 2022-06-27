@@ -50,6 +50,7 @@ import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
+import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.calc.CalcSpiroKitE;
@@ -114,18 +115,6 @@ public class PatientInformationFragment extends Fragment implements Observer {
             patientSearchField.clearFocus();
 
             inputMethodManager.hideSoftInputFromWindow(patientSearchField.getWindowToken(), 0);
-
-
-
-            /*
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-
-                }
-            });
-
-             */
 
         }
 
@@ -217,6 +206,15 @@ public class PatientInformationFragment extends Fragment implements Observer {
                 measurementSelectedListener.onMeasurementSelected(meas);
 
 
+
+            }
+        });
+
+        measurementAdapter.setOnItemChangedListener(new OnItemChangedListener() {
+            @Override
+            public void onChanged() {
+
+                selectMeasurements();
 
             }
         });
@@ -351,6 +349,14 @@ public class PatientInformationFragment extends Fragment implements Observer {
     public void onResume() {
         super.onResume();
 
+        selectPatients();
+        selectMeasurements();
+        updateUI();
+
+    }
+
+    private void selectPatients() {
+
         Thread thread = new Thread() {
 
             @Override
@@ -364,6 +370,31 @@ public class PatientInformationFragment extends Fragment implements Observer {
                 database.close();
 
                 patientsAdapter.setPatients(patientList);
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        patientsAdapter.notifyDataSetChanged();
+                    }
+                });
+
+                Looper.loop();
+
+            }
+        };
+
+        thread.start();
+
+
+    }
+
+    private void selectMeasurements() {
+        Thread thread = new Thread() {
+
+            @Override
+            public void run() {
+                super.run();
+                Looper.prepare();
 
                 MeasurementDatabase measurementDatabase = Room.databaseBuilder(context, MeasurementDatabase.class, RoomNames.ROOM_MEASUREMENT_DB_NAME)
                         .build();
@@ -382,20 +413,23 @@ public class PatientInformationFragment extends Fragment implements Observer {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        patientsAdapter.notifyDataSetChanged();
+
                         measurementAdapter.notifyDataSetChanged();
-                        if (isExpanded) updatePatientInformation();
-                        else updatePatientSimpleInfo();
                         dateRangeText.setText(getString(R.string.date_to_date, simpleDateFormat.format(minDate), simpleDateFormat.format(maxDate)));
                     }
                 });
 
                 Looper.loop();
+
             }
         };
 
         thread.start();
+    }
 
+    private void updateUI() {
+        if (isExpanded) updatePatientInformation();
+        else updatePatientSimpleInfo();
     }
 
     @Override

@@ -1,13 +1,11 @@
 package kr.co.theresearcher.spirokitfortab.measurement.fvc;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,7 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
 import kr.co.theresearcher.spirokitfortab.R;
+import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
+import kr.co.theresearcher.spirokitfortab.dialog.OnSelectedInDialogListener;
+import kr.co.theresearcher.spirokitfortab.dialog.SelectionDialog;
 import kr.co.theresearcher.spirokitfortab.main.result.OnOrderSelectedListener;
 
 
@@ -30,6 +32,9 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
     private Context context;
     private List<ResultFVC> fvcResults;
     private OnOrderSelectedListener orderSelectedListener;
+    private OnItemChangedListener changedListener;
+    private long rootTimestamp;
+
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
     private boolean nothing = true;
@@ -37,6 +42,14 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
     public FvcResultAdapter(Context context) {
         this.fvcResults = new ArrayList<>();
         this.context = context;
+    }
+
+    public void setRootTimestamp(long timestamp) {
+        this.rootTimestamp = timestamp;
+    }
+
+    public void setChangedListener(OnItemChangedListener listener) {
+        changedListener = listener;
     }
 
     public void setOnOrderSelectedListener(OnOrderSelectedListener listener) {
@@ -62,11 +75,6 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
 
     public void clear() {
         fvcResults.clear();
-    }
-
-    public void deleteFileOrDir(File file) {
-
-
     }
 
     @NonNull
@@ -134,6 +142,20 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
 
                 //File path = context.getExternalFilesDir("data/")
 
+                SelectionDialog selectionDialog = new SelectionDialog(context);
+                selectionDialog.setTitle(context.getString(R.string.question_delete));
+                selectionDialog.setSelectedListener(new OnSelectedInDialogListener() {
+                    @Override
+                    public void onSelected(boolean select) {
+                        if (select) {
+                            removeThisData(rootTimestamp, holder.getAdapterPosition() + 1);
+                            changedListener.onChanged();
+                        }
+                    }
+                });
+
+                selectionDialog.show();
+
             }
         });
 
@@ -143,6 +165,34 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
     public int getItemCount() {
         return (fvcResults != null ? fvcResults.size() : 0);
     }
+
+    private void removeThisData(long timestamp, int order) {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmssSS", Locale.getDefault());
+
+        String dirName = dateFormat.format(timestamp);
+        File dir = context.getExternalFilesDir("data/"
+                + SharedPreferencesManager.getOfficeID(context) + "/"
+                + SharedPreferencesManager.getPatientId(context) + "/"
+                + dirName + "/" + order);
+
+        deleteFileWithChildren(dir);
+
+    }
+
+    private void deleteFileWithChildren(File fileOrDirectory) {
+
+        if (fileOrDirectory.isDirectory()) {
+            File[] files = fileOrDirectory.listFiles();
+            for (File file : files) {
+                deleteFileWithChildren(file);
+            }
+        }
+
+        fileOrDirectory.delete();
+
+    }
+
 }
 
 class FvcResultViewHolder extends RecyclerView.ViewHolder {

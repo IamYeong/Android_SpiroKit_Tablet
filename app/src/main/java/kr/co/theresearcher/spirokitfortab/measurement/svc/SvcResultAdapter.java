@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -12,12 +13,17 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
 import kr.co.theresearcher.spirokitfortab.R;
+import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
+import kr.co.theresearcher.spirokitfortab.dialog.OnSelectedInDialogListener;
+import kr.co.theresearcher.spirokitfortab.dialog.SelectionDialog;
 import kr.co.theresearcher.spirokitfortab.main.result.OnOrderSelectedListener;
 
 public class SvcResultAdapter extends RecyclerView.Adapter<SvcResultViewHolder> {
@@ -26,13 +32,24 @@ public class SvcResultAdapter extends RecyclerView.Adapter<SvcResultViewHolder> 
     private Context context;
     private boolean isNothing = true;
     private OnOrderSelectedListener orderSelectedListener;
+    private OnItemChangedListener onItemChangedListener;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd (HH:mm)", Locale.getDefault());
+
+    private long rootTimestamp;
 
     public SvcResultAdapter(Context context) {
 
         this.context = context;
         results = new ArrayList<>();
 
+    }
+
+    public void setOnItemChangedListener(OnItemChangedListener listener) {
+        this.onItemChangedListener = listener;
+    }
+
+    public void setRootTimestamp(long timestamp) {
+        this.rootTimestamp = timestamp;
     }
 
     public void setOrderSelectedListener(OnOrderSelectedListener listener) {
@@ -98,12 +115,62 @@ public class SvcResultAdapter extends RecyclerView.Adapter<SvcResultViewHolder> 
             }
         });
 
+        holder.getDeleteButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                SelectionDialog selectionDialog = new SelectionDialog(context);
+                selectionDialog.setTitle(context.getString(R.string.question_delete));
+                selectionDialog.setSelectedListener(new OnSelectedInDialogListener() {
+                    @Override
+                    public void onSelected(boolean select) {
+
+                        if (select) {
+
+                            removeThisData(rootTimestamp, holder.getAdapterPosition() + 1);
+                            onItemChangedListener.onChanged();
+
+                        }
+                    }
+                });
+
+                selectionDialog.show();
+
+            }
+        });
 
     }
 
     @Override
     public int getItemCount() {
         return (results != null ? results.size() : 0);
+    }
+
+    private void removeThisData(long timestamp, int order) {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmssSS", Locale.getDefault());
+
+        String dirName = dateFormat.format(timestamp);
+        File dir = context.getExternalFilesDir("data/"
+                + SharedPreferencesManager.getOfficeID(context) + "/"
+                + SharedPreferencesManager.getPatientId(context) + "/"
+                + dirName + "/" + order);
+
+        deleteFileWithChildren(dir);
+
+    }
+
+    private void deleteFileWithChildren(File fileOrDirectory) {
+
+        if (fileOrDirectory.isDirectory()) {
+            File[] files = fileOrDirectory.listFiles();
+            for (File file : files) {
+                deleteFileWithChildren(file);
+            }
+        }
+
+        fileOrDirectory.delete();
+
     }
 }
 
@@ -112,6 +179,7 @@ class SvcResultViewHolder extends RecyclerView.ViewHolder {
     private TextView titleText, dateText, vcText;
     private CardView svcCard;
     private LinearLayout linearLayout;
+    private ImageButton deleteButton;
 
     public SvcResultViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -122,7 +190,16 @@ class SvcResultViewHolder extends RecyclerView.ViewHolder {
 
         svcCard = itemView.findViewById(R.id.card_svc_result);
         linearLayout = itemView.findViewById(R.id.linear_svc_result);
+        deleteButton = itemView.findViewById(R.id.img_btn_delete_svc_result);
 
+    }
+
+    public ImageButton getDeleteButton() {
+        return deleteButton;
+    }
+
+    public void setDeleteButton(ImageButton deleteButton) {
+        this.deleteButton = deleteButton;
     }
 
     public LinearLayout getLinearLayout() {
