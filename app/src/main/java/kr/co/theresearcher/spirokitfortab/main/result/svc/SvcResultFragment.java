@@ -30,6 +30,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
@@ -44,7 +46,7 @@ import kr.co.theresearcher.spirokitfortab.measurement.svc.MeasurementSvcActivity
 import kr.co.theresearcher.spirokitfortab.measurement.svc.ResultSVC;
 import kr.co.theresearcher.spirokitfortab.measurement.svc.SvcResultAdapter;
 
-public class SvcResultFragment extends Fragment {
+public class SvcResultFragment extends Fragment implements Observer {
 
     private Measurement measurement;
     private RecyclerView rv;
@@ -58,6 +60,11 @@ public class SvcResultFragment extends Fragment {
     public SvcResultFragment(Measurement measurement) {
         // Required empty public constructor
         this.measurement = measurement;
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        Log.d(getClass().getSimpleName(), "SVC FRAGMENT : TOUCH");
     }
 
     @Override

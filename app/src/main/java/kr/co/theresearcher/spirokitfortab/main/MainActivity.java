@@ -22,6 +22,7 @@ import android.os.Looper;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -32,6 +33,9 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.Vector;
 
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
@@ -52,11 +56,13 @@ import kr.co.theresearcher.spirokitfortab.setting.SettingActivity;
 
 public class MainActivity extends AppCompatActivity {
 
+    private ProxyObserver observer = new ProxyObserver();
     private FragmentManager fragmentManager;
     private ImageButton settingButton, insertPatientButton;
     private Button measButton;
     private ImageView bleConnectionImage;
     private FragmentContainerView patientInfoContainer, resultContainer;
+    private PatientInformationFragment informationFragment;
 
     private SpiroKitBluetoothLeService mService;
     private Handler handler = new Handler(Looper.getMainLooper());
@@ -169,7 +175,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        PatientInformationFragment informationFragment = new PatientInformationFragment();
+        informationFragment = new PatientInformationFragment();
+        observer.addObserver(informationFragment);
         informationFragment.setMeasurementSelectedListener(new OnMeasurementSelectedListener() {
             @Override
             public void onMeasurementSelected(Measurement measurement) {
@@ -246,7 +253,6 @@ public class MainActivity extends AppCompatActivity {
 
         thread.start();
 
-
     }
 
     private void setFragmentByMeasGroup(Measurement measurement) {
@@ -256,11 +262,17 @@ public class MainActivity extends AppCompatActivity {
 
             case 0 :
                 FvcResultFragment fvcResultFragment = new FvcResultFragment(measurement);
+                observer.deleteObservers();
+                observer.addObserver(informationFragment);
+                observer.addObserver(fvcResultFragment);
                 replaceFragment(R.id.fragment_container_result_main, fvcResultFragment);
                 break;
 
             case 1  :
                 SvcResultFragment svcResultFragment = new SvcResultFragment(measurement);
+                observer.deleteObservers();
+                observer.addObserver(informationFragment);
+                observer.addObserver(svcResultFragment);
                 replaceFragment(R.id.fragment_container_result_main, svcResultFragment);
 
                 break;
@@ -273,5 +285,20 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+
+            Log.d(getClass().getSimpleName(), "CHANGED : " + observer.hasChanged());
+            observer.notificationObservers(1);
+            Log.d(getClass().getSimpleName(), "DOWN EVENT!!!");
+        }
+
+
+        return super.dispatchTouchEvent(ev);
+    }
+
 
 }

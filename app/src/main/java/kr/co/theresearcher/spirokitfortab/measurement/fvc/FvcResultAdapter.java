@@ -5,6 +5,7 @@ import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
@@ -14,6 +15,7 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +62,11 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
 
     public void clear() {
         fvcResults.clear();
+    }
+
+    public void deleteFileOrDir(File file) {
+
+
     }
 
     @NonNull
@@ -121,6 +128,14 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
             }
         });
 
+        holder.getDeleteButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //File path = context.getExternalFilesDir("data/")
+
+            }
+        });
 
     }
 
@@ -137,6 +152,8 @@ class FvcResultViewHolder extends RecyclerView.ViewHolder {
 
     private CardView fvcCardView;
     private LinearLayout linearLayout;
+
+    private ImageButton deleteButton;
 
     public FvcResultViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -175,6 +192,7 @@ class FvcResultViewHolder extends RecyclerView.ViewHolder {
         texts.add(itemView.findViewById(R.id.tv_pef_compare_result_table));
 
         linearLayout = itemView.findViewById(R.id.linear_fvc_result);
+        deleteButton = itemView.findViewById(R.id.img_btn_delete_fvc_result);
 
     }
 
@@ -189,6 +207,14 @@ class FvcResultViewHolder extends RecyclerView.ViewHolder {
             defaultTexts.get(i).setTextColor(color);
         }
 
+    }
+
+    public ImageButton getDeleteButton() {
+        return deleteButton;
+    }
+
+    public void setDeleteButton(ImageButton deleteButton) {
+        this.deleteButton = deleteButton;
     }
 
     public LinearLayout getLinearLayout() {

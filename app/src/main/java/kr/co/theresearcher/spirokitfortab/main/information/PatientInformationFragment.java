@@ -46,6 +46,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Observable;
+import java.util.Observer;
 
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
@@ -69,7 +71,7 @@ import kr.co.theresearcher.spirokitfortab.main.patients.PatientsAdapter;
 import kr.co.theresearcher.spirokitfortab.measurement.fvc.MeasurementFvcActivity;
 import kr.co.theresearcher.spirokitfortab.measurement.fvc.ResultFVC;
 
-public class PatientInformationFragment extends Fragment {
+public class PatientInformationFragment extends Fragment implements Observer {
 
     private Context context;
     private Button startMeasButton;
@@ -86,17 +88,21 @@ public class PatientInformationFragment extends Fragment {
     private OnMeasurementSelectedListener measurementSelectedListener;
     private ImageButton informationExpandButton;
     private boolean isExpanded = true;
-    private boolean isFocused = true;
+    private boolean isFocused = false;
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
     private long minDate = Calendar.getInstance().getTime().getTime();
     private long maxDate = Calendar.getInstance().getTime().getTime();
 
-
     private Handler handler = new Handler(Looper.getMainLooper());
 
     public PatientInformationFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        Log.d(getClass().getSimpleName(), "INFO FRAGMENT : TOUCH");
     }
 
     public void setMeasurementSelectedListener(OnMeasurementSelectedListener listener) {
@@ -173,10 +179,9 @@ public class PatientInformationFragment extends Fragment {
             @Override
             public void onMeasSelected(Measurement meas) {
 
-                isFocused = false;
-
                 patientsRV.setVisibility(View.INVISIBLE);
                 patientsRV.setClickable(false);
+                patientSearchField.clearFocus();
 
                 measurementSelectedListener.onMeasurementSelected(meas);
 
@@ -214,7 +219,7 @@ public class PatientInformationFragment extends Fragment {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
 
-                Log.d(getClass().getSimpleName(), "Has Focus : " + hasFocus);
+                //Log.d(getClass().getSimpleName(), "Has Focus : " + hasFocus);
             }
         });
 
@@ -225,16 +230,21 @@ public class PatientInformationFragment extends Fragment {
                 isFocused = !isFocused;
 
                 if (isFocused) {
-                    patientsRV.setVisibility(View.VISIBLE);
-                    patientsRV.setClickable(true);
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            patientSearchField.requestFocus();
+                        }
+                    });
                 } else {
-                    patientsRV.setVisibility(View.INVISIBLE);
-                    patientsRV.setClickable(false);
+                    patientSearchField.clearFocus();
                 }
+
+                //patientsRV.setVisibility(View.VISIBLE);
+                //patientsRV.setClickable(true);
 
             }
         });
-
 
         startMeasButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -430,5 +440,19 @@ public class PatientInformationFragment extends Fragment {
         patientInfoText.setText(info.toString());
     }
 
+    public void changeSearchFieldFocus(boolean enable) {
+
+        if (enable) {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    patientSearchField.requestFocus();
+                }
+            });
+        } else {
+            patientSearchField.clearFocus();
+        }
+
+    }
 
 }

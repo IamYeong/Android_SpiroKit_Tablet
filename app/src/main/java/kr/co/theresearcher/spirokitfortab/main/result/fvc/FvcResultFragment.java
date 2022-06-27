@@ -30,6 +30,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Observable;
+import java.util.Observer;
 
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
@@ -46,7 +48,7 @@ import kr.co.theresearcher.spirokitfortab.measurement.fvc.FvcResultAdapter;
 import kr.co.theresearcher.spirokitfortab.measurement.fvc.MeasurementFvcActivity;
 import kr.co.theresearcher.spirokitfortab.measurement.fvc.ResultFVC;
 
-public class FvcResultFragment extends Fragment {
+public class FvcResultFragment extends Fragment implements Observer {
 
     private Context context;
 
@@ -63,6 +65,13 @@ public class FvcResultFragment extends Fragment {
 
     public FvcResultFragment(Measurement measurement) {
         this.measurement = measurement;
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+
+        Log.d(getClass().getSimpleName(), "FVC FRAGMENT : TOUCH");
+
     }
 
     @Override

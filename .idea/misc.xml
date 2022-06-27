@@ -24,6 +24,7 @@
         <entry key="app/src/main/res/drawable/ic_baseline_keyboard_arrow_up_30_black.xml" value="0.346" />
         <entry key="app/src/main/res/drawable/ic_baseline_logout_30_white.xml" value="0.328" />
         <entry key="app/src/main/res/drawable/ic_baseline_menu_book_30_black.xml" value="0.2615" />
+        <entry key="app/src/main/res/drawable/ic_baseline_pause_30_white.xml" value="0.346" />
         <entry key="app/src/main/res/drawable/ic_baseline_person_add_30_black.xml" value="0.328" />
         <entry key="app/src/main/res/drawable/ic_baseline_play_arrow_30_white.xml" value="0.328" />
         <entry key="app/src/main/res/drawable/ic_baseline_refresh_30_white.xml" value="0.328" />
@@ -64,7 +65,7 @@
         <entry key="app/src/main/res/layout/dialog_selection.xml" value="0.16276041666666666" />
         <entry key="app/src/main/res/layout/dialog_text_input.xml" value="0.16276041666666666" />
         <entry key="app/src/main/res/layout/fragment_fvc_value_list.xml" value="0.16276041666666666" />
-        <entry key="app/src/main/res/layout/fragment_patient_information.xml" value="0.35201793721973096" />
+        <entry key="app/src/main/res/layout/fragment_patient_information.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_patients.xml" value="0.16276041666666666" />
         <entry key="app/src/main/res/layout/fragment_result.xml" value="0.17" />
         <entry key="app/src/main/res/layout/fragment_svc_result.xml" value="0.18" />
