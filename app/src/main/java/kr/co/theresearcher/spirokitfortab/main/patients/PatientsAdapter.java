@@ -139,7 +139,7 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsViewHolder> {
                 SharedPreferencesManager.setPatientNoSmokingDate(context, patient.getStopSmokeDate());
                 SharedPreferencesManager.setPatientSmokingAmount(context, patient.getSmokeAmountPack());
                 SharedPreferencesManager.setPatientHumanRaceId(context, patient.getHumanRaceId());
-                SharedPreferencesManager.setPatientMatchDoctor(context, patient.getDoctorName());
+                SharedPreferencesManager.setPatientMatchDoctor(context, patient.getDoctorID());
                 //주치의 입력
 
                 simpleSelectedListener.onSimpleSelected();

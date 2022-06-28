@@ -222,11 +222,11 @@ public class SharedPreferencesManager {
         return getPreferences(context).getFloat(INPUT_PATIENT_ + "pack", 0f);
     }
 
-    public static boolean setPatientMatchDoctor(Context context, String doctor) {
+    public static boolean setPatientMatchDoctor(Context context, int doctorID) {
 
         SharedPreferences sharedPreferences = getPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();;
-        editor.putString(INPUT_PATIENT_ + "match_doctor", doctor);
+        editor.putInt(INPUT_PATIENT_ + "match_doctor", doctorID);
         return editor.commit();
     }
 

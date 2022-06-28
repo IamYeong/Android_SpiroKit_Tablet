@@ -20,6 +20,9 @@ public interface PatientDao {
     @Query("SELECT * FROM PATIENT WHERE PATIENT_CHART_NUM = :chartNumber")
     Patient selectPatientByChartNumber(String chartNumber);
 
+    @Query("SELECT * FROM PATIENT WHERE PATIENT_OFFICE_ID = :officeID")
+    List<Patient> selectPatientByOfficeID(int officeID);
+
     @Insert
     void insertPatient(Patient patient);
 

@@ -44,15 +44,15 @@ public class Patient {
     @ColumnInfo(name = "PATIENT_SMOKE_AMOUNT_PER_PACK")
     private float smokeAmountPack;
 
-    @ColumnInfo(name = "PATIENT_DOCTOR_NAME")
-    private String doctorName;
+    @ColumnInfo(name = "PATIENT_DOCTOR_ID")
+    private int doctorID;
 
     @ColumnInfo(name = "PATIENT_OFFICE_ID")
     private int officeID;
 
     //오피스 ID 빠져있음
 
-    public Patient(int officeID, String chartNumber, String name, boolean gender, int weight, int height, int humanRaceId, long birthDate, long startSmokeDate, long stopSmokeDate, boolean isSmoke, float smokeAmountPack, String doctorName) {
+    public Patient(int officeID, String chartNumber, String name, boolean gender, int weight, int height, int humanRaceId, long birthDate, long startSmokeDate, long stopSmokeDate, boolean isSmoke, float smokeAmountPack, int doctorID) {
         this.officeID = officeID;
         this.chartNumber = chartNumber;
         this.name = name;
@@ -65,11 +65,15 @@ public class Patient {
         this.stopSmokeDate = stopSmokeDate;
         this.isSmoke = isSmoke;
         this.smokeAmountPack = smokeAmountPack;
-        this.doctorName = doctorName;
+        this.doctorID = doctorID;
     }
 
     public Patient() {
 
+    }
+
+    public int getDoctorID() {
+        return doctorID;
     }
 
     public int getOfficeID() {
@@ -176,11 +180,11 @@ public class Patient {
         this.smokeAmountPack = smokeAmountPack;
     }
 
-    public String getDoctorName() {
-        return doctorName;
+    public int getDoctorName() {
+        return doctorID;
     }
 
-    public void setDoctorName(String doctorName) {
-        this.doctorName = doctorName;
+    public void setDoctorID(int doctorID) {
+        this.doctorID = doctorID;
     }
 }
