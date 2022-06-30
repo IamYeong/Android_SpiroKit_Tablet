@@ -75,13 +75,13 @@ public class MainActivity extends AppCompatActivity {
             mService = ((SpiroKitBluetoothLeService.LocalBinder)iBinder).getService();
 
             if (mService.isConnect()) {
-                bleConnectionImage.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.ble_connection)));
-                bleConnectionImage.setImageDrawable(AppCompatResources.getDrawable(MainActivity.this, R.drawable.ic_baseline_bluetooth_30_white));
+                //bleConnectionImage.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.ble_connection)));
+                bleConnectionImage.setImageDrawable(AppCompatResources.getDrawable(MainActivity.this, R.drawable.ic_connect_spirokit));
                 //macAddressText.setText(SharedPreferencesManager.getBluetoothDeviceMacAddress(SettingActivity.this));
             } else {
                 //macAddressText.setText(getString(R.string.state_disconnect));
-                bleConnectionImage.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.gray_light)));
-                bleConnectionImage.setImageDrawable(AppCompatResources.getDrawable(MainActivity.this, R.drawable.ic_baseline_bluetooth_30_black));
+                //bleConnectionImage.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.gray_light)));
+                bleConnectionImage.setImageDrawable(AppCompatResources.getDrawable(MainActivity.this, R.drawable.ic_disconnect_spirokit));
             }
 
             mService.setBluetoothLeCallback(new SpiroKitBluetoothLeService.BluetoothLeCallback() {
@@ -93,8 +93,8 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onWriteCharacteristic() {
                     //testTitleText.setText("WRITE CHARACTERISTIC");
-                    bleConnectionImage.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.ble_connection)));
-                    bleConnectionImage.setImageDrawable(AppCompatResources.getDrawable(MainActivity.this, R.drawable.ic_baseline_bluetooth_30_white));
+                    //bleConnectionImage.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.ble_connection)));
+                    bleConnectionImage.setImageDrawable(AppCompatResources.getDrawable(MainActivity.this, R.drawable.ic_connect_spirokit));
                 }
 
                 @Override
@@ -116,8 +116,8 @@ public class MainActivity extends AppCompatActivity {
                         //testTitleText.setText(String.valueOf(status));
                     } else if (status == BluetoothProfile.STATE_DISCONNECTED) {
 
-                        bleConnectionImage.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.gray_light)));
-                        bleConnectionImage.setImageDrawable(AppCompatResources.getDrawable(MainActivity.this, R.drawable.ic_baseline_bluetooth_30_black));
+                        //bleConnectionImage.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.gray_light)));
+                        bleConnectionImage.setImageDrawable(AppCompatResources.getDrawable(MainActivity.this, R.drawable.ic_disconnect_spirokit));
 
                     }
                 }

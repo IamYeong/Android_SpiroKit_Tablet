@@ -30,6 +30,10 @@
         <entry key="app/src/main/res/drawable/ic_baseline_refresh_30_white.xml" value="0.328" />
         <entry key="app/src/main/res/drawable/ic_baseline_search_30.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/ic_baseline_settings_30_white.xml" value="0.328" />
+        <entry key="app/src/main/res/drawable/ic_connect_spirokit.xml" value="0.346" />
+        <entry key="app/src/main/res/drawable/ic_disconnect_spirokit.xml" value="0.346" />
+        <entry key="app/src/main/res/drawable/ic_person_insert.xml" value="0.346" />
+        <entry key="app/src/main/res/drawable/ic_setting.xml" value="0.346" />
         <entry key="app/src/main/res/drawable/item_img_btn_bg.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/item_img_btn_bg_gray.xml" value="0.328" />
         <entry key="app/src/main/res/drawable/item_loading.xml" value="0.2615" />
@@ -53,7 +57,7 @@
         <entry key="app/src/main/res/layout/activity_exception.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_join_user.xml" value="0.12" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.15" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_measurement_fvc.xml" value="0.16" />
         <entry key="app/src/main/res/layout/activity_measurement_mvv.xml" value="0.20442708333333334" />
         <entry key="app/src/main/res/layout/activity_measurement_svc.xml" value="0.2" />

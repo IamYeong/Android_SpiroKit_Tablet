@@ -15,6 +15,7 @@
         >
 
         <TextView
+            android:id="@+id/tv_spirokit_title_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
@@ -31,11 +32,25 @@
             android:layout_marginHorizontal="10dp"
             />
 
+        <ImageView
+            android:id="@+id/img_ble_connection_main"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_connect_spirokit"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_spirokit_title_main"
+
+            android:padding="10dp"
+
+            />
+
         <ImageButton
             android:id="@+id/img_btn_setting_main"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/ic_baseline_settings_30_white"
+            android:src="@drawable/ic_setting"
 
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -44,33 +59,17 @@
             android:background="@drawable/item_img_btn_bg_gray"
             />
 
-        <ImageView
-            android:id="@+id/img_ble_connection_main"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-
-            app:layout_constraintEnd_toStartOf="@id/img_btn_setting_main"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginHorizontal="20dp"
-
-            android:src="@drawable/ic_baseline_bluetooth_30_black"
-            android:background="@drawable/item_img_btn_bg_gray"
-
-            android:padding="6dp"
-            />
-
         <ImageButton
             android:id="@+id/img_btn_insert_patient_main"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/ic_baseline_person_add_30_black"
+            android:src="@drawable/ic_person_insert"
 
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/img_ble_connection_main"
+            app:layout_constraintEnd_toStartOf="@id/img_btn_setting_main"
             android:layout_marginHorizontal="20dp"
-            android:layout_margin="20dp"
+            android:padding="10dp"
             android:background="@drawable/item_img_btn_bg_gray"
             />
 
