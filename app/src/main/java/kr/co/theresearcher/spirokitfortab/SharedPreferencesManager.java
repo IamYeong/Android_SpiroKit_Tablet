@@ -24,6 +24,9 @@ public class SharedPreferencesManager {
     public static final String CONNECTED_MAC_ADDRESS =
             "kr.co.theresearcher.preferences.mac.address";
 
+    public static final String CONNECTED_DEVICE_NAME =
+            "kr.co.theresearcher.preferences.device.name";
+
     public static final String IS_CONNECT =
             "kr.co.theresearcher.is.connect";
 
@@ -32,7 +35,6 @@ public class SharedPreferencesManager {
 
     public static final String OPERATOR_ID =
             "kr.co.theresearcher.operator.id";
-
 
     public static SharedPreferences getPreferences(Context context) {
         return context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
@@ -68,7 +70,7 @@ public class SharedPreferencesManager {
     }
 
     public static String getInputNickname(Context context) {
-        return getPreferences(context).getString(USER_NICKNAME, "");
+        return getPreferences(context).getString(USER_NICKNAME, "NICK NAME");
     }
 
     public static boolean setInputPassword(Context context, String password) {
@@ -275,6 +277,19 @@ public class SharedPreferencesManager {
         SharedPreferences sharedPreferences = getPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(OPERATOR_ID, id);
+        return editor.commit();
+    }
+
+    public static String getConnectedDeviceName(Context context) {
+
+        return getPreferences(context).getString(CONNECTED_DEVICE_NAME, "");
+
+    }
+
+    public static boolean setConnectedDeviceName(Context context, String name) {
+        SharedPreferences sharedPreferences = getPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();;
+        editor.putString(CONNECTED_DEVICE_NAME, name);
         return editor.commit();
     }
 

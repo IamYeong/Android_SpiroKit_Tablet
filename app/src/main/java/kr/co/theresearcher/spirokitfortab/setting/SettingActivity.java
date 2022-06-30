@@ -30,7 +30,9 @@ import android.os.ParcelUuid;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,11 +54,13 @@ import kr.co.theresearcher.spirokitfortab.setting.operator.OperatorActivity;
 public class SettingActivity extends AppCompatActivity {
 
     private ImageButton backButton;
-    private Button startScanButton, autoPairingButton, sleepModeButton, logoutButton, manualButton, syncButton;
+    private FrameLayout startFrameButton;
+    private Button logoutButton;
+    private ProgressBar scanProgress;
     private CardView operatorCard;
     private RecyclerView rv;
     private BluetoothScanResultsAdapter adapter;
-    private TextView macAddressText;
+    private TextView connectStateText, startScanText, userNickname;
     private boolean enableAutoPairing, enableSleepMode;
 
     private BluetoothAdapter bluetoothAdapter;
@@ -73,7 +77,8 @@ public class SettingActivity extends AppCompatActivity {
         @Override
         public void run() {
             bluetoothLeScanner.stopScan(scanCallback);
-            if (loadingDialog.isShowing()) loadingDialog.dismiss();
+            scanProgress.setVisibility(View.INVISIBLE);
+            startScanText.setVisibility(View.VISIBLE);
         }
     };
 
@@ -84,9 +89,11 @@ public class SettingActivity extends AppCompatActivity {
             mService = ((SpiroKitBluetoothLeService.LocalBinder)iBinder).getService();
 
             if (mService.isConnect()) {
-                macAddressText.setText(SharedPreferencesManager.getBluetoothDeviceMacAddress(SettingActivity.this));
+                Log.d(getClass().getSimpleName(), "*******************isConnect");
+                connectStateText.setText(getString(R.string.connect_with_what, SharedPreferencesManager.getConnectedDeviceName(SettingActivity.this)));
             } else {
-                macAddressText.setText(getString(R.string.state_disconnect));
+                Log.d(getClass().getSimpleName(), "*******************is NOT Connect");
+               connectStateText.setText(getString(R.string.state_disconnect));
             }
 
             mService.setBluetoothLeCallback(new SpiroKitBluetoothLeService.BluetoothLeCallback() {
@@ -107,7 +114,8 @@ public class SettingActivity extends AppCompatActivity {
                     //연결 완료
                     Log.d(getClass().getSimpleName(), "**********onDescriptorWrite");
                     if (loadingDialog.isShowing()) loadingDialog.dismiss();
-                    finish();
+                    connectStateText.setText(getString(R.string.connect_with_what, SharedPreferencesManager.getConnectedDeviceName(SettingActivity.this)));
+                    startScanText.setText(getString(R.string.do_disconnect));
                     //macAddressText.setText(SharedPreferencesManager.getBluetoothDeviceMacAddress(SettingActivity.this));
                 }
 
@@ -121,6 +129,8 @@ public class SettingActivity extends AppCompatActivity {
                     if (status == BluetoothProfile.STATE_CONNECTED) {
                         //testTitleText.setText(String.valueOf(status));
 
+                    } else {
+                        connectStateText.setText(getString(R.string.state_disconnect));
                     }
                 }
             });
@@ -146,8 +156,8 @@ public class SettingActivity extends AppCompatActivity {
                                 handler.postDelayed(stopScanRunnable, 5000);
 
                                 bluetoothLeScanner.startScan(filters, scanSettings, scanCallback);
-                                loadingDialog.setTitle(getString(R.string.scanning));
-                                loadingDialog.show();
+                                startScanText.setVisibility(View.INVISIBLE);
+                                scanProgress.setVisibility(View.VISIBLE);
 
                             } else {
 
@@ -166,9 +176,12 @@ public class SettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        startScanButton = findViewById(R.id.btn_start_scan_setting);
-        macAddressText = findViewById(R.id.tv_mac_address_setting);
+        userNickname = findViewById(R.id.tv_user_nickname_setting);
+        startFrameButton = findViewById(R.id.frame_btn_start_scan_setting);
+        connectStateText = findViewById(R.id.tv_spirokit_connect_state_setting);
         backButton = findViewById(R.id.img_btn_back_setting);
+        scanProgress = findViewById(R.id.progress_scan_loading);
+        startScanText = findViewById(R.id.tv_start_scan);
 
         operatorCard = findViewById(R.id.card_operator_management);
         operatorCard.setOnClickListener(new View.OnClickListener() {
@@ -196,6 +209,9 @@ public class SettingActivity extends AppCompatActivity {
                         if (select) {
 
                             String macAddress = result.getDevice().getAddress();
+
+                            SharedPreferencesManager.setBluetoothDeviceMacAddress(getApplicationContext(), result.getDevice().getAddress());
+                            SharedPreferencesManager.setConnectedDeviceName(getApplicationContext(), result.getDevice().getName());
 
                             Log.d(getClass().getSimpleName(), macAddress + ", " + mService.getClass().getSimpleName());
 
@@ -228,7 +244,7 @@ public class SettingActivity extends AppCompatActivity {
 
 
 
-        startScanButton.setOnClickListener(new View.OnClickListener() {
+        startFrameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -243,6 +259,8 @@ public class SettingActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        userNickname.setText(SharedPreferencesManager.getInputNickname(SettingActivity.this));
 
         scanStandBy();
 
@@ -304,6 +322,7 @@ public class SettingActivity extends AppCompatActivity {
                 String name = result.getDevice().getName();
 
                 if (name == null) return;
+
                 adapter.addResult(result);
 
             }

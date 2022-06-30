@@ -40,6 +40,7 @@ public class SpiroKitBluetoothLeService extends Service {
 
 
             if (newState == BluetoothProfile.STATE_CONNECTED) {
+
                 bluetoothLeCallback.onConnectStateChanged(newState);
 
                 gatt.discoverServices();
@@ -55,10 +56,13 @@ public class SpiroKitBluetoothLeService extends Service {
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
 
                 bluetoothLeCallback.onConnectStateChanged(newState);
+
                 isConnect = false;
 
                 disconnect();
                 close();
+
+
 
                 //if (initialize()) connect(SharedPreferencesManager.getBluetoothDeviceMacAddress(getApplicationContext()));
                 //gatt.connect();
@@ -120,9 +124,9 @@ public class SpiroKitBluetoothLeService extends Service {
             super.onDescriptorWrite(gatt, descriptor, status);
 
             Log.d(getClass().getSimpleName(), "onDescriptorWrite");
-
-            bluetoothLeCallback.onDescriptorWrite();
             isConnect = true;
+            bluetoothLeCallback.onDescriptorWrite();
+
 
         }
 
@@ -168,8 +172,6 @@ public class SpiroKitBluetoothLeService extends Service {
 
         Log.d(getClass().getSimpleName(), "service connect() call");
         if (!initialize()) return false;
-
-        SharedPreferencesManager.setBluetoothDeviceMacAddress(getApplicationContext(), deviceAddress);
 
         BluetoothDevice bluetoothDevice = bluetoothAdapter.getRemoteDevice(deviceAddress);
         bluetoothGatt = bluetoothDevice.connectGatt(getApplicationContext(), false, gattCallback);

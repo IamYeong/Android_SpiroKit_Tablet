@@ -123,6 +123,8 @@
     <string name="state_connect">연결됨</string>
     <string name="state_disconnect">연결되지 않음</string>
 
+    <string name="connect_with_what">%1$s과(와) 연결됨</string>
+
     <string name="do_connect">연결하기</string>
     <string name="do_disconnect">연결끊기</string>
     <string name="disconnecting">연결 끊는 중</string>

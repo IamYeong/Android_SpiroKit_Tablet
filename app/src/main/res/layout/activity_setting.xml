@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".setting.SettingActivity"
-    android:background="@color/primary_color"
+    android:background="@color/gray_background"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/primary_color"
+        android:background="@color/white"
         android:elevation="10dp"
         >
 
@@ -22,7 +22,7 @@
             android:id="@+id/img_btn_back_setting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_keyboard_arrow_left_30_white"
+            android:src="@drawable/ic_baseline_keyboard_arrow_left_30_black"
             android:background="?attr/selectableItemBackgroundBorderless"
 
             app:layout_constraintTop_toTopOf="parent"
@@ -36,9 +36,9 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/times"
 
-            android:textColor="@color/white"
-            android:text="@string/spirokit_title"
-            android:textSize="30sp"
+            android:textColor="@color/black"
+            android:text="@string/setting"
+            android:textSize="20sp"
 
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -46,36 +46,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             />
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
         android:id="@+id/view_line_center_setting"
         android:layout_width="2dp"
         android:layout_height="0dp"
-        android:background="@color/gray_dark"
+        android:background="@color/transparent"
         app:layout_constraintTop_toBottomOf="@id/constraint_layout_bar_setting"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
 
-        android:layout_marginTop="150dp"
-        android:layout_marginBottom="50dp"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:fontFamily="@font/nanum_gothic_bold"
-        android:textSize="20sp"
-
-        app:layout_constraintBottom_toTopOf="@id/card_scan_area_setting"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintStart_toStartOf="@id/card_scan_area_setting"
-        app:layout_constraintEnd_toEndOf="@id/card_scan_area_setting"
-
-        android:text="@string/device"
         />
 
     <androidx.cardview.widget.CardView
@@ -87,7 +69,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="@id/view_line_center_setting"
         android:layout_marginHorizontal="50dp"
-        app:cardCornerRadius="10dp">
+        android:layout_marginVertical="50dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp"
+
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -95,91 +81,126 @@
             android:orientation="vertical"
             >
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
+                android:id="@+id/linear_box_device_connect_info_setting"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingVertical="10dp"
+                android:orientation="horizontal"
+
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="20dp"
                 >
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/nanum_gothic"
+                    android:fontFamily="@font/nanum_gothic_bold"
                     android:textColor="@color/black"
-                    android:textSize="20sp"
+                    android:textSize="15sp"
                     android:text="@string/device_info"
 
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/frame_btn_start_scan_setting"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginStart="15dp"
-                    />
+                    android:layout_weight="1"
 
-                <android.widget.Button
-                    android:id="@+id/btn_start_scan_setting"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/button_shape"
-                    android:backgroundTint="@color/primary_color"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_marginEnd="20dp"
-                    android:textColor="@color/white"
-                    android:fontFamily="@font/nanum_gothic"
-                    android:textSize="15sp"
-                    android:text="@string/scan"
+                    android:textAlignment="textStart"
+                    android:layout_marginStart="20dp"
                     />
 
                 <TextView
-                    android:id="@+id/tv_mac_address_setting"
+                    android:id="@+id/tv_spirokit_connect_state_setting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nanum_gothic"
                     android:textColor="@color/black"
-                    android:textSize="20sp"
+                    android:textSize="15sp"
 
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/btn_start_scan_setting"
-                    android:layout_marginEnd="20dp"
+                    app:layout_constraintBottom_toTopOf="@id/frame_btn_start_scan_setting"
+                    app:layout_constraintEnd_toEndOf="parent"
 
                     android:text="@string/state_disconnect"
+                    android:layout_weight="1"
+
+                    android:textAlignment="textEnd"
+
+                    android:layout_marginEnd="20dp"
+                    />
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/frame_btn_start_scan_setting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_out_line_highlight"
+                app:layout_constraintTop_toBottomOf="@id/tv_spirokit_connect_state_setting"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginHorizontal="20dp"
+                android:textColor="@color/highlight_color"
+                android:fontFamily="@font/nanum_gothic"
+                android:textSize="15sp"
+                android:text="@string/scan"
+                android:padding="10dp"
+                >
+
+                <TextView
+                    android:id="@+id/tv_start_scan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textAlignment="center"
+                    android:textColor="@color/highlight_color"
+                    android:fontFamily="@font/nanum_gothic"
+                    android:textSize="18sp"
+                    android:text="@string/scan"
                     />
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                <ProgressBar
+                    android:id="@+id/progress_scan_loading"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/gray_dark"
-                android:layout_marginHorizontal="20dp"
-                />
+                    android:layout_gravity="center"
+
+                    android:indeterminateDrawable="@drawable/item_loading_highlight"
+                    android:indeterminateDuration="500"
+
+                    android:visibility="invisible"
+                    />
+
+
+            </FrameLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/nanum_gothic"
                 android:textColor="@color/gray_dark"
-                android:textSize="15sp"
+                android:textSize="11sp"
                 android:layout_marginHorizontal="20dp"
                 android:text="@string/scan_info"
                 android:paddingVertical="10dp"
+                android:layout_gravity="start"
+                android:paddingStart="20dp"
+                android:layout_marginTop="10dp"
                 />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingVertical="10dp"
-                android:layout_marginHorizontal="20dp"
+                android:layout_marginHorizontal="40dp"
                 >
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    android:fontFamily="@font/nanum_gothic"
+                    android:fontFamily="@font/nanum_gothic_bold"
                     android:textSize="15sp"
 
                     app:layout_constraintTop_toTopOf="parent"
@@ -193,7 +214,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    android:fontFamily="@font/nanum_gothic"
+                    android:fontFamily="@font/nanum_gothic_bold"
                     android:textSize="15sp"
 
                     app:layout_constraintTop_toTopOf="parent"
@@ -208,7 +229,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    android:fontFamily="@font/nanum_gothic"
+                    android:fontFamily="@font/nanum_gothic_bold"
                     android:textSize="15sp"
 
                     app:layout_constraintTop_toTopOf="parent"
@@ -226,7 +247,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/gray_dark"
+                android:background="@color/gray_background"
                 android:layout_marginHorizontal="20dp"
                 />
 
@@ -235,7 +256,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginVertical="10dp"
-                android:layout_marginHorizontal="20dp"
+                android:layout_marginHorizontal="40dp"
                 />
 
         </LinearLayout>
@@ -250,8 +271,8 @@
         app:layout_constraintBottom_toBottomOf="@id/view_line_center_setting"
         app:layout_constraintStart_toEndOf="@id/view_line_center_setting"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginHorizontal="100dp"
-
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginVertical="50dp"
 
         >
 
@@ -262,11 +283,7 @@
             >
 
             <include
-                layout="@layout/item_setting_auto_pairing"
-                />
-
-            <include
-                layout="@layout/item_setting_sleep_mode"
+                layout="@layout/item_setting_operator_management"
                 />
 
             <include
@@ -277,9 +294,7 @@
                 layout="@layout/item_setting_app_version"
                 />
 
-            <include
-                layout="@layout/item_setting_operator_management"
-                />
+
 
         </LinearLayout>
 
