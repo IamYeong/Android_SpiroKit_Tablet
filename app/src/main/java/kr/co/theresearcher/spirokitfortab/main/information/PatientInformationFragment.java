@@ -72,6 +72,7 @@ import kr.co.theresearcher.spirokitfortab.main.patients.OnItemSimpleSelectedList
 import kr.co.theresearcher.spirokitfortab.main.patients.PatientsAdapter;
 import kr.co.theresearcher.spirokitfortab.measurement.fvc.MeasurementFvcActivity;
 import kr.co.theresearcher.spirokitfortab.measurement.fvc.ResultFVC;
+import kr.co.theresearcher.spirokitfortab.patient_input.PatientModifyActivity;
 
 public class PatientInformationFragment extends Fragment implements Observer {
 
@@ -161,6 +162,14 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
                 selectPatients();
 
+            }
+        });
+
+        modifyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, PatientModifyActivity.class);
+                startActivity(intent);
             }
         });
 

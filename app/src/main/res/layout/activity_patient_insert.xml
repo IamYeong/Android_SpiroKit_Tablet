@@ -137,6 +137,7 @@
                         app:layout_constraintStart_toStartOf="parent"
 
                         android:paddingBottom="10dp"
+                        android:paddingHorizontal="20dp"
                         />
 
                     <TextView
@@ -350,7 +351,7 @@
                             android:gravity="center_vertical"
                             android:hint="@string/height"
 
-                            android:paddingHorizontal="10dp"
+                            android:paddingHorizontal="20dp"
                             android:inputType="number"
 
                             android:textColorHint="@color/gray"
@@ -395,6 +396,7 @@
                             app:layout_constraintStart_toEndOf="@id/et_height_insert_patient"
 
                             android:paddingBottom="10dp"
+                            android:paddingHorizontal="20dp"
                             />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>

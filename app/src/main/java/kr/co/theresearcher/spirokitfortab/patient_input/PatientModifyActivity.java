@@ -32,6 +32,8 @@ import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
 import kr.co.theresearcher.spirokitfortab.db.operator.OperatorDao;
 import kr.co.theresearcher.spirokitfortab.db.operator.OperatorDatabase;
 import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
+import kr.co.theresearcher.spirokitfortab.db.patient.PatientDao;
+import kr.co.theresearcher.spirokitfortab.db.patient.PatientDatabase;
 
 public class PatientModifyActivity extends AppCompatActivity {
 
@@ -356,6 +358,59 @@ public class PatientModifyActivity extends AppCompatActivity {
             }
         });
 
+        modifyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Thread thread = new Thread() {
+
+                    @Override
+                    public void run() {
+                        super.run();
+                        Looper.prepare();
+
+                        String name = nameField.getText().toString();
+                        String chartNumber = chartNumberField.getText().toString();
+                        int height = Integer.parseInt(heightField.getText().toString());
+                        int weight = Integer.parseInt(weightField.getText().toString());
+                        float smokeAmount = Float.parseFloat(smokeAmountField.getText().toString());
+
+                        patient.setOfficeID(SharedPreferencesManager.getOfficeID(PatientModifyActivity.this));
+                        patient.setBirthDate(birthDate);
+                        patient.setName(name);
+                        patient.setChartNumber(chartNumber);
+                        patient.setHeight(height);
+                        patient.setWeight(weight);
+                        patient.setGender(isMale);
+                        patient.setSmoke(isSmoking);
+                        patient.setSmokeAmountPack(smokeAmount);
+                        patient.setStartSmokeDate(startSmokeDate);
+                        patient.setStopSmokeDate(stopSmokeDate);
+                        patient.setDoctorID(doctorID);
+                        patient.setHumanRaceId(humanRaceID);
+
+                        setPatientInfoInPreferences(PatientModifyActivity.this, patient);
+
+                        PatientDatabase database = Room.databaseBuilder(PatientModifyActivity.this, PatientDatabase.class, RoomNames.ROOM_PATIENT_DB_NAME).build();
+                        PatientDao patientDao = database.patientDao();
+                        patientDao.updatePatient(patient);
+                        database.close();
+
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                finish();
+                            }
+                        });
+
+                        Looper.loop();
+                    }
+                };
+                thread.start();
+
+            }
+        });
+
         humanRaceSpinner.setAdapter(humanRaceAdapter);
 
 
@@ -413,6 +468,7 @@ public class PatientModifyActivity extends AppCompatActivity {
 
     private void setViewStateByPatientInfo() {
 
+        chartNumberField.setText(patient.getChartNumber());
         nameField.setText(patient.getName());
         if (patient.isGender()) {
             isMale = true;
@@ -504,6 +560,33 @@ public class PatientModifyActivity extends AppCompatActivity {
 
             } else {
 
+                haveSmoking = true;
+
+                haveSmokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.primary_color)));
+                haveSmokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.white)));
+
+                haveNotSmokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
+                haveNotSmokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
+
+                smokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
+                smokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
+                smokeButton.setClickable(true);
+
+                nonSmokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
+                nonSmokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
+                nonSmokeButton.setClickable(true);
+
+                startSmokeDateSelectButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
+                startSmokeDateSelectButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
+                startSmokeDateSelectButton.setClickable(true);
+
+                smokeAmountField.setBackgroundResource(R.drawable.text_field_inner_shadow_white);
+                smokeAmountField.setHintTextColor(getColor(R.color.gray_dark));
+                smokeAmountField.setFocusable(true);
+
+                stopSmokeDateSelectButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
+                stopSmokeDateSelectButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
+                stopSmokeDateSelectButton.setClickable(true);
 
 
             }
@@ -533,6 +616,24 @@ public class PatientModifyActivity extends AppCompatActivity {
         patient.setDoctorID(SharedPreferencesManager.getPatientMatchDoctorID(context));
 
         return patient;
+    }
+
+    private void setPatientInfoInPreferences(Context context, Patient patient) {
+
+        SharedPreferencesManager.setPatientId(context, patient.getId());
+        SharedPreferencesManager.setPatientName(context, patient.getName());
+        SharedPreferencesManager.setPatientChartNumber(context, patient.getChartNumber());
+        SharedPreferencesManager.setPatientGender(context, patient.isGender());
+        SharedPreferencesManager.setPatientHumanRaceId(context, patient.getHumanRaceId());
+        SharedPreferencesManager.setPatientHeight(context, patient.getHeight());
+        SharedPreferencesManager.setPatientWeight(context, patient.getWeight());
+        SharedPreferencesManager.setPatientBirth(context, patient.getBirthDate());
+        SharedPreferencesManager.setPatientIsSmoking(context, patient.isSmoke());
+        SharedPreferencesManager.setPatientStartSmokingDate(context, patient.getStartSmokeDate());
+        SharedPreferencesManager.setPatientNoSmokingDate(context, patient.getStopSmokeDate());
+        SharedPreferencesManager.setPatientSmokingAmount(context, patient.getSmokeAmountPack());
+        SharedPreferencesManager.setPatientMatchDoctor(context, patient.getDoctorID());
+
     }
 
 }
