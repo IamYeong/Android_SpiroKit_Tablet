@@ -351,6 +351,7 @@
                             android:hint="@string/height"
 
                             android:paddingHorizontal="10dp"
+                            android:inputType="number"
 
                             android:textColorHint="@color/gray"
 
@@ -387,6 +388,7 @@
                             android:background="@drawable/text_field_inner_shadow_white"
                             android:hint="@string/weight"
                             android:textColorHint="@color/gray"
+                            android:inputType="number"
 
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -415,7 +417,7 @@
                         android:layout_marginHorizontal="40dp"
                         android:layout_marginBottom="20dp"
                         android:background="@drawable/spinner_background_white"
-                        android:elevation="10dp" />
+                        android:elevation="5dp" />
 
 
                 </LinearLayout>
@@ -580,7 +582,7 @@
                             android:background="@drawable/text_field_inner_shadow_white"
                             android:hint="00"
                             app:hintTextColor="@color/gray_dark"
-                            android:inputType="number"
+                            android:inputType="numberDecimal"
                             android:textAlignment="center"
                             android:paddingBottom="14dp"
 

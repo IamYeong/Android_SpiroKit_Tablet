@@ -230,8 +230,8 @@ public class SharedPreferencesManager {
         return editor.commit();
     }
 
-    public static String getPatientMatchDoctor(Context context) {
-        return getPreferences(context).getString(INPUT_PATIENT_ + "match_doctor", "");
+    public static int getPatientMatchDoctorID(Context context) {
+        return getPreferences(context).getInt(INPUT_PATIENT_ + "match_doctor", -1);
     }
 
     public static boolean setBluetoothDeviceMacAddress(Context context, String address) {

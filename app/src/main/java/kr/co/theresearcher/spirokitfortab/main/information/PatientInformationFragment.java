@@ -81,7 +81,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
     private RecyclerView patientsRV, measurementsRV;
     private ImageButton dateRangeButton, modifyButton;
-    private TextView patientNameText, patientInfoText, dateRangeText;
+    private TextView patientNameText, patientInfoText, dateRangeText, patientsEmptyText, measurementsEmptyText;
     private FrameLayout volumeFlowLayout, volumeTimeLayout;
 
     private PatientsAdapter patientsAdapter;
@@ -111,6 +111,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
             isFocused = false;
             patientsRV.setVisibility(View.INVISIBLE);
+            patientsEmptyText.setVisibility(View.INVISIBLE);
             patientsRV.setClickable(true);
             patientSearchField.clearFocus();
 
@@ -143,6 +144,8 @@ public class PatientInformationFragment extends Fragment implements Observer {
         patientInfoText = view.findViewById(R.id.tv_content_patient_info_fragment);
         dateRangeText = view.findViewById(R.id.tv_date_range_patient_info_fragment);
         informationExpandButton = view.findViewById(R.id.img_btn_expand_patient_info);
+        patientsEmptyText = view.findViewById(R.id.tv_empty_patients_notification);
+        measurementsEmptyText = view.findViewById(R.id.tv_empty_measurements_notification);
 
         volumeFlowLayout = view.findViewById(R.id.frame_volume_flow_graph_result_fragment);
         volumeTimeLayout = view.findViewById(R.id.frame_volume_time_graph_result_fragment);
@@ -276,6 +279,8 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
                     isFocused = true;
                     patientsRV.setVisibility(View.VISIBLE);
+                    if (patientsAdapter.getItemCount() > 0) patientsEmptyText.setVisibility(View.INVISIBLE);
+                    else patientsEmptyText.setVisibility(View.VISIBLE);
                     patientsRV.setClickable(true);
 
 
@@ -362,7 +367,6 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
         selectPatients();
         selectMeasurements();
-        updateUI();
 
     }
 
@@ -385,6 +389,15 @@ public class PatientInformationFragment extends Fragment implements Observer {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        if (patientList.size() > 0) {
+                            patientsEmptyText.setVisibility(View.INVISIBLE);
+                            updateUI();
+                        } else {
+                            patientsEmptyText.setVisibility(View.VISIBLE);
+                            patientInfoText.setText("");
+                            patientNameText.setText("N/A");
+
+                        }
                         patientsAdapter.notifyDataSetChanged();
                     }
                 });
@@ -425,6 +438,8 @@ public class PatientInformationFragment extends Fragment implements Observer {
                     @Override
                     public void run() {
 
+                        if (measurements.size() > 0) measurementsEmptyText.setVisibility(View.INVISIBLE);
+                        else measurementsEmptyText.setVisibility(View.VISIBLE);
                         measurementAdapter.notifyDataSetChanged();
                         dateRangeText.setText(getString(R.string.date_to_date, simpleDateFormat.format(minDate), simpleDateFormat.format(maxDate)));
                     }

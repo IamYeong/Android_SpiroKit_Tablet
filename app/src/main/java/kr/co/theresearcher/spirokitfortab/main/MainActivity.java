@@ -49,6 +49,7 @@ import kr.co.theresearcher.spirokitfortab.db.patient.PatientDao;
 import kr.co.theresearcher.spirokitfortab.db.patient.PatientDatabase;
 import kr.co.theresearcher.spirokitfortab.main.information.PatientInformationFragment;
 import kr.co.theresearcher.spirokitfortab.main.patients.PatientsFragment;
+import kr.co.theresearcher.spirokitfortab.main.result.empty.EmptyResultFragment;
 import kr.co.theresearcher.spirokitfortab.main.result.fvc.FvcResultFragment;
 import kr.co.theresearcher.spirokitfortab.main.result.svc.SvcResultFragment;
 import kr.co.theresearcher.spirokitfortab.patient_input.PatientInsertActivity;
@@ -187,6 +188,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         fragmentManager = getSupportFragmentManager();
+        EmptyResultFragment emptyResultFragment = new EmptyResultFragment();
+        setFragment(R.id.fragment_container_result_main, emptyResultFragment);
         setFragment(R.id.fragment_container_patient_info_main, informationFragment);
 
         startService(new Intent(getApplicationContext(), SpiroKitBluetoothLeService.class));

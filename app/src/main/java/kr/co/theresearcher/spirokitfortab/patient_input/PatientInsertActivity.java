@@ -6,6 +6,8 @@ import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.core.util.Pair;
 import androidx.room.Room;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.ColorSpace;
@@ -407,6 +409,7 @@ public class PatientInsertActivity extends AppCompatActivity {
                             PatientDatabase database = Room.databaseBuilder(PatientInsertActivity.this, PatientDatabase.class, RoomNames.ROOM_PATIENT_DB_NAME).build();
                             PatientDao patientDao = database.patientDao();
 
+                            setPatientInfoInPreferences(PatientInsertActivity.this, patient);
                             patientDao.insertPatient(patient);
 
                             database.close();
@@ -452,6 +455,7 @@ public class PatientInsertActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        selectDoctors();
 
 
     }
@@ -499,14 +503,29 @@ public class PatientInsertActivity extends AppCompatActivity {
         if (nameField.getText().toString().length() == 0) return false;
         if (heightField.getText().toString().length() == 0) return false;
         if (weightField.getText().toString().length() == 0) return false;
-        if (smokeAmountField.getText().toString().length() == 0) return false;
         if (chartNumberField.getText().toString().length() == 0) return false;
-        if (nameField.getText().toString().length() == 0) return false;
         if (birthDate == -1) return false;
-        if (startSmokeDate == -1) return false;
-        if (stopSmokeDate == -1) return false;
+
 
         return true;
+    }
+
+    private void setPatientInfoInPreferences(Context context, Patient patient) {
+
+        SharedPreferencesManager.setPatientId(context, patient.getId());
+        SharedPreferencesManager.setPatientName(context, patient.getName());
+        SharedPreferencesManager.setPatientChartNumber(context, patient.getChartNumber());
+        SharedPreferencesManager.setPatientGender(context, patient.isGender());
+        SharedPreferencesManager.setPatientHumanRaceId(context, patient.getHumanRaceId());
+        SharedPreferencesManager.setPatientHeight(context, patient.getHeight());
+        SharedPreferencesManager.setPatientWeight(context, patient.getWeight());
+        SharedPreferencesManager.setPatientBirth(context, patient.getBirthDate());
+        SharedPreferencesManager.setPatientIsSmoking(context, patient.isSmoke());
+        SharedPreferencesManager.setPatientStartSmokingDate(context, patient.getStartSmokeDate());
+        SharedPreferencesManager.setPatientNoSmokingDate(context, patient.getStopSmokeDate());
+        SharedPreferencesManager.setPatientSmokingAmount(context, patient.getSmokeAmountPack());
+        SharedPreferencesManager.setPatientMatchDoctor(context, patient.getDoctorID());
+
     }
 
 }

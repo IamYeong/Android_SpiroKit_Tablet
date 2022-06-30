@@ -197,6 +197,24 @@
                     android:layout_marginVertical="10dp"
                     />
 
+                <TextView
+                    android:id="@+id/tv_empty_measurements_notification"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintTop_toTopOf="@id/rv_test_history_patient_info_fragment"
+                    app:layout_constraintBottom_toBottomOf="@id/rv_test_history_patient_info_fragment"
+                    app:layout_constraintStart_toStartOf="@id/rv_test_history_patient_info_fragment"
+                    app:layout_constraintEnd_toEndOf="@id/rv_test_history_patient_info_fragment"
+                    android:background="@color/white"
+
+                    android:fontFamily="@font/nanum_gothic_bold"
+                    android:textSize="15sp"
+                    android:text="선택한 환자의 검사목록을\n확인할 수 있습니다"
+                    android:gravity="center"
+
+                    android:visibility="invisible"
+                    />
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -217,6 +235,23 @@
         android:clickable="false"
         />
 
+    <TextView
+        android:id="@+id/tv_empty_patients_notification"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@id/rv_patients_info_fragment"
+        app:layout_constraintBottom_toBottomOf="@id/rv_patients_info_fragment"
+        app:layout_constraintStart_toStartOf="@id/rv_patients_info_fragment"
+        app:layout_constraintEnd_toEndOf="@id/rv_patients_info_fragment"
+        android:background="@color/white"
+
+        android:fontFamily="@font/nanum_gothic_bold"
+        android:textSize="15sp"
+        android:text="환자 정보를 추가하신 후\n목록으로 확인가능합니다"
+        android:gravity="center"
+
+        android:visibility="invisible"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
