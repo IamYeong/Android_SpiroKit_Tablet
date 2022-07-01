@@ -182,6 +182,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onMeasurementSelected(Measurement measurement) {
 
+                if (measurement == null) {
+                    EmptyResultFragment emptyResultFragment = new EmptyResultFragment();
+                    setFragment(R.id.fragment_container_result_main, emptyResultFragment);
+                }
                 setFragmentByMeasGroup(measurement);
 
             }
@@ -263,6 +267,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setFragmentByMeasGroup(Measurement measurement) {
 
+        if (measurement == null) return;
 
         switch (measurement.getMeasurementID()) {
 

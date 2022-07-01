@@ -105,6 +105,8 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
     private Handler handler = new Handler(Looper.getMainLooper());
 
+    private String doctorName = "";
+
     public PatientInformationFragment() {
         // Required empty public constructor
     }
@@ -204,18 +206,20 @@ public class PatientInformationFragment extends Fragment implements Observer {
                         List<Measurement> measurements = measurementDao.selectByPatientID(SharedPreferencesManager.getPatientId(context));
                         measurementDatabase.close();
 
-                        if (measurements.size() > 0) {
-                            measurementsEmptyText.setVisibility(View.INVISIBLE);
-                            measurementSelectedListener.onMeasurementSelected(measurements.get(measurements.size() - 1));
-                        } else {
-                            measurementsEmptyText.setVisibility(View.VISIBLE);
-                        }
-
                         measurementAdapter.setMeasurements(measurements);
 
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
+
+                                if (measurements.size() > 0) {
+                                    measurementsEmptyText.setVisibility(View.INVISIBLE);
+                                    measurementSelectedListener.onMeasurementSelected(measurements.get(measurements.size() - 1));
+                                } else {
+                                    measurementsEmptyText.setVisibility(View.VISIBLE);
+                                    measurementSelectedListener.onMeasurementSelected(null);
+                                }
+
                                 measurementAdapter.notifyDataSetChanged();
                             }
                         });
@@ -467,6 +471,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
                             measurementSelectedListener.onMeasurementSelected(measurements.get(measurements.size() - 1));
                         } else {
                             measurementsEmptyText.setVisibility(View.VISIBLE);
+                            measurementSelectedListener.onMeasurementSelected(null);
                         }
                         measurementAdapter.notifyDataSetChanged();
                         dateRangeText.setText(getString(R.string.date_to_date, simpleDateFormat.format(minDate), simpleDateFormat.format(maxDate)));
@@ -528,7 +533,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
         if (SharedPreferencesManager.getPatientIsSmoking(context)) info.append(getString(R.string.is_smoke_for_input, getString(R.string.smoking))).append("\n");
         else info.append(getString(R.string.is_smoke_for_input, getString(R.string.no_smoking))).append("\n");
 
-        info.append(getString(R.string.match_doctor_for_input, ""));
+        info.append(getString(R.string.match_doctor_for_input, SharedPreferencesManager.getPatientMatchDoctorID(context) + ""));
 
         patientInfoText.setText(info.toString());
 
@@ -584,7 +589,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
                 OperatorDatabase database = Room.databaseBuilder(context, OperatorDatabase.class, RoomNames.ROOM_OPERATOR_DB_NAME).build();
                 OperatorDao operatorDao = database.operatorDao();
                 List<Operator> operators = operatorDao.selectByOfficeID(SharedPreferencesManager.getOfficeID(context));
-                for (Operator operator : operators) if (operator.getId() == SharedPreferencesManager.getPatientMatchDoctorID(context))
+                for (Operator operator : operators) if (operator.getId() == SharedPreferencesManager.getPatientMatchDoctorID(context)) doctorName = operator.getName();
 
 
                 Looper.loop();
