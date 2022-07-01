@@ -1,11 +1,14 @@
 package kr.co.theresearcher.spirokitfortab.measurement.svc;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import android.bluetooth.BluetoothGattService;
+import android.bluetooth.BluetoothProfile;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -23,7 +26,11 @@ import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -64,9 +71,15 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
     private RecyclerView resultRV;
     private FrameLayout volumeTimeGraphLayout, resultGraphLayout;
-    private Button startButton, saveButton, retestButton, completeButton;
+    private Button completeButton, saveButton;
+    private MaterialButton startButton, retestButton;
     private ImageButton backButton;
     private TextView titleText, emptyText;
+
+    private ConstraintLayout connectButton;
+    private ImageView connectStateImage;
+    private TextView connectStateText;
+    private ProgressBar connectStateProgressBar;
 
     private SvcResultAdapter adapter;
     private SpiroKitBluetoothLeService mService;
@@ -87,16 +100,24 @@ public class MeasurementSvcActivity extends AppCompatActivity {
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-
             mService = ((SpiroKitBluetoothLeService.LocalBinder)service).getService();
 
-            if (mService.isConnect()) {
-
-            } else {
-
-            }
-
             mService.setBluetoothLeCallback(bluetoothLeCallback);
+
+            if (mService.isConnect()) {
+                connectStateImage.setImageDrawable(AppCompatResources.getDrawable(MeasurementSvcActivity.this, R.drawable.ic_connect_spirokit));
+                connectStateImage.setVisibility(View.VISIBLE);
+                connectStateText.setText(getString(R.string.state_connect));
+                connectStateProgressBar.setVisibility(View.INVISIBLE);
+            } else {
+                connectStateImage.setImageDrawable(AppCompatResources.getDrawable(MeasurementSvcActivity.this, R.drawable.ic_disconnect_spirokit));
+                connectStateImage.setVisibility(View.VISIBLE);
+                connectStateText.setText(getString(R.string.state_disconnect));
+                connectStateProgressBar.setVisibility(View.INVISIBLE);
+
+
+                mService.connect(SharedPreferencesManager.getBluetoothDeviceMacAddress(MeasurementSvcActivity.this));
+            }
 
         }
 
@@ -134,6 +155,15 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         @Override
         public void onDescriptorWrite() {
 
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    connectStateImage.setImageDrawable(AppCompatResources.getDrawable(MeasurementSvcActivity.this, R.drawable.ic_connect_spirokit));
+                    connectStateImage.setVisibility(View.VISIBLE);
+                    connectStateText.setText(getString(R.string.state_connect));
+                    connectStateProgressBar.setVisibility(View.INVISIBLE);
+                }
+            });
         }
 
         @Override
@@ -143,7 +173,21 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
         @Override
         public void onConnectStateChanged(int status) {
+            if (status == BluetoothProfile.STATE_CONNECTED) {
+                //testTitleText.setText(String.valueOf(status));
+            } else {
 
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        connectStateImage.setImageDrawable(AppCompatResources.getDrawable(MeasurementSvcActivity.this, R.drawable.ic_disconnect_spirokit));
+                        connectStateImage.setVisibility(View.VISIBLE);
+                        connectStateText.setText(getString(R.string.state_disconnect));
+                        connectStateProgressBar.setVisibility(View.INVISIBLE);
+                    }
+                });
+
+            }
         }
     };
 
@@ -163,6 +207,11 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         completeButton = findViewById(R.id.btn_complete_svc_meas);
         emptyText = findViewById(R.id.tv_empty_svc_meas);
 
+        connectStateProgressBar = findViewById(R.id.progress_connecting_svc_meas);
+        connectStateImage = findViewById(R.id.img_connect_state_svc_meas);
+        connectStateText = findViewById(R.id.tv_connect_title_svc_meas);
+        connectButton = findViewById(R.id.constraint_connect_button_svc_meas);
+
         backButton = findViewById(R.id.img_btn_back_svc_meas);
 
         adapter = new SvcResultAdapter(this);
@@ -178,6 +227,26 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         resultRV.setLayoutManager(linearLayoutManager);
         resultRV.setAdapter(adapter);
+
+        connectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (mService.isConnect()) {
+                    ConfirmDialog confirmDialog = new ConfirmDialog(MeasurementSvcActivity.this);
+                    confirmDialog.setTitle("이미 연결돼있습니다, 검사를 시작하세요");
+                    confirmDialog.show();
+
+                    return;
+                }
+
+                mService.connect(SharedPreferencesManager.getBluetoothDeviceMacAddress(MeasurementSvcActivity.this));
+                connectStateImage.setVisibility(View.INVISIBLE);
+                connectStateProgressBar.setVisibility(View.VISIBLE);
+                connectStateText.setText(getString(R.string.connecting));
+
+            }
+        });
 
         /*
         Display display = getWindowManager().getDefaultDisplay();

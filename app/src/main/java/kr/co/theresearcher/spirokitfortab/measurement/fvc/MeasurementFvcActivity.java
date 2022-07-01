@@ -309,6 +309,14 @@ public class MeasurementFvcActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                if (mService.isConnect()) {
+                    ConfirmDialog confirmDialog = new ConfirmDialog(MeasurementFvcActivity.this);
+                    confirmDialog.setTitle("이미 연결돼있습니다, 검사를 시작하세요");
+                    confirmDialog.show();
+
+                    return;
+                }
+
                 mService.connect(SharedPreferencesManager.getBluetoothDeviceMacAddress(MeasurementFvcActivity.this));
                 connectStateImage.setVisibility(View.INVISIBLE);
                 connectingProgressBar.setVisibility(View.VISIBLE);

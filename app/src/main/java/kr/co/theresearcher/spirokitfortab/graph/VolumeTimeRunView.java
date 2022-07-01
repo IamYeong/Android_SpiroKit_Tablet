@@ -50,6 +50,13 @@ public class VolumeTimeRunView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        //축 라벨
+        canvas.drawText("Flow(l/s)", 30f, 30f, labelPaint);
+        canvas.drawText("Volume(L)", canvasWidth - 100f, canvasHeight - 30f, labelPaint);
+
+        //제목 라벨
+        canvas.drawText("Volume|Flow Graph", canvasWidth / 2f, 30f, labelPaint);
+
         //X 축 하단선
         //canvas.drawLine(0f, canvasHeight, canvasWidth, canvasHeight, linePaint);
         //Y 축 측면선

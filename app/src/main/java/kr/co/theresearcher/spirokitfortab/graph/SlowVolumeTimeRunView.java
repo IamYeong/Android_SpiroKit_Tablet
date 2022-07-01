@@ -52,6 +52,13 @@ public class SlowVolumeTimeRunView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        //축 라벨
+        canvas.drawText("Volume(L)", 30f, 30f, labelPaint);
+        canvas.drawText("Time(s)", canvasWidth - 100f, canvasHeight - 30f, labelPaint);
+
+        //제목 라벨
+        canvas.drawText("Volume|Time Graph", canvasWidth / 2f, 30f, labelPaint);
+
         //X축 중간선
         canvas.drawLine(0f, canvasHeight / 2f, canvasWidth, canvasHeight / 2f, linePaint);
 
