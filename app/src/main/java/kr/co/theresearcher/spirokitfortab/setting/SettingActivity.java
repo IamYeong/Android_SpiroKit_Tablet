@@ -114,8 +114,15 @@ public class SettingActivity extends AppCompatActivity {
                     //연결 완료
                     Log.d(getClass().getSimpleName(), "**********onDescriptorWrite");
                     if (loadingDialog.isShowing()) loadingDialog.dismiss();
-                    connectStateText.setText(getString(R.string.connect_with_what, SharedPreferencesManager.getConnectedDeviceName(SettingActivity.this)));
-                    startScanText.setText(getString(R.string.do_disconnect));
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            connectStateText.setText(getString(R.string.connect_with_what, SharedPreferencesManager.getConnectedDeviceName(SettingActivity.this)));
+                            startScanText.setText(getString(R.string.do_disconnect));
+                        }
+                    });
+
                     //macAddressText.setText(SharedPreferencesManager.getBluetoothDeviceMacAddress(SettingActivity.this));
                 }
 
@@ -130,7 +137,15 @@ public class SettingActivity extends AppCompatActivity {
                         //testTitleText.setText(String.valueOf(status));
 
                     } else {
-                        connectStateText.setText(getString(R.string.state_disconnect));
+
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                connectStateText.setText(getString(R.string.state_disconnect));
+                            }
+                        });
+
+
                     }
                 }
             });
@@ -182,6 +197,8 @@ public class SettingActivity extends AppCompatActivity {
         backButton = findViewById(R.id.img_btn_back_setting);
         scanProgress = findViewById(R.id.progress_scan_loading);
         startScanText = findViewById(R.id.tv_start_scan);
+
+        logoutButton = findViewById(R.id.btn_logout_setting);
 
         operatorCard = findViewById(R.id.card_operator_management);
         operatorCard.setOnClickListener(new View.OnClickListener() {
@@ -248,7 +265,12 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                activityResultLauncher.launch(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE));
+                if (mService.isConnect()) {
+                    mService.disconnect();
+                } else {
+                    activityResultLauncher.launch(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE));
+                }
+
 
             }
         });
@@ -257,6 +279,17 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                finish();
+                //프리퍼런스 데이터를 user id 를 -1 처럼 만들고
+                //설정화면을 닫은 뒤 메인화면이 onResume 되는데, ID 가 -1이면 닫고 로그인화면으로 이동해도 좋음.
+
             }
         });
 

@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -38,7 +39,11 @@ import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.calc.CalcSpiroKitE;
 import kr.co.theresearcher.spirokitfortab.calc.CalcSvcSpiroKitE;
+import kr.co.theresearcher.spirokitfortab.db.RoomNames;
 import kr.co.theresearcher.spirokitfortab.db.measurement.Measurement;
+import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
+import kr.co.theresearcher.spirokitfortab.db.operator.OperatorDao;
+import kr.co.theresearcher.spirokitfortab.db.operator.OperatorDatabase;
 import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
 import kr.co.theresearcher.spirokitfortab.graph.SlowVolumeTimeRunView;
 import kr.co.theresearcher.spirokitfortab.main.result.OnOrderSelectedListener;
@@ -55,6 +60,7 @@ public class SvcResultFragment extends Fragment implements Observer {
     private List<SlowVolumeTimeRunView> graphViews = new ArrayList<>();
     private SvcResultAdapter svcResultAdapter;
     private Context context;
+    private TextView matchDoctorText, measDoctorText;
 
     private Handler handler = new Handler(Looper.getMainLooper());
 
@@ -76,6 +82,9 @@ public class SvcResultFragment extends Fragment implements Observer {
 
         rv = view.findViewById(R.id.rv_result_svc_fragment);
         graphLayout = view.findViewById(R.id.frame_svc_graph_result_fragment);
+
+        measDoctorText = view.findViewById(R.id.tv_meas_doctor_main_svc_result);
+        matchDoctorText = view.findViewById(R.id.tv_match_doctor_main_svc_result);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(container.getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -311,6 +320,56 @@ public class SvcResultFragment extends Fragment implements Observer {
     private void selectResult(int order) {
         graphLayout.removeAllViews();
         graphLayout.addView(graphViews.get(order));
+    }
+
+    private void setDoctors() {
+        Thread thread = new Thread() {
+
+            @Override
+            public void run() {
+                super.run();
+                Looper.prepare();
+
+                OperatorDatabase operatorDatabase = Room.databaseBuilder(context, OperatorDatabase.class, RoomNames.ROOM_OPERATOR_DB_NAME).build();
+                OperatorDao operatorDao = operatorDatabase.operatorDao();
+
+                List<Operator> operators = operatorDao.selectByOfficeID(SharedPreferencesManager.getOfficeID(context));
+
+                for (int i = 0; i < operators.size(); i++) {
+
+                    Operator op = operators.get(i);
+                    if (measurement.getMeasOperatorID() == op.getId()) {
+
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                measDoctorText.setText(getString(R.string.meas_doctor_result_input, op.getName()));
+
+                            }
+                        });
+
+                    }
+
+                    if (SharedPreferencesManager.getPatientMatchDoctorID(context) == op.getId()) {
+
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                matchDoctorText.setText(getString(R.string.match_doctor_result_input, op.getName()));
+                            }
+                        });
+
+                    }
+
+                }
+
+
+                Looper.loop();
+            }
+        };
+
+        thread.start();
     }
 
 }

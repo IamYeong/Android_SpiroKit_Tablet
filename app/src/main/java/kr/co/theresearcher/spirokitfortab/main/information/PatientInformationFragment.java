@@ -60,6 +60,9 @@ import kr.co.theresearcher.spirokitfortab.db.meas_group.MeasGroup;
 import kr.co.theresearcher.spirokitfortab.db.measurement.Measurement;
 import kr.co.theresearcher.spirokitfortab.db.measurement.MeasurementDao;
 import kr.co.theresearcher.spirokitfortab.db.measurement.MeasurementDatabase;
+import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
+import kr.co.theresearcher.spirokitfortab.db.operator.OperatorDao;
+import kr.co.theresearcher.spirokitfortab.db.operator.OperatorDatabase;
 import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
 import kr.co.theresearcher.spirokitfortab.db.patient.PatientDao;
 import kr.co.theresearcher.spirokitfortab.db.patient.PatientDatabase;
@@ -97,6 +100,8 @@ public class PatientInformationFragment extends Fragment implements Observer {
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
     private long minDate = Calendar.getInstance().getTime().getTime();
     private long maxDate = Calendar.getInstance().getTime().getTime();
+
+    private List<Operator> operators = new ArrayList<>();
 
     private Handler handler = new Handler(Looper.getMainLooper());
 
@@ -199,6 +204,13 @@ public class PatientInformationFragment extends Fragment implements Observer {
                         List<Measurement> measurements = measurementDao.selectByPatientID(SharedPreferencesManager.getPatientId(context));
                         measurementDatabase.close();
 
+                        if (measurements.size() > 0) {
+                            measurementsEmptyText.setVisibility(View.INVISIBLE);
+                            measurementSelectedListener.onMeasurementSelected(measurements.get(measurements.size() - 1));
+                        } else {
+                            measurementsEmptyText.setVisibility(View.VISIBLE);
+                        }
+
                         measurementAdapter.setMeasurements(measurements);
 
                         handler.post(new Runnable() {
@@ -285,13 +297,8 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
                     Log.d(getClass().getSimpleName(), "Patient edit text click");
 
-
                     isFocused = true;
-                    patientsRV.setVisibility(View.VISIBLE);
-                    if (patientsAdapter.getItemCount() > 0) patientsEmptyText.setVisibility(View.INVISIBLE);
-                    else patientsEmptyText.setVisibility(View.VISIBLE);
-                    patientsRV.setClickable(true);
-
+                    selectPatients();
 
                 }
 
@@ -374,8 +381,9 @@ public class PatientInformationFragment extends Fragment implements Observer {
     public void onResume() {
         super.onResume();
 
-        selectPatients();
+        //selectPatients();
         selectMeasurements();
+        updateUI();
 
     }
 
@@ -390,8 +398,12 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
                 PatientDatabase database = Room.databaseBuilder(context, PatientDatabase.class, RoomNames.ROOM_PATIENT_DB_NAME).build();
                 PatientDao patientDao = database.patientDao();
-                List<Patient> patientList = patientDao.selectAllPatient();
+                List<Patient> patientList = patientDao.selectPatientByOfficeID(SharedPreferencesManager.getOfficeID(context));
                 database.close();
+
+                for (Patient patient : patientList) {
+                    Log.e(getClass().getSimpleName(), "************************ PID : " + patient.getId());
+                }
 
                 patientsAdapter.setPatients(patientList);
 
@@ -400,6 +412,8 @@ public class PatientInformationFragment extends Fragment implements Observer {
                     public void run() {
                         if (patientList.size() > 0) {
                             patientsEmptyText.setVisibility(View.INVISIBLE);
+                            patientsRV.setVisibility(View.VISIBLE);
+                            patientsRV.setClickable(true);
                             updateUI();
                         } else {
                             patientsEmptyText.setVisibility(View.VISIBLE);
@@ -437,6 +451,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
 
                 for (Measurement measurement : measurements) {
+                    Log.e(getClass().getSimpleName(), "************************ MEAS - PID : " + measurement.getPatientID());
                     if (minDate > measurement.getMeasDate()) minDate = measurement.getMeasDate();
                     if (maxDate < measurement.getMeasDate()) maxDate = measurement.getMeasDate();
                 }
@@ -447,8 +462,12 @@ public class PatientInformationFragment extends Fragment implements Observer {
                     @Override
                     public void run() {
 
-                        if (measurements.size() > 0) measurementsEmptyText.setVisibility(View.INVISIBLE);
-                        else measurementsEmptyText.setVisibility(View.VISIBLE);
+                        if (measurements.size() > 0) {
+                            measurementsEmptyText.setVisibility(View.INVISIBLE);
+                            measurementSelectedListener.onMeasurementSelected(measurements.get(measurements.size() - 1));
+                        } else {
+                            measurementsEmptyText.setVisibility(View.VISIBLE);
+                        }
                         measurementAdapter.notifyDataSetChanged();
                         dateRangeText.setText(getString(R.string.date_to_date, simpleDateFormat.format(minDate), simpleDateFormat.format(maxDate)));
                     }
@@ -552,6 +571,27 @@ public class PatientInformationFragment extends Fragment implements Observer {
             patientSearchField.clearFocus();
         }
 
+    }
+
+    private void selectOperators() {
+        Thread thread = new Thread() {
+
+            @Override
+            public void run() {
+                super.run();
+                Looper.prepare();
+
+                OperatorDatabase database = Room.databaseBuilder(context, OperatorDatabase.class, RoomNames.ROOM_OPERATOR_DB_NAME).build();
+                OperatorDao operatorDao = database.operatorDao();
+                List<Operator> operators = operatorDao.selectByOfficeID(SharedPreferencesManager.getOfficeID(context));
+                for (Operator operator : operators) if (operator.getId() == SharedPreferencesManager.getPatientMatchDoctorID(context))
+
+
+                Looper.loop();
+            }
+        };
+
+        thread.start();
     }
 
 }

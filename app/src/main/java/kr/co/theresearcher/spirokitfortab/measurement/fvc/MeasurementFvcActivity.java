@@ -1,6 +1,8 @@
 package kr.co.theresearcher.spirokitfortab.measurement.fvc;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
@@ -20,8 +22,11 @@ import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -77,8 +82,12 @@ public class MeasurementFvcActivity extends AppCompatActivity {
     private List<VolumeTimeResultView> volumeTimeResultViewList = new ArrayList<>();
     private List<Integer> pulseWidthList = new ArrayList<>();
     private RecyclerView rv;
-    private Button retestButton, completeButton, startStopButton, preSaveButton, postSaveButton;
-    private ProgressBar timerProgressBar, weakFlowProgressBar;
+    private Button completeButton, preSaveButton, postSaveButton;
+    private ConstraintLayout connectButton;
+    private ImageView connectStateImage;
+    private TextView connectStateText;
+    private MaterialButton retestButton, startStopButton;
+    private ProgressBar timerProgressBar, weakFlowProgressBar, connectingProgressBar;
     private ImageButton backButton;
     private FvcResultAdapter resultAdapter;
     private TextView patientNameText;
@@ -106,12 +115,6 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
 
             mService = ((SpiroKitBluetoothLeService.LocalBinder)iBinder).getService();
-
-            if (mService.isConnect()) {
-
-            } else {
-
-            }
 
             mService.setBluetoothLeCallback(new SpiroKitBluetoothLeService.BluetoothLeCallback() {
                 @Override
@@ -176,11 +179,23 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                 @Override
                 public void onWriteCharacteristic() {
                     //testTitleText.setText("WRITE CHARACTERISTIC");
+
+
                 }
 
                 @Override
                 public void onDescriptorWrite() {
                     //testTitleText.setText("DESCRIPTOR WRITE");
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            connectStateImage.setImageDrawable(AppCompatResources.getDrawable(MeasurementFvcActivity.this, R.drawable.ic_connect_spirokit));
+                            connectStateImage.setVisibility(View.VISIBLE);
+                            connectStateText.setText(getString(R.string.state_connect));
+                            connectingProgressBar.setVisibility(View.INVISIBLE);
+                        }
+                    });
 
                 }
 
@@ -193,9 +208,39 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                 public void onConnectStateChanged(int status) {
                     if (status == BluetoothProfile.STATE_CONNECTED) {
                         //testTitleText.setText(String.valueOf(status));
+                    } else {
+
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                connectStateImage.setImageDrawable(AppCompatResources.getDrawable(MeasurementFvcActivity.this, R.drawable.ic_disconnect_spirokit));
+                                connectStateImage.setVisibility(View.VISIBLE);
+                                connectStateText.setText(getString(R.string.state_disconnect));
+                                connectingProgressBar.setVisibility(View.INVISIBLE);
+                            }
+                        });
+
                     }
                 }
             });
+
+            if (mService.isConnect()) {
+
+                connectStateImage.setImageDrawable(AppCompatResources.getDrawable(MeasurementFvcActivity.this, R.drawable.ic_connect_spirokit));
+                connectStateImage.setVisibility(View.VISIBLE);
+                connectStateText.setText(getString(R.string.state_connect));
+                connectingProgressBar.setVisibility(View.INVISIBLE);
+            } else {
+
+                connectStateImage.setImageDrawable(AppCompatResources.getDrawable(MeasurementFvcActivity.this, R.drawable.ic_disconnect_spirokit));
+                connectStateImage.setVisibility(View.VISIBLE);
+                connectStateText.setText(getString(R.string.state_disconnect));
+                connectingProgressBar.setVisibility(View.INVISIBLE);
+
+
+                mService.connect(SharedPreferencesManager.getBluetoothDeviceMacAddress(MeasurementFvcActivity.this));
+
+            }
 
         }
 
@@ -236,6 +281,11 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         timerProgressBar = findViewById(R.id.progressbar_expiratory_timer);
         weakFlowProgressBar = findViewById(R.id.progressbar_weak_expiratory);
 
+        connectButton = findViewById(R.id.constraint_connect_button_fvc_meas);
+        connectStateImage = findViewById(R.id.img_connect_state_fvc_meas);
+        connectStateText = findViewById(R.id.tv_connect_title_fvc_meas);
+        connectingProgressBar = findViewById(R.id.progress_connecting_fvc_meas);
+
         resultAdapter = new FvcResultAdapter(MeasurementFvcActivity.this);
         resultAdapter.setOnOrderSelectedListener(new OnOrderSelectedListener() {
             @Override
@@ -254,6 +304,18 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         rv.setAdapter(resultAdapter);
 
         patientNameText.setText(SharedPreferencesManager.getPatientName(this));
+
+        connectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mService.connect(SharedPreferencesManager.getBluetoothDeviceMacAddress(MeasurementFvcActivity.this));
+                connectStateImage.setVisibility(View.INVISIBLE);
+                connectingProgressBar.setVisibility(View.VISIBLE);
+                connectStateText.setText(getString(R.string.connecting));
+
+            }
+        });
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -445,7 +507,8 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                         Measurement measurement = new Measurement(
                                 SharedPreferencesManager.getOfficeID(MeasurementFvcActivity.this),
                                 SharedPreferencesManager.getPatientId(MeasurementFvcActivity.this),
-                                MeasGroup.fvc.ordinal(), startTimestamp, simpleDateFormat.format(startTimestamp));
+                                MeasGroup.fvc.ordinal(), startTimestamp, simpleDateFormat.format(startTimestamp),
+                                SharedPreferencesManager.getOperatorID(MeasurementFvcActivity.this));
                         measurementDao.insertMeasurement(measurement);
                         database.close();
 

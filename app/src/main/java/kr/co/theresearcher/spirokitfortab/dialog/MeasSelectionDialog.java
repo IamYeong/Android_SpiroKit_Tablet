@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -40,44 +41,77 @@ public class MeasSelectionDialog extends Dialog {
     private Button fvcButton, svcButton;
     private AppCompatSpinner jobSpinner, operatorSpinner;
     private TextView matchDoctorText;
+    private ImageButton closeButton;
 
     private ArrayAdapter<String> jobArrayAdapter;
     private ArrayAdapter<String> operatorArrayAdapter;
 
     private Handler handler = new Handler(Looper.getMainLooper());
-    private List<String> operatorNames = new ArrayList<>();
-    private List<Operator> operators = new ArrayList<>();
+    private List<Operator> operators;
+    private List<Operator> sortedOperators = new ArrayList<>();
+
+    private OperatorDatabase operatorDatabase;
 
     public MeasSelectionDialog(@NonNull Context context) {
         super(context);
+        operatorDatabase = Room.databaseBuilder(context, OperatorDatabase.class, RoomNames.ROOM_OPERATOR_DB_NAME).build();
 
-        List<String> jobsName = new ArrayList<>();
-        for (Work work : Work.values()) jobsName.add(work.name().toUpperCase(Locale.ROOT));
+        Thread thread = new Thread() {
 
-        jobArrayAdapter = new ArrayAdapter<String>(
-                getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, jobsName
-        );
+            @Override
+            public void run() {
+                super.run();
+                Looper.prepare();
+
+                OperatorDao operatorDao = operatorDatabase.operatorDao();
+                operators = operatorDao.selectByOfficeID(SharedPreferencesManager.getOfficeID(getContext()));
+
+                Looper.loop();
+            }
+        };
+        thread.start();
 
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setBackgroundDrawableResource(R.color.transparent);
         setContentView(R.layout.dialog_meas_selection);
+        setCancelable(false);
 
         fvcButton = findViewById(R.id.btn_fvc_meas_selection_dialog);
         svcButton = findViewById(R.id.btn_svc_meas_selection_dialog);
         jobSpinner = findViewById(R.id.spinner_operate_group);
         operatorSpinner = findViewById(R.id.spinner_operator_group);
+        closeButton = findViewById(R.id.img_btn_close_meas_selection_dialog);
+
+        Work[] works = Work.values();
+        String[] workNames = new String[works.length];
+        for (int i = 0; i < works.length; i++) workNames[i] = works[i].name();
+
+        jobArrayAdapter = new ArrayAdapter<String>(
+                getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, workNames
+        );
 
         jobSpinner.setAdapter(jobArrayAdapter);
+
+
+
+
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                operatorDatabase.close();
+                dismiss();
+            }
+        });
 
         operatorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                SharedPreferencesManager.setOperatorID(getContext(), operators.get(position).getOfficeID());
+                SharedPreferencesManager.setOperatorID(getContext(), sortedOperators.get(position).getOfficeID());
 
             }
 
@@ -91,42 +125,8 @@ public class MeasSelectionDialog extends Dialog {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                Thread thread = new Thread() {
-
-                    @Override
-                    public void run() {
-                        super.run();
-                        Looper.prepare();
-
-                        OperatorDatabase database = Room.databaseBuilder(getContext(), OperatorDatabase.class, RoomNames.ROOM_OPERATOR_DB_NAME).build();
-                        OperatorDao operatorDao = database.operatorDao();
-
-                        operatorNames.clear();
-                        for (Operator operator : operatorDao.selectByOfficeID(SharedPreferencesManager.getOfficeID(getContext()))) {
-                            if (operator.getWorkID() == position) {
-                                operators.add(operator);
-                                operatorNames.add(operator.getName());
-                            }
-                        }
-
-                        operatorArrayAdapter = new ArrayAdapter<String>(
-                                getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, operatorNames
-                        );
-
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                operatorSpinner.setAdapter(operatorArrayAdapter);
-                            }
-                        });
-
-                        Looper.loop();
-                    }
-                };
-
-                thread.start();
-
-
+                Work selectedWork = Work.values()[position];
+                updateOperators(selectedWork.ordinal());
 
             }
 
@@ -140,6 +140,7 @@ public class MeasSelectionDialog extends Dialog {
             @Override
             public void onClick(View v) {
 
+                operatorDatabase.close();
                 Intent intent = new Intent(getContext(), MeasurementFvcActivity.class);
                 getContext().startActivity(intent);
                 dismiss();
@@ -151,6 +152,7 @@ public class MeasSelectionDialog extends Dialog {
             @Override
             public void onClick(View v) {
 
+                operatorDatabase.close();
                 Intent intent = new Intent(getContext(), MeasurementSvcActivity.class);
                 getContext().startActivity(intent);
                 dismiss();
@@ -159,4 +161,41 @@ public class MeasSelectionDialog extends Dialog {
         });
 
     }
+
+    private void updateOperators(int workID) {
+
+        Thread thread = new Thread() {
+
+            @Override
+            public void run() {
+                super.run();
+                Looper.prepare();
+
+                sortedOperators.clear();
+                for (int i = 0; i < operators.size(); i++) {
+                    if (operators.get(i).getWorkID() == workID) sortedOperators.add(operators.get(i));
+                }
+
+                String[] operatorNames = new String[sortedOperators.size()];
+                for (int i = 0; i < sortedOperators.size(); i++) operatorNames[i] = sortedOperators.get(i).getName();
+                operatorArrayAdapter = new ArrayAdapter<String>(
+                        getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, operatorNames
+                );
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        operatorSpinner.setAdapter(operatorArrayAdapter);
+                    }
+                });
+
+                Looper.loop();
+            }
+        };
+        thread.start();
+
+    }
+
+
+
 }

@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ public class OperatorActivity extends AppCompatActivity {
     private EditText nameTextField;
     private Button addButton;
     private OperatorAdapter adapter;
+    private ImageButton backButton;
 
     private Handler handler = new Handler(Looper.getMainLooper());
     private boolean isSpinnerInit = false;
@@ -48,6 +50,14 @@ public class OperatorActivity extends AppCompatActivity {
         nameTextField = findViewById(R.id.et_operator_name);
         spinner = findViewById(R.id.spinner_operator_work);
         rv = findViewById(R.id.rv_operator);
+        backButton = findViewById(R.id.img_btn_back_operator);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         adapter = new OperatorAdapter(this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);

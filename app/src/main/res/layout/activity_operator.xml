@@ -9,95 +9,180 @@
     android:background="@color/gray_background"
     >
 
-    <View
-        android:id="@+id/view_center_line_operator"
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_operator"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintStart_toEndOf="@id/view_center_line_operator"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linear_operator"
-        app:layout_constraintBottom_toBottomOf="parent"
-
-        android:layout_marginVertical="10dp"
-        android:background="@color/gray_background"
-        />
-
-    <LinearLayout
-        android:id="@+id/linear_operator"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_layout_bar_operator"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/view_center_line_operator"
-        app:layout_constraintEnd_toEndOf="parent"
-
-        android:background="@color/gray_background"
+        android:background="@color/white"
+        android:elevation="10dp"
         >
 
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/spinner_operator_work"
+        <ImageButton
+            android:id="@+id/img_btn_back_operator"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
-
-            android:layout_weight="1"
-
-            android:background="@drawable/spinner_background_white"
-
-            android:elevation="10dp"
-            android:layout_marginVertical="20dp"
-            android:layout_marginHorizontal="10dp"
-            />
-
-        <EditText
-            android:id="@+id/et_operator_name"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-
-            android:layout_weight="1"
-            android:layout_marginEnd="20dp"
-
-            android:layout_marginVertical="20dp"
-            android:layout_marginHorizontal="10dp"
-
-            android:background="@drawable/text_field_background_round_white"
-            android:backgroundTint="@color/white"
-
-            android:elevation="10dp"
-            android:hint="@string/name"
-            android:padding="10dp"
-            />
-
-
-        <android.widget.Button
-            android:id="@+id/btn_add_operator"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_keyboard_arrow_left_30_black"
+            android:background="?attr/selectableItemBackgroundBorderless"
 
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-
-
-            android:background="@drawable/button_shape"
-            android:backgroundTint="@color/primary_color"
-            android:textColor="@color/white"
-            android:text="추가"
-
-            android:layout_weight="1"
-
-            android:layout_marginVertical="20dp"
-            android:layout_marginHorizontal="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_margin="20dp"
             />
 
-    </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/times"
+
+            android:textColor="@color/black"
+            android:text="@string/setting"
+            android:textSize="20sp"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="500dp"
+        android:layout_height="0dp"
+        android:layout_marginVertical="50dp"
+        app:cardCornerRadius="17dp"
+        app:cardElevation="0dp"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/constraint_layout_bar_operator"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <LinearLayout
+                android:id="@+id/linear_operator_select_work"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+
+                app:layout_constraintTop_toTopOf="parent"
+
+                android:layout_marginVertical="20dp"
+                android:layout_marginHorizontal="20dp"
+
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanum_gothic_bold"
+                    android:text="의료진 관리"
+                    android:textSize="15sp"
+
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+
+
+                    />
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/spinner_operator_work"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+
+                    android:layout_weight="1"
+
+                    android:background="@drawable/spinner_background_white"
+
+                    android:elevation="10dp"
+                    android:layout_marginVertical="20dp"
+                    android:layout_marginHorizontal="10dp"
+                    />
+
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_operator"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toBottomOf="@id/linear_operator_select_work"
+                app:layout_constraintBottom_toTopOf="@id/linear_operator"
+
+                android:layout_marginHorizontal="50dp"
+
+                android:layout_marginVertical="10dp"
+                />
+
+            <LinearLayout
+                android:id="@+id/linear_operator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="20dp"
+                >
+
+
+                <EditText
+                    android:id="@+id/et_operator_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+
+                    android:layout_weight="3"
+                    android:layout_marginEnd="20dp"
+
+                    android:layout_marginVertical="20dp"
+                    android:layout_marginHorizontal="10dp"
+
+                    android:background="@drawable/text_field_inner_shadow_white"
+
+                    android:hint="@string/name"
+                    android:padding="10dp"
+                    />
+
+
+                <android.widget.Button
+                    android:id="@+id/btn_add_operator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+
+
+                    android:background="@drawable/button_shape"
+                    android:backgroundTint="@color/white"
+                    android:textColor="@color/black"
+                    android:drawableStart="@drawable/ic_person_insert"
+                    android:padding="10dp"
+                    android:text="추가"
+
+                    android:layout_weight="1"
+
+                    android:layout_marginVertical="20dp"
+                    android:layout_marginHorizontal="10dp"
+                    />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+
 
 
 

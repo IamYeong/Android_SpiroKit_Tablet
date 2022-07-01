@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/nanum_gothic"
             android:textColor="@color/black"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:text="NAME"
             app:layout_constraintTop_toTopOf="@id/img_btn_back_meas"
             app:layout_constraintBottom_toBottomOf="@id/img_btn_back_meas"
@@ -48,17 +48,89 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/button_shape"
-            android:backgroundTint="@color/primary_color"
-            android:textColor="@color/white"
-            android:text="@string/complete"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/black"
+            android:text="최종완료"
             android:textSize="15sp"
             android:paddingVertical="10dp"
+            android:paddingHorizontal="30dp"
 
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_margin="20dp"
+
+            android:elevation="5dp"
             />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_connect_button_fvc_meas"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            app:layout_constraintEnd_toStartOf="@id/btn_complete_fvc_meas"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="20dp"
+
+            android:background="@drawable/button_shape"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:backgroundTint="@color/white"
+            android:elevation="1dp"
+            android:layout_marginVertical="10dp"
+            android:paddingHorizontal="10dp"
+            >
+
+            <ProgressBar
+                android:id="@+id/progress_connecting_fvc_meas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_gravity="left|center_vertical"
+                android:indeterminateDrawable="@drawable/item_loading_highlight"
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_margin="2dp"
+                app:layout_constraintEnd_toStartOf="@id/tv_connect_title_fvc_meas"
+
+                android:visibility="invisible"
+                android:indeterminateDuration="500"
+                />
+
+            <ImageView
+                android:id="@+id/img_connect_state_fvc_meas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_connect_spirokit"
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_margin="10dp"
+                app:layout_constraintEnd_toStartOf="@id/tv_connect_title_fvc_meas"
+
+                android:visibility="visible"
+
+                />
+
+            <TextView
+                android:id="@+id/tv_connect_title_fvc_meas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:text="연결하기"
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_margin="10dp"
+                />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -205,39 +277,42 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
 
-
             >
 
-            <android.widget.Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_retest_meas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button_shape"
+                app:icon="@drawable/ic_baseline_refresh_30_white"
+                android:text="재측정"
                 android:backgroundTint="@color/white"
-                android:textColor="@color/gray_dark"
-                android:text="@string/retest"
-                android:textSize="15sp"
+                app:iconTint="@color/highlight_color"
+                android:textColor="@color/black"
+                app:iconGravity="textStart"
+                app:iconPadding="20dp"
                 android:layout_weight="1"
-
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginVertical="20dp"
+                android:paddingVertical="10dp"
+                app:cornerRadius="10dp"
                 />
 
-            <android.widget.Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_start_stop_meas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button_shape"
+                app:icon="@drawable/ic_baseline_play_arrow_30_white"
+                android:text="측정하기"
                 android:backgroundTint="@color/white"
-                android:textColor="@color/gray_dark"
-                android:text="@string/start"
-                android:textSize="15sp"
-                android:paddingVertical="10dp"
-
+                app:iconTint="@color/highlight_color"
+                android:textColor="@color/black"
+                app:iconGravity="textStart"
+                app:iconPadding="20dp"
                 android:layout_weight="1"
-
                 android:layout_marginEnd="20dp"
                 android:layout_marginVertical="20dp"
+                android:paddingVertical="10dp"
+                app:cornerRadius="10dp"
                 />
 
             <android.widget.Button
@@ -253,6 +328,7 @@
 
                 android:layout_marginEnd="20dp"
                 android:layout_marginVertical="20dp"
+                android:paddingVertical="15dp"
                 />
 
             <android.widget.Button
@@ -260,14 +336,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_shape"
-                android:backgroundTint="@color/primary_color"
-                android:textColor="@color/white"
+                android:backgroundTint="@color/white"
+                android:textColor="@color/black"
                 android:text="@string/post_save"
 
                 android:layout_weight="1"
 
                 android:layout_marginEnd="20dp"
                 android:layout_marginVertical="20dp"
+                android:paddingVertical="15dp"
                 />
 
         </LinearLayout>

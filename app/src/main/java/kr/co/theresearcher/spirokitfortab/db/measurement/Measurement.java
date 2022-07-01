@@ -27,15 +27,27 @@ public class Measurement {
     @ColumnInfo(name = "MEASUREMENT_OFFICE_ID")
     private int officeID;
 
+    @ColumnInfo(name = "MEASUREMENT_OPERATOR_ID")
+    private int measOperatorID;
+
     @Ignore
     private boolean isSelected;
 
-    public Measurement(int officeID, int patientID, int measurementID, long measDate, String path) {
+    public Measurement(int officeID, int patientID, int measurementID, long measDate, String path, int measOperatorID) {
         this.officeID = officeID;
         this.patientID = patientID;
         this.measurementID = measurementID;
         this.measDate = measDate;
         this.path = path;
+        this.measOperatorID = measOperatorID;
+    }
+
+    public int getMeasOperatorID() {
+        return measOperatorID;
+    }
+
+    public void setMeasOperatorID(int measOperatorID) {
+        this.measOperatorID = measOperatorID;
     }
 
     public int getOfficeID() {

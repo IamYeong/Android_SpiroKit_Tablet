@@ -408,8 +408,6 @@ public class PatientInsertActivity extends AppCompatActivity {
 
                             PatientDatabase database = Room.databaseBuilder(PatientInsertActivity.this, PatientDatabase.class, RoomNames.ROOM_PATIENT_DB_NAME).build();
                             PatientDao patientDao = database.patientDao();
-
-                            setPatientInfoInPreferences(PatientInsertActivity.this, patient);
                             patientDao.insertPatient(patient);
 
                             database.close();

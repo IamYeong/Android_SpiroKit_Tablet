@@ -66,7 +66,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
     private FrameLayout volumeTimeGraphLayout, resultGraphLayout;
     private Button startButton, saveButton, retestButton, completeButton;
     private ImageButton backButton;
-    private TextView titleText;
+    private TextView titleText, emptyText;
 
     private SvcResultAdapter adapter;
     private SpiroKitBluetoothLeService mService;
@@ -111,7 +111,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         public void onReadCharacteristic(byte[] data) {
 
             if (!isStart) return;
-            if (pulseWidthList.size() > 1000) return;
+            if (timerCount >= 60d) return;
 
             int value = conversionIntegerFromByteArray(data);
             if (value > 10) {
@@ -161,6 +161,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         startButton = findViewById(R.id.btn_start_stop_svc_meas);
         saveButton = findViewById(R.id.btn_save_svc_meas);
         completeButton = findViewById(R.id.btn_complete_svc_meas);
+        emptyText = findViewById(R.id.tv_empty_svc_meas);
 
         backButton = findViewById(R.id.img_btn_back_svc_meas);
 
@@ -354,9 +355,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
             }
         });
 
-
     }
-
 
     private void saveData() {
 
@@ -427,6 +426,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
                             resultGraphLayout.removeAllViews();
                             resultGraphLayout.addView(volumeTimeRunViews.get(testOrder - 1));
+                            emptyText.setVisibility(View.INVISIBLE);
 
                             //emptyImage.setVisibility(View.GONE);
 
@@ -438,8 +438,10 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
                 } catch (JSONException e) {
 
-                } catch (IOException e) {
+                    Log.e(getClass().getSimpleName(), e.getCause().toString());
 
+                } catch (IOException e) {
+                    Log.e(getClass().getSimpleName(), e.getCause().toString());
                 }
 
 
@@ -575,7 +577,8 @@ public class MeasurementSvcActivity extends AppCompatActivity {
                         SharedPreferencesManager.getPatientId(MeasurementSvcActivity.this),
                         MeasGroup.svc.ordinal(),
                         startTimestamp,
-                        simpleDateFormat.format(startTimestamp)
+                        simpleDateFormat.format(startTimestamp),
+                        SharedPreferencesManager.getOperatorID(MeasurementSvcActivity.this)
                 );
 
                 measurementDao.insertMeasurement(measurement);

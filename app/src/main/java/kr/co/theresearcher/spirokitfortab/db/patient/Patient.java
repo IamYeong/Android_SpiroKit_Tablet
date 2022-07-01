@@ -52,6 +52,7 @@ public class Patient {
 
     //오피스 ID 빠져있음
 
+
     public Patient(int officeID, String chartNumber, String name, boolean gender, int weight, int height, int humanRaceId, long birthDate, long startSmokeDate, long stopSmokeDate, boolean isSmoke, float smokeAmountPack, int doctorID) {
         this.officeID = officeID;
         this.chartNumber = chartNumber;
@@ -67,6 +68,8 @@ public class Patient {
         this.smokeAmountPack = smokeAmountPack;
         this.doctorID = doctorID;
     }
+
+
 
     public Patient() {
 
