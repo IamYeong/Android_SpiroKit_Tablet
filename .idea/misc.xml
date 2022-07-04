@@ -55,6 +55,7 @@
         <entry key="app/src/main/res/drawable/text_field_background_round_gray.xml" value="0.342" />
         <entry key="app/src/main/res/drawable/text_field_background_round_white.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/text_field_inner_shadow_white.xml" value="0.346" />
+        <entry key="app/src/main/res/drawable/text_out_line_black.xml" value="0.328" />
         <entry key="app/src/main/res/drawable/under_line.xml" value="0.2615" />
         <entry key="app/src/main/res/font/fonts.xml" value="0.17786458333333333" />
         <entry key="app/src/main/res/layout/activity_condition_agree.xml" value="0.18" />

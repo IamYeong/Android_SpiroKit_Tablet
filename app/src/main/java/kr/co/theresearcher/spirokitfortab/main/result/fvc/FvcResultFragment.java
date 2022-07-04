@@ -92,10 +92,10 @@ public class FvcResultFragment extends Fragment implements Observer {
         measDoctorText = view.findViewById(R.id.tv_meas_doctor_main_result);
 
         MeasGroup[] measGroups = MeasGroup.values();
-        measGroupText.setText(measGroups[measurement.getMeasurementID()].toString().toUpperCase(Locale.ROOT) + getString(R.string.measurement));
+        measGroupText.setText(measGroups[measurement.getMeasurementID()].toString().toUpperCase(Locale.ROOT) + getString(R.string.checkup));
 
-        matchDoctorText.setText(getString(R.string.match_doctor_result_input, "TEST"));
-        measDoctorText.setText(getString(R.string.meas_doctor_result_input, "TEST"));
+        matchDoctorText.setText(getString(R.string.family_doctor_is, "TEST"));
+        measDoctorText.setText(getString(R.string.checkup_doctor_is, "TEST"));
 
         adapter = new FvcResultAdapter(context);
         adapter.setRootTimestamp(measurement.getMeasDate());
@@ -447,7 +447,7 @@ public class FvcResultFragment extends Fragment implements Observer {
                             @Override
                             public void run() {
 
-                                measDoctorText.setText(getString(R.string.meas_doctor_result_input, op.getName()));
+                                measDoctorText.setText(getString(R.string.checkup_doctor_is, op.getName()));
 
                             }
                         });
@@ -459,7 +459,7 @@ public class FvcResultFragment extends Fragment implements Observer {
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                matchDoctorText.setText(getString(R.string.match_doctor_result_input, op.getName()));
+                                matchDoctorText.setText(getString(R.string.family_doctor_is, op.getName()));
                             }
                         });
 

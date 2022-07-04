@@ -61,6 +61,7 @@ import kr.co.theresearcher.spirokitfortab.db.measurement.Measurement;
 import kr.co.theresearcher.spirokitfortab.db.measurement.MeasurementDao;
 import kr.co.theresearcher.spirokitfortab.db.measurement.MeasurementDatabase;
 import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
+import kr.co.theresearcher.spirokitfortab.dialog.LoadingDialog;
 import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
 import kr.co.theresearcher.spirokitfortab.graph.SlowVolumeTimeRunView;
 import kr.co.theresearcher.spirokitfortab.main.result.OnOrderSelectedListener;
@@ -95,7 +96,23 @@ public class MeasurementSvcActivity extends AppCompatActivity {
     private double timerCount = 0d;
     private int testOrder = 1;
 
+    private LoadingDialog loadingDialog;
+
     private Handler handler = new Handler(Looper.getMainLooper());
+
+    private Runnable initializeEndRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (loadingDialog.isShowing()) loadingDialog.dismiss();
+        }
+    };
+
+    private Runnable terminateEndRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (loadingDialog.isShowing()) loadingDialog.dismiss();
+        }
+    };
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -142,6 +159,40 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
             } else {
 
+                if (value == 2) {
+
+                    handler.postDelayed(initializeEndRunnable, 3000);
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!loadingDialog.isShowing()) {
+                                loadingDialog = new LoadingDialog(MeasurementSvcActivity.this);
+                                loadingDialog.setTitle(getString(R.string.spirokit_initializing));
+                                loadingDialog.show();
+                            }
+                        }
+                    });
+
+
+                } else if (value == 3) {
+
+                    handler.postDelayed(terminateEndRunnable, 3000);
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!loadingDialog.isShowing()) {
+                                loadingDialog = new LoadingDialog(MeasurementSvcActivity.this);
+                                loadingDialog.setTitle(getString(R.string.spirokit_terminating));
+                                loadingDialog.show();
+                            }
+                        }
+                    });
+
+
+
+                }
 
             }
 
@@ -390,6 +441,8 @@ public class MeasurementSvcActivity extends AppCompatActivity {
             }
         });
 
+        loadingDialog = new LoadingDialog(MeasurementSvcActivity.this);
+
 
     }
 
@@ -398,6 +451,10 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         super.onPause();
 
         unbindService(serviceConnection);
+
+        handler.removeCallbacks(initializeEndRunnable);
+        handler.removeCallbacks(terminateEndRunnable);
+
     }
 
     @Override
@@ -405,6 +462,8 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         super.onResume();
 
         bindService(new Intent(MeasurementSvcActivity.this, SpiroKitBluetoothLeService.class), serviceConnection, Context.BIND_AUTO_CREATE);
+
+        if (loadingDialog.isShowing()) loadingDialog.dismiss();
     }
 
     private int conversionIntegerFromByteArray(byte[] data) {

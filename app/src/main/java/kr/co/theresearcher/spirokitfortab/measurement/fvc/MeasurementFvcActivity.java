@@ -110,6 +110,20 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd_HHmmssSS", Locale.getDefault());
 
+    private Runnable initializeEndRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (loadingDialog.isShowing()) loadingDialog.dismiss();
+        }
+    };
+
+    private Runnable terminateEndRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (loadingDialog.isShowing()) loadingDialog.dismiss();
+        }
+    };
+
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
@@ -139,35 +153,35 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
                         if (value == 2) {
 
-                            handler.postDelayed(new Runnable() {
+                            handler.postDelayed(initializeEndRunnable, 3000);
+
+                            handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-
-                                    if (loadingDialog.isShowing()) loadingDialog.dismiss();
-
+                                    if (!loadingDialog.isShowing()) {
+                                        loadingDialog = new LoadingDialog(MeasurementFvcActivity.this);
+                                        loadingDialog.setTitle(getString(R.string.spirokit_initializing));
+                                        loadingDialog.show();
+                                    }
                                 }
-                            }, 1000);
+                            });
 
-                            if (!loadingDialog.isShowing()) {
-                                loadingDialog.setTitle(getString(R.string.spirokit_initializing));
-                                loadingDialog.show();
-                            }
 
                         } else if (value == 3) {
 
-                            handler.postDelayed(new Runnable() {
+                            handler.postDelayed(terminateEndRunnable, 3000);
+
+                            handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-
-                                    if (loadingDialog.isShowing()) loadingDialog.dismiss();
-
+                                    if (!loadingDialog.isShowing()) {
+                                        loadingDialog = new LoadingDialog(MeasurementFvcActivity.this);
+                                        loadingDialog.setTitle(getString(R.string.spirokit_terminating));
+                                        loadingDialog.show();
+                                    }
                                 }
-                            }, 1000);
+                            });
 
-                            if (!loadingDialog.isShowing()) {
-                                loadingDialog.setTitle(getString(R.string.spirokit_terminating));
-                                loadingDialog.show();
-                            }
 
 
                         }
@@ -584,8 +598,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
             }
         });
 
-        loadingDialog = new LoadingDialog(this);
-
+        loadingDialog = new LoadingDialog(MeasurementFvcActivity.this);
         startTimestamp = Calendar.getInstance().getTime().getTime();
 
     }
@@ -596,6 +609,11 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
         unbindService(serviceConnection);
 
+        handler.removeCallbacks(initializeEndRunnable);
+        handler.removeCallbacks(terminateEndRunnable);
+
+
+
     }
 
     @Override
@@ -603,6 +621,8 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         super.onResume();
 
         bindService(new Intent(getApplicationContext(), SpiroKitBluetoothLeService.class), serviceConnection, Context.BIND_AUTO_CREATE);
+
+        if (loadingDialog.isShowing()) loadingDialog.dismiss();
     }
 
     private int conversionIntegerFromByteArray(byte[] data) {
