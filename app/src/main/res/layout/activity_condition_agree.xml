@@ -11,14 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/primary_color"
+        android:background="@color/white"
         >
 
         <ImageButton
             android:id="@+id/img_btn_back_terms_conditions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_keyboard_arrow_left_30_white"
+            android:src="@drawable/ic_baseline_keyboard_arrow_left_30_black"
 
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -31,7 +31,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="18sp"
 
             app:layout_constraintTop_toTopOf="parent"
@@ -106,6 +106,8 @@
                 android:textAlignment="textStart"
                 android:text="@string/agree_all_condition"
 
+                android:buttonTint="@color/highlight_color"
+
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="30dp"
@@ -122,9 +124,8 @@
         android:id="@+id/btn_next_terms_conditions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/text_field_background_round_white"
-        android:backgroundTint="@color/primary_color"
-        android:textColor="@color/white"
+        android:background="@drawable/button_out_line_highlight"
+        android:textColor="@color/highlight_color"
         android:fontFamily="@font/nanum_gothic_bold"
         android:text="@string/next"
 

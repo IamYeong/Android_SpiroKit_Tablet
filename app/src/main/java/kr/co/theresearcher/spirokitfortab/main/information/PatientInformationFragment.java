@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.cardview.widget.CardView;
 import androidx.core.util.Pair;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -28,6 +29,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -87,12 +89,13 @@ public class PatientInformationFragment extends Fragment implements Observer {
     private ImageButton dateRangeButton, modifyButton;
     private TextView patientNameText, patientInfoText, dateRangeText, patientsEmptyText, measurementsEmptyText;
     private FrameLayout volumeFlowLayout, volumeTimeLayout;
+    private CardView patientCard;
 
     private PatientsAdapter patientsAdapter;
     private MeasurementAdapter measurementAdapter;
 
     private OnMeasurementSelectedListener measurementSelectedListener;
-    private ImageButton informationExpandButton;
+    private ImageView informationExpandImage;
     private boolean isExpanded = true;
     private boolean isFocused = false;
     private InputMethodManager inputMethodManager;
@@ -151,9 +154,10 @@ public class PatientInformationFragment extends Fragment implements Observer {
         patientNameText = view.findViewById(R.id.tv_name_patient_info_fragment);
         patientInfoText = view.findViewById(R.id.tv_content_patient_info_fragment);
         dateRangeText = view.findViewById(R.id.tv_date_range_patient_info_fragment);
-        informationExpandButton = view.findViewById(R.id.img_btn_expand_patient_info);
+        informationExpandImage = view.findViewById(R.id.img_expand_patient_info);
         patientsEmptyText = view.findViewById(R.id.tv_empty_patients_notification);
         measurementsEmptyText = view.findViewById(R.id.tv_empty_measurements_notification);
+        patientCard = view.findViewById(R.id.card_patient_info);
 
         volumeFlowLayout = view.findViewById(R.id.frame_volume_flow_graph_result_fragment);
         volumeTimeLayout = view.findViewById(R.id.frame_volume_time_graph_result_fragment);
@@ -177,6 +181,23 @@ public class PatientInformationFragment extends Fragment implements Observer {
             public void onClick(View v) {
                 Intent intent = new Intent(context, PatientModifyActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        patientCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (isExpanded) {
+                    updatePatientSimpleInfo();
+                    informationExpandImage.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.ic_baseline_keyboard_arrow_down_30_black));
+                } else {
+                    updatePatientInformation();
+                    informationExpandImage.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.ic_baseline_keyboard_arrow_up_30_black));
+                }
+
+                isExpanded = !isExpanded;
+
             }
         });
 
@@ -320,22 +341,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
             }
         });
 
-        informationExpandButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                if (isExpanded) {
-                    updatePatientSimpleInfo();
-                    informationExpandButton.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.ic_baseline_keyboard_arrow_down_30_black));
-                } else {
-                    updatePatientInformation();
-                    informationExpandButton.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.ic_baseline_keyboard_arrow_up_30_black));
-                }
-
-                isExpanded = !isExpanded;
-
-            }
-        });
 
         dateRangeButton.setOnClickListener(new View.OnClickListener() {
             @Override
