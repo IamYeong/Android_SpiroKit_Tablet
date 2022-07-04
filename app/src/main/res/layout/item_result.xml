@@ -51,7 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:text="1차 검사 (Pre)"
+                android:text="@string/n_order_meas"
 
                 android:fontFamily="@font/nanum_gothic_bold"
                 android:textSize="15sp"
@@ -254,7 +254,7 @@
                     android:id="@+id/tv_fev1_per_table_row"
                     android:layout_weight="1"
 
-                    android:text="@string/fev1percent"
+                    android:text="@string/fev1per"
 
                     android:paddingVertical="5dp"
 

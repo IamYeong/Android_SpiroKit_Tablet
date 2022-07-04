@@ -31,7 +31,7 @@
 
             android:fontFamily="@font/nanum_gothic_bold"
             android:textSize="20sp"
-            android:text="검사 후 결과를 확인할 수 있습니다"
+            android:text="@string/empty_result"
             android:gravity="center"
             />
 

@@ -118,10 +118,11 @@
 
                 android:fontFamily="@font/nanum_gothic_bold"
                 android:textSize="15sp"
-                android:text="@string/volume_flow_graph"
+                android:text="@string/volume_time_graph"
 
                 app:layout_constraintTop_toTopOf="@id/tv_volume_flow_title_result"
                 app:layout_constraintStart_toEndOf="@id/view_line_center_result"
+                android:layout_marginHorizontal="20dp"
                 />
 
             <FrameLayout

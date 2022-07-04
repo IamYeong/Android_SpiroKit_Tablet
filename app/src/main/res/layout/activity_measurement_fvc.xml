@@ -103,7 +103,7 @@
                 android:id="@+id/img_connect_state_fvc_meas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_connect_spirokit"
+                android:src="@drawable/ic_disconnect_spirokit"
 
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -369,7 +369,7 @@
         app:layout_constraintStart_toStartOf="@id/rv_meas"
 
         android:background="@color/white"
-        android:text="@string/nothing_result"
+        android:text="@string/fvc_nothing_result"
         android:textColor="@color/gray_dark"
         android:textAlignment="center"
         android:textSize="20sp"

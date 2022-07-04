@@ -104,7 +104,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="textStart"
-                android:text="@string/request_terms_condition_persional_info_agree"
+                android:text="@string/agree_all_condition"
 
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

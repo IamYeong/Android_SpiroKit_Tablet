@@ -96,13 +96,13 @@ public class SvcResultAdapter extends RecyclerView.Adapter<SvcResultViewHolder> 
 
         ResultSVC resultSVC = results.get(holder.getAdapterPosition());
 
-        holder.getVcText().setText(context.getString(R.string.liter_with_parameter, resultSVC.getVc()));
+        holder.getVcText().setText(context.getString(R.string.with_L, resultSVC.getVc()));
         holder.getDateText().setText(simpleDateFormat.format(resultSVC.getTimestamp()));
 
         if (resultSVC.isPost()) {
-            holder.getTitleText().setText(context.getString(R.string.result_order, holder.getAdapterPosition() + 1, context.getString(R.string.post)));
+            holder.getTitleText().setText(context.getString(R.string.n_order_meas, holder.getAdapterPosition() + 1, context.getString(R.string.post)));
         } else {
-            holder.getTitleText().setText(context.getString(R.string.result_order, holder.getAdapterPosition() + 1, context.getString(R.string.pre)));
+            holder.getTitleText().setText(context.getString(R.string.n_order_meas, holder.getAdapterPosition() + 1, context.getString(R.string.pre)));
         }
 
         if (resultSVC.isSelected()) {
@@ -129,7 +129,7 @@ public class SvcResultAdapter extends RecyclerView.Adapter<SvcResultViewHolder> 
             public void onClick(View v) {
 
                 SelectionDialog selectionDialog = new SelectionDialog(context);
-                selectionDialog.setTitle(context.getString(R.string.question_delete));
+                selectionDialog.setTitle(context.getString(R.string.question_delete_history));
                 selectionDialog.setSelectedListener(new OnSelectedInDialogListener() {
                     @Override
                     public void onSelected(boolean select) {

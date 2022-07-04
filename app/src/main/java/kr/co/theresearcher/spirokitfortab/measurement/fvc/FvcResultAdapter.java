@@ -101,26 +101,26 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
         }
 
         if (resultFVC.isPost()) {
-            holder.getOrderText().setText(context.getString(R.string.result_order, holder.getAdapterPosition() + 1, context.getString(R.string.post)));
+            holder.getOrderText().setText(context.getString(R.string.n_order_meas, holder.getAdapterPosition() + 1, context.getString(R.string.post)));
         } else {
-            holder.getOrderText().setText(context.getString(R.string.result_order, holder.getAdapterPosition() + 1, context.getString(R.string.pre)));
+            holder.getOrderText().setText(context.getString(R.string.n_order_meas, holder.getAdapterPosition() + 1, context.getString(R.string.pre)));
         }
 
-        holder.getDateText().setText(context.getString(R.string.time_is, simpleDateFormat.format(resultFVC.getTimestamp())));
+        holder.getDateText().setText(context.getString(R.string.time_colon_what, simpleDateFormat.format(resultFVC.getTimestamp())));
 
-        holder.getFvcText().setText(context.getString(R.string.liter_with_parameter, resultFVC.getFvc()));
-        holder.getFvcPredText().setText(context.getString(R.string.liter_with_parameter, resultFVC.getFvcPredict()));
-        holder.getFvcCompareText().setText(context.getString(R.string.percent_with_parameter, (resultFVC.getFvc() / resultFVC.getFvcPredict()) * 100f, "%"));
+        holder.getFvcText().setText(context.getString(R.string.with_L, resultFVC.getFvc()));
+        holder.getFvcPredText().setText(context.getString(R.string.with_L, resultFVC.getFvcPredict()));
+        holder.getFvcCompareText().setText(context.getString(R.string.with_per, (resultFVC.getFvc() / resultFVC.getFvcPredict()) * 100f, "%"));
 
-        holder.getFev1Text().setText(context.getString(R.string.liter_with_parameter, resultFVC.getFev1()));
-        holder.getFev1PredText().setText(context.getString(R.string.liter_with_parameter, resultFVC.getFev1Predict()));
-        holder.getFev1CompareText().setText(context.getString(R.string.percent_with_parameter, (resultFVC.getFev1() / resultFVC.getFev1Predict()) * 100f, "%"));
+        holder.getFev1Text().setText(context.getString(R.string.with_L, resultFVC.getFev1()));
+        holder.getFev1PredText().setText(context.getString(R.string.with_L, resultFVC.getFev1Predict()));
+        holder.getFev1CompareText().setText(context.getString(R.string.with_per, (resultFVC.getFev1() / resultFVC.getFev1Predict()) * 100f, "%"));
 
-        holder.getFev1PercentText().setText(context.getString(R.string.percent_with_parameter, resultFVC.getFev1percent(), "%"));
-        holder.getFev1PercentPredText().setText(context.getString(R.string.percent_with_parameter, resultFVC.getFev1PercentPredict(), "%"));
-        holder.getFev1PercentCompareText().setText(context.getString(R.string.percent_with_parameter, (resultFVC.getFev1percent() / resultFVC.getFev1PercentPredict()) * 100f , "%"));
+        holder.getFev1PercentText().setText(context.getString(R.string.with_per, resultFVC.getFev1percent(), "%"));
+        holder.getFev1PercentPredText().setText(context.getString(R.string.with_per, resultFVC.getFev1PercentPredict(), "%"));
+        holder.getFev1PercentCompareText().setText(context.getString(R.string.with_per, (resultFVC.getFev1percent() / resultFVC.getFev1PercentPredict()) * 100f , "%"));
 
-        holder.getPefText().setText(context.getString(R.string.lps_with_parameter, resultFVC.getPef()));
+        holder.getPefText().setText(context.getString(R.string.with_lps, resultFVC.getPef()));
         holder.getPefPredtext().setText("-");
         holder.getPefCompareText().setText("-");
 
@@ -143,7 +143,7 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
                 //File path = context.getExternalFilesDir("data/")
 
                 SelectionDialog selectionDialog = new SelectionDialog(context);
-                selectionDialog.setTitle(context.getString(R.string.question_delete));
+                selectionDialog.setTitle(context.getString(R.string.question_delete_history));
                 selectionDialog.setSelectedListener(new OnSelectedInDialogListener() {
                     @Override
                     public void onSelected(boolean select) {

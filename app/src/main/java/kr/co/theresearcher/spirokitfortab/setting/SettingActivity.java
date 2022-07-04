@@ -70,7 +70,7 @@ public class SettingActivity extends AppCompatActivity {
     private ScanSettings scanSettings;
 
     private SpiroKitBluetoothLeService mService;
-    private LoadingDialog loadingDialog;
+    //private LoadingDialog loadingDialog;
     private Handler handler = new Handler(Looper.getMainLooper());
 
     private Runnable stopScanRunnable = new Runnable() {
@@ -114,7 +114,7 @@ public class SettingActivity extends AppCompatActivity {
 
                     //연결 완료
                     Log.d(getClass().getSimpleName(), "**********onDescriptorWrite");
-                    if (loadingDialog.isShowing()) loadingDialog.dismiss();
+                    //if (loadingDialog.isShowing()) loadingDialog.dismiss();
 
                     handler.post(new Runnable() {
                         @Override
@@ -219,7 +219,7 @@ public class SettingActivity extends AppCompatActivity {
             public void onDeviceLookup(ScanResult result) {
 
                 SelectionDialog selectionDialog = new SelectionDialog(SettingActivity.this);
-                selectionDialog.setTitle(getString(R.string.connect_this_device));
+                selectionDialog.setTitle(getString(R.string.question_connect));
                 selectionDialog.setSelectedListener(new OnSelectedInDialogListener() {
                     @Override
                     public void onSelected(boolean select) {
@@ -235,8 +235,8 @@ public class SettingActivity extends AppCompatActivity {
 
                             if (mService != null) {
 
-                                loadingDialog.setTitle(getString(R.string.connecting));
-                                loadingDialog.show();
+                                //loadingDialog.setTitle(getString(R.string.connecting));
+                                //loadingDialog.show();
                                 mService.connect(macAddress);
 
                             }
@@ -256,11 +256,6 @@ public class SettingActivity extends AppCompatActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rv.setLayoutManager(linearLayoutManager);
         rv.setAdapter(adapter);
-
-        loadingDialog = new LoadingDialog(SettingActivity.this);
-        loadingDialog.setTitle(getString(R.string.scanning));
-
-
 
         startFrameButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -317,7 +312,7 @@ public class SettingActivity extends AppCompatActivity {
     private boolean checkBLE() {
 
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            Toast.makeText(this, getString(R.string.can_not_ble), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, getString(R.string.can_not_ble), Toast.LENGTH_SHORT).show();
 
             return false;
         }
@@ -378,28 +373,28 @@ public class SettingActivity extends AppCompatActivity {
                     case ScanCallback.SCAN_FAILED_ALREADY_STARTED:
 
                         ConfirmDialog confirmDialog1 = new ConfirmDialog(SettingActivity.this);
-                        confirmDialog1.setTitle(getString(R.string.fail_already_scanning));
+                        confirmDialog1.setTitle(getString(R.string.already_scanning));
                         confirmDialog1.show();
 
                         break;
 
                     case ScanCallback.SCAN_FAILED_APPLICATION_REGISTRATION_FAILED:
                         ConfirmDialog confirmDialog2 = new ConfirmDialog(SettingActivity.this);
-                        confirmDialog2.setTitle(getString(R.string.fail_app_registration));
+                        confirmDialog2.setTitle(getString(R.string.not_available_ble));
                         confirmDialog2.show();
                         break;
 
 
                     case ScanCallback.SCAN_FAILED_FEATURE_UNSUPPORTED:
                         ConfirmDialog confirmDialog3 = new ConfirmDialog(SettingActivity.this);
-                        confirmDialog3.setTitle(getString(R.string.fail_feature_unsupported));
+                        confirmDialog3.setTitle(getString(R.string.not_available_ble));
                         confirmDialog3.show();
                         break;
 
 
                     case ScanCallback.SCAN_FAILED_INTERNAL_ERROR:
                         ConfirmDialog confirmDialog4 = new ConfirmDialog(SettingActivity.this);
-                        confirmDialog4.setTitle(getString(R.string.fail_internal_error));
+                        confirmDialog4.setTitle(getString(R.string.not_available_ble));
                         confirmDialog4.show();
                         break;
 

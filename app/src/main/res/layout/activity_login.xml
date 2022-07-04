@@ -52,7 +52,7 @@
 
         android:layout_weight="1"
 
-        android:hint="@string/email"
+        android:hint="@string/user_email"
 
         android:fontFamily="@font/nanum_gothic"
         android:inputType="textEmailAddress"
@@ -77,7 +77,7 @@
 
         android:layout_marginTop="20dp"
 
-        android:hint="@string/password"
+        android:hint="@string/user_password"
         android:inputType="textPassword"
 
         android:paddingBottom="10dp"

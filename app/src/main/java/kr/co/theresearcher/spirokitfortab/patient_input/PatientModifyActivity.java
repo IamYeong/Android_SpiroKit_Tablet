@@ -248,7 +248,7 @@ public class PatientModifyActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 MaterialDatePicker<Long> materialDatePicker = MaterialDatePicker.Builder.datePicker()
-                        .setTitleText(getString(R.string.select_test_date))
+                        .setTitleText(getString(R.string.select_birth_date))
 
 
                         .build();
@@ -273,7 +273,7 @@ public class PatientModifyActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 MaterialDatePicker<Long> materialDatePicker = MaterialDatePicker.Builder.datePicker()
-                        .setTitleText(getString(R.string.select_test_date))
+                        .setTitleText(getString(R.string.select_start_smoke_date))
 
 
                         .build();
@@ -298,7 +298,7 @@ public class PatientModifyActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 MaterialDatePicker<Long> materialDatePicker = MaterialDatePicker.Builder.datePicker()
-                        .setTitleText(getString(R.string.select_test_date))
+                        .setTitleText(getString(R.string.select_stop_smoke_date))
 
 
                         .build();

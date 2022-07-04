@@ -18,7 +18,7 @@
         android:layout_margin="20dp"
 
         android:fontFamily="@font/nanum_gothic"
-        android:text="@string/operator_management"
+        android:text="@string/management_medical_staff"
         android:textSize="15sp"
         android:textColor="@color/black"
         />

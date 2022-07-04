@@ -344,7 +344,7 @@ public class SvcResultFragment extends Fragment implements Observer {
                             @Override
                             public void run() {
 
-                                measDoctorText.setText(getString(R.string.meas_doctor_result_input, op.getName()));
+                                measDoctorText.setText(getString(R.string.checkup_doctor_is, op.getName()));
 
                             }
                         });
@@ -356,7 +356,7 @@ public class SvcResultFragment extends Fragment implements Observer {
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                matchDoctorText.setText(getString(R.string.match_doctor_result_input, op.getName()));
+                                matchDoctorText.setText(getString(R.string.family_doctor_is, op.getName()));
                             }
                         });
 

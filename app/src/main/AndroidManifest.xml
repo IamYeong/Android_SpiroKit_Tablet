@@ -33,18 +33,24 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".setting.operator.OperatorActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="landscape"
+            />
         <activity
             android:name=".patient_input.PatientModifyActivity"
+            android:screenOrientation="landscape"
             android:exported="false" />
         <activity
             android:name=".patient_input.PatientInsertActivity"
+            android:screenOrientation="landscape"
             android:exported="false" />
         <activity
             android:name=".measurement.mvv.MeasurementMvvActivity"
+            android:screenOrientation="landscape"
             android:exported="false" />
         <activity
             android:name=".measurement.svc.MeasurementSvcActivity"
+            android:screenOrientation="landscape"
             android:exported="false" />
         <activity
             android:name=".setting.SettingActivity"

@@ -341,7 +341,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
             @Override
             public void onClick(View v) {
                 MaterialDatePicker<Pair<Long, Long>> materialDatePicker = MaterialDatePicker.Builder.dateRangePicker()
-                        .setTitleText(getString(R.string.select_test_date))
+                        .setTitleText(getString(R.string.select_history_range))
 
 
                         .build();
@@ -508,32 +508,32 @@ public class PatientInformationFragment extends Fragment implements Observer {
         patientNameText.setText(SharedPreferencesManager.getPatientName(context));
         StringBuilder info = new StringBuilder();
 
-        info.append(getString(R.string.chart_number_for_input, SharedPreferencesManager.getPatientChartNumber(context))).append("\n");
+        info.append(getString(R.string.chart_number_is, SharedPreferencesManager.getPatientChartNumber(context))).append("\n");
         if (SharedPreferencesManager.getPatientGender(context)) {
-            info.append(getString(R.string.gender_for_input, getString(R.string.male))).append("\n");
+            info.append(getString(R.string.gender_is, getString(R.string.male))).append("\n");
         } else {
-            info.append(getString(R.string.gender_for_input, getString(R.string.female))).append("\n");
+            info.append(getString(R.string.gender_is, getString(R.string.female))).append("\n");
         }
-        info.append(getString(R.string.height_for_input, SharedPreferencesManager.getPatientHeight(context))).append("\n");
-        info.append(getString(R.string.weight_for_input, SharedPreferencesManager.getPatientWeight(context))).append("\n");
-        info.append(getString(R.string.birth_for_input, simpleDateFormat.format(SharedPreferencesManager.getPatientBirth(context)))).append("\n");
+        info.append(getString(R.string.height_is, SharedPreferencesManager.getPatientHeight(context))).append("\n");
+        info.append(getString(R.string.weight_is, SharedPreferencesManager.getPatientWeight(context))).append("\n");
+        info.append(getString(R.string.birth_is, simpleDateFormat.format(SharedPreferencesManager.getPatientBirth(context)))).append("\n");
 
         HumanRace[] humanRaces = HumanRace.values();
         int raceId = SharedPreferencesManager.getPatientHumanRaceId(context);
         for (int i = 0; i < humanRaces.length; i++) {
             if (i == raceId) {
-                info.append(getString(R.string.human_race_for_input, humanRaces[i].getValue())).append("\n");
+                info.append(getString(R.string.human_race_is, humanRaces[i].getValue())).append("\n");
                 break;
             }
         }
-        info.append(getString(R.string.start_smoke_for_input, simpleDateFormat.format(SharedPreferencesManager.getPatientStartSmokingDate(context)))).append("\n");
-        info.append(getString(R.string.stop_smoke_for_input, simpleDateFormat.format(SharedPreferencesManager.getPatientNoSmokingDate(context)))).append("\n");
-        info.append(getString(R.string.smoke_amount_per_day, SharedPreferencesManager.getPatientSmokingAmount(context))).append("\n");
+        info.append(getString(R.string.smoke_start_date_is, simpleDateFormat.format(SharedPreferencesManager.getPatientStartSmokingDate(context)))).append("\n");
+        info.append(getString(R.string.smoke_stop_date_is, simpleDateFormat.format(SharedPreferencesManager.getPatientNoSmokingDate(context)))).append("\n");
+        info.append(getString(R.string.smoking_per_day_is, SharedPreferencesManager.getPatientSmokingAmount(context))).append("\n");
 
-        if (SharedPreferencesManager.getPatientIsSmoking(context)) info.append(getString(R.string.is_smoke_for_input, getString(R.string.smoking))).append("\n");
-        else info.append(getString(R.string.is_smoke_for_input, getString(R.string.no_smoking))).append("\n");
+        if (SharedPreferencesManager.getPatientIsSmoking(context)) info.append(getString(R.string.smoking_now_is, getString(R.string.smoking))).append("\n");
+        else info.append(getString(R.string.smoking_now_is, getString(R.string.not_smoking))).append("\n");
 
-        info.append(getString(R.string.match_doctor_for_input, SharedPreferencesManager.getPatientMatchDoctorID(context) + ""));
+        info.append(getString(R.string.family_doctor_is, SharedPreferencesManager.getPatientMatchDoctorID(context) + ""));
 
         patientInfoText.setText(info.toString());
 

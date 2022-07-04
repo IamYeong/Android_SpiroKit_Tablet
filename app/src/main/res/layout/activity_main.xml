@@ -36,7 +36,7 @@
             android:id="@+id/img_ble_connection_main"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/ic_connect_spirokit"
+            android:src="@drawable/ic_disconnect_spirokit"
 
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

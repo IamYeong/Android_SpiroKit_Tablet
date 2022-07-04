@@ -63,13 +63,13 @@ public class BluetoothScanResultsAdapter extends RecyclerView.Adapter<BluetoothS
         if (name != null) {
             holder.getNameText().setText(name);
         } else {
-            holder.getNameText().setText(context.getString(R.string.null_string));
+            holder.getNameText().setText(context.getString(R.string.state_null));
         }
 
         if (macAddress != null) {
             holder.getAddressText().setText(macAddress);
         } else {
-            holder.getAddressText().setText(context.getString(R.string.null_string));
+            holder.getAddressText().setText(context.getString(R.string.state_null));
         }
 
         holder.getDecibelText().setText(decibel);

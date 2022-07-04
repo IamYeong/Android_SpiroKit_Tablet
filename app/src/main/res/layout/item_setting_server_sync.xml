@@ -15,8 +15,6 @@
         android:textColor="@color/black"
         android:textSize="15sp"
 
-        android:text="@string/sync_with_server"
-
         android:layout_gravity="start|center_vertical"
 
         android:layout_margin="20dp"

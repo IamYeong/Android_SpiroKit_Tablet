@@ -15,7 +15,7 @@
         android:textColor="@color/black"
         android:textSize="15sp"
 
-        android:text="@string/auto_pairing"
+
 
         android:layout_gravity="start|center_vertical"
 
@@ -30,7 +30,7 @@
         android:backgroundTint="@color/primary_color"
 
         android:textColor="@color/white"
-        android:text="@string/on"
+
 
         android:layout_gravity="end|center_vertical"
         android:layout_margin="20dp"

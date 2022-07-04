@@ -71,7 +71,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
     private RecyclerView resultRV;
     private FrameLayout volumeTimeGraphLayout, resultGraphLayout;
-    private Button completeButton, saveButton;
+    private Button completeButton, preSaveButton, postSaveButton;
     private MaterialButton startButton, retestButton;
     private ImageButton backButton;
     private TextView titleText, emptyText;
@@ -203,7 +203,8 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         volumeTimeGraphLayout = findViewById(R.id.frame_volume_time_graph_svc_meas);
         resultGraphLayout = findViewById(R.id.frame_volume_time_graph_result_svc);
         startButton = findViewById(R.id.btn_start_stop_svc_meas);
-        saveButton = findViewById(R.id.btn_save_svc_meas);
+        preSaveButton = findViewById(R.id.btn_pre_save_svc_meas);
+        postSaveButton = findViewById(R.id.btn_post_save_svc_meas);
         completeButton = findViewById(R.id.btn_complete_svc_meas);
         emptyText = findViewById(R.id.tv_empty_svc_meas);
 
@@ -277,12 +278,20 @@ public class MeasurementSvcActivity extends AppCompatActivity {
             }
         });
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
+        preSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                saveData();
+                saveData(false);
 
+            }
+        });
+
+        postSaveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                saveData(true);
             }
         });
 
@@ -461,7 +470,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
     }
 
-    private void saveData() {
+    private void saveData(boolean isPost) {
 
         Thread thread = new Thread() {
 
@@ -494,7 +503,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("pid", SharedPreferencesManager.getPatientId(MeasurementSvcActivity.this));
-                    jsonObject.put("isPost", false);
+                    jsonObject.put("isPost", isPost);
                     jsonObject.put("order", testOrder);
                     jsonObject.put("ts", date);
                     jsonObject.put("meas", MeasGroup.svc);
@@ -518,7 +527,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             ConfirmDialog confirmDialog = new ConfirmDialog(MeasurementSvcActivity.this);
-                            confirmDialog.setTitle(getString(R.string.success_data_save));
+                            confirmDialog.setTitle(getString(R.string.save_success));
                             confirmDialog.show();
 
                             isStart = true;
@@ -593,14 +602,6 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         resultSVC.setVc(calc.getVC());
 
         adapter.addResult(resultSVC);
-
-    }
-
-    private void updateResult() {
-
-
-
-
 
     }
 

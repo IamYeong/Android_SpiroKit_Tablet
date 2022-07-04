@@ -2,253 +2,222 @@
     <string name="app_name">SpiroKitForTab</string>
     <!-- TODO: Remove or change this placeholder text -->
 
-    <string name="fvc" translatable="false">FVC</string>
-    <string name="fev1" translatable="false">FEV1</string>
-    <string name="pef" translatable="false">PEF</string>
-    <string name="fev1percent" translatable="false">FEV1%</string>
+    <!-- Application -->
 
-    <string name="svc" translatable="false">SVC</string>
-    <string name="vc" translatable="false">VC</string>
-    <string name="erv" translatable="false">ERV</string>
-    <string name="ic" translatable="false">IC</string>
-    <string name="irv" translatable="false">IRV</string>
-
-    <string name="unit_lps" translatable="false">l/s</string>
-    <string name="unit_liter" translatable="false">L</string>
-    <string name="unit_second" translatable="false">S</string>
-
-    <string name="null_string">NULL</string>
-    <string name="na">N/A</string>
-
-    <!-- 전역 리소스 -->
     <string name="spirokit_title">The SpiroKit</string>
-    <string name="app_version_v">V 1.0</string>
-    <string name="save">저장</string>
-    <string name="delete">삭제</string>
+    <string name="app_v">V 1.0</string>
+
     <string name="confirm">확인</string>
     <string name="cancel">취소</string>
-    <string name="question_delete">선택한 목록을 삭제하시겠습니까?</string>
+    <string name="delete">삭제</string>
+    <string name="fail_server_response">서버응답 실패</string>
+    
+    <string name="checkup">검사</string>
+    <string name="state_null">NULL</string>
 
-    <string name="confirm_terminate">앱을 종료하시겠습니까?</string>
+    <!-- Splash activity -->
 
-    <!-- 로그인 화면 -->
-    <string name="email">이메일</string>
-    <string name="password">비밀번호</string>
 
-    <!-- 유저등록 화면 -->
+    <!-- Login Activity -->
+    <string name="user_login">사용자 로그인</string>
+    <string name="user_email">이메일</string>
+    <string name="user_identifier">아이디</string>
+    <string name="user_password">패스워드</string>
+    <string name="login">로그인</string>
+    <string name="join">가입</string>
+
+    <string name="request_input_email_or_password">이메일 또는 패스워드를 입력해주세요</string>
+    <string name="request_input_id_or_password">아이디 또는 패스워드를 입력해주세요</string>
+
+    <string name="request_confirm_email_or_password">이메일 또는 패스워드를 확인해주세요</string>
+    <string name="request_confirm_id_or_password">아이디 또는 패스워드를 확인해주세요</string>
+
+    <!-- Join Activity -->
+    <string name="user_join">사용자 가입</string>
     <string name="nickname">닉네임</string>
-    <string name="password_confirm">비밀번호 확인</string>
-    <string name="password_rule">* 비밀번호는 영문 2글자와 숫자로 구성돼야 합니다(총 6~8자)</string>
+    <string name="confirm_password">비밀번호 확인</string>
+    <string name="request_rule_password">영문 2자와 숫자로 이루어진 비밀번호로 설정해주세요(총 6~8자)</string>
+    <string name="request_empty_info">누락된 항목이 있습니다. 모두 입력해주세요.</string>
 
-    <string name="please_input_email">이메일을 입력해주세요</string>
-    <string name="please_check_password">비밀번호를 확인해주세요</string>
-    <string name="password_different">비밀번호가 틀립니다</string>
-    <string name="email_not_found">이메일을 찾지 못 했습니다</string>
-    <string name="please_input_nickname">닉네임을 입력해주세요</string>
-    <string name="please_input_password">비밀번호를 입력해주세요</string>
-    <string name="password_should_be_6_8">비밀번호는 6~8자로 구성돼야 합니다</string>
-    <string name="password_contains_only_num_alphabet">비밀번호는 숫자와 영문만 허용합니다</string>
-    <string name="password_contains_only_two_char">비밀번호에 영문자가 2개 포함돼야합니다</string>
-    <string name="password_check_fail">비밀번호 확인에 실패했습니다</string>
-    <string name="mismatch_email_format">이메일 형식이 올바르지 않습니다</string>
-    <string name="email_duplicate">중복 이메일이 있습니다\n입력정보를 확인해주세요</string>
-    <string name="nickname_duplicate">중복 닉네임이 있습니다\n입력정보를 확인해주세요</string>
+    <string name="request_confirm_password">비밀번호를 확인해주세요</string>
+    <string name="complete_user_join">가입이 완료되었습니다</string>
 
     <!-- 이용약관 -->
     <string name="terms_and_conditions">이용약관</string>
-    <string name="personal_information">개인정보 처리방침</string>
-    <string name="request_terms_conditions_agree">이용약관에 동의해주세요</string>
-    <string name="request_personal_info_agree">개인정보 처리방침에 동의해주세요</string>
-    <string name="request_terms_condition_persional_info_agree">이용약관 및 개인정보 처리방침에 동의해주세요</string>
-    <string name="request_must_be_agree">내용에 동의하셔야 사용자 등록 및 앱 이용이 가능합니다</string>
     <string name="next">다음</string>
-
-    <!-- 환자목록 메인화면 -->
-    <string name="patients">환자리스트</string>
-    <string name="patient">환자</string>
-    <string name="setting">설정</string>
+    <string name="agree_all_condition">이용약관에 동의합니다</string>
+    
+    <!-- 환자 목록 -->
+    <string name="patient_list">환자목록</string>
+    <string name="latest_meas_date">최근 검사일</string>
+    <string name="male">남</string>
+    <string name="female">여</string>
+    
     <string name="search">검색</string>
+    <string name="patient_name_search">환자 이름 검색</string>
+    
+    <string name="not_applicable">N/A</string>
+    <string name="confirm_patient_delete">해당 환자를 삭제하시겠습니까?</string>
 
-    <string name="chart_number_colon">차트넘버 : %1$s</string>
-    <string name="delete_select_patients">선택한 환자 정보를 모두 지우시겠습니까?</string>
 
-    <string name="nothing_patients">환자정보를 추가한 후 사용해보세요</string>
-    <string name="nothing_measurements">검사 후 결과를 확인해보세요</string>
-
-    <!-- 환자추가 / 수정 -->
-    <string name="patient_add">환자정보 추가</string>
-    <string name="patient_edit">환자정보 수정</string>
-
+    <!-- Add patient -->
     <string name="chart_number">차트넘버</string>
     <string name="name">이름</string>
     <string name="gender">성별</string>
-    <string name="birth">생년월일</string>
     <string name="height">신장(cm)</string>
     <string name="weight">체중(kg)</string>
+
+    <string name="birth">생년월일</string>
     <string name="human_race">인종</string>
-    <string name="start_smoking_date">흡연시작일</string>
-    <string name="smoking_amount_per_day">하루 흡연량(갑)</string>
-    <string name="smoking_period">흡연기간</string>
-    <string name="smoking_is_now">현재 흡연 여부</string>
-    <string name="smoking_no_when">금연 시기</string>
-    <string name="match_doctor">담당의사</string>
-    <string name="meas_doctor">검사자</string>
 
-    <string name="male">남</string>
-    <string name="female">여</string>
-    <string name="no_smoking">금연</string>
+    <string name="start_smoke_date">흡연시기</string>
+    <string name="stop_smoke_date">금연시기</string>
+    <string name="smoke_amount_day">하루 흡연량</string>
+
+    <string name="is_smoking">현재 흡연 여부</string>
     <string name="smoking">흡연</string>
+    <string name="not_smoking">금연</string>
 
-    <string name="birth_date_picker">생년월일 선택</string>
-    <string name="start_smoking_date_picker">흡연시작일 선택</string>
-    <string name="no_smoking_date_picker">금연일 선택</string>
+    <string name="have_smoked">흡연 경험</string>
+    <string name="have">있음</string>
+    <string name="have_not">없음</string>
 
-    <string name="please_input_name">이름을 입력해주세요</string>
-    <string name="please_input_height">신장을 입력해주세요</string>
-    <string name="please_input_weight">체중을 입력해주세요</string>
-    <string name="please_select_birth">생년월일을 선택해주세요</string>
-    <string name="please_select_race">인종을 선택해주세요</string>
+    <string name="add_patient">환자 추가</string>
+    <string name="close">닫기</string>
+    <string name="add">등록</string>
+    
+    <string name="yes">예</string>
+    <string name="no">아니오</string>
+    
+    <string name="request_input_require_patient_info">이름, 성별, 키, 체중, 생년월일, 인종은\n반드시 기입해주시기 바랍니다</string>
+    <string name="request_input_require_patient_info2">필수정보는 반드시 기입해주시기 바랍니다</string>
+    
+    <string name="request_input_what">%1$s를(을) 입력해주세요</string>
+    <string name="request_selection_what">%1$s를(을) 선택해주세요</string>
+    
+    <string name="family_doctor">담당의</string>
+    <string name="selection_family_doctor">담당의 선택</string>
+    <string name="checkup_doctor">검사자</string>
 
-    <!-- 환자 정보 화면 -->
-    <string name="time_select_error">기간 선택이 잘못되었습니다.</string>
-    <string name="date_to_date">%1$s ~ %2$s</string>
-    <string name="select_test_date">검사 기간 선택</string>
+    <string name="request_have_not_doctors">의료진 정보를 등록해주세요</string>
+    <string name="have_not_what">등록된 %1$s가(이) 없습니다</string>
 
-    <!-- 설정 -->
-    <string name="device_info">디바이스 정보</string>
-    <string name="app_version">앱 버전</string>
-    <string name="user">사용자</string>
-    <string name="back_up">백업/복원</string>
-    <string name="logout">로그아웃</string>
+    <string name="date_format_ymd">yyyy.MM.dd</string>
 
-    <string name="state_connect">연결됨</string>
-    <string name="state_disconnect">연결되지 않음</string>
+    <string name="select_birth_date">생년월일 선택</string>
+    <string name="select_start_smoke_date">흡연시작시기 선택</string>
+    <string name="select_stop_smoke_date">금연시기 선택</string>
 
-    <string name="connect_with_what">%1$s과(와) 연결됨</string>
-
-    <string name="do_connect">연결하기</string>
-    <string name="do_disconnect">연결끊기</string>
-    <string name="disconnecting">연결 끊는 중</string>
-    <string name="question_disconnect">기기와 연결을 끊을까요?</string>
-
-    <string name="auto_pairing">자동 연동</string>
-    <string name="on">ON</string>
-    <string name="off">OFF</string>
-    <string name="sleep_mode">슬립 모드(5분 후 기기 종료)</string>
-    <string name="manual">매뉴얼</string>
-    <string name="sync_with_server">서버 동기화</string>
-    <string name="operator_management">의료진 관리</string>
-
-    <!-- 스캔 / 연결 화면 -->
-    <string name="question_stop_scan_and_finish">기기 탐색을 멈추고 나가시겠습니까?</string>
-
-    <string name="fail_already_scanning">이미 스캔 중입니다</string>
-    <string name="fail_app_registration">FAIL : APPLICATION_REGISTRATION</string>
-    <string name="fail_feature_unsupported">FAIL : FEATURE_UNSUPPORTED</string>
-    <string name="fail_internal_error">FAIL : INTERNAL_ERROR</string>
-
-    <string name="scan_info">디바이스와 전원을 켜신 후 스캔버튼을 눌러 주시기 바랍니다.\n연결이 원활하지 않을 경우 디바이스를 껐다가 다시 켜신 후 연결을 시도해주세요.</string>
-    <string name="can_not_ble">BLE 연동이 불가한 디바이스입니다</string>
-    <string name="must_be_enable_ble">블루투스가 켜져있어야만\n스파이로킷 스캔 및 연동이 가능합니다</string>
-
-    <!-- 환자정보 화면 -->
-
-    <string name="measurement">검사</string>
-
-    <string name="chart_number_for_input">* 차트넘버 : %1$s</string>
-    <string name="gender_for_input">* 성별 : %1$s</string>
-    <string name="weight_for_input">* 체중(kg) : %1$d kg</string>
-    <string name="height_for_input">* 신장(cm) : %1$d cm</string>
-    <string name="birth_for_input">* 생년월일 : %1$s</string>
-    <string name="human_race_for_input">* 인종 : %1$s</string>
-    <string name="start_smoke_for_input">* 흡연시작일 : %1$s</string>
-    <string name="stop_smoke_for_input">* 금연일 : %1$s</string>
-    <string name="smoke_amount_per_day">* 하루흡연량 : %.2f 갑</string>
-    <string name="is_smoke_for_input">* 현재 흡연 여부 : %1$s</string>
-    <string name="match_doctor_for_input">* 담당의 : %1$s</string>
-
-    <string name="match_doctor_result_input">주치의 : %1$s</string>
-    <string name="meas_doctor_result_input">검사자 : %1$s</string>
-
-
-    <!-- 검사 화면 -->
-    <string name="retest">재측정</string>
+    <!-- Main Activity -->
+    <string name="empty_result">측정한 이력이 있다면 그래프와 수치가 이 곳에 표기됩니다</string>
     <string name="history">기록</string>
-    <string name="complete">완료</string>
-    <string name="start">시작</string>
-    <string name="stop">정지</string>
+    <string name="question_delete_history">해당 검사결과를 삭제하시겠습니까?</string>
+    <string name="question_delete_patient">해당 환자를 삭제하시겠습니까?</string>
 
-    <string name="already_connect">이미 연결되어 있습니다</string>
-    <string name="making_function">기능 준비 중입니다</string>
+    <string name="select_history_range">조회할 기록 기간 선택</string>
+    <string name="date_to_date">%1$s ~ %2$s</string>
 
-    <string name="over_than_data_limit">허용 가능한 데이터를 초과했습니다.\n현재 데이터를 저장하거나 재측정해주세요</string>
-    <string name="success_data_save">검사데이터가 저장되었습니다</string>
+    <string name="checkup_doctor_is">검사자 : %1$s</string>
+    <string name="family_doctor_is">주치의 : %1$s</string>
+    <string name="chart_number_is">차트넘버 : %1$s</string>
+    <string name="gender_is">성별 : %1$s</string>
+    <string name="height_is">신장 : %1$d cm</string>
+    <string name="weight_is">체중 : %1$d kg</string>
+    <string name="birth_is">생년월일 : %1$s</string>
+    <string name="human_race_is">인종 : %1$s</string>
+    <string name="smoke_start_date_is">흡연시작일 : %1$s</string>
+    <string name="smoke_stop_date_is">금연일 : %1$s</string>
+    <string name="smoking_per_day_is">하루 흡연량 : %1f</string>
+    <string name="smoking_now_is">현재 흡연 여부 : %1$s</string>
 
-    <string name="question_test_terminate">검사 화면에서 나가시겠습니까?\n저장하지 않은 검사데이터는 복구되지 않습니다</string>
-    <string name="please_save_first">저장된 검사가 있어야\n최종완료 및 결과확인이 가능합니다</string>
-    <string name="can_not_connect_cause_not_saved_address">연결했던 디바이스 정보가 없습니다\n설정화면에서 기기와 연동 후 검사해주세요</string>
+    <!-- FVC Activity -->
+    <string name="fvc_meas">FVC 검사</string>
 
-    <string name="data_length_zero">저장할 데이터가 충분하지 않습니다</string>
-    <string name="not_save_pre_yet">PRE 검사 전에 POST 검사는 저장될 수 없습니다</string>
+    <string name="pre_save">Pre 저장</string>
+    <string name="post_save">Post 저장</string>
 
-    <string name="n_order_test">%1$d차 검사</string>
-    <string name="pre_save">PRE 저장</string>
-    <string name="post_save">POST 저장</string>
+    <string name="retest">재측정</string>
+    <string name="complete">최종완료</string>
 
-    <string name="spirokit_initializing">스파이로킷 동작 준비 중입니다</string>
-    <string name="spirokit_terminating">스파이로킷 종료 중입니다</string>
-    <string name="nothing_result">측정 후 저장하면 결과확인이 즉시 가능합니다</string>
+    <string name="start_meas">측정하기</string>
+    <string name="pause_meas">일시정지</string>
+    
+    <string name="save_success">저장되었습니다</string>
+    <string name="can_not_save_non_data">측정된 데이터가 없으면 저장할 수 없습니다</string>
+    <string name="fvc_nothing_result">측정 후 결과들이 이 곳에 표기됩니다</string>
 
-    <!-- 연결 화면 -->
-    <string name="connect_device">디바이스 연결</string>
+    <string name="connecting">연결 중</string>
+
+    <string name="spirokit_initializing">측정 준비 중입니다</string>
+    <string name="spirokit_terminating">정상 종료 중입니다.\n재측정을 원하시면 다시 전원을 켜주세요</string>
+
+    <!-- SVC Activity -->
+    <string name="svc_meas">SVC 검사</string>
+    <string name="svc_nothing_result">측정 후 결과들이 이 곳에 표기됩니다</string>
+
+    <!-- Setting Activity -->
     <string name="device">디바이스</string>
+    <string name="device_info">디바이스 정보</string>
+
     <string name="scan">스캔</string>
-    <string name="start_scan">스캔시작</string>
-    <string name="stop_scan">스캔중지</string>
-    <string name="connect">연결</string>
-    <string name="mac_address">맥주소</string>
-    <string name="unit_decibel">dB</string>
-    <string name="info_decibel">dB의 크기가 낮을 수록 디바이스가 가깝습니다</string>
+    <string name="do_disconnect">연결끊기</string>
+    <string name="do_connect">연결하기</string>
+    <string name="mac_address">맥 주소</string>
+    <string name="decibel">dB</string>
 
-    <string name="connect_this_device">연결하시겠습니까?</string>
-    <string name="connecting">연결 시도 중</string>
-    <string name="scanning">SpiroKit 탐색 중</string>
+    <string name="state_disconnect">연결되지 않음</string>
+    <string name="state_connect">연결됨</string>
 
-    <!-- 결과 화면 -->
+    <string name="connect_with_what">%1$s와(과) 연결되었습니다</string>
+    <string name="question_connect">연결하시겠습니까?</string>
+    <string name="question_disconnect">연결을 끊으시겠습니까?</string>
+    <string name="device_connect">디바이스 연결</string>
 
-    <string name="pre">PRE</string>
-    <string name="post">POST</string>
+    <string name="logout">로그아웃</string>
+    <string name="setting">설정</string>
 
-    <string name="result_order">%1$d차 검사(%2$s)</string>
-    <string name="date_is">날짜 : %1$s</string>
-    <string name="time_is">시간 : %1$s</string>
-    <string name="fvc_with_unit">FVC : %.3f L</string>
-    <string name="fev1_with_unit">FEV1 : %.3f L</string>
-    <string name="fev1_percent_with_unit">FEV1%1$s : %2$.3f %3$s</string>
-    <string name="pef_with_unit">PEF : %.3f l/s</string>
+    <string name="app_version">앱 버전</string>
 
-    <string name="liter_with_parameter">%.3f L</string>
-    <string name="percent_with_parameter">%.3f %2$s</string>
-    <string name="lps_with_parameter">%.3f l/s</string>
+    <string name="disconnected_with_device">디바이스와 연결이 끊어졌습니다</string>
+    <string name="connected_with_device">디바이스와 연결되었습니다</string>
 
-    <string name="meas">Meas</string>
-    <string name="pred">Pred</string>
-    <string name="percent">Percent</string>
+    <string name="scan_info">디바이스의 전원을 켜신 후 스캔버튼을 눌러 주시기 바랍니다.\n연결이 원활하지 않을 경우 디바이스를 종료 후 다시 켜주시고 연결을 시도해주세요</string>
+    <string name="must_be_enable_ble">블루투스는 필수기능이므로 활성화 후 이용가능합니다</string>
 
-    <string name="date">날짜</string>
-    <string name="volume_flow_graph">볼륨(Volume) | 플로우(Flow) 그래프</string>
+    <string name="already_scanning">기존 진행중인 주변기기 탐색이 있습니다</string>
+    <string name="not_available_ble">블루투스를 이용할 수 없는 장치입니다. 기종을 확인해주세요</string>
+
+
+    <!-- Operator Activity -->
+    <string name="management_medical_staff">의료진 관리</string>
+    <string name="question_delete_staff">해당 의료진을 삭제하시겠습니까?</string>
+    <string name="additional">추가</string>
+    
+    
+    <!-- Result Activity -->
+    <string name="volume_flow_graph">볼룸(Volume) | 플로우(Flow) 그래프</string>
     <string name="volume_time_graph">볼륨(Volume) | 타임(Time) 그래프</string>
-    <string name="title_activity_bottom_navigation_main">BottomNavigationMainActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="n_order_meas">%1$d차 검사(%2$s)</string>
+    <string name="date_colon_what">날짜 : %1$s</string>
+    <string name="time_colon_what">시간 : %1$s</string>
 
-    <string name="loading_results">결과 로드 중.....</string>
+    <string name="meas">meas</string>
+    <string name="pred">pred</string>
+    <string name="percent">percent</string>
 
-    <!-- 예외화면 -->
-    <string name="exception_user_message">일시적 오류가 발생되었습니다.\n해당 사항은 조치가 가능하도록 로그로 남겼으며\n빠른 시일 내로 조치 후 업데이트하겠습니다.\n아래 버튼을 통해 이전 화면으로 돌아갈 수 있습니다.</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="fvc">FVC</string>
+    <string name="fev1">FEV1</string>
+    <string name="fev1per">FEV1%</string>
+    <string name="pef">PEF</string>
 
+    <string name="svc">SVC</string>
+    <string name="vc">VC</string>
+
+    <string name="with_L">%3f L</string>
+    <string name="with_lps">%3f l/s</string>
+    <string name="with_per">%3f %2$s</string>
+
+    <string name="post">POST</string>
+    <string name="pre">PRE</string>
 
 </resources>

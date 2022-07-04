@@ -144,7 +144,7 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
             public void onClick(View v) {
 
                 SelectionDialog selectionDialog = new SelectionDialog(context);
-                selectionDialog.setTitle(context.getString(R.string.question_delete));
+                selectionDialog.setTitle(context.getString(R.string.question_delete_history));
                 selectionDialog.setSelectedListener(new OnSelectedInDialogListener() {
                     @Override
                     public void onSelected(boolean select) {

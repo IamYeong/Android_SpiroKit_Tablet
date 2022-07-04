@@ -331,6 +331,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
                 if (saveSomething) {
                     removeThisData();
+                    finish();
                 } else {
 
                     finish();
@@ -805,7 +806,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             ConfirmDialog confirmDialog = new ConfirmDialog(MeasurementFvcActivity.this);
-                            confirmDialog.setTitle(getString(R.string.success_data_save));
+                            confirmDialog.setTitle(getString(R.string.save_success));
                             confirmDialog.show();
 
                             isStart = true;

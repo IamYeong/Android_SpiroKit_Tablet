@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:fontFamily="@font/nanum_gothic_bold"
-            android:text="@string/patient_add"
+            android:text="@string/add_patient"
             app:layout_constraintStart_toEndOf="@id/img_btn_back_insert_patient"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -51,7 +51,7 @@
             android:background="@drawable/button_shape"
             android:backgroundTint="@color/primary_color"
             android:textColor="@color/white"
-            android:text="@string/save"
+            android:text="@string/add"
             android:textSize="20sp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -147,7 +147,7 @@
 
                         android:layout_marginBottom="10dp"
                         android:fontFamily="@font/nanum_gothic"
-                        android:text="@string/match_doctor"
+                        android:text="@string/family_doctor"
                         android:textSize="15sp"
 
                         app:layout_constraintBottom_toTopOf="@id/spinner_match_doctor_insert_patient"
@@ -499,7 +499,7 @@
 
                         android:layout_marginBottom="10dp"
                         android:fontFamily="@font/nanum_gothic"
-                        android:text="@string/smoking_is_now"
+                        android:text="@string/is_smoking"
                         android:textSize="15sp" />
 
                     <LinearLayout
@@ -530,7 +530,7 @@
                             android:background="@drawable/button_shape"
                             android:backgroundTint="@color/white"
                             android:elevation="10dp"
-                            android:text="@string/no_smoking" />
+                            android:text="@string/not_smoking" />
 
                     </LinearLayout>
 
@@ -542,7 +542,7 @@
 
                         android:layout_marginBottom="10dp"
                         android:fontFamily="@font/nanum_gothic"
-                        android:text="@string/start_smoking_date"
+                        android:text="@string/start_smoke_date"
                         android:textSize="15sp" />
 
                     <android.widget.Button
@@ -566,7 +566,7 @@
 
                         android:layout_marginBottom="10dp"
                         android:fontFamily="@font/nanum_gothic"
-                        android:text="@string/smoking_amount_per_day"
+                        android:text="@string/smoke_amount_day"
                         android:textSize="15sp" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -623,7 +623,7 @@
 
                         android:layout_marginBottom="10dp"
                         android:fontFamily="@font/nanum_gothic"
-                        android:text="@string/smoking_no_when"
+                        android:text="@string/stop_smoke_date"
                         android:textSize="15sp" />
 
                     <android.widget.Button

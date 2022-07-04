@@ -28,7 +28,7 @@
             app:layout_constraintEnd_toEndOf="parent"
 
             android:layout_margin="20dp"
-            android:text="@string/measurement"
+            android:text="@string/checkup"
             />
 
         <ImageButton
@@ -71,7 +71,7 @@
                     android:textSize="18sp"
                     android:fontFamily="@font/nanum_gothic"
 
-                    android:text="주치의"
+                    android:text="@string/family_doctor"
                     android:layout_weight="1"
 
                     android:gravity="center"
@@ -86,7 +86,7 @@
                     android:textAlignment="center"
 
                     android:background="@drawable/text_field_inner_shadow_white"
-                    android:text="DOCTOR_NAME"
+                    android:hint="@string/family_doctor"
                     android:padding="20dp"
                     />
 
@@ -103,7 +103,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="@string/meas_doctor"
+                    android:text="@string/checkup_doctor"
 
                     android:textColor="@color/black"
                     android:textSize="18sp"

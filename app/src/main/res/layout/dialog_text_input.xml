@@ -13,10 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_margin="10dp"
-        android:background="@drawable/text_field_background_round_white"
-        android:backgroundTint="@color/gray_light"
+        android:background="@drawable/text_field_inner_shadow_white"
 
-        android:hint="파일 이름(csv)"
         android:padding="10dp"
         android:textSize="18sp"
         android:textColor="@color/black"
