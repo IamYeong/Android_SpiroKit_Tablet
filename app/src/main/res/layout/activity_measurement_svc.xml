@@ -184,7 +184,7 @@
             >
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_retest_meas"
+                android:id="@+id/btn_retest_svc_meas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:icon="@drawable/ic_baseline_refresh_30_white"
@@ -278,6 +278,7 @@
         android:text="측정 후 즉시 결과확인이 가능합니다"
         android:background="@color/white"
         android:visibility="visible"
+        android:gravity="center"
         />
 
 

@@ -91,6 +91,7 @@ public class SettingActivity extends AppCompatActivity {
             if (mService.isConnect()) {
                 Log.d(getClass().getSimpleName(), "*******************isConnect");
                 connectStateText.setText(getString(R.string.connect_with_what, SharedPreferencesManager.getConnectedDeviceName(SettingActivity.this)));
+                startScanText.setText(getString(R.string.do_disconnect));
             } else {
                 Log.d(getClass().getSimpleName(), "*******************is NOT Connect");
                connectStateText.setText(getString(R.string.state_disconnect));

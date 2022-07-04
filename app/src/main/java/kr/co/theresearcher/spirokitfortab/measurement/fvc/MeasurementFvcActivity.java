@@ -564,17 +564,21 @@ public class MeasurementFvcActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                isStart = !isStart;
+
                 if (isStart) {
 
-                    startStopButton.setText(getString(R.string.stop));
+                    startStopButton.setText("일시정지");
+                    startStopButton.setIcon(AppCompatResources.getDrawable(MeasurementFvcActivity.this, R.drawable.ic_baseline_pause_30_white));
 
                 } else {
 
-                    startStopButton.setText(getString(R.string.start));
+                    startStopButton.setText("측정하기");
+                    startStopButton.setIcon(AppCompatResources.getDrawable(MeasurementFvcActivity.this, R.drawable.ic_baseline_play_arrow_30_white));
 
                 }
 
-                isStart = !isStart;
+
 
             }
         });

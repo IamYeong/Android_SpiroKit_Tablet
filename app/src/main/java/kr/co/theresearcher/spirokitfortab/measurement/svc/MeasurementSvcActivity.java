@@ -213,11 +213,14 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         connectButton = findViewById(R.id.constraint_connect_button_svc_meas);
 
         backButton = findViewById(R.id.img_btn_back_svc_meas);
+        retestButton = findViewById(R.id.btn_retest_svc_meas);
 
         adapter = new SvcResultAdapter(this);
         adapter.setOrderSelectedListener(new OnOrderSelectedListener() {
             @Override
             public void onOrderSelected(int order) {
+
+                selectData(order);
 
             }
         });
@@ -292,10 +295,42 @@ public class MeasurementSvcActivity extends AppCompatActivity {
             }
         });
 
+        retestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                timerCount = 0;
+                pulseWidthList.clear();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        graphView.clear();
+                        graphView.postInvalidate();
+
+                    }
+                });
+
+            }
+        });
+
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 isStart = !isStart;
+
+                if (isStart) {
+
+                    startButton.setText("일시정지");
+                    startButton.setIcon(AppCompatResources.getDrawable(MeasurementSvcActivity.this, R.drawable.ic_baseline_pause_30_white));
+
+                } else {
+
+                    startButton.setText("측정하기");
+                    startButton.setIcon(AppCompatResources.getDrawable(MeasurementSvcActivity.this, R.drawable.ic_baseline_play_arrow_30_white));
+
+                }
             }
         });
 
@@ -493,11 +528,8 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
                             adapter.notifyDataSetChanged();
 
-                            resultGraphLayout.removeAllViews();
-                            resultGraphLayout.addView(volumeTimeRunViews.get(testOrder - 1));
+                            selectData(testOrder - 1);
                             emptyText.setVisibility(View.INVISIBLE);
-
-                            //emptyImage.setVisibility(View.GONE);
 
                             testOrder++;
 
@@ -621,10 +653,16 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
     }
 
-
-
     private void deleteDirs() {
 
+
+    }
+
+    private void selectData(int order) {
+
+        resultGraphLayout.removeAllViews();
+
+        resultGraphLayout.addView(volumeTimeRunViews.get(order));
 
     }
 

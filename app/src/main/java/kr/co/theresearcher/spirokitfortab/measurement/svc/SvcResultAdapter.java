@@ -68,6 +68,11 @@ public class SvcResultAdapter extends RecyclerView.Adapter<SvcResultViewHolder> 
         }
 
         results.add(resultSVC);
+
+        for (ResultSVC result : results) result.setSelected(false);
+        results.get(results.size() - 1).setSelected(true);
+
+
     }
 
     public void addEmptyResult(ResultSVC resultSVC) {
