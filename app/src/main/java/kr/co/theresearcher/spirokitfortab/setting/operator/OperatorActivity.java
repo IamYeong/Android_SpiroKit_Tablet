@@ -23,9 +23,6 @@ import java.util.Locale;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.db.RoomNames;
-import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
-import kr.co.theresearcher.spirokitfortab.db.operator.OperatorDao;
-import kr.co.theresearcher.spirokitfortab.db.operator.OperatorDatabase;
 import kr.co.theresearcher.spirokitfortab.db.work.Work;
 
 public class OperatorActivity extends AppCompatActivity {

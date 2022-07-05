@@ -1,6 +1,5 @@
 package kr.co.theresearcher.spirokitfortab.main.information;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.cardview.widget.CardView;
 import androidx.core.util.Pair;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,19 +29,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -55,28 +44,12 @@ import java.util.Observer;
 import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
-import kr.co.theresearcher.spirokitfortab.calc.CalcSpiroKitE;
 import kr.co.theresearcher.spirokitfortab.db.RoomNames;
 import kr.co.theresearcher.spirokitfortab.db.human_race.HumanRace;
-import kr.co.theresearcher.spirokitfortab.db.meas_group.MeasGroup;
-import kr.co.theresearcher.spirokitfortab.db.measurement.Measurement;
-import kr.co.theresearcher.spirokitfortab.db.measurement.MeasurementDao;
-import kr.co.theresearcher.spirokitfortab.db.measurement.MeasurementDatabase;
-import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
-import kr.co.theresearcher.spirokitfortab.db.operator.OperatorDao;
-import kr.co.theresearcher.spirokitfortab.db.operator.OperatorDatabase;
-import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
-import kr.co.theresearcher.spirokitfortab.db.patient.PatientDao;
-import kr.co.theresearcher.spirokitfortab.db.patient.PatientDatabase;
 import kr.co.theresearcher.spirokitfortab.dialog.MeasSelectionDialog;
-import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
-import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowResultView;
-import kr.co.theresearcher.spirokitfortab.graph.VolumeTimeResultView;
 import kr.co.theresearcher.spirokitfortab.main.OnMeasurementSelectedListener;
 import kr.co.theresearcher.spirokitfortab.main.patients.OnItemSimpleSelectedListener;
 import kr.co.theresearcher.spirokitfortab.main.patients.PatientsAdapter;
-import kr.co.theresearcher.spirokitfortab.measurement.fvc.MeasurementFvcActivity;
-import kr.co.theresearcher.spirokitfortab.measurement.fvc.ResultFVC;
 import kr.co.theresearcher.spirokitfortab.patient_input.PatientModifyActivity;
 
 public class PatientInformationFragment extends Fragment implements Observer {

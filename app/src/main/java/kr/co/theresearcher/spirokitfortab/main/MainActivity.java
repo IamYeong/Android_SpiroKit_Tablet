@@ -29,7 +29,6 @@ import android.widget.ImageView;
 
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.bluetooth.SpiroKitBluetoothLeService;
-import kr.co.theresearcher.spirokitfortab.db.measurement.Measurement;
 import kr.co.theresearcher.spirokitfortab.main.information.PatientInformationFragment;
 import kr.co.theresearcher.spirokitfortab.main.result.empty.EmptyResultFragment;
 import kr.co.theresearcher.spirokitfortab.main.result.fvc.FvcResultFragment;

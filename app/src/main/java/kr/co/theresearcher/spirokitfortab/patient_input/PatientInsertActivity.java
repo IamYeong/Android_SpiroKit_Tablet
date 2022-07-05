@@ -1,21 +1,14 @@
 package kr.co.theresearcher.spirokitfortab.patient_input;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.AppCompatSpinner;
-import androidx.core.util.Pair;
 import androidx.room.Room;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.graphics.ColorSpace;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -26,10 +19,8 @@ import android.widget.ImageButton;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -38,13 +29,6 @@ import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.db.RoomNames;
 import kr.co.theresearcher.spirokitfortab.db.gender.Gender;
 import kr.co.theresearcher.spirokitfortab.db.human_race.HumanRace;
-import kr.co.theresearcher.spirokitfortab.db.meas_group.MeasGroup;
-import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
-import kr.co.theresearcher.spirokitfortab.db.operator.OperatorDao;
-import kr.co.theresearcher.spirokitfortab.db.operator.OperatorDatabase;
-import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
-import kr.co.theresearcher.spirokitfortab.db.patient.PatientDao;
-import kr.co.theresearcher.spirokitfortab.db.patient.PatientDatabase;
 import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
 
 public class PatientInsertActivity extends AppCompatActivity {

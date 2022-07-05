@@ -1,7 +1,6 @@
 package kr.co.theresearcher.spirokitfortab.main.result.svc;
 
 import android.content.Context;
-import android.icu.util.Measure;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,9 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -37,18 +34,11 @@ import java.util.Observer;
 import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
-import kr.co.theresearcher.spirokitfortab.calc.CalcSpiroKitE;
 import kr.co.theresearcher.spirokitfortab.calc.CalcSvcSpiroKitE;
 import kr.co.theresearcher.spirokitfortab.db.RoomNames;
-import kr.co.theresearcher.spirokitfortab.db.measurement.Measurement;
-import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
-import kr.co.theresearcher.spirokitfortab.db.operator.OperatorDao;
-import kr.co.theresearcher.spirokitfortab.db.operator.OperatorDatabase;
 import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
 import kr.co.theresearcher.spirokitfortab.graph.SlowVolumeTimeRunView;
 import kr.co.theresearcher.spirokitfortab.main.result.OnOrderSelectedListener;
-import kr.co.theresearcher.spirokitfortab.measurement.fvc.ResultFVC;
-import kr.co.theresearcher.spirokitfortab.measurement.svc.MeasurementSvcActivity;
 import kr.co.theresearcher.spirokitfortab.measurement.svc.ResultSVC;
 import kr.co.theresearcher.spirokitfortab.measurement.svc.SvcResultAdapter;
 

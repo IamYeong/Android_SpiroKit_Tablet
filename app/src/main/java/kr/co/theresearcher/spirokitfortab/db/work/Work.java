@@ -1,7 +1,34 @@
 package kr.co.theresearcher.spirokitfortab.db.work;
 
-public enum Work {
-    doctor, //의사
-    nurse,  //간호사
-    pathologist //임상병리사
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity
+public class Work {
+
+    @PrimaryKey
+    @ColumnInfo(name = "id")
+    private int id;
+
+    @ColumnInfo(name = "work")
+    private String work;
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getWork() {
+        return work;
+    }
+
+    public void setWork(String work) {
+        this.work = work;
+    }
+
 }

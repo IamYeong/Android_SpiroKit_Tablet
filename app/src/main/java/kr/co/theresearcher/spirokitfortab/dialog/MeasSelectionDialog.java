@@ -1,7 +1,6 @@
 package kr.co.theresearcher.spirokitfortab.dialog;
 
 import android.app.Dialog;
-import android.content.AbstractThreadedSyncAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,26 +12,18 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.room.Room;
 
-import com.google.android.material.navigation.NavigationView;
-
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.db.RoomNames;
-import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
-import kr.co.theresearcher.spirokitfortab.db.operator.OperatorDao;
-import kr.co.theresearcher.spirokitfortab.db.operator.OperatorDatabase;
 import kr.co.theresearcher.spirokitfortab.db.work.Work;
 import kr.co.theresearcher.spirokitfortab.measurement.fvc.MeasurementFvcActivity;
 import kr.co.theresearcher.spirokitfortab.measurement.svc.MeasurementSvcActivity;

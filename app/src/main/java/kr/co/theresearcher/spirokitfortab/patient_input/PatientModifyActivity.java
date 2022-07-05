@@ -28,12 +28,6 @@ import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.db.RoomNames;
 import kr.co.theresearcher.spirokitfortab.db.human_race.HumanRace;
-import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
-import kr.co.theresearcher.spirokitfortab.db.operator.OperatorDao;
-import kr.co.theresearcher.spirokitfortab.db.operator.OperatorDatabase;
-import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
-import kr.co.theresearcher.spirokitfortab.db.patient.PatientDao;
-import kr.co.theresearcher.spirokitfortab.db.patient.PatientDatabase;
 
 public class PatientModifyActivity extends AppCompatActivity {
 

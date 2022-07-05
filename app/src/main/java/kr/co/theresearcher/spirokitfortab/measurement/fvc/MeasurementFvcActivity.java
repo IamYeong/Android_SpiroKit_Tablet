@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
@@ -54,9 +53,6 @@ import kr.co.theresearcher.spirokitfortab.bluetooth.SpiroKitBluetoothLeService;
 import kr.co.theresearcher.spirokitfortab.calc.CalcSpiroKitE;
 import kr.co.theresearcher.spirokitfortab.db.RoomNames;
 import kr.co.theresearcher.spirokitfortab.db.meas_group.MeasGroup;
-import kr.co.theresearcher.spirokitfortab.db.measurement.Measurement;
-import kr.co.theresearcher.spirokitfortab.db.measurement.MeasurementDao;
-import kr.co.theresearcher.spirokitfortab.db.measurement.MeasurementDatabase;
 import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
 import kr.co.theresearcher.spirokitfortab.dialog.LoadingDialog;
 import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
@@ -524,6 +520,8 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                     public void run() {
                         super.run();
                         Looper.prepare();
+
+                        Room.databaseBuilder(MeasurementFvcActivity.this, )
 
                         MeasurementDatabase database = Room.databaseBuilder(MeasurementFvcActivity.this, MeasurementDatabase.class, RoomNames.ROOM_MEASUREMENT_DB_NAME).build();
                         MeasurementDao measurementDao = database.measurementDao();
