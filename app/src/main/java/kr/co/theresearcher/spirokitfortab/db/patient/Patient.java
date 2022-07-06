@@ -3,6 +3,7 @@ package kr.co.theresearcher.spirokitfortab.db.patient;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import kr.co.theresearcher.spirokitfortab.db.office.Office;
@@ -13,15 +14,19 @@ import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
                 entity = Office.class,
                 parentColumns = "hashed",
                 childColumns = "office_hashed",
-                onDelete = ForeignKey.CASCADE
+                onDelete = ForeignKey.CASCADE,
+                onUpdate = ForeignKey.CASCADE
         ),
         @ForeignKey(
                 entity = Operator.class,
                 parentColumns = "hashed",
                 childColumns = "operator_work_Hashed",
-                onDelete = ForeignKey.CASCADE
+                onDelete = ForeignKey.CASCADE,
+                onUpdate = ForeignKey.CASCADE
         )
-})
+        },
+        indices = {@Index(value = "hashed", unique = true)}
+)
 public class Patient {
 
     @PrimaryKey(autoGenerate = true)

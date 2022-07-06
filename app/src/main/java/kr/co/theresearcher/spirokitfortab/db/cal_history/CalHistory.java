@@ -3,6 +3,7 @@ package kr.co.theresearcher.spirokitfortab.db.cal_history;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import kr.co.theresearcher.spirokitfortab.db.office.Office;
@@ -14,23 +15,25 @@ import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
                 entity = Office.class,
                 parentColumns = "id",
                 childColumns = "office_id",
-                onDelete = ForeignKey.CASCADE
+                onDelete = ForeignKey.CASCADE,
+                onUpdate = ForeignKey.CASCADE
         ),
         @ForeignKey(
                 entity = Operator.class,
                 parentColumns = "id",
                 childColumns = "operator_id",
-                onDelete = ForeignKey.CASCADE
-
-
+                onDelete = ForeignKey.CASCADE,
+                onUpdate = ForeignKey.CASCADE
         ),
         @ForeignKey(
                 entity = Patient.class,
                 parentColumns = "id",
                 childColumns = "patient_id",
-                onDelete = ForeignKey.CASCADE
+                onDelete = ForeignKey.CASCADE,
+                onUpdate = ForeignKey.CASCADE
         )
-})
+        },
+        indices = {@Index(value = "hashed", unique = true)})
 public class CalHistory{
 
     @PrimaryKey(autoGenerate = true)

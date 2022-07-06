@@ -1,10 +1,14 @@
 package kr.co.theresearcher.spirokitfortab.db.office;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity
+@Entity(tableName = "office",
+        indices = {
+        @Index(value = "hashed", unique = true)})
 public class Office {
 
     @PrimaryKey

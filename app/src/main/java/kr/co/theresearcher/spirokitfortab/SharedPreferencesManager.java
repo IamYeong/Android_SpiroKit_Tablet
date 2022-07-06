@@ -5,292 +5,288 @@ import android.content.SharedPreferences;
 
 import java.util.Calendar;
 
+import kr.co.theresearcher.spirokitfortab.db.human_race.HumanRace;
+import kr.co.theresearcher.spirokitfortab.db.work.Work;
+
 public class SharedPreferencesManager {
 
     private static final String SHARED_PREFERENCES_NAME =
             "kr.co.theresearcher.thespirokit.sharedpreferences";
-    public static final String LOGGED_IN_USER =
-            "kr.co.theresearcher.logged.in.user";
-    public static final String INPUT_EMAIL_ADDRESS =
-            "kr.co.theresearcher.input.eamil";
-    public static final String INPUT_USER_PASSWORD =
-            "kr.co.theresearcher.user.input.password";
-    public static final String USER_NICKNAME =
-            "kr.co.theresearcher.user.nickname";
 
-    public static final String INPUT_PATIENT_ =
-            "kr.co.theresearcher.preferences.patient.";
 
-    public static final String CONNECTED_MAC_ADDRESS =
+
+    private static final String CONNECTED_MAC_ADDRESS =
             "kr.co.theresearcher.preferences.mac.address";
 
-    public static final String CONNECTED_DEVICE_NAME =
+    private static final String CONNECTED_DEVICE_NAME =
             "kr.co.theresearcher.preferences.device.name";
 
-    public static final String IS_CONNECT =
-            "kr.co.theresearcher.is.connect";
+    private static final String OFFICE_HASH =
+            "kr.co.theresearcher.office.hash";
 
-    public static final String OFFICE_ID =
+    private static final String OFFICE_ID =
             "kr.co.theresearcher.office.id";
 
-    public static final String OPERATOR_ID =
-            "kr.co.theresearcher.operator.id";
+    private static final String OFFICE_PASS =
+            "kr.co.theresearcher.office.pass";
+
+    private static final String OFFICE_NAME =
+            "kr.co.theresearcher.office.name";
+
+    private static final String OPERATOR_HASH =
+            "kr.co.theresearcher.operator.hash";
+
+    private static final String CAL_HISTORY_HASH =
+            "kr.co.theresearcher.cal.history.hash";
+
+    private static final String PATIENT_ID = "kr.co.theresearcher.patient.id";
+    private static final String PATIENT_HASHED = "kr.co.theresearcher.patient.hashed";
+    private static final String PATIENT_OFFICE_HASHED = "kr.co.theresearcher.patient.office.hashed";
+    private static final String PATIENT_OPERATOR_WORK_HASHED = "kr.co.theresearcher.patient.operator.work.hashed";
+    private static final String PATIENT_OPERATOR_DOCTOR_HASHED = "kr.co.theresearcher.patient.operator.doctor.hashed";
+    private static final String PATIENT_CHART_NUMBER = "kr.co.theresearcher.patient.chart.number";
+    private static final String PATIENT_NAME = "kr.co.theresearcher.patient.name";
+    private static final String PATIENT_GENDER = "kr.co.theresearcher.patient.gender";
+    private static final String PATIENT_HEIGHT = "kr.co.theresearcher.patient.height";
+    private static final String PATIENT_WEIGHT = "kr.co.theresearcher.patient.weight";
+    private static final String PATIENT_BIRTHDAY = "kr.co.theresearcher.patient.birthday";
+    private static final String PATIENT_HUMAN_RACE = "kr.co.theresearcher.patient.human.race";
+    private static final String PATIENT_SMOKING_AMOUNT_PER_DAY = "kr.co.theresearcher.patient.smoking.amount.per.day";
+    private static final String PATIENT_SMOKING_PERIOD = "kr.co.theresearcher.patient.smoking.period";
+    private static final String PATIENT_SMOKING_IS_NOW = "kr.co.theresearcher.patient.smoking.is.now";
+    //private static final String PATIENT_SMOKING_NO_WHEN = "kr.co.theresearcher.patient.smoking.no.when";
+    private static final String PATIENT_SMOKING_START_DATE = "kr.co.theresearcher.patient.smoking.start.date";
+    private static final String PATIENT_SMOKING_STOP_DATE = "kr.co.theresearcher.patient.smoking.stop.date";
+    private static final String PATIENT_LATEST_DAY = "kr.co.theresearcher.patient.latest.cal.date";
+    //private static final String PATIENT_FROM_OS = "kr.co.theresearcher.patient.os";
+    private static final String PATIENT_CREATE_DATE = "kr.co.theresearcher.patient.c.date";
+
 
     public static SharedPreferences getPreferences(Context context) {
         return context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
     }
 
-    public static boolean setLoggedInUserId(Context context, int id) {
-        SharedPreferences sharedPreferences = getPreferences(context);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(LOGGED_IN_USER, id);
-        return editor.commit();
-    }
-
-    public static int getLoggedInUserId(Context context) {
-        return getPreferences(context).getInt(LOGGED_IN_USER, 0);
-    }
-
-    public static boolean setInputEmail(Context context, String email) {
-        SharedPreferences sharedPreferences = getPreferences(context);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(INPUT_EMAIL_ADDRESS, email);
-        return editor.commit();
-    }
-
-    public static String getInputEmail(Context context) {
-        return getPreferences(context).getString(INPUT_EMAIL_ADDRESS, "");
-    }
-
-    public static boolean setInputNickname(Context context, String nickname) {
-        SharedPreferences sharedPreferences = getPreferences(context);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(USER_NICKNAME, nickname);
-        return editor.commit();
-    }
-
-    public static String getInputNickname(Context context) {
-        return getPreferences(context).getString(USER_NICKNAME, "NICK NAME");
-    }
-
-    public static boolean setInputPassword(Context context, String password) {
-        SharedPreferences sharedPreferences = getPreferences(context);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(INPUT_USER_PASSWORD, password);
-        return editor.commit();
-    }
-
-    public static String getInputUserPassword(Context context) {
-        return getPreferences(context).getString(INPUT_USER_PASSWORD, "");
-    }
-
-    public static boolean setPatientId(Context context, int id) {
+    public boolean setDeviceMacAddress(Context context, String value) {
 
         SharedPreferences sharedPreferences = getPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(INPUT_PATIENT_ + "id", id);
+        editor.putString(CONNECTED_MAC_ADDRESS, value);
         return editor.commit();
+
     }
 
-    public static int getPatientId(Context context) {
-        return getPreferences(context).getInt(INPUT_PATIENT_ + "id", 0);
-    }
-
-    public static boolean setPatientName(Context context, String name) {
-
+    public boolean setDeviceName(Context context, String value) {
         SharedPreferences sharedPreferences = getPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(INPUT_PATIENT_ + "name", name);
+        editor.putString(CONNECTED_DEVICE_NAME, value);
         return editor.commit();
     }
 
-    public static String getPatientName(Context context) {
-        return getPreferences(context).getString(INPUT_PATIENT_ + "name", "");
-    }
-
-    public static boolean setPatientChartNumber(Context context, String chartNumber) {
-
+    public boolean setOfficeID(Context context, String value) {
         SharedPreferences sharedPreferences = getPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(INPUT_PATIENT_ + "chart.number", chartNumber);
+        editor.putString(OFFICE_ID, value);
         return editor.commit();
     }
 
-    public static String getPatientChartNumber(Context context) {
-        return getPreferences(context).getString(INPUT_PATIENT_ + "chart.number", "");
-    }
-
-    public static boolean setPatientGender(Context context, boolean gender) {
-
+    public boolean setOfficePassword(Context context, String value) {
         SharedPreferences sharedPreferences = getPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(INPUT_PATIENT_ + "gender", gender);
+        editor.putString(OFFICE_PASS, value);
         return editor.commit();
     }
 
-    public static boolean getPatientGender(Context context) {
-        return getPreferences(context).getBoolean(INPUT_PATIENT_ + "gender", true);
-    }
-
-    public static boolean setPatientIsSmoking(Context context, boolean isSmoking) {
-
+    public boolean setOfficeHashed(Context context, String value) {
         SharedPreferences sharedPreferences = getPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(INPUT_PATIENT_ + "is.smoking", isSmoking);
+        editor.putString(OFFICE_HASH, value);
         return editor.commit();
     }
 
-    public static boolean getPatientIsSmoking(Context context) {
-        return getPreferences(context).getBoolean(INPUT_PATIENT_ + "is.smoking", true);
-    }
-
-    public static boolean setPatientHumanRaceId(Context context, int humanRaceId) {
-
+    public boolean setOfficeName(Context context, String value) {
         SharedPreferences sharedPreferences = getPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(INPUT_PATIENT_ + "human.race.id", humanRaceId);
+        editor.putString(OFFICE_NAME, value);
         return editor.commit();
     }
 
-    public static int getPatientHumanRaceId(Context context) {
-        return getPreferences(context).getInt(INPUT_PATIENT_ + "human.race.id", 0);
-    }
-
-    public static boolean setPatientHeight(Context context, int height) {
-
+    public boolean setOperatorHash(Context context, String value) {
         SharedPreferences sharedPreferences = getPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(INPUT_PATIENT_ + "height", height);
+        editor.putString(OPERATOR_HASH, value);
         return editor.commit();
     }
 
-    public static int getPatientHeight(Context context) {
-        return getPreferences(context).getInt(INPUT_PATIENT_ + "height", 0);
-    }
-
-    public static boolean setPatientWeight(Context context, int weight) {
-
+    public boolean setHistoryHash(Context context, String value) {
         SharedPreferences sharedPreferences = getPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(INPUT_PATIENT_ + "weight", weight);
+        editor.putString(CAL_HISTORY_HASH, value);
         return editor.commit();
     }
 
-    public static int getPatientWeight(Context context) {
-        return getPreferences(context).getInt(INPUT_PATIENT_ + "weight", 0);
-    }
-
-    public static boolean setPatientBirth(Context context, long birth) {
+    public boolean setPatientID(Context context, int value) {
         SharedPreferences sharedPreferences = getPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putLong(INPUT_PATIENT_ + "birth", birth);
+        editor.putInt(PATIENT_ID, value);
         return editor.commit();
     }
 
-    public static long getPatientBirth(Context context) {
-        return getPreferences(context).getLong(INPUT_PATIENT_ + "birth", Calendar.getInstance().getTime().getTime());
-    }
-
-    public static boolean setPatientStartSmokingDate(Context context, long startSmoking) {
+    public boolean setPatientHash(Context context, String value) {
         SharedPreferences sharedPreferences = getPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putLong(INPUT_PATIENT_ + "start.smoking", startSmoking);
+        editor.putString(PATIENT_HASHED, value);
         return editor.commit();
     }
 
-    public static long getPatientStartSmokingDate(Context context) {
-        return getPreferences(context).getLong(INPUT_PATIENT_ + "start.smoking", Calendar.getInstance().getTime().getTime());
-    }
-
-    public static boolean setPatientNoSmokingDate(Context context, long noSmoking) {
+    public boolean setPatientOfficeHash(Context context, String value) {
         SharedPreferences sharedPreferences = getPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putLong(INPUT_PATIENT_ + "no.smoking", noSmoking);
+        editor.putString(PATIENT_OFFICE_HASHED, value);
         return editor.commit();
     }
 
-    public static long getPatientNoSmokingDate(Context context) {
-        return getPreferences(context).getLong(INPUT_PATIENT_ + "no.smoking", Calendar.getInstance().getTime().getTime());
-    }
-
-    public static boolean setPatientSmokingAmount(Context context, float pack) {
+    public boolean setPatientOperatorWorkHash(Context context, String value) {
         SharedPreferences sharedPreferences = getPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putFloat(INPUT_PATIENT_ + "pack", pack);
+        editor.putString(PATIENT_OPERATOR_WORK_HASHED, value);
         return editor.commit();
     }
 
-    public static float getPatientSmokingAmount(Context context) {
-        return getPreferences(context).getFloat(INPUT_PATIENT_ + "pack", 0f);
-    }
-
-    public static boolean setPatientMatchDoctor(Context context, int doctorID) {
-
-        SharedPreferences sharedPreferences = getPreferences(context);
-        SharedPreferences.Editor editor = sharedPreferences.edit();;
-        editor.putInt(INPUT_PATIENT_ + "match_doctor", doctorID);
-        return editor.commit();
-    }
-
-    public static int getPatientMatchDoctorID(Context context) {
-        return getPreferences(context).getInt(INPUT_PATIENT_ + "match_doctor", -1);
-    }
-
-    public static boolean setBluetoothDeviceMacAddress(Context context, String address) {
-        SharedPreferences sharedPreferences = getPreferences(context);
-        SharedPreferences.Editor editor = sharedPreferences.edit();;
-        editor.putString(CONNECTED_MAC_ADDRESS, address);
-        return editor.commit();
-    }
-
-    public static String getBluetoothDeviceMacAddress(Context context) {
-        return getPreferences(context).getString(CONNECTED_MAC_ADDRESS, "");
-    }
-
-    public static boolean setConnectState(Context context, boolean isConnect) {
+    public boolean setPatientOperatorDoctorHash(Context context, String value) {
         SharedPreferences sharedPreferences = getPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(IS_CONNECT, isConnect);
+        editor.putString(PATIENT_OPERATOR_DOCTOR_HASHED, value);
         return editor.commit();
     }
 
-    public static boolean getConnectState(Context context) {
-        return getPreferences(context).getBoolean(IS_CONNECT, false);
-    }
-
-    public static int getOfficeID(Context context) {
-        return getPreferences(context).getInt(OFFICE_ID, 0);
-    }
-
-    public static boolean setOfficeID(Context context, int id) {
+    public boolean setPatientName(Context context, String value) {
         SharedPreferences sharedPreferences = getPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(OFFICE_ID, id);
+        editor.putString(PATIENT_NAME, value);
         return editor.commit();
     }
 
-    public static int getOperatorID(Context context) {
-        return getPreferences(context).getInt(OPERATOR_ID, 0);
-    }
-
-    public static boolean setOperatorID(Context context, int id) {
+    public boolean setPatientChartNumber(Context context, String value) {
         SharedPreferences sharedPreferences = getPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(OPERATOR_ID, id);
+        editor.putString(PATIENT_CHART_NUMBER, value);
         return editor.commit();
     }
 
-    public static String getConnectedDeviceName(Context context) {
-
-        return getPreferences(context).getString(CONNECTED_DEVICE_NAME, "");
-
-    }
-
-    public static boolean setConnectedDeviceName(Context context, String name) {
+    public boolean setPatientHeight(Context context, int value) {
         SharedPreferences sharedPreferences = getPreferences(context);
-        SharedPreferences.Editor editor = sharedPreferences.edit();;
-        editor.putString(CONNECTED_DEVICE_NAME, name);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(PATIENT_HEIGHT, value);
         return editor.commit();
     }
+
+    public boolean setPatientWeight(Context context, int value) {
+        SharedPreferences sharedPreferences = getPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(PATIENT_WEIGHT, value);
+        return editor.commit();
+    }
+
+    public boolean setPatientGender(Context context, String value) {
+        SharedPreferences sharedPreferences = getPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(PATIENT_GENDER, value);
+        return editor.commit();
+    }
+
+    public boolean setPatientHumanRace(Context context, String value) {
+        SharedPreferences sharedPreferences = getPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(PATIENT_HUMAN_RACE, value);
+        return editor.commit();
+    }
+
+    public boolean setPatientSmokingStartDate(Context context, String value) {
+        SharedPreferences sharedPreferences = getPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(PATIENT_SMOKING_START_DATE, value);
+        return editor.commit();
+    }
+
+    public boolean setPatientSmokingStopDate(Context context, String value) {
+        SharedPreferences sharedPreferences = getPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(PATIENT_SMOKING_STOP_DATE, value);
+        return editor.commit();
+    }
+
+    public boolean setPatientSmokingIsNow(Context context, int value) {
+        SharedPreferences sharedPreferences = getPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(PATIENT_SMOKING_IS_NOW, value);
+        return editor.commit();
+    }
+
+    public boolean setPatientBirthday(Context context, String value) {
+        SharedPreferences sharedPreferences = getPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(PATIENT_BIRTHDAY, value);
+        return editor.commit();
+    }
+
+    public boolean setPatientLatestDay(Context context, String value) {
+        SharedPreferences sharedPreferences = getPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(PATIENT_LATEST_DAY, value);
+        return editor.commit();
+    }
+
+    public boolean setPatientSmokingAmountPerDay(Context context, String value) {
+        SharedPreferences sharedPreferences = getPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(PATIENT_SMOKING_AMOUNT_PER_DAY, value);
+        return editor.commit();
+    }
+
+    public boolean setPatientCreateDate(Context context, long value) {
+        SharedPreferences sharedPreferences = getPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(PATIENT_CREATE_DATE, value);
+        return editor.commit();
+    }
+
+    public boolean setPatientSmokingPeriod(Context context, int value) {
+        SharedPreferences sharedPreferences = getPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(PATIENT_SMOKING_PERIOD, value);
+        return editor.commit();
+    }
+
+
+    public String getDeviceMacAddress(Context context) { return getPreferences(context).getString(CONNECTED_MAC_ADDRESS, ""); }
+    public String getDeviceName(Context context) { return getPreferences(context).getString(CONNECTED_DEVICE_NAME, ""); }
+    public String getOfficeID(Context context) { return getPreferences(context).getString(OFFICE_ID, ""); }
+    public String getOfficePass(Context context) { return getPreferences(context).getString(OFFICE_PASS, ""); }
+    public String getOfficeName(Context context) { return getPreferences(context).getString(OFFICE_NAME, ""); }
+    public String getOfficeHash(Context context) { return getPreferences(context).getString(OFFICE_HASH, ""); }
+    public String getOperatorHash(Context context) { return getPreferences(context).getString(OPERATOR_HASH, ""); }
+    public String getCalHistoryHash(Context context) { return getPreferences(context).getString(CAL_HISTORY_HASH, ""); }
+
+    public int getPatientId(Context context) { return getPreferences(context).getInt(PATIENT_ID, -1); }
+    public String getPatientHashed(Context context) { return getPreferences(context).getString(PATIENT_HASHED, ""); }
+    public String getPatientOfficeHashed(Context context) { return getPreferences(context).getString(PATIENT_OFFICE_HASHED, ""); }
+    public String getPatientChartNumber(Context context) { return getPreferences(context).getString(PATIENT_CHART_NUMBER, ""); }
+    public String getPatientName(Context context) { return getPreferences(context).getString(PATIENT_NAME, ""); }
+    public String getPatientOperatorWorkHashed(Context context) { return getPreferences(context).getString(PATIENT_OPERATOR_WORK_HASHED, ""); }
+    public String getPatientOperatorDoctorHashed(Context context) { return getPreferences(context).getString(PATIENT_OPERATOR_DOCTOR_HASHED, ""); }
+    public String getPatientGender(Context context) { return getPreferences(context).getString(PATIENT_GENDER, ""); }
+    public int getPatientHeight(Context context) { return getPreferences(context).getInt(PATIENT_HEIGHT, 0); }
+    public int getPatientWeight(Context context) { return getPreferences(context).getInt(PATIENT_WEIGHT, 0); }
+    public String getPatientSmokingStartDate(Context context) { return getPreferences(context).getString(PATIENT_SMOKING_START_DATE, ""); }
+    public String getPatientSmokingStopDate(Context context) { return getPreferences(context).getString(PATIENT_SMOKING_STOP_DATE, ""); }
+    public String getPatientSmokingIsNow(Context context) { return getPreferences(context).getString(PATIENT_SMOKING_IS_NOW, ""); }
+    public String getPatientSmokingAmountPerDay(Context context) { return getPreferences(context).getString(PATIENT_SMOKING_AMOUNT_PER_DAY, ""); }
+    public int getPatientSmokingPeriod(Context context) { return getPreferences(context).getInt(PATIENT_SMOKING_PERIOD, 0); }
+    public String getPatientBirthday(Context context) { return getPreferences(context).getString(PATIENT_BIRTHDAY, ""); }
+    public String getPatientHumanRace(Context context) { return getPreferences(context).getString(PATIENT_HUMAN_RACE, ""); }
+    public long getPatientCreateDate(Context context) { return getPreferences(context).getLong(PATIENT_CREATE_DATE, 0); }
+    public String getPatientLatestDay(Context context) { return getPreferences(context).getString(PATIENT_LATEST_DAY, ""); }
+
+
 
 }

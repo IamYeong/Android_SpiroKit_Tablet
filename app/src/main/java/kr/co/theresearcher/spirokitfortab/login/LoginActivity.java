@@ -3,6 +3,7 @@ package kr.co.theresearcher.spirokitfortab.login;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,9 +27,15 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.Map;
 
 import kr.co.theresearcher.spirokitfortab.R;
+import kr.co.theresearcher.spirokitfortab.db.RoomNames;
+import kr.co.theresearcher.spirokitfortab.db.office.Office;
+import kr.co.theresearcher.spirokitfortab.db.office.OfficeDao;
+import kr.co.theresearcher.spirokitfortab.db.office.OfficeDatabase;
+import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
 import kr.co.theresearcher.spirokitfortab.join.ConditionAgreeActivity;
 import kr.co.theresearcher.spirokitfortab.join.JoinUserActivity;
 import kr.co.theresearcher.spirokitfortab.main.MainActivity;
@@ -39,7 +46,7 @@ import kr.co.theresearcher.spirokitfortab.volley.VolleyResponseListener;
 public class LoginActivity extends AppCompatActivity {
 
     private Button loginButton, moveToJoinButton;
-    private EditText emailField, passwordField;
+    private EditText identifierField, passwordField;
 
     private Handler handler = new Handler(Looper.getMainLooper());
 
@@ -50,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        emailField = findViewById(R.id.et_email_login);
+        identifierField = findViewById(R.id.et_id_login);
         passwordField = findViewById(R.id.et_password_login);
         loginButton = findViewById(R.id.btn_user_login);
         moveToJoinButton = findViewById(R.id.btn_to_register_from_login);
@@ -69,8 +76,67 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
+                Thread thread = new Thread() {
+                    @Override
+                    public void run() {
+                        super.run();
+                        Looper.prepare();
+
+                        String id = "";
+                        id += identifierField.getText().toString();
+
+                        String password = "";
+                        password += passwordField.getText().toString();
+
+                        OfficeDatabase officeDatabase = Room.databaseBuilder(getApplicationContext(), OfficeDatabase.class, RoomNames.ROOM_OFFICE_DB_NAME)
+                                .createFromAsset("database/office.db")
+                                .build();
+
+                        OfficeDao officeDao = officeDatabase.officeDao();
+                        Office office = officeDao.selectOfficeByID(id);
+
+                        if (office == null) {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    ConfirmDialog confirmDialog = new ConfirmDialog(LoginActivity.this);
+                                    confirmDialog.setTitle(getString(R.string.request_confirm_id_or_password));
+                                    confirmDialog.show();
+                                    return;
+
+                                }
+                            });
+                        }
+
+                        if (!office.getOfficePassword().equals(password)) {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    ConfirmDialog confirmDialog = new ConfirmDialog(LoginActivity.this);
+                                    confirmDialog.setTitle(getString(R.string.request_confirm_id_or_password));
+                                    confirmDialog.show();
+                                    return;
+
+                                }
+                            });
+                        }
+
+                        if ((office.getOfficeID().equals(id)) && (office.getOfficePassword().equals(password))) {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                }
+                            });
+                        }
+
+                        Looper.loop();
+                    }
+                };
+                thread.start();
 
                 /*
 

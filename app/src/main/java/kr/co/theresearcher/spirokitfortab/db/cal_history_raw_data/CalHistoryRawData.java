@@ -3,6 +3,7 @@ package kr.co.theresearcher.spirokitfortab.db.cal_history_raw_data;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
@@ -12,9 +13,12 @@ import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
                 entity = CalHistory.class,
                 parentColumns = "hashed",
                 childColumns = "cal_history_hashed",
-                onDelete = ForeignKey.CASCADE
-        )
-})
+                onDelete = ForeignKey.CASCADE,
+                onUpdate = ForeignKey.CASCADE
+            )
+        },
+        indices = {@Index(value = "hashed", unique = true)}
+)
 public class CalHistoryRawData {
 
     @PrimaryKey(autoGenerate = true)

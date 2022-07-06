@@ -3,18 +3,21 @@ package kr.co.theresearcher.spirokitfortab.db.operator;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import androidx.room.RewriteQueriesToDropUnusedColumns;
 
 import kr.co.theresearcher.spirokitfortab.db.office.Office;
 
-@Entity(foreignKeys = {
+@Entity(tableName = "operator", foreignKeys = {
         @ForeignKey(
                 entity = Office.class,
                 parentColumns = "hashed",
                 childColumns = "office_hashed",
-                onDelete = ForeignKey.CASCADE
-        )})
+                onDelete = ForeignKey.CASCADE,
+                onUpdate = ForeignKey.CASCADE
+        )},
+        indices = {@Index(value = "hashed", unique = true)})
 public class Operator {
 
     @PrimaryKey
