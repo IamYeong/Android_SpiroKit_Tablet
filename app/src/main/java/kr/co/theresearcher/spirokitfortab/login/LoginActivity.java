@@ -97,31 +97,16 @@ public class LoginActivity extends AppCompatActivity {
                         Looper.prepare();
 
                         String id = "";
+                        String password = "";
                         id += identifierField.getText().toString();
+                        password += passwordField.getText().toString();
 
-                        Instant instant = Instant.now().truncatedTo(ChronoUnit.MICROS);
+                        //Instant instant = Instant.now().truncatedTo(ChronoUnit.MICROS);
                         SpiroKitDatabase database = SpiroKitDatabase.getInstance(getApplicationContext());
 
-                        List<Work> works = database.workDao().selectAllWork();
-
-                        for (Work work : works) {
-                            System.out.println(work.getWork());
-                        }
-
-                        for (HumanRace humanRace : database.humanRaceDao().selectAllHumanRace()) {
-                            System.out.println(humanRace.getRace());
-                        }
-
-                        List<Office> offices = database.officeDao().selectAllOffices();
-
-                        for (Office office : offices) {
-                            System.out.println(office.getHashed());
-                        }
-
-
+                        Office office = database.officeDao().selectOfficeByID(id);
                         SpiroKitDatabase.removeInstance();
 
-                        /*
                         if (office == null) {
                             handler.post(new Runnable() {
                                 @Override
@@ -130,10 +115,11 @@ public class LoginActivity extends AppCompatActivity {
                                     ConfirmDialog confirmDialog = new ConfirmDialog(LoginActivity.this);
                                     confirmDialog.setTitle(getString(R.string.request_confirm_id_or_password));
                                     confirmDialog.show();
-                                    return;
 
                                 }
                             });
+
+                            return;
                         }
 
                         if (!office.getOfficePassword().equals(password)) {
@@ -144,28 +130,27 @@ public class LoginActivity extends AppCompatActivity {
                                     ConfirmDialog confirmDialog = new ConfirmDialog(LoginActivity.this);
                                     confirmDialog.setTitle(getString(R.string.request_confirm_id_or_password));
                                     confirmDialog.show();
-                                    return;
 
                                 }
                             });
+
+                            return;
                         }
 
                         SharedPreferencesManager.setOfficeID(LoginActivity.this, id);
                         SharedPreferencesManager.setOfficePassword(LoginActivity.this, password);
+                        SharedPreferencesManager.setOfficeHashed(LoginActivity.this, office.getHashed());
 
                         if ((office.getOfficeID().equals(id)) && (office.getOfficePassword().equals(password))) {
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
 
-
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     startActivity(intent);
                                 }
                             });
                         }
-
-                         */
 
                         Looper.loop();
                     }
