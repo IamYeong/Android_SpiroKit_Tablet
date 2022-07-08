@@ -1,5 +1,6 @@
 package kr.co.theresearcher.spirokitfortab.db.human_race;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -7,7 +8,7 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "human_race")
 public class HumanRace {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     private int id;
 

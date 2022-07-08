@@ -19,7 +19,7 @@ import java.util.Locale;
 
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
-import kr.co.theresearcher.spirokitfortab.db.RoomNames;
+import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
 import kr.co.theresearcher.spirokitfortab.db.work.Work;
 
 public class OperatorAdapter extends RecyclerView.Adapter<OperatorViewHolder> {
@@ -63,8 +63,8 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorViewHolder> {
         Operator operator = searchResults.get(holder.getAdapterPosition());
 
         holder.getNameText().setText(operator.getName());
-        Work[] works = Work.values();
-        holder.getWorkText().setText(works[operator.getWorkID()].toString().toUpperCase(Locale.ROOT));
+        //Work[] works = Work.values();
+        //holder.getWorkText().setText(works[operator.getWorkID()].toString().toUpperCase(Locale.ROOT));
 
         holder.getDeleteButton().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,11 +76,9 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorViewHolder> {
                         super.run();
                         Looper.prepare();
 
-                        OperatorDatabase operatorDatabase = Room.databaseBuilder(context, OperatorDatabase.class, RoomNames.ROOM_OPERATOR_DB_NAME).build();
-                        OperatorDao operatorDao = operatorDatabase.operatorDao();
-                        operatorDao.deleteOperator(operator);
+                        //OperatorDatabase.getInstance(context).operatorDao().update()
 
-                        setOperators(operatorDao.selectByOfficeID(SharedPreferencesManager.getOfficeID(context)));
+                        //setOperators(operatorDao.selectByOfficeID(SharedPreferencesManager.getOfficeID(context)));
 
                         handler.post(new Runnable() {
                             @Override

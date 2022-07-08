@@ -16,16 +16,9 @@ import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
                 childColumns = "office_hashed",
                 onDelete = ForeignKey.CASCADE,
                 onUpdate = ForeignKey.CASCADE
-        ),
-        @ForeignKey(
-                entity = Operator.class,
-                parentColumns = "hashed",
-                childColumns = "operator_work_Hashed",
-                onDelete = ForeignKey.CASCADE,
-                onUpdate = ForeignKey.CASCADE
-        )
-        },
-        indices = {@Index(value = "hashed", unique = true)}
+        )},
+        indices = {@Index(value = "hashed", unique = true), @Index(value = "office_hashed", unique = true)
+}
 )
 public class Patient {
 
@@ -38,12 +31,6 @@ public class Patient {
 
     @ColumnInfo(name = "office_hashed")
     private String officeHashed;
-
-    @ColumnInfo(name = "operator_work_hashed")
-    private String operatorWorkHashed;
-
-    @ColumnInfo(name = "operator_doctor_hashed")
-    private String operatorDoctorHashed;
 
     @ColumnInfo(name = "chart_no")
     private String chartNumber;
@@ -93,11 +80,12 @@ public class Patient {
     @ColumnInfo(name = "is_deleted")
     private int isDeleted;
 
-    public Patient(String hashed, String officeHashed, String operatorWorkHashed, String operatorDoctorHashed, String chartNumber, String name, String gender, int height, int weight, String birthDay, String humanRace, int nowSmoking, String stopSmokingDay, String startSmokingDay, String smokingAmountPerDay) {
+    @ColumnInfo(name = "is_deleted_reference")
+    private int isDeletedReference;
+
+    public Patient(String hashed, String officeHashed, String chartNumber, String name, String gender, int height, int weight, String birthDay, String humanRace, int nowSmoking, String stopSmokingDay, String startSmokingDay, String smokingAmountPerDay) {
         this.hashed = hashed;
         this.officeHashed = officeHashed;
-        this.operatorWorkHashed = operatorWorkHashed;
-        this.operatorDoctorHashed = operatorDoctorHashed;
         this.chartNumber = chartNumber;
         this.name = name;
         this.gender = gender;
@@ -121,8 +109,6 @@ public class Patient {
 
         hashed = builder.hashed;
         officeHashed = builder.officeHashed;
-        operatorWorkHashed = builder.operatorWorkHashed;
-        operatorDoctorHashed = builder.operatorDoctorHashed;
         chartNumber = builder.chartNumber;
         name = builder.name;
         gender = builder.gender;
@@ -142,6 +128,13 @@ public class Patient {
 
     }
 
+    public int getIsDeletedReference() {
+        return isDeletedReference;
+    }
+
+    public void setIsDeletedReference(int isDeletedReference) {
+        this.isDeletedReference = isDeletedReference;
+    }
 
     public int getId() {
         return id;
@@ -165,22 +158,6 @@ public class Patient {
 
     public void setHashed(String hashed) {
         this.hashed = hashed;
-    }
-
-    public String getOperatorWorkHashed() {
-        return operatorWorkHashed;
-    }
-
-    public void setOperatorWorkHashed(String operatorWorkHashed) {
-        this.operatorWorkHashed = operatorWorkHashed;
-    }
-
-    public String getOperatorDoctorHashed() {
-        return operatorDoctorHashed;
-    }
-
-    public void setOperatorDoctorHashed(String operatorDoctorHashed) {
-        this.operatorDoctorHashed = operatorDoctorHashed;
     }
 
     public String getChartNumber() {

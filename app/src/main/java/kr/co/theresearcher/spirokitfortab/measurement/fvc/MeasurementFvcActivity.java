@@ -38,6 +38,8 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,12 +49,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import kr.co.theresearcher.spirokitfortab.Fluid;
+import kr.co.theresearcher.spirokitfortab.HashConverter;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.bluetooth.SpiroKitBluetoothLeService;
 import kr.co.theresearcher.spirokitfortab.calc.CalcSpiroKitE;
-import kr.co.theresearcher.spirokitfortab.db.RoomNames;
-import kr.co.theresearcher.spirokitfortab.db.meas_group.MeasGroup;
+
+import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
+import kr.co.theresearcher.spirokitfortab.db.cal_history_raw_data.CalHistoryRawData;
 import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
 import kr.co.theresearcher.spirokitfortab.dialog.LoadingDialog;
 import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
@@ -76,7 +80,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
     private VolumeTimeRunView volumeTimeRunView;
     private List<VolumeFlowResultView> volumeFlowResultViewList = new ArrayList<>();
     private List<VolumeTimeResultView> volumeTimeResultViewList = new ArrayList<>();
-    private List<Integer> pulseWidthList = new ArrayList<>();
+    private List<String> pulseWidthList = new ArrayList<>();
     private RecyclerView rv;
     private Button completeButton, preSaveButton, postSaveButton;
     private ConstraintLayout connectButton;
@@ -142,7 +146,10 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
                         dataReceivedCount++;
 
-                        pulseWidthList.add(value);
+                        String d = "";
+                        for (byte b : data) d += (char)b;
+
+                        pulseWidthList.add(d);
                         handleData(value);
 
                     } else {
@@ -248,7 +255,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                 connectingProgressBar.setVisibility(View.INVISIBLE);
 
 
-                mService.connect(SharedPreferencesManager.getBluetoothDeviceMacAddress(MeasurementFvcActivity.this));
+                mService.connect(SharedPreferencesManager.getDeviceMacAddress(MeasurementFvcActivity.this));
 
             }
 
@@ -327,7 +334,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                     return;
                 }
 
-                mService.connect(SharedPreferencesManager.getBluetoothDeviceMacAddress(MeasurementFvcActivity.this));
+                mService.connect(SharedPreferencesManager.getDeviceMacAddress(MeasurementFvcActivity.this));
                 connectStateImage.setVisibility(View.INVISIBLE);
                 connectingProgressBar.setVisibility(View.VISIBLE);
                 connectStateText.setText(getString(R.string.connecting));
@@ -493,7 +500,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 saveSomething = true;
-                saveData(false);
+                saveData(0);
 
             }
         });
@@ -502,7 +509,8 @@ public class MeasurementFvcActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (saveSomething) saveData(true);
+                if (saveSomething) saveData(1);
+
                 else {
 
                 }
@@ -521,17 +529,27 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                         super.run();
                         Looper.prepare();
 
-                        Room.databaseBuilder(MeasurementFvcActivity.this, )
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault());
+                        long now = Calendar.getInstance().getTime().getTime();
+                        String historyHash = "";
 
-                        MeasurementDatabase database = Room.databaseBuilder(MeasurementFvcActivity.this, MeasurementDatabase.class, RoomNames.ROOM_MEASUREMENT_DB_NAME).build();
-                        MeasurementDao measurementDao = database.measurementDao();
-                        Measurement measurement = new Measurement(
-                                SharedPreferencesManager.getOfficeID(MeasurementFvcActivity.this),
-                                SharedPreferencesManager.getPatientId(MeasurementFvcActivity.this),
-                                MeasGroup.fvc.ordinal(), startTimestamp, simpleDateFormat.format(startTimestamp),
-                                SharedPreferencesManager.getOperatorID(MeasurementFvcActivity.this));
-                        measurementDao.insertMeasurement(measurement);
-                        database.close();
+                        try {
+                            historyHash = HashConverter.hashingFromString(simpleDateFormat.format(now));
+                        } catch (NoSuchAlgorithmException e) {
+
+                        }
+
+                        CalHistory calHistory = new CalHistory(
+                                historyHash,
+                                SharedPreferencesManager.getOfficeHash(MeasurementFvcActivity.this),
+                                SharedPreferencesManager.getOperatorHash(MeasurementFvcActivity.this),
+                                SharedPreferencesManager.getPatientHashed(MeasurementFvcActivity.this),
+                                simpleDateFormat.format(now),
+                                "f",
+                                "e",
+                                0);
+
+
 
                         handler.post(new Runnable() {
                             @Override
@@ -766,7 +784,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
     }
 
-    private void saveData(boolean isPost) {
+    private void saveData(int isPost) {
 
         isStart = false;
 
@@ -777,82 +795,73 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                 super.run();
                 Looper.prepare();
 
-                try {
+                long date = Calendar.getInstance().getTime().getTime();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault());
 
-                    long date = Calendar.getInstance().getTime().getTime();
+                StringBuilder stringBuilder = new StringBuilder();
 
-                    File csvFile = new File(getExternalFilesDir("data/" + SharedPreferencesManager.getOfficeID(MeasurementFvcActivity.this)
-                            + "/" + SharedPreferencesManager.getPatientId(MeasurementFvcActivity.this) + "/" + simpleDateFormat.format(startTimestamp)
-                            + "/" + testOrder), testOrder + ".csv");
+                for (int i = 0; i < pulseWidthList.size(); i++) {
 
-                    FileWriter fileWriter = new FileWriter(csvFile);
-                    BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-
-                    for (int i = 0; i < pulseWidthList.size(); i++) {
-
-                        bufferedWriter.write(Integer.toString(pulseWidthList.get(i)));
-                        bufferedWriter.write("\n");
-
+                    String value = pulseWidthList.get(i);
+                    if (pulseWidthList.size() - 1 == i) {
+                        byte[] data = value.getBytes();
+                        stringBuilder.append(Integer.toString(conversionIntegerFromByteArray(data)));
+                        break;
                     }
-                    pulseWidthList.clear();
-                    bufferedWriter.close();
-                    //CSV 파일 저장================
+                    stringBuilder.append(value);
 
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("pid", SharedPreferencesManager.getPatientId(MeasurementFvcActivity.this));
-                    jsonObject.put("isPost", isPost);
-                    jsonObject.put("order", testOrder);
-                    jsonObject.put("ts", date);
-                    jsonObject.put("meas", MeasGroup.fvc);
-
-
-                    File jsonFile = new File(getExternalFilesDir("data/" + SharedPreferencesManager.getOfficeID(MeasurementFvcActivity.this)
-                            + "/" + SharedPreferencesManager.getPatientId(MeasurementFvcActivity.this) + "/" + simpleDateFormat.format(startTimestamp)
-                            + "/" + testOrder), testOrder + ".json");
-
-                    FileOutputStream fileOutputStream = new FileOutputStream(jsonFile);
-                    fileOutputStream.write(jsonObject.toString().getBytes());
-
-                    fileOutputStream.close();
-                    //Json 파일 저장===================
-
-                    jsonObject = null;
-
-                    addResult(testOrder, date, isPost);
-
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            ConfirmDialog confirmDialog = new ConfirmDialog(MeasurementFvcActivity.this);
-                            confirmDialog.setTitle(getString(R.string.save_success));
-                            confirmDialog.show();
-
-                            isStart = true;
-
-                            volumeFlowRunView.clear();
-                            volumeTimeRunView.clear();
-                            volumeFlowRunView.postInvalidate();
-                            volumeTimeRunView.postInvalidate();
-
-                            resultAdapter.notifyDataSetChanged();
-                            resultVolumeFlowGraphLayout.removeAllViews();
-                            resultVolumeTimeGraphLayout.removeAllViews();
-                            resultVolumeFlowGraphLayout.addView(volumeFlowResultViewList.get(testOrder - 1));
-                            resultVolumeTimeGraphLayout.addView(volumeTimeResultViewList.get(testOrder - 1));
-
-                            emptyText.setVisibility(View.GONE);
-
-                            testOrder++;
-
-                        }
-                    });
-
-
-                } catch (JSONException e) {
-
-                } catch (IOException e) {
 
                 }
+
+                String hash = "";
+
+                try {
+                    hash = HashConverter.hashingFromString(simpleDateFormat.format(date));
+                } catch (NoSuchAlgorithmException e) {
+
+                }
+
+                CalHistoryRawData rawData = new CalHistoryRawData(
+                        hash,
+                        SharedPreferencesManager.getCalHistoryHash(MeasurementFvcActivity.this),
+                        Integer.toString(testOrder),
+                        stringBuilder.toString(),
+                        simpleDateFormat.format(date),
+                        isPost
+                );
+
+
+
+                //CalHistoryRawDataDatabase.removeInstance();
+
+                addResult(testOrder, date, isPost);
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ConfirmDialog confirmDialog = new ConfirmDialog(MeasurementFvcActivity.this);
+                        confirmDialog.setTitle(getString(R.string.save_success));
+                        confirmDialog.show();
+
+                        isStart = true;
+
+                        volumeFlowRunView.clear();
+                        volumeTimeRunView.clear();
+                        volumeFlowRunView.postInvalidate();
+                        volumeTimeRunView.postInvalidate();
+
+                        resultAdapter.notifyDataSetChanged();
+                        resultVolumeFlowGraphLayout.removeAllViews();
+                        resultVolumeTimeGraphLayout.removeAllViews();
+                        resultVolumeFlowGraphLayout.addView(volumeFlowResultViewList.get(testOrder - 1));
+                        resultVolumeTimeGraphLayout.addView(volumeTimeResultViewList.get(testOrder - 1));
+
+                        emptyText.setVisibility(View.GONE);
+
+                        testOrder++;
+
+                    }
+                });
 
 
                 Looper.loop();
@@ -887,52 +896,34 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
     }
 
-    private void addResult(int order, long timestamp, boolean isPost) {
+    private void addResult(int order, long timestamp, int isPost) {
 
         //여기서는 어댑터에 추가랑 뷰배열에 추가만 해두고
         //핸들러에서 notify 수행, addVIew 하면 될 듯.
 
         List<Integer> pulseWidths = new ArrayList<>();
-        try {
-            FileReader fileReader = new FileReader(
-                    getExternalFilesDir("data/" +
-                            SharedPreferencesManager.getOfficeID(this) + "/"
-                            + SharedPreferencesManager.getPatientId(this) + "/"
-                            + simpleDateFormat.format(startTimestamp)
-                            + "/" + testOrder + "/" + testOrder + ".csv")
-            );
 
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-            String line = "";
-            while ((line = bufferedReader.readLine()) != null) {
-
-                pulseWidths.add(Integer.parseInt(line));
-
-            }
-
-        } catch (FileNotFoundException e) {
-
-        } catch (IOException e) {
-
+        for (int i = 0; i < pulseWidthList.size(); i++) {
+            pulseWidths.add(conversionIntegerFromByteArray(pulseWidthList.get(i).getBytes()));
         }
 
         CalcSpiroKitE calc = new CalcSpiroKitE(pulseWidths);
         calc.measure();
+        pulseWidthList.clear();
 
         double fvc = calc.getFVC();
         double fev1 = calc.getFev1();
         double pef = calc.getPef();
 
         double fvcP = calc.getFVCp(
-                SharedPreferencesManager.getPatientBirth(this),
+                0,
                 SharedPreferencesManager.getPatientHeight(this),
                 SharedPreferencesManager.getPatientWeight(this),
                 SharedPreferencesManager.getPatientGender(this)
         );
 
         double fev1P = calc.getFEV1p(
-                SharedPreferencesManager.getPatientBirth(this),
+                0,
                 SharedPreferencesManager.getPatientHeight(this),
                 SharedPreferencesManager.getPatientWeight(this),
                 SharedPreferencesManager.getPatientGender(this)
@@ -956,6 +947,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         resultFVC.setPef(pef);
 
         resultFVC.setTimestamp(timestamp);
+
         resultFVC.setPost(isPost);
 
         resultAdapter.addFvcResult(resultFVC);

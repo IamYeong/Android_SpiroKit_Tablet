@@ -3,6 +3,7 @@ package kr.co.theresearcher.spirokitfortab.db.cal_history;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
@@ -10,29 +11,32 @@ import kr.co.theresearcher.spirokitfortab.db.office.Office;
 import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
 import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
 
-@Entity(tableName = "cal_history", foreignKeys = {
-        @ForeignKey(
-                entity = Office.class,
-                parentColumns = "id",
-                childColumns = "office_id",
-                onDelete = ForeignKey.CASCADE,
-                onUpdate = ForeignKey.CASCADE
-        ),
+@Entity(tableName = "cal_history",foreignKeys = {
+
         @ForeignKey(
                 entity = Operator.class,
-                parentColumns = "id",
-                childColumns = "operator_id",
+                parentColumns = "hashed",
+                childColumns = "operator_hashed",
+                onDelete = ForeignKey.CASCADE,
+                onUpdate = ForeignKey.CASCADE
+        )
+        ,
+        @ForeignKey(
+                entity = Patient.class,
+                parentColumns = "office_hashed",
+                childColumns = "office_hashed",
                 onDelete = ForeignKey.CASCADE,
                 onUpdate = ForeignKey.CASCADE
         ),
         @ForeignKey(
                 entity = Patient.class,
-                parentColumns = "id",
-                childColumns = "patient_id",
+                parentColumns = "hashed",
+                childColumns = "patient_hashed",
                 onDelete = ForeignKey.CASCADE,
                 onUpdate = ForeignKey.CASCADE
         )
-        },
+},
+
         indices = {@Index(value = "hashed", unique = true)})
 public class CalHistory{
 
@@ -67,6 +71,12 @@ public class CalHistory{
     @ColumnInfo(name = "is_deleted")
     private int isDeleted;
 
+    @ColumnInfo(name = "is_deleted_reference")
+    private int isDeletedReference;
+
+    @Ignore
+    private boolean isSelected;
+
     public CalHistory(String hashed, String officeHashed, String operatorHashed, String patientHashed, String finishDate, String measDiv, String deviceDiv, int isDeleted) {
         this.hashed = hashed;
         this.officeHashed = officeHashed;
@@ -76,6 +86,22 @@ public class CalHistory{
         this.measDiv = measDiv;
         this.deviceDiv = deviceDiv;
         this.isDeleted = isDeleted;
+    }
+
+    public int getIsDeletedReference() {
+        return isDeletedReference;
+    }
+
+    public void setIsDeletedReference(int isDeletedReference) {
+        this.isDeletedReference = isDeletedReference;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.isSelected = selected;
     }
 
     public int getId() {

@@ -29,6 +29,8 @@ import android.widget.ImageView;
 
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.bluetooth.SpiroKitBluetoothLeService;
+import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
+import kr.co.theresearcher.spirokitfortab.main.information.OnCalHistorySelectedListener;
 import kr.co.theresearcher.spirokitfortab.main.information.PatientInformationFragment;
 import kr.co.theresearcher.spirokitfortab.main.result.empty.EmptyResultFragment;
 import kr.co.theresearcher.spirokitfortab.main.result.fvc.FvcResultFragment;
@@ -41,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
     private ProxyObserver observer = new ProxyObserver();
     private FragmentManager fragmentManager;
     private ImageButton settingButton, insertPatientButton;
-    private Button measButton;
     private ImageView bleConnectionImage;
     private FragmentContainerView patientInfoContainer, resultContainer;
     private PatientInformationFragment informationFragment;
@@ -159,15 +160,15 @@ public class MainActivity extends AppCompatActivity {
 
         informationFragment = new PatientInformationFragment();
         observer.addObserver(informationFragment);
-        informationFragment.setMeasurementSelectedListener(new OnMeasurementSelectedListener() {
+        informationFragment.setHistorySelectedListener(new OnCalHistorySelectedListener() {
             @Override
-            public void onMeasurementSelected(Measurement measurement) {
+            public void onHistorySelected(CalHistory history) {
 
-                if (measurement == null) {
+                if (history == null) {
                     EmptyResultFragment emptyResultFragment = new EmptyResultFragment();
                     setFragment(R.id.fragment_container_result_main, emptyResultFragment);
                 }
-                setFragmentByMeasGroup(measurement);
+                setFragmentByMeasGroup(history);
 
             }
         });
@@ -222,15 +223,15 @@ public class MainActivity extends AppCompatActivity {
                 super.run();
                 Looper.prepare();
 
-                MeasurementDatabase database = Room.databaseBuilder(MainActivity.this, MeasurementDatabase.class, RoomNames.ROOM_MEASUREMENT_DB_NAME)
+                historyDatabase database = Room.databaseBuilder(MainActivity.this, historyDatabase.class, RoomNames.ROOM_history_DB_NAME)
                         .build();
-                MeasurementDao measurementDao = database.measurementDao();
-                List<Measurement> measurements = measurementDao.selectByPatientID(SharedPreferencesManager.getPatientId(MainActivity.this));
+                historyDao historyDao = database.historyDao();
+                List<history> historys = historyDao.selectByPatientID(SharedPreferencesManager.getPatientId(MainActivity.this));
 
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        setFragmentByMeasGroup(measurements.get(measurements.size() - 1));
+                        setFragmentByMeasGroup(historys.get(historys.size() - 1));
                     }
                 });
 
@@ -246,22 +247,22 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setFragmentByMeasGroup(Measurement measurement) {
+    private void setFragmentByMeasGroup(CalHistory history) {
 
-        if (measurement == null) return;
+        if (history == null) return;
 
-        switch (measurement.getMeasurementID()) {
+        switch (history.getMeasDiv()) {
 
-            case 0 :
-                FvcResultFragment fvcResultFragment = new FvcResultFragment(measurement);
+            case "f" :
+                FvcResultFragment fvcResultFragment = new FvcResultFragment(history);
                 observer.deleteObservers();
                 observer.addObserver(informationFragment);
                 observer.addObserver(fvcResultFragment);
                 replaceFragment(R.id.fragment_container_result_main, fvcResultFragment);
                 break;
 
-            case 1  :
-                SvcResultFragment svcResultFragment = new SvcResultFragment(measurement);
+            case "s"  :
+                SvcResultFragment svcResultFragment = new SvcResultFragment(history);
                 observer.deleteObservers();
                 observer.addObserver(informationFragment);
                 observer.addObserver(svcResultFragment);
@@ -269,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
 
-            case 2 :
+            case "m" :
 
                 break;
 

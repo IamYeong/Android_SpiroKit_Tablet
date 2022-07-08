@@ -3,12 +3,13 @@ package kr.co.theresearcher.spirokitfortab.db.cal_history_raw_data;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
 
-@Entity(tableName = "cal_history_raw_data", foreignKeys = {
+@Entity(tableName = "cal_history_raw_data",  foreignKeys = {
         @ForeignKey(
                 entity = CalHistory.class,
                 parentColumns = "hashed",
@@ -49,6 +50,20 @@ public class CalHistoryRawData {
     @ColumnInfo(name = "is_deleted")
     private int isDeleted;
 
+    @ColumnInfo(name = "is_deleted_reference")
+    private int isDeletedReference;
+
+    public int getIsDeletedReference() {
+        return isDeletedReference;
+    }
+
+    public void setIsDeletedReference(int isDeletedReference) {
+        this.isDeletedReference = isDeletedReference;
+    }
+
+    @Ignore
+    private boolean isSelected;
+
     public CalHistoryRawData(String hashed, String calHistoryHashed, String orderNumber, String data, String calDate, int isPost) {
         this.hashed = hashed;
         this.calHistoryHashed = calHistoryHashed;
@@ -57,6 +72,14 @@ public class CalHistoryRawData {
         this.calDate = calDate;
         this.isPost = isPost;
         isDeleted = 0;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 
     public int getId() {

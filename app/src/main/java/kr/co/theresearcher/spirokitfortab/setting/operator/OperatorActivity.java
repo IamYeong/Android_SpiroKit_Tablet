@@ -22,7 +22,7 @@ import java.util.Locale;
 
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
-import kr.co.theresearcher.spirokitfortab.db.RoomNames;
+import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
 import kr.co.theresearcher.spirokitfortab.db.work.Work;
 
 public class OperatorActivity extends AppCompatActivity {
@@ -64,7 +64,7 @@ public class OperatorActivity extends AppCompatActivity {
 
 
         List<String> works = new ArrayList<>();
-        for (Work work : Work.values()) works.add(work.name().toUpperCase(Locale.ROOT));
+        //for (Work work : Work.values()) works.add(work.name().toUpperCase(Locale.ROOT));
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, works
         );
@@ -107,12 +107,9 @@ public class OperatorActivity extends AppCompatActivity {
                             return;
                         }
 
-                        Operator operator = new Operator(name, SharedPreferencesManager.getOfficeID(OperatorActivity.this), workID);
+                        Operator operator = new Operator();
 
-                        OperatorDatabase operatorDatabase = Room.databaseBuilder(OperatorActivity.this, OperatorDatabase.class, RoomNames.ROOM_OPERATOR_DB_NAME).build();
-                        OperatorDao operatorDao = operatorDatabase.operatorDao();
-                        operatorDao.insertOperator(operator);
-                        operatorDatabase.close();
+                        //OperatorDatabase.getInstance(OperatorActivity.this).operatorDao().updateOperator(operator);
 
                         adapter.addOperator(operator);
 
@@ -159,11 +156,7 @@ public class OperatorActivity extends AppCompatActivity {
                 super.run();
                 Looper.prepare();
 
-                OperatorDatabase operatorDatabase = Room.databaseBuilder(OperatorActivity.this, OperatorDatabase.class, RoomNames.ROOM_OPERATOR_DB_NAME).build();
-                OperatorDao operatorDao = operatorDatabase.operatorDao();
-                //operatorDao.deleteAll();
-                List<Operator> operators = operatorDao.selectByOfficeID(SharedPreferencesManager.getOfficeID(OperatorActivity.this));
-                operatorDatabase.close();
+                List<Operator> operators = new ArrayList<>();
 
                 handler.post(new Runnable() {
                     @Override

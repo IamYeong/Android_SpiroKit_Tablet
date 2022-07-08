@@ -35,7 +35,8 @@ import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.calc.CalcSvcSpiroKitE;
-import kr.co.theresearcher.spirokitfortab.db.RoomNames;
+import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
+import kr.co.theresearcher.spirokitfortab.db.cal_history_raw_data.CalHistoryRawData;
 import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
 import kr.co.theresearcher.spirokitfortab.graph.SlowVolumeTimeRunView;
 import kr.co.theresearcher.spirokitfortab.main.result.OnOrderSelectedListener;
@@ -44,7 +45,7 @@ import kr.co.theresearcher.spirokitfortab.measurement.svc.SvcResultAdapter;
 
 public class SvcResultFragment extends Fragment implements Observer {
 
-    private Measurement measurement;
+    private CalHistory history;
     private RecyclerView rv;
     private FrameLayout graphLayout;
     private List<SlowVolumeTimeRunView> graphViews = new ArrayList<>();
@@ -54,9 +55,8 @@ public class SvcResultFragment extends Fragment implements Observer {
 
     private Handler handler = new Handler(Looper.getMainLooper());
 
-    public SvcResultFragment(Measurement measurement) {
-        // Required empty public constructor
-        this.measurement = measurement;
+    public SvcResultFragment(CalHistory history) {
+        this.history = history;
     }
 
     @Override
@@ -151,73 +151,52 @@ public class SvcResultFragment extends Fragment implements Observer {
                 super.run();
                 Looper.prepare();
 
+                List<CalHistoryRawData> rawDatas= new ArrayList<>();
 
-                File root = context.getExternalFilesDir("data/"
-                        + SharedPreferencesManager.getOfficeID(context) + "/"
-                        + SharedPreferencesManager.getPatientId(context) + "/"
-                        + measurement.getPath());
+                if (rawDatas.size() == 0) return;
 
-                File[] tests = root.listFiles();
+                for (int i = 0; i < rawDatas.size(); i++) {
 
-                System.out.println(tests.length);
+                    String[] data = rawDatas.get(i).getData().split(" ");
+                    List<Integer> pulseWidth = new ArrayList<>();
 
-                for (int i = 0; i < tests.length; i++) {
+                    for (int j = 0; j < data.length; j++) {
 
-                    int n = Integer.parseInt(tests[i].getName());
-                    File jsonFile = new File(tests[i], n + ".json");
-                    File csvFile = new File(tests[i], n + ".csv");
+                        pulseWidth.add(Integer.parseInt(data[j]));
 
-                    JSONObject jsonObject = readJsonFile(jsonFile);
-                    List<Integer> pulseWidth = readCsvFile(csvFile);
-
-                    try {
-
-                        System.out.println(jsonObject.toString());
-                        System.out.println(pulseWidth.size());
-
-
-                        int pid = jsonObject.getInt("pid");
-                        long timestamp = jsonObject.getLong("ts");
-                        String measGroup = jsonObject.getString("meas");
-                        int order = jsonObject.getInt("order");
-                        boolean isPost = jsonObject.getBoolean("isPost");
-
-                        CalcSvcSpiroKitE calc = new CalcSvcSpiroKitE(pulseWidth);
-                        calc.measure();
-
-                        double vc = calc.getVC();
-
-                        graphViews.add(createVolumeTimeGraph(calc.getVolumeTimeGraph()));
-
-                        ResultSVC resultSVC = new ResultSVC();
-                        resultSVC.setTimestamp(timestamp);
-                        resultSVC.setVc(vc);
-                        resultSVC.setSelected(false);
-                        resultSVC.setPost(isPost);
-
-                        if (i == 0) resultSVC.setSelected(true);
-                        else resultSVC.setSelected(false);
-
-                        svcResultAdapter.addResult(resultSVC);
-
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                svcResultAdapter.notifyDataSetChanged();
-                                graphLayout.removeAllViews();
-                                graphLayout.addView(graphViews.get(0));
-                            }
-                        });
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
 
+                    CalcSvcSpiroKitE calc = new CalcSvcSpiroKitE(pulseWidth);
+                    calc.measure();
+
+                    double vc = calc.getVC();
+
+                    graphViews.add(createVolumeTimeGraph(calc.getVolumeTimeGraph()));
+
+                    ResultSVC resultSVC = new ResultSVC();
+                    resultSVC.setTimestamp(0);
+                    resultSVC.setVc(vc);
+                    resultSVC.setSelected(false);
+                    if (rawDatas.get(i).getIsPost() == 1) resultSVC.setPost(true);
+                    else resultSVC.setPost(false);
+
+
+                    if (i == 0) resultSVC.setSelected(true);
+                    else resultSVC.setSelected(false);
+
+                    svcResultAdapter.addResult(resultSVC);
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            svcResultAdapter.notifyDataSetChanged();
+                            graphLayout.removeAllViews();
+                            graphLayout.addView(graphViews.get(0));
+                        }
+                    });
+
                 }
-
-
 
                 Looper.loop();
 
@@ -313,53 +292,7 @@ public class SvcResultFragment extends Fragment implements Observer {
     }
 
     private void setDoctors() {
-        Thread thread = new Thread() {
 
-            @Override
-            public void run() {
-                super.run();
-                Looper.prepare();
-
-                OperatorDatabase operatorDatabase = Room.databaseBuilder(context, OperatorDatabase.class, RoomNames.ROOM_OPERATOR_DB_NAME).build();
-                OperatorDao operatorDao = operatorDatabase.operatorDao();
-
-                List<Operator> operators = operatorDao.selectByOfficeID(SharedPreferencesManager.getOfficeID(context));
-
-                for (int i = 0; i < operators.size(); i++) {
-
-                    Operator op = operators.get(i);
-                    if (measurement.getMeasOperatorID() == op.getId()) {
-
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                measDoctorText.setText(getString(R.string.checkup_doctor_is, op.getName()));
-
-                            }
-                        });
-
-                    }
-
-                    if (SharedPreferencesManager.getPatientMatchDoctorID(context) == op.getId()) {
-
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                matchDoctorText.setText(getString(R.string.family_doctor_is, op.getName()));
-                            }
-                        });
-
-                    }
-
-                }
-
-
-                Looper.loop();
-            }
-        };
-
-        thread.start();
     }
 
 }

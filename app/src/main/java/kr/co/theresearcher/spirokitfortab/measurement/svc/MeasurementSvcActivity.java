@@ -50,8 +50,7 @@ import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.bluetooth.SpiroKitBluetoothLeService;
 import kr.co.theresearcher.spirokitfortab.calc.CalcSvcSpiroKitE;
-import kr.co.theresearcher.spirokitfortab.db.RoomNames;
-import kr.co.theresearcher.spirokitfortab.db.meas_group.MeasGroup;
+
 import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
 import kr.co.theresearcher.spirokitfortab.dialog.LoadingDialog;
 import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
@@ -123,7 +122,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
                 connectStateProgressBar.setVisibility(View.INVISIBLE);
 
 
-                mService.connect(SharedPreferencesManager.getBluetoothDeviceMacAddress(MeasurementSvcActivity.this));
+                mService.connect(SharedPreferencesManager.getDeviceMacAddress(MeasurementSvcActivity.this));
             }
 
         }
@@ -285,7 +284,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
                     return;
                 }
 
-                mService.connect(SharedPreferencesManager.getBluetoothDeviceMacAddress(MeasurementSvcActivity.this));
+                mService.connect(SharedPreferencesManager.getDeviceMacAddress(MeasurementSvcActivity.this));
                 connectStateImage.setVisibility(View.INVISIBLE);
                 connectStateProgressBar.setVisibility(View.VISIBLE);
                 connectStateText.setText(getString(R.string.connecting));
@@ -551,11 +550,6 @@ public class MeasurementSvcActivity extends AppCompatActivity {
                     //CSV 파일 저장================
 
                     JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("pid", SharedPreferencesManager.getPatientId(MeasurementSvcActivity.this));
-                    jsonObject.put("isPost", isPost);
-                    jsonObject.put("order", testOrder);
-                    jsonObject.put("ts", date);
-                    jsonObject.put("meas", MeasGroup.svc);
 
 
                     File jsonFile = new File(getExternalFilesDir("data/" + SharedPreferencesManager.getOfficeID(MeasurementSvcActivity.this)
@@ -594,10 +588,6 @@ public class MeasurementSvcActivity extends AppCompatActivity {
                         }
                     });
 
-
-                } catch (JSONException e) {
-
-                    Log.e(getClass().getSimpleName(), e.getCause().toString());
 
                 } catch (IOException e) {
                     Log.e(getClass().getSimpleName(), e.getCause().toString());
@@ -727,19 +717,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd_HHmmssSS", Locale.getDefault());
 
-                MeasurementDatabase database = Room.databaseBuilder(MeasurementSvcActivity.this, MeasurementDatabase.class, RoomNames.ROOM_MEASUREMENT_DB_NAME).build();
-                MeasurementDao measurementDao = database.measurementDao();
-                Measurement measurement = new Measurement(
-                        SharedPreferencesManager.getOfficeID(MeasurementSvcActivity.this),
-                        SharedPreferencesManager.getPatientId(MeasurementSvcActivity.this),
-                        MeasGroup.svc.ordinal(),
-                        startTimestamp,
-                        simpleDateFormat.format(startTimestamp),
-                        SharedPreferencesManager.getOperatorID(MeasurementSvcActivity.this)
-                );
-
-                measurementDao.insertMeasurement(measurement);
-                database.close();
+                //measurementDao.insertMeasurement(measurement);
 
                 handler.post(new Runnable() {
                     @Override

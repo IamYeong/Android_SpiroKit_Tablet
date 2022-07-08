@@ -351,7 +351,7 @@ public class CalcSpiroKitE {
         return mvv;
     }
 
-    public float getFVCp(long birth, int height, int weight, boolean gender) {
+    public float getFVCp(long birth, int height, int weight, String gender) {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(birth);
@@ -361,7 +361,7 @@ public class CalcSpiroKitE {
 
         int currentYear = calendar.get(Calendar.YEAR);
 
-        if (gender) {
+        if (gender.equals("m")) {
             return -4.8434f - 0.00008633f * (float)Math.pow(currentYear - year, 2) + 0.05292f * height + 0.01095f * weight;
         } else {
             return -3.0006f - 0.0001273f * (float)Math.pow(currentYear - year, 2) + 0.03951f * height + 0.006892f * weight;
@@ -369,7 +369,7 @@ public class CalcSpiroKitE {
 
     }
 
-    public float getFEV1p(long birth, int height, int weight, boolean gender) {
+    public float getFEV1p(long birth, int height, int weight, String gender) {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(birth);
@@ -379,7 +379,7 @@ public class CalcSpiroKitE {
 
         int currentYear = calendar.get(Calendar.YEAR);
 
-        if (gender) {
+        if (gender.equals("m")) {
             return -3.4132f - 0.0002484f * (float)Math.pow(currentYear - year, 2) + 0.04578f * height;
         } else {
             return -2.4114f - 0.0001920f * (float)Math.pow(currentYear - year, 2) + 0.03558f * height;

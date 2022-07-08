@@ -90,7 +90,7 @@ public class SettingActivity extends AppCompatActivity {
 
             if (mService.isConnect()) {
                 Log.d(getClass().getSimpleName(), "*******************isConnect");
-                connectStateText.setText(getString(R.string.connect_with_what, SharedPreferencesManager.getConnectedDeviceName(SettingActivity.this)));
+                connectStateText.setText(getString(R.string.connect_with_what, SharedPreferencesManager.getDeviceName(SettingActivity.this)));
                 startScanText.setText(getString(R.string.do_disconnect));
             } else {
                 Log.d(getClass().getSimpleName(), "*******************is NOT Connect");
@@ -119,7 +119,7 @@ public class SettingActivity extends AppCompatActivity {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            connectStateText.setText(getString(R.string.connect_with_what, SharedPreferencesManager.getConnectedDeviceName(SettingActivity.this)));
+                            connectStateText.setText(getString(R.string.connect_with_what, SharedPreferencesManager.getDeviceName(SettingActivity.this)));
                             startScanText.setText(getString(R.string.do_disconnect));
                         }
                     });
@@ -228,8 +228,8 @@ public class SettingActivity extends AppCompatActivity {
 
                             String macAddress = result.getDevice().getAddress();
 
-                            SharedPreferencesManager.setBluetoothDeviceMacAddress(getApplicationContext(), result.getDevice().getAddress());
-                            SharedPreferencesManager.setConnectedDeviceName(getApplicationContext(), result.getDevice().getName());
+                            SharedPreferencesManager.setDeviceMacAddress(getApplicationContext(), result.getDevice().getAddress());
+                            SharedPreferencesManager.setDeviceName(getApplicationContext(), result.getDevice().getName());
 
                             Log.d(getClass().getSimpleName(), macAddress + ", " + mService.getClass().getSimpleName());
 
@@ -289,7 +289,7 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-        userNickname.setText(SharedPreferencesManager.getInputNickname(SettingActivity.this));
+        userNickname.setText(SharedPreferencesManager.getOfficeName(SettingActivity.this));
 
         scanStandBy();
 

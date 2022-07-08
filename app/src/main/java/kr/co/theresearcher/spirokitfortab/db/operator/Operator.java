@@ -42,6 +42,17 @@ public class Operator {
     @ColumnInfo(name = "is_deleted")
     private int isDeleted;
 
+    @ColumnInfo(name = "is_deleted_reference")
+    private int isDeletedReference;
+
+    public int getIsDeletedReference() {
+        return isDeletedReference;
+    }
+
+    public void setIsDeletedReference(int isDeletedReference) {
+        this.isDeletedReference = isDeletedReference;
+    }
+
     public int getId() {
         return id;
     }

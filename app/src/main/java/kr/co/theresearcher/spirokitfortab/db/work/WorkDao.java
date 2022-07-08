@@ -8,7 +8,7 @@ import java.util.List;
 @Dao
 public interface WorkDao {
 
-    @Query("SELECT * FROM WORK")
+    @Query("SELECT * FROM work_group")
     List<Work> selectAllWork();
 
 }

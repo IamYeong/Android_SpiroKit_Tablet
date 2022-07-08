@@ -27,14 +27,22 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 
 import kr.co.theresearcher.spirokitfortab.R;
-import kr.co.theresearcher.spirokitfortab.db.RoomNames;
+import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
+
+import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
+import kr.co.theresearcher.spirokitfortab.db.human_race.HumanRace;
+import kr.co.theresearcher.spirokitfortab.db.human_race.HumanRaceDao;
+
 import kr.co.theresearcher.spirokitfortab.db.office.Office;
 import kr.co.theresearcher.spirokitfortab.db.office.OfficeDao;
-import kr.co.theresearcher.spirokitfortab.db.office.OfficeDatabase;
+
+import kr.co.theresearcher.spirokitfortab.db.work.Work;
 import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
 import kr.co.theresearcher.spirokitfortab.join.ConditionAgreeActivity;
 import kr.co.theresearcher.spirokitfortab.join.JoinUserActivity;
@@ -62,6 +70,12 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.btn_user_login);
         moveToJoinButton = findViewById(R.id.btn_to_register_from_login);
 
+        String savedID = SharedPreferencesManager.getOfficeID(LoginActivity.this);
+        String savedPass = SharedPreferencesManager.getOfficePass(LoginActivity.this);
+
+        identifierField.setText(savedID);
+        passwordField.setText(savedPass);
+
         moveToJoinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,16 +99,29 @@ public class LoginActivity extends AppCompatActivity {
                         String id = "";
                         id += identifierField.getText().toString();
 
-                        String password = "";
-                        password += passwordField.getText().toString();
+                        Instant instant = Instant.now().truncatedTo(ChronoUnit.MICROS);
+                        SpiroKitDatabase database = SpiroKitDatabase.getInstance(getApplicationContext());
 
-                        OfficeDatabase officeDatabase = Room.databaseBuilder(getApplicationContext(), OfficeDatabase.class, RoomNames.ROOM_OFFICE_DB_NAME)
-                                .createFromAsset("database/office.db")
-                                .build();
+                        List<Work> works = database.workDao().selectAllWork();
 
-                        OfficeDao officeDao = officeDatabase.officeDao();
-                        Office office = officeDao.selectOfficeByID(id);
+                        for (Work work : works) {
+                            System.out.println(work.getWork());
+                        }
 
+                        for (HumanRace humanRace : database.humanRaceDao().selectAllHumanRace()) {
+                            System.out.println(humanRace.getRace());
+                        }
+
+                        List<Office> offices = database.officeDao().selectAllOffices();
+
+                        for (Office office : offices) {
+                            System.out.println(office.getHashed());
+                        }
+
+
+                        SpiroKitDatabase.removeInstance();
+
+                        /*
                         if (office == null) {
                             handler.post(new Runnable() {
                                 @Override
@@ -123,15 +150,22 @@ public class LoginActivity extends AppCompatActivity {
                             });
                         }
 
+                        SharedPreferencesManager.setOfficeID(LoginActivity.this, id);
+                        SharedPreferencesManager.setOfficePassword(LoginActivity.this, password);
+
                         if ((office.getOfficeID().equals(id)) && (office.getOfficePassword().equals(password))) {
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
+
+
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     startActivity(intent);
                                 }
                             });
                         }
+
+                         */
 
                         Looper.loop();
                     }

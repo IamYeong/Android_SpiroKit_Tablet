@@ -6,15 +6,29 @@ import static org.junit.Assert.*;
 
 import android.os.SystemClock;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.FieldPosition;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import kr.co.theresearcher.spirokitfortab.db.human_race.HumanRace;
-import kr.co.theresearcher.spirokitfortab.db.meas_group.MeasGroup;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -25,12 +39,16 @@ public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
 
-        try {
-            String hash = HashConverter.hashingFromString("홍길동2022-07-05 00:00:001f10668b5f1cb897d57faf08cfe58c668060f14ce32077c43011c862fea5f5c7");
-            System.out.println(hash);
-        } catch (NoSuchAlgorithmException e) {
+        //이 방법 계산은 되고 포맷만 맞추면 됨
+        Instant instant = Instant.now().truncatedTo(ChronoUnit.MICROS);
+        System.out.println(instant.atZone(ZoneId.systemDefault()).toString());
 
-        }
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS")
+                .withZone(ZoneId.systemDefault());
+
+        String result = dateTimeFormatter.format(instant);
+
+        System.out.println(result);
 
     }
 }

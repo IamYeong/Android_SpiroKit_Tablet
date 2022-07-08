@@ -24,17 +24,17 @@ import java.util.Locale;
 import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
-import kr.co.theresearcher.spirokitfortab.db.RoomNames;
-import kr.co.theresearcher.spirokitfortab.db.meas_group.MeasGroup;
+
+import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
 import kr.co.theresearcher.spirokitfortab.dialog.OnSelectedInDialogListener;
 import kr.co.theresearcher.spirokitfortab.dialog.SelectionDialog;
 
 public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHolder> {
 
     private Context context;
-    private List<Measurement> measurements;
-    private List<Measurement> searchResults;
-    private OnMeasSelectedListener selectedListener;
+    private List<CalHistory> histories;
+    private List<CalHistory> searchResults;
+    private OnCalHistorySelectedListener selectedListener;
     private OnItemChangedListener onItemChangedListener;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.getDefault());
 
@@ -42,7 +42,7 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
 
     public MeasurementAdapter(Context context) {
         this.context = context;
-        measurements = new ArrayList<>();
+        histories = new ArrayList<>();
         searchResults = new ArrayList<>();
     }
 
@@ -52,18 +52,22 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
 
     public boolean searchMeasInRange(long from, long to) {
 
+
         if (from > to) return false;
         if (from < 0) return false;
 
+        /*
         searchResults.clear();
 
-        for (Measurement measurement : measurements) {
+        for (CalHistory CalHistory : histories) {
 
-            if ((measurement.getMeasDate() >= from) && (measurement.getMeasDate() <= to)) {
-                searchResults.add(measurement);
+            if ((CalHistory.getMeasDate() >= from) && (CalHistory.getMeasDate() <= to)) {
+                searchResults.add(CalHistory);
             }
 
         }
+
+         */
 
         return true;
 
@@ -72,20 +76,20 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
     public void initializing() {
 
         searchResults.clear();
-        searchResults.addAll(measurements);
+        searchResults.addAll(histories);
 
     }
 
-    public void setSelectedListener(OnMeasSelectedListener listener) {
+    public void setSelectedListener(OnCalHistorySelectedListener listener) {
         this.selectedListener = listener;
     }
 
-    public void setMeasurements(List<Measurement> measurementList) {
+    public void setCalHistories(List<CalHistory> CalHistoryList) {
 
-        this.measurements.clear();
+        this.histories.clear();
         this.searchResults.clear();
-        this.measurements.addAll(measurementList);
-        this.searchResults.addAll(measurementList);
+        this.histories.addAll(CalHistoryList);
+        this.searchResults.addAll(CalHistoryList);
 
         if (searchResults.size() > 0) {
             searchResults.get(searchResults.size() - 1).setSelected(true);
@@ -93,9 +97,9 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
 
     }
 
-    public void addMeasurement(Measurement measurement) {
-        this.measurements.add(measurement);
-        this.searchResults.add(measurement);
+    public void addCalHistory(CalHistory CalHistory) {
+        this.histories.add(CalHistory);
+        this.searchResults.add(CalHistory);
     }
 
     @NonNull
@@ -108,9 +112,9 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
     @Override
     public void onBindViewHolder(@NonNull MeasurementViewHolder holder, int position) {
 
-        Measurement measurement = searchResults.get(holder.getAdapterPosition());
+        CalHistory calHistory = searchResults.get(holder.getAdapterPosition());
 
-        if (measurement.isSelected()) {
+        if (calHistory.isSelected()) {
 
             holder.getConstraintLayout().setBackground(AppCompatResources.getDrawable(context, R.drawable.item_selected_meas));
 
@@ -120,17 +124,20 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
 
         }
 
-        holder.getMeasTitle().setText(simpleDateFormat.format(measurement.getMeasDate()));
-        MeasGroup[] measGroups = MeasGroup.values();
-        holder.getGroupText().setText(measGroups[measurement.getMeasurementID()].toString().toUpperCase(Locale.ROOT));
+        holder.getMeasTitle().setText(simpleDateFormat.format(0));
+        if (calHistory.getMeasDiv().equals("f")) holder.getGroupText().setText(context.getString(R.string.fvc));
+        else if (calHistory.getMeasDiv().equals("s")) holder.getGroupText().setText(context.getString(R.string.svc));
+        //else if (calHistory.getMeasDiv().equals("m")) holder.getGroupText().setText(context.getString(R.string.mvv));
+        else holder.getGroupText().setText(context.getString(R.string.not_applicable));
+
 
         holder.getConstraintLayout().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                for (Measurement meas : searchResults) meas.setSelected(false);
+                for (CalHistory history : searchResults) history.setSelected(false);
                 searchResults.get(holder.getAdapterPosition()).setSelected(true);
-                selectedListener.onMeasSelected(measurement);
+                selectedListener.onHistorySelected(calHistory);
                 notifyDataSetChanged();
             }
         });
@@ -152,13 +159,8 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
                                 super.run();
                                 Looper.prepare();
 
-                                removeThisData(measurement.getMeasDate());
-
-                                MeasurementDatabase measurementDatabase = Room.databaseBuilder(context, MeasurementDatabase.class, RoomNames.ROOM_MEASUREMENT_DB_NAME)
-                                        .build();
-                                MeasurementDao measurementDao = measurementDatabase.measurementDao();
-                                measurementDao.deleteMeasurement(measurement);
-                                measurementDatabase.close();
+                                //calHistory.isDeleted(1);
+                                //dao.update
 
                                 handler.post(new Runnable() {
                                     @Override
@@ -190,32 +192,6 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
         return (searchResults != null ? searchResults.size() : 0);
     }
 
-    private void removeThisData(long timestamp) {
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmssSS", Locale.getDefault());
-
-        String dirName = dateFormat.format(timestamp);
-        File dir = context.getExternalFilesDir("data/"
-                + SharedPreferencesManager.getOfficeID(context) + "/"
-                + SharedPreferencesManager.getPatientId(context) + "/"
-                + dirName);
-
-        deleteFileWithChildren(dir);
-
-    }
-
-    private void deleteFileWithChildren(File fileOrDirectory) {
-
-        if (fileOrDirectory.isDirectory()) {
-            File[] files = fileOrDirectory.listFiles();
-            for (File file : files) {
-                deleteFileWithChildren(file);
-            }
-        }
-
-        fileOrDirectory.delete();
-
-    }
 }
 
 class MeasurementViewHolder extends RecyclerView.ViewHolder {

@@ -8,7 +8,7 @@ import java.util.List;
 @Dao
 public interface HumanRaceDao {
 
-    @Query("SELECT * FROM HUMANRACE")
+    @Query("SELECT * FROM human_race")
     List<HumanRace> selectAllHumanRace();
 
 }

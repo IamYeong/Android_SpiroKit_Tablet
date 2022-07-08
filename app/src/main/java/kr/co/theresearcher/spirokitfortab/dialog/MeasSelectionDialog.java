@@ -23,7 +23,8 @@ import java.util.List;
 
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
-import kr.co.theresearcher.spirokitfortab.db.RoomNames;
+
+import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
 import kr.co.theresearcher.spirokitfortab.db.work.Work;
 import kr.co.theresearcher.spirokitfortab.measurement.fvc.MeasurementFvcActivity;
 import kr.co.theresearcher.spirokitfortab.measurement.svc.MeasurementSvcActivity;
@@ -42,11 +43,8 @@ public class MeasSelectionDialog extends Dialog {
     private List<Operator> operators;
     private List<Operator> sortedOperators = new ArrayList<>();
 
-    private OperatorDatabase operatorDatabase;
-
     public MeasSelectionDialog(@NonNull Context context) {
         super(context);
-        operatorDatabase = Room.databaseBuilder(context, OperatorDatabase.class, RoomNames.ROOM_OPERATOR_DB_NAME).build();
 
         Thread thread = new Thread() {
 
@@ -55,8 +53,7 @@ public class MeasSelectionDialog extends Dialog {
                 super.run();
                 Looper.prepare();
 
-                OperatorDao operatorDao = operatorDatabase.operatorDao();
-                operators = operatorDao.selectByOfficeID(SharedPreferencesManager.getOfficeID(getContext()));
+                //operators = OperatorDatabase.getInstance(getContext()).operatorDao().selectAllOperator(SharedPreferencesManager.getOfficeID(getContext()));
 
                 Looper.loop();
             }
@@ -79,9 +76,9 @@ public class MeasSelectionDialog extends Dialog {
         operatorSpinner = findViewById(R.id.spinner_operator_group);
         closeButton = findViewById(R.id.img_btn_close_meas_selection_dialog);
 
-        Work[] works = Work.values();
-        String[] workNames = new String[works.length];
-        for (int i = 0; i < works.length; i++) workNames[i] = works[i].name();
+        //Work[] works = Work.values();
+        String[] workNames = new String[0];
+        //for (int i = 0; i < works.length; i++) workNames[i] = works[i].name();
 
         jobArrayAdapter = new ArrayAdapter<String>(
                 getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, workNames
@@ -95,7 +92,7 @@ public class MeasSelectionDialog extends Dialog {
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                operatorDatabase.close();
+
                 dismiss();
             }
         });
@@ -104,7 +101,7 @@ public class MeasSelectionDialog extends Dialog {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                SharedPreferencesManager.setOperatorID(getContext(), sortedOperators.get(position).getOfficeID());
+                SharedPreferencesManager.setOperatorHash(getContext(), sortedOperators.get(position).getHashed());
 
             }
 
@@ -118,8 +115,8 @@ public class MeasSelectionDialog extends Dialog {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                Work selectedWork = Work.values()[position];
-                updateOperators(selectedWork.ordinal());
+                //Work selectedWork = Work.values()[position];
+                //updateOperators(selectedWork.ordinal());
 
             }
 
@@ -133,7 +130,6 @@ public class MeasSelectionDialog extends Dialog {
             @Override
             public void onClick(View v) {
 
-                operatorDatabase.close();
                 Intent intent = new Intent(getContext(), MeasurementFvcActivity.class);
                 getContext().startActivity(intent);
                 dismiss();
@@ -145,7 +141,6 @@ public class MeasSelectionDialog extends Dialog {
             @Override
             public void onClick(View v) {
 
-                operatorDatabase.close();
                 Intent intent = new Intent(getContext(), MeasurementSvcActivity.class);
                 getContext().startActivity(intent);
                 dismiss();
@@ -166,7 +161,7 @@ public class MeasSelectionDialog extends Dialog {
 
                 sortedOperators.clear();
                 for (int i = 0; i < operators.size(); i++) {
-                    if (operators.get(i).getWorkID() == workID) sortedOperators.add(operators.get(i));
+                    //if (operators.get(i).getWorkID() == workID) sortedOperators.add(operators.get(i));
                 }
 
                 String[] operatorNames = new String[sortedOperators.size()];

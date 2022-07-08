@@ -36,8 +36,8 @@ import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.calc.CalcSpiroKitE;
-import kr.co.theresearcher.spirokitfortab.db.RoomNames;
-import kr.co.theresearcher.spirokitfortab.db.meas_group.MeasGroup;
+import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
+import kr.co.theresearcher.spirokitfortab.db.cal_history_raw_data.CalHistoryRawData;
 import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowResultView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeTimeResultView;
@@ -57,13 +57,13 @@ public class FvcResultFragment extends Fragment implements Observer {
 
     private List<VolumeFlowResultView> volumeFlowResultViews = new ArrayList<>();
     private List<VolumeTimeResultView> volumeTimeResultViews = new ArrayList<>();
-    private Measurement measurement;
+    private CalHistory history;
     private Handler handler = new Handler(Looper.getMainLooper());
 
 
 
-    public FvcResultFragment(Measurement measurement) {
-        this.measurement = measurement;
+    public FvcResultFragment(CalHistory history) {
+        this.history = history;
     }
 
     @Override
@@ -87,14 +87,13 @@ public class FvcResultFragment extends Fragment implements Observer {
         matchDoctorText = view.findViewById(R.id.tv_match_doctor_main_result);
         measDoctorText = view.findViewById(R.id.tv_meas_doctor_main_result);
 
-        MeasGroup[] measGroups = MeasGroup.values();
-        measGroupText.setText(measGroups[measurement.getMeasurementID()].toString().toUpperCase(Locale.ROOT) + getString(R.string.checkup));
+        //measGroupText.setText(measGroups[measurement.getMeasurementID()].toString().toUpperCase(Locale.ROOT) + getString(R.string.checkup));
 
         matchDoctorText.setText(getString(R.string.family_doctor_is, "TEST"));
         measDoctorText.setText(getString(R.string.checkup_doctor_is, "TEST"));
 
         adapter = new FvcResultAdapter(context);
-        adapter.setRootTimestamp(measurement.getMeasDate());
+        //adapter.setRootTimestamp(measurement.getMeasDate());
         adapter.setOnOrderSelectedListener(new OnOrderSelectedListener() {
             @Override
             public void onOrderSelected(int order) {
@@ -249,113 +248,91 @@ public class FvcResultFragment extends Fragment implements Observer {
                 super.run();
                 Looper.prepare();
 
+                List<CalHistoryRawData> rawDatas = new ArrayList<>();
 
-                File root = context.getExternalFilesDir("data/"
-                        + SharedPreferencesManager.getOfficeID(context) + "/"
-                        + SharedPreferencesManager.getPatientId(context) + "/"
-                        + measurement.getPath());
+                if (rawDatas.size() == 0) return;
 
-                File[] tests = root.listFiles();
+                for (int i = 0; i < rawDatas.size(); i++) {
 
-                System.out.println(tests.length);
+                    String[] data = rawDatas.get(i).getData().split(" ");
+                    List<Integer> pulseWidth = new ArrayList<>();
 
-                for (int i = 0; i < tests.length; i++) {
+                    for (int j = 0; j < data.length; j++) {
 
-                    int n = Integer.parseInt(tests[i].getName());
-                    File jsonFile = new File(tests[i], n + ".json");
-                    File csvFile = new File(tests[i], n + ".csv");
+                        pulseWidth.add(Integer.parseInt(data[j]));
 
-                    JSONObject jsonObject = readJsonFile(jsonFile);
-                    List<Integer> pulseWidth = readCsvFile(csvFile);
-
-                    try {
-
-                        System.out.println(jsonObject.toString());
-                        System.out.println(pulseWidth.size());
-
-
-                        int pid = jsonObject.getInt("pid");
-                        long timestamp = jsonObject.getLong("ts");
-                        String measGroup = jsonObject.getString("meas");
-                        int order = jsonObject.getInt("order");
-                        boolean isPost = jsonObject.getBoolean("isPost");
-
-                        CalcSpiroKitE calc = new CalcSpiroKitE(pulseWidth);
-                        calc.measure();
-
-                        double fvc = calc.getFVC();
-                        double fev1 = calc.getFev1();
-                        double pef = calc.getPef();
-
-                        double fvcP = calc.getFVCp(
-                                SharedPreferencesManager.getPatientBirth(context),
-                                SharedPreferencesManager.getPatientHeight(context),
-                                SharedPreferencesManager.getPatientWeight(context),
-                                SharedPreferencesManager.getPatientGender(context)
-                        );
-
-                        double fev1P = calc.getFEV1p(
-                                SharedPreferencesManager.getPatientBirth(context),
-                                SharedPreferencesManager.getPatientHeight(context),
-                                SharedPreferencesManager.getPatientWeight(context),
-                                SharedPreferencesManager.getPatientGender(context)
-                        );
-
-                        System.out.println(fvc + ", " + fev1 + ", " + pef);
-
-                        List<ResultCoordinate> volumeFlowGraph = calc.getVolumeFlowGraph();
-                        List<ResultCoordinate> volumeTimeGraph = calc.getForcedVolumeTimeGraph();
-
-                        System.out.println(volumeFlowGraph.size());
-                        System.out.println(volumeTimeGraph.size());
-
-                        volumeFlowResultViews.add(createVolumeFlowGraph(volumeFlowGraph, width, height));
-                        volumeTimeResultViews.add(createVolumeTimeGraph(volumeTimeGraph, width, height));
-
-                        System.out.println(volumeFlowResultViews.size());
-                        System.out.println(volumeTimeResultViews.size());
-                        Log.d(getClass().getSimpleName(), volumeFlowResultViews.size() + ", " + volumeTimeResultViews.size());
-
-                        ResultFVC resultFVC = new ResultFVC();
-                        resultFVC.setFvc(fvc);
-                        resultFVC.setFvcPredict(fvcP);
-
-                        resultFVC.setFev1(fev1);
-                        resultFVC.setFev1Predict(fev1P);
-
-                        resultFVC.setFev1percent((fev1 / fvc) * 100f);
-                        resultFVC.setFev1PercentPredict((fev1P / fvcP) * 100f);
-
-                        resultFVC.setPef(pef);
-
-                        resultFVC.setTimestamp(timestamp);
-                        resultFVC.setPost(isPost);
-
-                        if (i == 0) resultFVC.setSelected(true);
-                        else resultFVC.setSelected(false);
-
-                        adapter.addFvcResult(resultFVC);
-
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                adapter.notifyDataSetChanged();
-                                volumeFlowLayout.removeAllViews();
-                                volumeTimeLayout.removeAllViews();
-                                volumeFlowLayout.addView(volumeFlowResultViews.get(0));
-                                volumeTimeLayout.addView(volumeTimeResultViews.get(0));
-                            }
-                        });
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
 
+                    CalcSpiroKitE calc = new CalcSpiroKitE(pulseWidth);
+                    calc.measure();
+
+                    double fvc = calc.getFVC();
+                    double fev1 = calc.getFev1();
+                    double pef = calc.getPef();
+
+                    double fvcP = calc.getFVCp(
+                            0,
+                            SharedPreferencesManager.getPatientHeight(context),
+                            SharedPreferencesManager.getPatientWeight(context),
+                            SharedPreferencesManager.getPatientGender(context)
+                    );
+
+                    double fev1P = calc.getFEV1p(
+                            0,
+                            SharedPreferencesManager.getPatientHeight(context),
+                            SharedPreferencesManager.getPatientWeight(context),
+                            SharedPreferencesManager.getPatientGender(context)
+                    );
+
+                    //System.out.println(fvc + ", " + fev1 + ", " + pef);
+
+                    List<ResultCoordinate> volumeFlowGraph = calc.getVolumeFlowGraph();
+                    List<ResultCoordinate> volumeTimeGraph = calc.getForcedVolumeTimeGraph();
+
+                    System.out.println(volumeFlowGraph.size());
+                    System.out.println(volumeTimeGraph.size());
+
+                    volumeFlowResultViews.add(createVolumeFlowGraph(volumeFlowGraph, width, height));
+                    volumeTimeResultViews.add(createVolumeTimeGraph(volumeTimeGraph, width, height));
+
+                    System.out.println(volumeFlowResultViews.size());
+                    System.out.println(volumeTimeResultViews.size());
+                    Log.d(getClass().getSimpleName(), volumeFlowResultViews.size() + ", " + volumeTimeResultViews.size());
+
+                    ResultFVC resultFVC = new ResultFVC();
+                    resultFVC.setFvc(fvc);
+                    resultFVC.setFvcPredict(fvcP);
+
+                    resultFVC.setFev1(fev1);
+                    resultFVC.setFev1Predict(fev1P);
+
+                    resultFVC.setFev1percent((fev1 / fvc) * 100f);
+                    resultFVC.setFev1PercentPredict((fev1P / fvcP) * 100f);
+
+                    resultFVC.setPef(pef);
+
+                    resultFVC.setTimestamp(0);
+                    resultFVC.setPost(rawDatas.get(i).getIsPost());
+
+                    if (i == 0) resultFVC.setSelected(true);
+                    else resultFVC.setSelected(false);
+
+                    adapter.addFvcResult(resultFVC);
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            adapter.notifyDataSetChanged();
+                            volumeFlowLayout.removeAllViews();
+                            volumeTimeLayout.removeAllViews();
+                            volumeFlowLayout.addView(volumeFlowResultViews.get(0));
+                            volumeTimeLayout.addView(volumeTimeResultViews.get(0));
+                        }
+                    });
+
+
                 }
-
-
 
                 Looper.loop();
 
@@ -429,40 +406,7 @@ public class FvcResultFragment extends Fragment implements Observer {
                 super.run();
                 Looper.prepare();
 
-                OperatorDatabase operatorDatabase = Room.databaseBuilder(context, OperatorDatabase.class, RoomNames.ROOM_OPERATOR_DB_NAME).build();
-                OperatorDao operatorDao = operatorDatabase.operatorDao();
-
-                List<Operator> operators = operatorDao.selectByOfficeID(SharedPreferencesManager.getOfficeID(context));
-
-                for (int i = 0; i < operators.size(); i++) {
-
-                    Operator op = operators.get(i);
-                    if (measurement.getMeasOperatorID() == op.getId()) {
-
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                measDoctorText.setText(getString(R.string.checkup_doctor_is, op.getName()));
-
-                            }
-                        });
-
-                    }
-
-                    if (SharedPreferencesManager.getPatientMatchDoctorID(context) == op.getId()) {
-
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                matchDoctorText.setText(getString(R.string.family_doctor_is, op.getName()));
-                            }
-                        });
-
-                    }
-
-                }
-
+                //주치의, 검사자 란에 이름(직함) 넣기
 
                 Looper.loop();
             }

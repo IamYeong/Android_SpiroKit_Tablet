@@ -25,7 +25,8 @@ import java.util.stream.Collectors;
 import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
-import kr.co.theresearcher.spirokitfortab.db.RoomNames;
+
+import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
 import kr.co.theresearcher.spirokitfortab.dialog.OnSelectedInDialogListener;
 import kr.co.theresearcher.spirokitfortab.dialog.SelectionDialog;
 
@@ -115,7 +116,7 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsViewHolder> {
 
         holder.getNameText().setText(patient.getName());
         holder.getChartNumberText().setText(patient.getChartNumber());
-        holder.getBirthText().setText(simpleDateFormat.format(patient.getBirthDate()));
+        holder.getBirthText().setText(patient.getBirthDay());
 
         holder.getLayout().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,19 +125,8 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsViewHolder> {
                 Log.d(getClass().getSimpleName(), patient.getName());
                 //선택 UI 처리 후 리스너로 전달, 리사이클러뷰 닫고 환자 정보 보여주면 됨.
 
-                SharedPreferencesManager.setPatientId(context, patient.getId());
-                SharedPreferencesManager.setPatientName(context, patient.getName());
-                SharedPreferencesManager.setPatientBirth(context, patient.getBirthDate());
-                SharedPreferencesManager.setPatientChartNumber(context, patient.getChartNumber());
-                SharedPreferencesManager.setPatientHeight(context, patient.getHeight());
-                SharedPreferencesManager.setPatientGender(context, patient.isGender());
-                SharedPreferencesManager.setPatientWeight(context, patient.getWeight());
-                SharedPreferencesManager.setPatientIsSmoking(context, patient.isSmoke());
-                SharedPreferencesManager.setPatientStartSmokingDate(context, patient.getStartSmokeDate());
-                SharedPreferencesManager.setPatientNoSmokingDate(context, patient.getStopSmokeDate());
-                SharedPreferencesManager.setPatientSmokingAmount(context, patient.getSmokeAmountPack());
-                SharedPreferencesManager.setPatientHumanRaceId(context, patient.getHumanRaceId());
-                SharedPreferencesManager.setPatientMatchDoctor(context, patient.getDoctorID());
+
+
                 //주치의 입력
 
                 simpleSelectedListener.onSimpleSelected();
@@ -161,11 +151,7 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsViewHolder> {
 
                                 removeThisData(patient.getId());
 
-                                PatientDatabase database = Room.databaseBuilder(context, PatientDatabase.class, RoomNames.ROOM_PATIENT_DB_NAME)
-                                        .build();
-                                PatientDao patientDao = database.patientDao();
-                                patientDao.deletePatient(patient);
-                                database.close();
+                                //PatientDatabase.getInstance(context).patientDao().deletePatient();
 
                                 handler.post(new Runnable() {
                                     @Override

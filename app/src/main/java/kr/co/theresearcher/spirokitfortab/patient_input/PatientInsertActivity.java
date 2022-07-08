@@ -26,9 +26,10 @@ import java.util.Locale;
 
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
-import kr.co.theresearcher.spirokitfortab.db.RoomNames;
-import kr.co.theresearcher.spirokitfortab.db.gender.Gender;
+
 import kr.co.theresearcher.spirokitfortab.db.human_race.HumanRace;
+import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
+
 import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
 
 public class PatientInsertActivity extends AppCompatActivity {
@@ -312,7 +313,7 @@ public class PatientInsertActivity extends AppCompatActivity {
 
         List<String> humanRaces = new ArrayList<>();
         List<String> doctors = new ArrayList<>();
-        for (HumanRace humanRace : HumanRace.values()) humanRaces.add(humanRace.getValue());
+        //for (HumanRace humanRace : HumanRace.values()) humanRaces.add(humanRace.getValue());
         //연도부터 선택하면 활성화 하는 방향도 좋을 듯
 
         humanRaceAdapter = new ArrayAdapter<String>(
@@ -368,33 +369,24 @@ public class PatientInsertActivity extends AppCompatActivity {
                             super.run();
                             Looper.prepare();
 
-                            Patient patient = new Patient();
-
                             String name = nameField.getText().toString();
                             String chartNumber = chartNumberField.getText().toString();
                             int height = Integer.parseInt(heightField.getText().toString());
                             int weight = Integer.parseInt(weightField.getText().toString());
                             float smokeAmount = Float.parseFloat(smokeAmountField.getText().toString());
 
-                            patient.setOfficeID(SharedPreferencesManager.getOfficeID(PatientInsertActivity.this));
-                            patient.setBirthDate(birthDate);
-                            patient.setName(name);
-                            patient.setChartNumber(chartNumber);
-                            patient.setHeight(height);
-                            patient.setWeight(weight);
-                            patient.setGender(isMale);
-                            patient.setSmoke(isSmoking);
-                            patient.setSmokeAmountPack(smokeAmount);
-                            patient.setStartSmokeDate(startSmokeDate);
-                            patient.setStopSmokeDate(stopSmokeDate);
-                            patient.setDoctorID(doctorID);
-                            patient.setHumanRaceId(humanRaceID);
+                            Patient patient = new Patient.Builder()
+                                    .officeHashed(SharedPreferencesManager.getOfficeHash(PatientInsertActivity.this))
+                                    .name(name)
+                                    .height(height)
+                                    .weight(weight)
+                                    .chartNumber(chartNumber)
 
-                            PatientDatabase database = Room.databaseBuilder(PatientInsertActivity.this, PatientDatabase.class, RoomNames.ROOM_PATIENT_DB_NAME).build();
-                            PatientDao patientDao = database.patientDao();
-                            patientDao.insertPatient(patient);
 
-                            database.close();
+                                    .build();
+
+
+                            //PatientDatabase.getInstance(PatientInsertActivity.this).patientDao().insertPatient(patient);
 
                             handler.post(new Runnable() {
                                 @Override
@@ -450,14 +442,7 @@ public class PatientInsertActivity extends AppCompatActivity {
                 super.run();
                 Looper.prepare();
 
-                OperatorDatabase operatorDatabase = Room.databaseBuilder(PatientInsertActivity.this, OperatorDatabase.class, RoomNames.ROOM_OPERATOR_DB_NAME).build();
-                OperatorDao operatorDao = operatorDatabase.operatorDao();
-                List<Operator> operators = operatorDao.selectByOfficeID(SharedPreferencesManager.getOfficeID(PatientInsertActivity.this));
-                operatorDatabase.close();
-                List<String> operatorNames = new ArrayList<>();
-                for (Operator op : operators) {
-                    operatorNames.add(op.getName());
-                }
+                /*
 
                 doctorAdapter = new ArrayAdapter<String>(
                         PatientInsertActivity.this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, operatorNames
@@ -469,6 +454,8 @@ public class PatientInsertActivity extends AppCompatActivity {
                         matchDoctorSpinner.setAdapter(doctorAdapter);
                     }
                 });
+
+                 */
 
 
                 Looper.loop();
@@ -494,19 +481,7 @@ public class PatientInsertActivity extends AppCompatActivity {
 
     private void setPatientInfoInPreferences(Context context, Patient patient) {
 
-        SharedPreferencesManager.setPatientId(context, patient.getId());
-        SharedPreferencesManager.setPatientName(context, patient.getName());
-        SharedPreferencesManager.setPatientChartNumber(context, patient.getChartNumber());
-        SharedPreferencesManager.setPatientGender(context, patient.isGender());
-        SharedPreferencesManager.setPatientHumanRaceId(context, patient.getHumanRaceId());
-        SharedPreferencesManager.setPatientHeight(context, patient.getHeight());
-        SharedPreferencesManager.setPatientWeight(context, patient.getWeight());
-        SharedPreferencesManager.setPatientBirth(context, patient.getBirthDate());
-        SharedPreferencesManager.setPatientIsSmoking(context, patient.isSmoke());
-        SharedPreferencesManager.setPatientStartSmokingDate(context, patient.getStartSmokeDate());
-        SharedPreferencesManager.setPatientNoSmokingDate(context, patient.getStopSmokeDate());
-        SharedPreferencesManager.setPatientSmokingAmount(context, patient.getSmokeAmountPack());
-        SharedPreferencesManager.setPatientMatchDoctor(context, patient.getDoctorID());
+
 
     }
 

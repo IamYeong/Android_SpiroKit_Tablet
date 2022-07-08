@@ -8,10 +8,10 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "office",
         indices = {
-        @Index(value = "hashed", unique = true)})
+        @Index(value = {"hashed"}, unique = true)})
 public class Office {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     private int id;
 
@@ -44,6 +44,17 @@ public class Office {
 
     @ColumnInfo(name = "office_pass")
     private String officePassword;
+
+    @ColumnInfo(name = "is_deleted")
+    private int isDeleted;
+
+    public int getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(int isDeleted) {
+        this.isDeleted = isDeleted;
+    }
 
     public int getId() {
         return id;
