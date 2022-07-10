@@ -80,9 +80,6 @@ public class Patient {
     @ColumnInfo(name = "is_deleted")
     private int isDeleted;
 
-    @ColumnInfo(name = "is_deleted_reference")
-    private int isDeletedReference;
-
     public Patient(String hashed, String officeHashed, String chartNumber, String name, String gender, int height, int weight, String birthDay, String humanRace, int nowSmoking, String stopSmokingDay, String startSmokingDay, String smokingAmountPerDay) {
         this.hashed = hashed;
         this.officeHashed = officeHashed;
@@ -126,14 +123,6 @@ public class Patient {
         createDate = builder.createDate;
         isDeleted = builder.isDeleted;
 
-    }
-
-    public int getIsDeletedReference() {
-        return isDeletedReference;
-    }
-
-    public void setIsDeletedReference(int isDeletedReference) {
-        this.isDeletedReference = isDeletedReference;
     }
 
     public int getId() {

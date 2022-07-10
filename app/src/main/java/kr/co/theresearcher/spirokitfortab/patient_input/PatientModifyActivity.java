@@ -83,7 +83,6 @@ public class PatientModifyActivity extends AppCompatActivity {
         haveNotSmokeButton = findViewById(R.id.btn_have_not_smoking_insert_patient);
 
         humanRaceSpinner = findViewById(R.id.spinner_human_race_insert_patient);
-        matchDoctorSpinner = findViewById(R.id.spinner_match_doctor_insert_patient);
 
         birthSelectButton = findViewById(R.id.btn_birth_date_insert_patient);
         startSmokeDateSelectButton = findViewById(R.id.btn_start_smoke_date_insert_patient);

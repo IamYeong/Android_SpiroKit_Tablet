@@ -114,6 +114,25 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsViewHolder> {
 
         Patient patient = searchResults.get(holder.getAdapterPosition());
 
+        Log.d(getClass().getSimpleName(), "==============================\n" +
+                patient.getChartNumber() + "\n"
+                + patient.getHashed() + "\n"
+                + patient.getGender() + "\n"
+                + patient.getStartSmokingDay() + "\n"
+                + patient.getStopSmokingDay() + "\n"
+                + patient.getBirthDay() + "\n"
+                + patient.getId() + "\n"
+                + patient.getNowSmoking() + "\n"
+                + patient.getWeight() + "\n"
+                + patient.getHeight() + "\n"
+                + patient.getName() + "\n"
+                + patient.getHumanRace() + "\n"
+                + patient.getOs() + "\n"
+                + patient.getSmokingPeriod() + "\n"
+                + patient.getOfficeHashed() + "\n"
+                + patient.getIsDeleted() +
+                "\n======================");
+
         holder.getNameText().setText(patient.getName());
         holder.getChartNumberText().setText(patient.getChartNumber());
         holder.getBirthText().setText(patient.getBirthDay());
@@ -124,8 +143,19 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsViewHolder> {
 
                 Log.d(getClass().getSimpleName(), patient.getName());
                 //선택 UI 처리 후 리스너로 전달, 리사이클러뷰 닫고 환자 정보 보여주면 됨.
-
-
+                SharedPreferencesManager.setPatientID(context, patient.getId());
+                SharedPreferencesManager.setPatientHash(context, patient.getHashed());
+                SharedPreferencesManager.setPatientOfficeHash(context, patient.getOfficeHashed());
+                SharedPreferencesManager.setPatientName(context, patient.getName());
+                SharedPreferencesManager.setPatientWeight(context, patient.getWeight());
+                SharedPreferencesManager.setPatientHeight(context, patient.getHeight());
+                SharedPreferencesManager.setPatientChartNumber(context, patient.getChartNumber());
+                SharedPreferencesManager.setPatientHumanRace(context, patient.getHumanRace());
+                SharedPreferencesManager.setPatientSmokingIsNow(context, patient.getNowSmoking());
+                SharedPreferencesManager.setPatientSmokingStartDate(context, patient.getStartSmokingDay());
+                SharedPreferencesManager.setPatientSmokingStopDate(context, patient.getStopSmokingDay());
+                SharedPreferencesManager.setPatientSmokingPeriod(context,patient.getSmokingPeriod());
+                SharedPreferencesManager.setPatientBirthday(context, patient.getBirthDay());
 
                 //주치의 입력
 

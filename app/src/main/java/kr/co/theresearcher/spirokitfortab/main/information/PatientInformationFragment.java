@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
+import androidx.room.RoomDatabase;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -44,6 +45,7 @@ import java.util.Observer;
 import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
+import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
 import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
 import kr.co.theresearcher.spirokitfortab.db.human_race.HumanRace;
 import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
@@ -368,7 +370,8 @@ public class PatientInformationFragment extends Fragment implements Observer {
                 super.run();
                 Looper.prepare();
 
-                List<Patient> patientList = new ArrayList<>();
+                SpiroKitDatabase database = SpiroKitDatabase.getInstance(context);
+                List<Patient> patientList = database.patientDao().selectPatientByOffice(SharedPreferencesManager.getOfficeHash(context));
 
                 patientsAdapter.setPatients(patientList);
 
@@ -472,26 +475,6 @@ public class PatientInformationFragment extends Fragment implements Observer {
         info.append(getString(R.string.height_is, SharedPreferencesManager.getPatientHeight(context))).append("\n");
         info.append(getString(R.string.weight_is, SharedPreferencesManager.getPatientWeight(context))).append("\n");
         info.append(getString(R.string.birth_is, SharedPreferencesManager.getPatientBirthday(context))).append("\n");
-
-        /*
-        HumanRace[] humanRaces = HumanRace.values();
-        int raceId = SharedPreferencesManager.getPatientHumanRaceId(context);
-        for (int i = 0; i < humanRaces.length; i++) {
-            if (i == raceId) {
-                info.append(getString(R.string.human_race_is, humanRaces[i].getValue())).append("\n");
-                break;
-            }
-        }
-
-         */
-        //info.append(getString(R.string.smoke_start_date_is, simpleDateFormat.format(SharedPreferencesManager.getPatientStartSmokingDate(context)))).append("\n");
-        //info.append(getString(R.string.smoke_stop_date_is, simpleDateFormat.format(SharedPreferencesManager.getPatientNoSmokingDate(context)))).append("\n");
-        //info.append(getString(R.string.smoking_per_day_is, SharedPreferencesManager.getPatientSmokingAmount(context))).append("\n");
-
-        //if (SharedPreferencesManager.getPatientIsSmoking(context)) info.append(getString(R.string.smoking_now_is, getString(R.string.smoking))).append("\n");
-        //else info.append(getString(R.string.smoking_now_is, getString(R.string.not_smoking))).append("\n");
-
-        //info.append(getString(R.string.family_doctor_is, SharedPreferencesManager.getPatientMatchDoctorID(context) + ""));
 
         patientInfoText.setText(info.toString());
 

@@ -19,14 +19,19 @@ import android.widget.ImageButton;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import kr.co.theresearcher.spirokitfortab.HashConverter;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 
+import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
 import kr.co.theresearcher.spirokitfortab.db.human_race.HumanRace;
 import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
 
@@ -37,7 +42,7 @@ public class PatientInsertActivity extends AppCompatActivity {
     private EditText chartNumberField, nameField, heightField, weightField, smokeAmountField;
     private Button insertButton, maleButton, femaleButton, smokeButton, nonSmokeButton, haveSmokeButton, haveNotSmokeButton
             , birthSelectButton, startSmokeDateSelectButton, stopSmokeDateSelectButton;
-    private AppCompatSpinner matchDoctorSpinner, humanRaceSpinner;
+    private AppCompatSpinner humanRaceSpinner;
 
     private ArrayAdapter<String> humanRaceAdapter, doctorAdapter;
 
@@ -81,7 +86,6 @@ public class PatientInsertActivity extends AppCompatActivity {
         haveNotSmokeButton = findViewById(R.id.btn_have_not_smoking_insert_patient);
 
         humanRaceSpinner = findViewById(R.id.spinner_human_race_insert_patient);
-        matchDoctorSpinner = findViewById(R.id.spinner_match_doctor_insert_patient);
 
         birthSelectButton = findViewById(R.id.btn_birth_date_insert_patient);
         startSmokeDateSelectButton = findViewById(R.id.btn_start_smoke_date_insert_patient);
@@ -324,19 +328,6 @@ public class PatientInsertActivity extends AppCompatActivity {
                 PatientInsertActivity.this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, doctors
         );
 
-        matchDoctorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                doctorID = position;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-
         humanRaceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -371,22 +362,45 @@ public class PatientInsertActivity extends AppCompatActivity {
 
                             String name = nameField.getText().toString();
                             String chartNumber = chartNumberField.getText().toString();
-                            int height = Integer.parseInt(heightField.getText().toString());
-                            int weight = Integer.parseInt(weightField.getText().toString());
-                            float smokeAmount = Float.parseFloat(smokeAmountField.getText().toString());
+                            int height = Integer.parseInt("0" + heightField.getText().toString());
+                            int weight = Integer.parseInt("0" + weightField.getText().toString());
+                            String smokeAmount = smokeAmountField.getText().toString() + "0";
+                            SimpleDateFormat birthDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                            char gender = 'm';
+                            int nowSmoking = 0;
+                            if (!isMale) gender = 'f';
+                            if (isSmoking) nowSmoking = 1;
 
-                            Patient patient = new Patient.Builder()
-                                    .officeHashed(SharedPreferencesManager.getOfficeHash(PatientInsertActivity.this))
-                                    .name(name)
-                                    .height(height)
-                                    .weight(weight)
-                                    .chartNumber(chartNumber)
+                            try {
 
+                                Patient patient = new Patient.Builder()
+                                        .officeHashed(SharedPreferencesManager.getOfficeHash(PatientInsertActivity.this))
+                                        .name(name)
+                                        .gender(gender + "")
+                                        .height(height)
+                                        .weight(weight)
+                                        .chartNumber(chartNumber)
+                                        .hashed(HashConverter.hashingFromString(
+                                                name
+                                                        + birthDateFormat.format(birthDate)
+                                                        + SharedPreferencesManager.getOfficeHash(PatientInsertActivity.this)))
+                                        .humanRace("y")
+                                        .nowSmoking(nowSmoking)
+                                        .smokingAmountDay(smokeAmount)
+                                        .birthDay(birthDateFormat.format(birthDate))
+                                        .build();
 
-                                    .build();
+                                patient.setStartSmokingDay(birthDateFormat.format(startSmokeDate));
+                                patient.setStopSmokingDay(birthDateFormat.format(stopSmokeDate));
+                                patient.setSmokingPeriod(diffDateMonth(startSmokeDate, stopSmokeDate));
 
+                                SpiroKitDatabase database = SpiroKitDatabase.getInstance(getApplicationContext());
+                                database.patientDao().insertPatient(patient);
+                                SpiroKitDatabase.removeInstance();
 
-                            //PatientDatabase.getInstance(PatientInsertActivity.this).patientDao().insertPatient(patient);
+                            } catch (NoSuchAlgorithmException e) {
+
+                            }
 
                             handler.post(new Runnable() {
                                 @Override
@@ -429,40 +443,6 @@ public class PatientInsertActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        selectDoctors();
-
-
-    }
-
-    private void selectDoctors() {
-
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                Looper.prepare();
-
-                /*
-
-                doctorAdapter = new ArrayAdapter<String>(
-                        PatientInsertActivity.this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, operatorNames
-                );
-
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        matchDoctorSpinner.setAdapter(doctorAdapter);
-                    }
-                });
-
-                 */
-
-
-                Looper.loop();
-            }
-        };
-        thread.start();
-
     }
 
 
@@ -475,13 +455,47 @@ public class PatientInsertActivity extends AppCompatActivity {
         if (chartNumberField.getText().toString().length() == 0) return false;
         if (birthDate == -1) return false;
 
-
         return true;
     }
 
     private void setPatientInfoInPreferences(Context context, Patient patient) {
 
+        /*
+        SharedPreferencesManager.setPatientID(context, );
+        SharedPreferencesManager.setPatientName(context, );
+        SharedPreferencesManager.setPatientHash(context, );
+        SharedPreferencesManager.setPatientChartNumber(context, );
+        SharedPreferencesManager.setPatientGender(context, );
+        SharedPreferencesManager.setPatientHeight(context, );
+        SharedPreferencesManager.setPatientWeight(context, );
+        SharedPreferencesManager.setPatientOperatorDoctorHash(context, );
+        SharedPreferencesManager.setPatientHumanRace(context, );
 
+        SharedPreferencesManager.setPatientSmokingIsNow(context, );
+        SharedPreferencesManager.setPatientSmokingStartDate(context, );
+        SharedPreferencesManager.setPatientSmokingStopDate(context, );
+        SharedPreferencesManager.setPatientSmokingAmountPerDay(context, );
+        SharedPreferencesManager.setPatientSmokingPeriod(context, );
+
+
+         */
+    }
+
+    private int diffDateMonth(long from, long to) {
+
+        Date fromDate = new Date(from);
+        Date toDate = new Date(to);
+
+        Calendar fromCal = Calendar.getInstance();
+        fromCal.setTime(fromDate);
+
+        Calendar toCal = Calendar.getInstance();
+        toCal.setTime(toDate);
+
+        int diffYear = toCal.get(Calendar.YEAR) - fromCal.get(Calendar.YEAR);
+        int diffMonth = toCal.get(Calendar.MONTH) - fromCal.get(Calendar.MONTH);
+
+        return (diffYear * 12) + diffMonth;
 
     }
 

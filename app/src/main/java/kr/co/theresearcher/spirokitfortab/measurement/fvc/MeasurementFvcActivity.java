@@ -41,6 +41,10 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -55,6 +59,7 @@ import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.bluetooth.SpiroKitBluetoothLeService;
 import kr.co.theresearcher.spirokitfortab.calc.CalcSpiroKitE;
 
+import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
 import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
 import kr.co.theresearcher.spirokitfortab.db.cal_history_raw_data.CalHistoryRawData;
 import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
@@ -347,8 +352,31 @@ public class MeasurementFvcActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (saveSomething) {
-                    removeThisData();
-                    finish();
+                    //removeThisData();
+
+                    Thread thread = new Thread() {
+                        @Override
+                        public void run() {
+                            super.run();
+                            Looper.prepare();
+
+                            SpiroKitDatabase database = SpiroKitDatabase.getInstance(MeasurementFvcActivity.this);
+                            database.calHistoryRawDataDao().deleteNotCompleteData();
+                            SpiroKitDatabase.removeInstance();
+
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    finish();
+                                }
+                            });
+
+                            Looper.loop();
+                        }
+                    };
+                    thread.start();
+
                 } else {
 
                     finish();
@@ -529,12 +557,15 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                         super.run();
                         Looper.prepare();
 
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault());
-                        long now = Calendar.getInstance().getTime().getTime();
+                        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS")
+                                .withZone(ZoneId.systemDefault());
+
+                        Instant instant = Instant.now().truncatedTo(ChronoUnit.MICROS);
+
                         String historyHash = "";
 
                         try {
-                            historyHash = HashConverter.hashingFromString(simpleDateFormat.format(now));
+                            historyHash = HashConverter.hashingFromString(dateTimeFormatter.format(instant));
                         } catch (NoSuchAlgorithmException e) {
 
                         }
@@ -544,12 +575,17 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                                 SharedPreferencesManager.getOfficeHash(MeasurementFvcActivity.this),
                                 SharedPreferencesManager.getOperatorHash(MeasurementFvcActivity.this),
                                 SharedPreferencesManager.getPatientHashed(MeasurementFvcActivity.this),
-                                simpleDateFormat.format(now),
+                                dateTimeFormatter.format(instant),
                                 "f",
                                 "e",
                                 0);
 
+                        SpiroKitDatabase database = SpiroKitDatabase.getInstance(MeasurementFvcActivity.this);
+                        database.calHistoryDao().insertHistory(calHistory);
 
+                        database.calHistoryRawDataDao().fillHistoryHash(historyHash);
+
+                        SpiroKitDatabase.removeInstance();
 
                         handler.post(new Runnable() {
                             @Override
@@ -795,8 +831,18 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                 super.run();
                 Looper.prepare();
 
-                long date = Calendar.getInstance().getTime().getTime();
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault());
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS")
+                        .withZone(ZoneId.systemDefault());
+
+                Instant instant = Instant.now().truncatedTo(ChronoUnit.MICROS);
+
+                String hashed = "";
+
+                try {
+                    hashed = HashConverter.hashingFromString(dateTimeFormatter.format(instant));
+                } catch (NoSuchAlgorithmException e) {
+
+                }
 
                 StringBuilder stringBuilder = new StringBuilder();
 
@@ -813,28 +859,22 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
                 }
 
-                String hash = "";
-
-                try {
-                    hash = HashConverter.hashingFromString(simpleDateFormat.format(date));
-                } catch (NoSuchAlgorithmException e) {
-
-                }
-
                 CalHistoryRawData rawData = new CalHistoryRawData(
-                        hash,
-                        SharedPreferencesManager.getCalHistoryHash(MeasurementFvcActivity.this),
+                        hashed,
+                        null,
                         Integer.toString(testOrder),
                         stringBuilder.toString(),
-                        simpleDateFormat.format(date),
+                        dateTimeFormatter.format(instant),
                         isPost
                 );
 
-
+                SpiroKitDatabase database = SpiroKitDatabase.getInstance(MeasurementFvcActivity.this);
+                database.calHistoryRawDataDao().insertRawData(rawData);
+                SpiroKitDatabase.removeInstance();
 
                 //CalHistoryRawDataDatabase.removeInstance();
 
-                addResult(testOrder, date, isPost);
+                addResult(testOrder, instant, isPost);
 
                 handler.post(new Runnable() {
                     @Override
@@ -896,7 +936,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
     }
 
-    private void addResult(int order, long timestamp, int isPost) {
+    private void addResult(int order, Instant timestamp, int isPost) {
 
         //여기서는 어댑터에 추가랑 뷰배열에 추가만 해두고
         //핸들러에서 notify 수행, addVIew 하면 될 듯.
@@ -946,7 +986,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
         resultFVC.setPef(pef);
 
-        resultFVC.setTimestamp(timestamp);
+        resultFVC.setTimestamp(timestamp.toEpochMilli());
 
         resultFVC.setPost(isPost);
 
@@ -1002,6 +1042,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
     }
 
+
     private void selectData(int order) {
 
         resultVolumeFlowGraphLayout.removeAllViews();
@@ -1012,4 +1053,40 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        if (saveSomething) {
+            //removeThisData();
+
+            Thread thread = new Thread() {
+                @Override
+                public void run() {
+                    super.run();
+                    Looper.prepare();
+
+                    SpiroKitDatabase database = SpiroKitDatabase.getInstance(MeasurementFvcActivity.this);
+                    database.calHistoryRawDataDao().deleteNotCompleteData();
+                    SpiroKitDatabase.removeInstance();
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            finish();
+                        }
+                    });
+
+                    Looper.loop();
+                }
+            };
+            thread.start();
+
+        } else {
+
+            finish();
+        }
+
+    }
 }

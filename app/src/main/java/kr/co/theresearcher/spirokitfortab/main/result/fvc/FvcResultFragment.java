@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
+import androidx.room.RoomDatabase;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -36,6 +37,7 @@ import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.calc.CalcSpiroKitE;
+import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
 import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
 import kr.co.theresearcher.spirokitfortab.db.cal_history_raw_data.CalHistoryRawData;
 import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
@@ -248,13 +250,17 @@ public class FvcResultFragment extends Fragment implements Observer {
                 super.run();
                 Looper.prepare();
 
-                List<CalHistoryRawData> rawDatas = new ArrayList<>();
+                SpiroKitDatabase database = SpiroKitDatabase.getInstance(context);
 
-                if (rawDatas.size() == 0) return;
+                List<CalHistoryRawData> rawData = database.calHistoryRawDataDao().selectRawDataByHistory(
+                        SharedPreferencesManager.getCalHistoryHash(context)
+                );
 
-                for (int i = 0; i < rawDatas.size(); i++) {
+                if (rawData.size() == 0) return;
 
-                    String[] data = rawDatas.get(i).getData().split(" ");
+                for (int i = 0; i < rawData.size(); i++) {
+
+                    String[] data = rawData.get(i).getData().split(" ");
                     List<Integer> pulseWidth = new ArrayList<>();
 
                     for (int j = 0; j < data.length; j++) {
@@ -312,7 +318,7 @@ public class FvcResultFragment extends Fragment implements Observer {
                     resultFVC.setPef(pef);
 
                     resultFVC.setTimestamp(0);
-                    resultFVC.setPost(rawDatas.get(i).getIsPost());
+                    resultFVC.setPost(rawData.get(i).getIsPost());
 
                     if (i == 0) resultFVC.setSelected(true);
                     else resultFVC.setSelected(false);
