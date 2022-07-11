@@ -17,7 +17,7 @@ import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
                 onDelete = ForeignKey.CASCADE,
                 onUpdate = ForeignKey.CASCADE
         )},
-        indices = {@Index(value = "hashed", unique = true), @Index(value = "office_hashed", unique = true)
+        indices = {@Index(value = "hashed", unique = true)
 }
 )
 public class Patient {

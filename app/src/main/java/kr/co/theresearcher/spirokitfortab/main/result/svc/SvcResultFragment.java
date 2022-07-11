@@ -190,26 +190,25 @@ public class SvcResultFragment extends Fragment implements Observer {
                     ResultSVC resultSVC = new ResultSVC();
                     resultSVC.setTimestamp(0);
                     resultSVC.setVc(vc);
-                    resultSVC.setSelected(false);
                     resultSVC.setPost(rawData.get(i).getIsPost());
-
 
                     if (i == 0) resultSVC.setSelected(true);
                     else resultSVC.setSelected(false);
 
                     svcResultAdapter.addResult(resultSVC);
 
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            svcResultAdapter.notifyDataSetChanged();
-                            graphLayout.removeAllViews();
-                            graphLayout.addView(graphViews.get(0));
-                        }
-                    });
 
                 }
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        svcResultAdapter.notifyDataSetChanged();
+                        graphLayout.removeAllViews();
+                        graphLayout.addView(graphViews.get(0));
+                    }
+                });
 
                 Looper.loop();
 

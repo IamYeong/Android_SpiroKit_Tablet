@@ -22,8 +22,8 @@ import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
         )
         ,
         @ForeignKey(
-                entity = Patient.class,
-                parentColumns = "office_hashed",
+                entity = Office.class,
+                parentColumns = "hashed",
                 childColumns = "office_hashed",
                 onDelete = ForeignKey.CASCADE,
                 onUpdate = ForeignKey.CASCADE

@@ -337,20 +337,19 @@ public class FvcResultFragment extends Fragment implements Observer {
 
                     adapter.addFvcResult(resultFVC);
 
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            adapter.notifyDataSetChanged();
-                            volumeFlowLayout.removeAllViews();
-                            volumeTimeLayout.removeAllViews();
-                            volumeFlowLayout.addView(volumeFlowResultViews.get(0));
-                            volumeTimeLayout.addView(volumeTimeResultViews.get(0));
-                        }
-                    });
-
-
                 }
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        adapter.notifyDataSetChanged();
+                        volumeFlowLayout.removeAllViews();
+                        volumeTimeLayout.removeAllViews();
+                        volumeFlowLayout.addView(volumeFlowResultViews.get(0));
+                        volumeTimeLayout.addView(volumeTimeResultViews.get(0));
+                    }
+                });
 
                 Looper.loop();
 

@@ -9,7 +9,9 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Editable;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -59,6 +61,8 @@ public class PatientInsertActivity extends AppCompatActivity {
     private int humanRaceID = 0;
     private int doctorID = 0;
 
+    private InputMethodManager inputMethodManager;
+
     private Handler handler = new Handler(Looper.getMainLooper());
     private String dateFormat = "yyyy-MM-dd";
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.getDefault());
@@ -67,6 +71,8 @@ public class PatientInsertActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_insert);
+
+        inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
         backButton = findViewById(R.id.img_btn_back_insert_patient);
 
@@ -91,6 +97,8 @@ public class PatientInsertActivity extends AppCompatActivity {
         startSmokeDateSelectButton = findViewById(R.id.btn_start_smoke_date_insert_patient);
         stopSmokeDateSelectButton = findViewById(R.id.btn_stop_smoke_date_insert_patient);
 
+        smokeAmountField.setFocusableInTouchMode(true);
+
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,13 +109,11 @@ public class PatientInsertActivity extends AppCompatActivity {
         maleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 isMale = true;
 
-                maleButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.primary_color)));
-                maleButton.setTextColor(ColorStateList.valueOf(getColor(R.color.white)));
-
-                femaleButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-                femaleButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
+                enableButton(maleButton, true);
+                enableButton(femaleButton, false);
             }
         });
 
@@ -117,11 +123,8 @@ public class PatientInsertActivity extends AppCompatActivity {
 
                 isMale = false;
 
-                femaleButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.primary_color)));
-                femaleButton.setTextColor(ColorStateList.valueOf(getColor(R.color.white)));
-
-                maleButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-                maleButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
+                enableButton(maleButton, false);
+                enableButton(femaleButton, true);
             }
         });
 
@@ -131,31 +134,13 @@ public class PatientInsertActivity extends AppCompatActivity {
 
                 haveSmoking = true;
 
-                haveSmokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.primary_color)));
-                haveSmokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.white)));
-
-                haveNotSmokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-                haveNotSmokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
-
-                smokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-                smokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
-                smokeButton.setClickable(true);
-
-                nonSmokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-                nonSmokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
-                nonSmokeButton.setClickable(true);
-
-                startSmokeDateSelectButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-                startSmokeDateSelectButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
-                startSmokeDateSelectButton.setClickable(true);
-
-                smokeAmountField.setBackgroundResource(R.drawable.text_field_inner_shadow_white);
-                smokeAmountField.setHintTextColor(getColor(R.color.gray_dark));
-                smokeAmountField.setFocusable(true);
-
-                stopSmokeDateSelectButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-                stopSmokeDateSelectButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
-                stopSmokeDateSelectButton.setClickable(true);
+                enableButton(haveSmokeButton, true);
+                enableButton(haveNotSmokeButton, false);
+                enableButton(smokeButton, false);
+                enableButton(nonSmokeButton, false);
+                enableButton(startSmokeDateSelectButton, false);
+                enableButton(stopSmokeDateSelectButton, false);
+                enableTextField(smokeAmountField);
 
             }
         });
@@ -166,34 +151,18 @@ public class PatientInsertActivity extends AppCompatActivity {
 
                 haveSmoking = false;
 
-                haveNotSmokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.primary_color)));
-                haveNotSmokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.white)));
+                enableButton(haveNotSmokeButton, true);
+                enableButton(haveSmokeButton, false);
 
-                haveSmokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-                haveSmokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
+                disableButton(smokeButton);
+                disableButton(nonSmokeButton);
+                disableButton(startSmokeDateSelectButton);
+                disableButton(stopSmokeDateSelectButton);
 
-                //하위 선택지 비활성화
-                smokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.gray_background)));
-                smokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.gray_dark)));
-                smokeButton.setClickable(false);
+                disableTextField(smokeAmountField);
 
-                nonSmokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.gray_background)));
-                nonSmokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.gray_dark)));
-                nonSmokeButton.setClickable(false);
-
-                startSmokeDateSelectButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.gray_background)));
-                startSmokeDateSelectButton.setTextColor(ColorStateList.valueOf(getColor(R.color.gray_dark)));
                 startSmokeDateSelectButton.setText(dateFormat);
-                startSmokeDateSelectButton.setClickable(false);
-
-                smokeAmountField.setBackgroundResource(R.drawable.text_field_background_round_gray);
-                smokeAmountField.setHintTextColor(getColor(R.color.gray_dark));
-                smokeAmountField.setFocusable(false);
-
-                stopSmokeDateSelectButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.gray_background)));
-                stopSmokeDateSelectButton.setTextColor(ColorStateList.valueOf(getColor(R.color.gray_dark)));
                 stopSmokeDateSelectButton.setText(dateFormat);
-                stopSmokeDateSelectButton.setClickable(false);
 
                 isSmoking = false;
                 startSmokeDate = -1L;
@@ -208,15 +177,9 @@ public class PatientInsertActivity extends AppCompatActivity {
 
                 isSmoking = true;
 
-                smokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.primary_color)));
-                smokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.white)));
-
-                nonSmokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-                nonSmokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
-
-                stopSmokeDateSelectButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.gray_background)));
-                stopSmokeDateSelectButton.setTextColor(ColorStateList.valueOf(getColor(R.color.gray_dark)));
-                stopSmokeDateSelectButton.setClickable(false);
+                enableButton(smokeButton, true);
+                enableButton(nonSmokeButton, false);
+                disableButton(stopSmokeDateSelectButton);
 
             }
         });
@@ -227,15 +190,9 @@ public class PatientInsertActivity extends AppCompatActivity {
 
                 isSmoking = false;
 
-                nonSmokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.primary_color)));
-                nonSmokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.white)));
-
-                smokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-                smokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
-
-                stopSmokeDateSelectButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-                stopSmokeDateSelectButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
-                stopSmokeDateSelectButton.setClickable(true);
+                enableButton(nonSmokeButton, true);
+                enableButton(smokeButton, false);
+                enableButton(stopSmokeDateSelectButton, false);
 
             }
         });
@@ -496,6 +453,45 @@ public class PatientInsertActivity extends AppCompatActivity {
         int diffMonth = toCal.get(Calendar.MONTH) - fromCal.get(Calendar.MONTH);
 
         return (diffYear * 12) + diffMonth;
+
+    }
+
+    private void enableButton(Button button, boolean isSelected) {
+
+        if (isSelected) {
+            button.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.primary_color)));
+            button.setTextColor(ColorStateList.valueOf(getColor(R.color.white)));
+            button.setClickable(true);
+        } else {
+            button.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
+            button.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
+            button.setClickable(true);
+        }
+
+    }
+
+    private void disableButton(Button button) {
+
+        button.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.gray_background)));
+        button.setTextColor(ColorStateList.valueOf(getColor(R.color.gray_dark)));
+        button.setClickable(false);
+
+    }
+
+    private void enableTextField(EditText editText) {
+
+        editText.setBackgroundResource(R.drawable.text_field_inner_shadow_white);
+        editText.setHintTextColor(getColor(R.color.gray_dark));
+        editText.setEnabled(true);
+
+    }
+
+    private void disableTextField(EditText editText) {
+
+        editText.setBackgroundResource(R.drawable.text_field_background_round_gray);
+        editText.setHintTextColor(getColor(R.color.gray_dark));
+        editText.setEnabled(false);
+        inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
 
     }
 

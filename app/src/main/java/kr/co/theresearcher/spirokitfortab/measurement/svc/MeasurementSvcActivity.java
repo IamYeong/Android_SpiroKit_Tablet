@@ -597,6 +597,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
                         confirmDialog.show();
 
                         isStart = true;
+                        timerCount = 0d;
 
                         graphView.clear();
                         graphView.postInvalidate();
