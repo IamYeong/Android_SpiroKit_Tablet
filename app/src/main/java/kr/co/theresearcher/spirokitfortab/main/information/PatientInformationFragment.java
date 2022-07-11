@@ -187,36 +187,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
                 if (isExpanded) updatePatientInformation();
                 else updatePatientSimpleInfo();
 
-                Thread thread = new Thread() {
-                    @Override
-                    public void run() {
-                        super.run();
-                        Looper.prepare();
-
-                        List<CalHistory> histories = new ArrayList<>();
-
-                        measurementAdapter.setCalHistories(histories);
-
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                if (histories.size() > 0) {
-                                    measurementsEmptyText.setVisibility(View.INVISIBLE);
-                                    historySelectedListener.onHistorySelected(histories.get(histories.size() - 1));
-                                } else {
-                                    measurementsEmptyText.setVisibility(View.VISIBLE);
-                                    historySelectedListener.onHistorySelected(null);
-                                }
-
-                                measurementAdapter.notifyDataSetChanged();
-                            }
-                        });
-
-                        Looper.loop();
-                    }
-                };
-                thread.start();
+                selectMeasurements();
 
             }
         });
@@ -411,11 +382,13 @@ public class PatientInformationFragment extends Fragment implements Observer {
                 super.run();
                 Looper.prepare();
 
-                List<CalHistory> histories = new ArrayList<>();
+                List<CalHistory> histories = SpiroKitDatabase.getInstance(context).calHistoryDao().selectHistoryByPatient(SharedPreferencesManager.getPatientHashed(context));
+                //parse
 
                 for (CalHistory history : histories) {
                     //if (minDate > measurement.getMeasDate()) minDate = measurement.getMeasDate();
                     //if (maxDate < measurement.getMeasDate()) maxDate = measurement.getMeasDate();
+
                 }
 
                 measurementAdapter.setCalHistories(histories);

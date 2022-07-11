@@ -256,6 +256,15 @@ public class FvcResultFragment extends Fragment implements Observer {
                         SharedPreferencesManager.getCalHistoryHash(context)
                 );
 
+                List<CalHistoryRawData> allData = database.calHistoryRawDataDao().selectAll();
+                for (CalHistoryRawData cal : allData) {
+                    Log.d(getClass().getSimpleName(), "CAL HISTORY HASH : " + cal.getCalHistoryHashed() + "\nDATA : " + cal.getData());
+                }
+
+                SpiroKitDatabase.removeInstance();
+
+                Log.d(getClass().getSimpleName(), "RAW DATA SIZE : " + rawData.size());
+
                 if (rawData.size() == 0) return;
 
                 for (int i = 0; i < rawData.size(); i++) {
@@ -268,6 +277,9 @@ public class FvcResultFragment extends Fragment implements Observer {
                         pulseWidth.add(Integer.parseInt(data[j]));
 
                     }
+
+                    for (int j = 0; j < 10; j++) Log.d(getClass().getSimpleName(), pulseWidth.get(j) + ", ");
+                    Log.d(getClass().getSimpleName(), "===================");
 
                     CalcSpiroKitE calc = new CalcSpiroKitE(pulseWidth);
                     calc.measure();

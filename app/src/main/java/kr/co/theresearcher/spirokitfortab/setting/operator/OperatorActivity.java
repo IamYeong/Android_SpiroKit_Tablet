@@ -9,6 +9,7 @@ import androidx.room.Room;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -16,12 +17,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import kr.co.theresearcher.spirokitfortab.HashConverter;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
+import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
 import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
 import kr.co.theresearcher.spirokitfortab.db.work.Work;
 
@@ -36,6 +40,7 @@ public class OperatorActivity extends AppCompatActivity {
 
     private Handler handler = new Handler(Looper.getMainLooper());
     private boolean isSpinnerInit = false;
+    private List<Work> works;
     private int workID = -1;
 
     @Override
@@ -63,10 +68,13 @@ public class OperatorActivity extends AppCompatActivity {
         rv.setAdapter(adapter);
 
 
-        List<String> works = new ArrayList<>();
+        works = SpiroKitDatabase.getInstance(OperatorActivity.this).workDao().selectAllWork();
+        List<String> workNames = new ArrayList<>();
+        for (Work work : works) workNames.add(work.getWork());
+
         //for (Work work : Work.values()) works.add(work.name().toUpperCase(Locale.ROOT));
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, works
+                this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, workNames
         );
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -95,6 +103,7 @@ public class OperatorActivity extends AppCompatActivity {
                         Looper.prepare();
 
                         String name = nameTextField.getText().toString();
+                        String work = works.get(workID).getWork();
 
                         if (name.length() == 0) {
 
@@ -107,11 +116,23 @@ public class OperatorActivity extends AppCompatActivity {
                             return;
                         }
 
-                        Operator operator = new Operator();
+                        try {
 
-                        //OperatorDatabase.getInstance(OperatorActivity.this).operatorDao().updateOperator(operator);
+                            Operator operator = new Operator();
+                            operator.setHashed(HashConverter.hashingFromString(name + work + SharedPreferencesManager.getOfficeHash(OperatorActivity.this)));
+                            operator.setOfficeHashed(SharedPreferencesManager.getOfficeHash(OperatorActivity.this));
+                            operator.setName(name);
+                            operator.setWork(work);
 
-                        adapter.addOperator(operator);
+                            SpiroKitDatabase.getInstance(OperatorActivity.this).operatorDao().insertOperator(operator);
+
+                            adapter.addOperator(operator);
+
+                        } catch (NoSuchAlgorithmException e) {
+
+                            Log.e(getClass().getSimpleName(), e.toString());
+
+                        }
 
                         handler.post(new Runnable() {
                             @Override
@@ -156,7 +177,9 @@ public class OperatorActivity extends AppCompatActivity {
                 super.run();
                 Looper.prepare();
 
-                List<Operator> operators = new ArrayList<>();
+                SpiroKitDatabase database = SpiroKitDatabase.getInstance(OperatorActivity.this);
+
+                List<Operator> operators = database.operatorDao().selectAllOperator(SharedPreferencesManager.getOfficeHash(OperatorActivity.this));
 
                 handler.post(new Runnable() {
                     @Override
@@ -174,4 +197,7 @@ public class OperatorActivity extends AppCompatActivity {
         thread.start();
 
     }
+
+
+
 }

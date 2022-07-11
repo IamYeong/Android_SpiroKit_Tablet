@@ -3,6 +3,7 @@ package kr.co.theresearcher.spirokitfortab.main.information;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -124,7 +125,7 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
 
         }
 
-        holder.getMeasTitle().setText(simpleDateFormat.format(0));
+        holder.getMeasTitle().setText(calHistory.getFinishDate());
         if (calHistory.getMeasDiv().equals("f")) holder.getGroupText().setText(context.getString(R.string.fvc));
         else if (calHistory.getMeasDiv().equals("s")) holder.getGroupText().setText(context.getString(R.string.svc));
         //else if (calHistory.getMeasDiv().equals("m")) holder.getGroupText().setText(context.getString(R.string.mvv));
@@ -137,6 +138,11 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
 
                 for (CalHistory history : searchResults) history.setSelected(false);
                 searchResults.get(holder.getAdapterPosition()).setSelected(true);
+
+                SharedPreferencesManager.setHistoryHash(context, calHistory.getHashed());
+
+                Log.d(getClass().getSimpleName(), "HISTORY HASH : " + calHistory.getHashed());
+
                 selectedListener.onHistorySelected(calHistory);
                 notifyDataSetChanged();
             }
@@ -159,8 +165,8 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
                                 super.run();
                                 Looper.prepare();
 
-                                //calHistory.isDeleted(1);
-                                //dao.update
+                                //calHIstory .isDeleted = 1
+                                //rawData .isDeletedReference = 1
 
                                 handler.post(new Runnable() {
                                     @Override

@@ -13,13 +13,16 @@ public interface CalHistoryRawDataDao {
     @Query("SELECT * FROM CAL_HISTORY_RAW_DATA WHERE cal_history_hashed = :calHistoryHashed")
     List<CalHistoryRawData> selectRawDataByHistory(String calHistoryHashed);
 
+    @Query("SELECT * FROM CAL_HISTORY_RAW_DATA")
+    List<CalHistoryRawData> selectAll();
+
     @Insert
     void insertRawData(CalHistoryRawData rawData);
 
     @Update
     void updateRawData(CalHistoryRawData rawData);
 
-    @Query("UPDATE CAL_HISTORY_RAW_DATA SET cal_history_hashed = :historyHashed WHERE cal_history_hashed = null")
+    @Query("UPDATE CAL_HISTORY_RAW_DATA SET cal_history_hashed = :historyHashed WHERE cal_history_hashed is null")
     void fillHistoryHash(String historyHashed);
 
     @Query("DELETE FROM cal_history_raw_data WHERE cal_history_hashed = null")

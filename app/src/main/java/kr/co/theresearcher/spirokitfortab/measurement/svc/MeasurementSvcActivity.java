@@ -39,23 +39,35 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
 import kr.co.theresearcher.spirokitfortab.Fluid;
+import kr.co.theresearcher.spirokitfortab.HashConverter;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.bluetooth.SpiroKitBluetoothLeService;
+import kr.co.theresearcher.spirokitfortab.calc.CalcSpiroKitE;
 import kr.co.theresearcher.spirokitfortab.calc.CalcSvcSpiroKitE;
 
+import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
+import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
+import kr.co.theresearcher.spirokitfortab.db.cal_history_raw_data.CalHistoryRawData;
 import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
 import kr.co.theresearcher.spirokitfortab.dialog.LoadingDialog;
 import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
 import kr.co.theresearcher.spirokitfortab.graph.SlowVolumeTimeRunView;
 import kr.co.theresearcher.spirokitfortab.main.result.OnOrderSelectedListener;
+import kr.co.theresearcher.spirokitfortab.measurement.fvc.MeasurementFvcActivity;
+import kr.co.theresearcher.spirokitfortab.measurement.fvc.ResultFVC;
 
 public class MeasurementSvcActivity extends AppCompatActivity {
 
@@ -76,7 +88,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
     private long startTimestamp;
     private List<SlowVolumeTimeRunView> volumeTimeRunViews = new ArrayList<>();
-    private List<Integer> pulseWidthList = new ArrayList<>();
+    private List<String> pulseWidthList = new ArrayList<>();
     private SlowVolumeTimeRunView graphView;
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd_HHmmssSS", Locale.getDefault());
@@ -137,13 +149,16 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         @Override
         public void onReadCharacteristic(byte[] data) {
 
-            if (!isStart) return;
-            if (timerCount >= 60d) return;
-
             int value = conversionIntegerFromByteArray(data);
             if (value > 10) {
 
-                pulseWidthList.add(value);
+                if (!isStart) return;
+                if (timerCount >= 60d) return;
+
+                String d = "";
+                for (byte b : data) d += (char)b;
+
+                pulseWidthList.add(d);
                 handleData(value);
 
             } else {
@@ -322,7 +337,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                saveData(false);
+                saveData(0);
 
             }
         });
@@ -331,7 +346,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                saveData(true);
+                saveData(1);
             }
         });
 
@@ -518,7 +533,9 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
     }
 
-    private void saveData(boolean isPost) {
+    private void saveData(int isPost) {
+
+        isStart = false;
 
         Thread thread = new Thread() {
 
@@ -527,118 +544,109 @@ public class MeasurementSvcActivity extends AppCompatActivity {
                 super.run();
                 Looper.prepare();
 
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS")
+                        .withZone(ZoneId.systemDefault());
+
+                Instant instant = Instant.now().truncatedTo(ChronoUnit.MICROS);
+
+                String hashed = "";
 
                 try {
+                    hashed = HashConverter.hashingFromString(dateTimeFormatter.format(instant));
+                } catch (NoSuchAlgorithmException e) {
 
-                    long date = Calendar.getInstance().getTime().getTime();
+                }
 
-                    File csvFile = new File(getExternalFilesDir("data/" + SharedPreferencesManager.getOfficeID(MeasurementSvcActivity.this)
-                            + "/" + SharedPreferencesManager.getPatientId(MeasurementSvcActivity.this) + "/" + simpleDateFormat.format(startTimestamp)
-                            + "/" + testOrder), testOrder + ".csv");
+                StringBuilder stringBuilder = new StringBuilder();
 
-                    FileWriter fileWriter = new FileWriter(csvFile);
-                    BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+                for (int i = 0; i < pulseWidthList.size(); i++) {
 
-                    for (int i = 0; i < pulseWidthList.size(); i++) {
+                    String value = pulseWidthList.get(i);
+                    if (pulseWidthList.size() - 1 == i) {
+                        byte[] data = value.getBytes();
+                        stringBuilder.append(Integer.toString(conversionIntegerFromByteArray(data)));
+                        break;
+                    }
+                    stringBuilder.append(value);
 
-                        bufferedWriter.write(Integer.toString(pulseWidthList.get(i)));
-                        bufferedWriter.write("\n");
+
+                }
+
+                CalHistoryRawData rawData = new CalHistoryRawData(
+                        hashed,
+                        null,
+                        Integer.toString(testOrder),
+                        stringBuilder.toString(),
+                        dateTimeFormatter.format(instant),
+                        isPost
+                );
+
+                SpiroKitDatabase database = SpiroKitDatabase.getInstance(MeasurementSvcActivity.this);
+                database.calHistoryRawDataDao().insertRawData(rawData);
+                SpiroKitDatabase.removeInstance();
+
+                //CalHistoryRawDataDatabase.removeInstance();
+
+                addResult(testOrder, instant, isPost);
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ConfirmDialog confirmDialog = new ConfirmDialog(MeasurementSvcActivity.this);
+                        confirmDialog.setTitle(getString(R.string.save_success));
+                        confirmDialog.show();
+
+                        isStart = true;
+
+                        graphView.clear();
+                        graphView.postInvalidate();
+
+                        adapter.notifyDataSetChanged();
+
+                        resultGraphLayout.removeAllViews();
+                        resultGraphLayout.addView(volumeTimeRunViews.get(testOrder - 1));
+
+                        emptyText.setVisibility(View.GONE);
+
+                        testOrder++;
 
                     }
-                    pulseWidthList.clear();
-                    bufferedWriter.close();
-                    //CSV 파일 저장================
-
-                    JSONObject jsonObject = new JSONObject();
-
-
-                    File jsonFile = new File(getExternalFilesDir("data/" + SharedPreferencesManager.getOfficeID(MeasurementSvcActivity.this)
-                            + "/" + SharedPreferencesManager.getPatientId(MeasurementSvcActivity.this) + "/" + simpleDateFormat.format(startTimestamp)
-                            + "/" + testOrder), testOrder + ".json");
-
-                    FileOutputStream fileOutputStream = new FileOutputStream(jsonFile);
-                    fileOutputStream.write(jsonObject.toString().getBytes());
-
-                    fileOutputStream.close();
-                    //Json 파일 저장===================
-
-                    jsonObject = null;
-
-                    addResult(testOrder, date, false);
-
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            ConfirmDialog confirmDialog = new ConfirmDialog(MeasurementSvcActivity.this);
-                            confirmDialog.setTitle(getString(R.string.save_success));
-                            confirmDialog.show();
-
-                            isStart = true;
-
-                            graphView.clear();
-                            graphView.postInvalidate();
-
-                            adapter.notifyDataSetChanged();
-
-                            selectData(testOrder - 1);
-                            emptyText.setVisibility(View.INVISIBLE);
-
-                            testOrder++;
-
-                        }
-                    });
-
-
-                } catch (IOException e) {
-                    Log.e(getClass().getSimpleName(), e.getCause().toString());
-                }
+                });
 
 
                 Looper.loop();
             }
         };
-
         thread.start();
 
     }
 
-    private void addResult(int order, long timestamp, boolean isPost) {
+    private void addResult(int order, Instant timestamp, int isPost) {
 
         //여기서는 어댑터에 추가랑 뷰배열에 추가만 해두고
         //핸들러에서 notify 수행, addVIew 하면 될 듯.
 
         List<Integer> pulseWidths = new ArrayList<>();
-        try {
-            FileReader fileReader = new FileReader(
-                    getExternalFilesDir("data/" +
-                            SharedPreferencesManager.getOfficeID(this) + "/"
-                            + SharedPreferencesManager.getPatientId(this) + "/"
-                            + simpleDateFormat.format(startTimestamp)
-                            + "/" + testOrder + "/" + testOrder + ".csv")
-            );
 
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-            String line = "";
-            while ((line = bufferedReader.readLine()) != null) {
-
-                pulseWidths.add(Integer.parseInt(line));
-
-            }
-
-        } catch (FileNotFoundException e) {
-
-        } catch (IOException e) {
-
+        for (int i = 0; i < pulseWidthList.size(); i++) {
+            pulseWidths.add(conversionIntegerFromByteArray(pulseWidthList.get(i).getBytes()));
         }
 
         CalcSvcSpiroKitE calc = new CalcSvcSpiroKitE(pulseWidths);
         calc.measure();
+        pulseWidthList.clear();
+
+        double vc = calc.getVC();
 
         volumeTimeRunViews.add(createVolumeTimeGraph(calc.getVolumeTimeGraph()));
 
+
         ResultSVC resultSVC = new ResultSVC();
-        resultSVC.setVc(calc.getVC());
+
+        resultSVC.setVc(vc);
+
+        resultSVC.setTimestamp(timestamp.toEpochMilli());
+        resultSVC.setPost(isPost);
 
         adapter.addResult(resultSVC);
 
@@ -715,9 +723,37 @@ public class MeasurementSvcActivity extends AppCompatActivity {
                 super.run();
                 Looper.prepare();
 
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd_HHmmssSS", Locale.getDefault());
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS")
+                        .withZone(ZoneId.systemDefault());
 
-                //measurementDao.insertMeasurement(measurement);
+                Instant instant = Instant.now().truncatedTo(ChronoUnit.MICROS);
+
+                String historyHash = "";
+
+                try {
+                    historyHash = HashConverter.hashingFromString(dateTimeFormatter.format(instant));
+                } catch (NoSuchAlgorithmException e) {
+
+                }
+
+                CalHistory calHistory = new CalHistory(
+                        historyHash,
+                        SharedPreferencesManager.getOfficeHash(MeasurementSvcActivity.this),
+                        SharedPreferencesManager.getOperatorHash(MeasurementSvcActivity.this),
+                        SharedPreferencesManager.getPatientHashed(MeasurementSvcActivity.this),
+                        dateTimeFormatter.format(instant),
+                        "s",
+                        "e",
+                        0);
+
+                SpiroKitDatabase database = SpiroKitDatabase.getInstance(MeasurementSvcActivity.this);
+                database.calHistoryDao().insertHistory(calHistory);
+
+                database.calHistoryRawDataDao().fillHistoryHash(historyHash);
+
+                SharedPreferencesManager.setHistoryHash(MeasurementSvcActivity.this, historyHash);
+
+                SpiroKitDatabase.removeInstance();
 
                 handler.post(new Runnable() {
                     @Override
@@ -725,7 +761,6 @@ public class MeasurementSvcActivity extends AppCompatActivity {
                         finish();
                     }
                 });
-
 
                 Looper.loop();
             }

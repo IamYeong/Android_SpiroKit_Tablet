@@ -63,8 +63,7 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorViewHolder> {
         Operator operator = searchResults.get(holder.getAdapterPosition());
 
         holder.getNameText().setText(operator.getName());
-        //Work[] works = Work.values();
-        //holder.getWorkText().setText(works[operator.getWorkID()].toString().toUpperCase(Locale.ROOT));
+        holder.getWorkText().setText(operator.getWork());
 
         holder.getDeleteButton().setOnClickListener(new View.OnClickListener() {
             @Override

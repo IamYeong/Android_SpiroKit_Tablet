@@ -20,7 +20,7 @@ import kr.co.theresearcher.spirokitfortab.db.office.Office;
         indices = {@Index(value = "hashed", unique = true)})
 public class Operator {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     private int id;
 
@@ -42,6 +42,11 @@ public class Operator {
     @ColumnInfo(name = "is_deleted")
     private int isDeleted;
 
+    public Operator() {
+        isDeleted = 0;
+        createTimestamp = 0;
+
+    }
 
     public int getId() {
         return id;

@@ -297,7 +297,6 @@ public class PatientInsertActivity extends AppCompatActivity {
                 MaterialDatePicker<Long> materialDatePicker = MaterialDatePicker.Builder.datePicker()
                         .setTitleText(getString(R.string.select_stop_smoke_date))
 
-
                         .build();
 
                 materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
@@ -305,7 +304,7 @@ public class PatientInsertActivity extends AppCompatActivity {
                     public void onPositiveButtonClick(Long selection) {
 
                         stopSmokeDate = selection;
-                        stopSmokeDateSelectButton.setText(simpleDateFormat.format(birthDate));
+                        stopSmokeDateSelectButton.setText(simpleDateFormat.format(stopSmokeDate));
 
                     }
                 });
@@ -381,9 +380,10 @@ public class PatientInsertActivity extends AppCompatActivity {
                                         .weight(weight)
                                         .chartNumber(chartNumber)
                                         .hashed(HashConverter.hashingFromString(
-                                                name
-                                                        + birthDateFormat.format(birthDate)
-                                                        + SharedPreferencesManager.getOfficeHash(PatientInsertActivity.this)))
+                                                chartNumber +
+                                                        name +
+                                                        birthDateFormat.format(birthDate) +
+                                                        SharedPreferencesManager.getOfficeHash(PatientInsertActivity.this)))
                                         .humanRace("y")
                                         .nowSmoking(nowSmoking)
                                         .smokingAmountDay(smokeAmount)

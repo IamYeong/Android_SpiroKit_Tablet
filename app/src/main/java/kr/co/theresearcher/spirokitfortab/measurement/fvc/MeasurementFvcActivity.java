@@ -537,11 +537,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (saveSomething) saveData(1);
-
-                else {
-
-                }
+                saveData(1);
 
             }
         });
@@ -584,6 +580,8 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                         database.calHistoryDao().insertHistory(calHistory);
 
                         database.calHistoryRawDataDao().fillHistoryHash(historyHash);
+
+                        SharedPreferencesManager.setHistoryHash(MeasurementFvcActivity.this, historyHash);
 
                         SpiroKitDatabase.removeInstance();
 

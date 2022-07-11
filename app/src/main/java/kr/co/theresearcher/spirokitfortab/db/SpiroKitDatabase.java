@@ -41,6 +41,7 @@ public abstract class SpiroKitDatabase extends RoomDatabase {
         if (instance == null) {
             instance = Room.databaseBuilder(context, SpiroKitDatabase.class, "theresearcher_spirokit.db")
                     .createFromAsset("database/spirokit.db")
+                    .allowMainThreadQueries()
                     .build();
         }
 

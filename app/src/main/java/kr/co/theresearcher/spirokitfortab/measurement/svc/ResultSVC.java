@@ -19,8 +19,12 @@ public class ResultSVC {
         return isPost;
     }
 
-    public void setPost(boolean post) {
-        isPost = post;
+    public void setPost(int post) {
+        if (post == 0) {
+            isPost = false;
+        } else {
+            isPost = true;
+        }
     }
 
     public boolean isSelected() {

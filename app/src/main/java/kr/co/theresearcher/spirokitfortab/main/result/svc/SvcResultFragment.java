@@ -35,6 +35,7 @@ import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.calc.CalcSvcSpiroKitE;
+import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
 import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
 import kr.co.theresearcher.spirokitfortab.db.cal_history_raw_data.CalHistoryRawData;
 import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
@@ -151,13 +152,26 @@ public class SvcResultFragment extends Fragment implements Observer {
                 super.run();
                 Looper.prepare();
 
-                List<CalHistoryRawData> rawDatas= new ArrayList<>();
+                SpiroKitDatabase database = SpiroKitDatabase.getInstance(context);
 
-                if (rawDatas.size() == 0) return;
+                List<CalHistoryRawData> rawData = database.calHistoryRawDataDao().selectRawDataByHistory(
+                        SharedPreferencesManager.getCalHistoryHash(context)
+                );
 
-                for (int i = 0; i < rawDatas.size(); i++) {
+                List<CalHistoryRawData> allData = database.calHistoryRawDataDao().selectAll();
+                for (CalHistoryRawData cal : allData) {
+                    Log.d(getClass().getSimpleName(), "CAL HISTORY HASH : " + cal.getCalHistoryHashed() + "\nDATA : " + cal.getData());
+                }
 
-                    String[] data = rawDatas.get(i).getData().split(" ");
+                SpiroKitDatabase.removeInstance();
+
+                Log.d(getClass().getSimpleName(), "RAW DATA SIZE : " + rawData.size());
+
+                if (rawData.size() == 0) return;
+
+                for (int i = 0; i < rawData.size(); i++) {
+
+                    String[] data = rawData.get(i).getData().split(" ");
                     List<Integer> pulseWidth = new ArrayList<>();
 
                     for (int j = 0; j < data.length; j++) {
@@ -171,14 +185,13 @@ public class SvcResultFragment extends Fragment implements Observer {
 
                     double vc = calc.getVC();
 
-                    graphViews.add(createVolumeTimeGraph(calc.getVolumeTimeGraph()));
+                    graphViews.add(createVolumeTimeGraph(calc.getVolumeTimeGraph(), width, height));
 
                     ResultSVC resultSVC = new ResultSVC();
                     resultSVC.setTimestamp(0);
                     resultSVC.setVc(vc);
                     resultSVC.setSelected(false);
-                    if (rawDatas.get(i).getIsPost() == 1) resultSVC.setPost(true);
-                    else resultSVC.setPost(false);
+                    resultSVC.setPost(rawData.get(i).getIsPost());
 
 
                     if (i == 0) resultSVC.setSelected(true);
@@ -262,11 +275,11 @@ public class SvcResultFragment extends Fragment implements Observer {
 
     }
 
-    private SlowVolumeTimeRunView createVolumeTimeGraph(List<ResultCoordinate> coordinates) {
+    private SlowVolumeTimeRunView createVolumeTimeGraph(List<ResultCoordinate> coordinates, int width, int height) {
 
         SlowVolumeTimeRunView graphView = new SlowVolumeTimeRunView(context);
         graphView.setId(View.generateViewId());
-        graphView.setCanvasSize(graphLayout.getWidth(), graphLayout.getHeight());
+        graphView.setCanvasSize(width, height);
         graphView.setMarkingCount(10, 8);
         graphView.setX(60f, 0f);
         graphView.setY(0.1f, -0.1f);

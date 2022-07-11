@@ -24,10 +24,12 @@ import java.util.List;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 
+import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
 import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
 import kr.co.theresearcher.spirokitfortab.db.work.Work;
 import kr.co.theresearcher.spirokitfortab.measurement.fvc.MeasurementFvcActivity;
 import kr.co.theresearcher.spirokitfortab.measurement.svc.MeasurementSvcActivity;
+import kr.co.theresearcher.spirokitfortab.setting.operator.OperatorActivity;
 
 public class MeasSelectionDialog extends Dialog {
 
@@ -39,9 +41,10 @@ public class MeasSelectionDialog extends Dialog {
     private ArrayAdapter<String> jobArrayAdapter;
     private ArrayAdapter<String> operatorArrayAdapter;
 
+    private List<Work> works;
+
     private Handler handler = new Handler(Looper.getMainLooper());
     private List<Operator> operators;
-    private List<Operator> sortedOperators = new ArrayList<>();
 
     public MeasSelectionDialog(@NonNull Context context) {
         super(context);
@@ -76,17 +79,15 @@ public class MeasSelectionDialog extends Dialog {
         operatorSpinner = findViewById(R.id.spinner_operator_group);
         closeButton = findViewById(R.id.img_btn_close_meas_selection_dialog);
 
-        //Work[] works = Work.values();
-        String[] workNames = new String[0];
-        //for (int i = 0; i < works.length; i++) workNames[i] = works[i].name();
+        works = SpiroKitDatabase.getInstance(getContext()).workDao().selectAllWork();
+        List<String> workNames = new ArrayList<>();
+        for (Work work : works) workNames.add(work.getWork());
 
         jobArrayAdapter = new ArrayAdapter<String>(
                 getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, workNames
         );
 
         jobSpinner.setAdapter(jobArrayAdapter);
-
-
 
 
         closeButton.setOnClickListener(new View.OnClickListener() {
@@ -101,7 +102,7 @@ public class MeasSelectionDialog extends Dialog {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                SharedPreferencesManager.setOperatorHash(getContext(), sortedOperators.get(position).getHashed());
+                SharedPreferencesManager.setOperatorHash(getContext(), operators.get(position).getHashed());
 
             }
 
@@ -115,8 +116,10 @@ public class MeasSelectionDialog extends Dialog {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                //Work selectedWork = Work.values()[position];
-                //updateOperators(selectedWork.ordinal());
+                String selectedWork = works.get(position).getWork();
+                operators = SpiroKitDatabase.getInstance(getContext()).operatorDao().selectOperatorByWork(SharedPreferencesManager.getOfficeHash(getContext()), selectedWork);
+
+                updateOperators();
 
             }
 
@@ -150,7 +153,7 @@ public class MeasSelectionDialog extends Dialog {
 
     }
 
-    private void updateOperators(int workID) {
+    private void updateOperators() {
 
         Thread thread = new Thread() {
 
@@ -159,13 +162,13 @@ public class MeasSelectionDialog extends Dialog {
                 super.run();
                 Looper.prepare();
 
-                sortedOperators.clear();
+                List<String> operatorNames = new ArrayList<>();
+
+
                 for (int i = 0; i < operators.size(); i++) {
-                    //if (operators.get(i).getWorkID() == workID) sortedOperators.add(operators.get(i));
+                    operatorNames.add(operators.get(i).getName());
                 }
 
-                String[] operatorNames = new String[sortedOperators.size()];
-                for (int i = 0; i < sortedOperators.size(); i++) operatorNames[i] = sortedOperators.get(i).getName();
                 operatorArrayAdapter = new ArrayAdapter<String>(
                         getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, operatorNames
                 );
