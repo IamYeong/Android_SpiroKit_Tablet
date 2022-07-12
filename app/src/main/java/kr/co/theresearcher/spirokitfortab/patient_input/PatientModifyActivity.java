@@ -414,43 +414,15 @@ public class PatientModifyActivity extends AppCompatActivity {
 
     private void setPatientInfoInPreferences(Context context, Patient patient) {
 
-        SharedPreferencesManager.setPatientID(context, patient.getId());
-        SharedPreferencesManager.setPatientName(context, patient.getName());
         SharedPreferencesManager.setPatientHash(context, patient.getHashed());
-        SharedPreferencesManager.setPatientChartNumber(context, patient.getChartNumber());
-        SharedPreferencesManager.setPatientGender(context, patient.getGender());
-        SharedPreferencesManager.setPatientHeight(context, patient.getHeight());
-        SharedPreferencesManager.setPatientWeight(context, patient.getWeight());
-        SharedPreferencesManager.setPatientHumanRace(context, patient.getHumanRace());
-        SharedPreferencesManager.setPatientSmokingIsNow(context, patient.getNowSmoking());
-        SharedPreferencesManager.setPatientSmokingStartDate(context, patient.getStartSmokingDay());
-        SharedPreferencesManager.setPatientSmokingStopDate(context, patient.getStopSmokingDay());
-        SharedPreferencesManager.setPatientSmokingAmountPerDay(context, patient.getSmokingAmountPerDay());
-        SharedPreferencesManager.setPatientSmokingPeriod(context, patient.getSmokingPeriod());
-        SharedPreferencesManager.setPatientBirthday(context, patient.getBirthDay());
+
     }
 
     private Patient getPatientFromPreferences(Context context) {
 
-        Patient patient = new Patient.Builder()
-                .hashed(SharedPreferencesManager.getPatientHashed(context))
-                .gender(SharedPreferencesManager.getPatientGender(context))
-                .name(SharedPreferencesManager.getPatientName(context))
-                .chartNumber(SharedPreferencesManager.getPatientChartNumber(context))
-                .birthDay(SharedPreferencesManager.getPatientBirthday(context))
-                .height(SharedPreferencesManager.getPatientHeight(context))
-                .weight(SharedPreferencesManager.getPatientWeight(context))
-                .officeHashed(SharedPreferencesManager.getOfficeHash(context))
-                .humanRace(SharedPreferencesManager.getPatientHumanRace(context))
-                .nowSmoking(SharedPreferencesManager.getPatientSmokingIsNow(context))
-                .smokingAmountDay(SharedPreferencesManager.getPatientSmokingAmountPerDay(context))
-                .startSmokingDate(SharedPreferencesManager.getPatientSmokingStartDate(context))
-                .stopSmokingDate(SharedPreferencesManager.getPatientSmokingStopDate(context))
-                .build();
 
-        patient.setId(SharedPreferencesManager.getPatientId(context));
 
-        return patient;
+        return SpiroKitDatabase.getInstance(context).patientDao().selectPatientByHash(SharedPreferencesManager.getPatientHashed(context));
 
     }
 

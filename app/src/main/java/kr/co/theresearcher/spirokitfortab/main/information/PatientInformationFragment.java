@@ -146,6 +146,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
             public void onChanged() {
 
                 selectPatients();
+                updatePatientInformation();
 
             }
         });
@@ -154,7 +155,14 @@ public class PatientInformationFragment extends Fragment implements Observer {
             @Override
             public void onClick(View v) {
 
-                if (SharedPreferencesManager.getPatientHashed(context).equals("")) {
+                Patient patient = SpiroKitDatabase.getInstance(context).patientDao().selectPatientByHash(SharedPreferencesManager.getPatientHashed(context));
+
+                if (patient.getIsDeleted() == 1) {
+
+                    ConfirmDialog confirmDialog = new ConfirmDialog(context);
+                    confirmDialog.setTitle(getString(R.string.please_select_patient));
+                    confirmDialog.show();
+
                     return;
                 }
                 Intent intent = new Intent(context, PatientModifyActivity.class);
@@ -277,12 +285,29 @@ public class PatientInformationFragment extends Fragment implements Observer {
             public void onClick(View v) {
 
                 SpiroKitDatabase database = SpiroKitDatabase.getInstance(context);
-                if (database.operatorDao().getItemCount() == 0) {
+
+                Patient patient = database.patientDao().selectPatientByHash(SharedPreferencesManager.getPatientHashed(context));
+                int operatorCount = database.operatorDao().getItemCount();
+
+                SpiroKitDatabase.removeInstance();
+
+                if (patient.getIsDeleted() == 1) {
+
                     ConfirmDialog confirmDialog = new ConfirmDialog(context);
-                    confirmDialog.setTitle("");
+                    confirmDialog.setTitle(getString(R.string.please_select_patient));
                     confirmDialog.show();
 
                     return;
+                }
+
+                if (operatorCount == 0) {
+
+                    ConfirmDialog confirmDialog = new ConfirmDialog(context);
+                    confirmDialog.setTitle(getString(R.string.please_add_operator));
+                    confirmDialog.show();
+
+                    return;
+
                 }
 
                 MeasSelectionDialog dialog = new MeasSelectionDialog(context);
@@ -449,22 +474,32 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
     private void updatePatientInformation() {
 
+        Patient patient = SpiroKitDatabase.getInstance(context).patientDao()
+                .selectPatientByHash(SharedPreferencesManager.getPatientHashed(context));
+
+        if (patient.getIsDeleted() == 1) {
+
+            patientNameText.setText(getString(R.string.not_applicable));
+            patientInfoText.setText(getString(R.string.please_select_patient));
+            return;
+        }
+
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         SimpleDateFormat birthDateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
 
-        patientNameText.setText(SharedPreferencesManager.getPatientName(context));
+        patientNameText.setText(patient.getName());
         StringBuilder info = new StringBuilder();
 
-        info.append(getString(R.string.chart_number_is, SharedPreferencesManager.getPatientChartNumber(context))).append("\n");
-        if (SharedPreferencesManager.getPatientGender(context).equals("m")) {
+        info.append(getString(R.string.chart_number_is, patient.getChartNumber())).append("\n");
+        if (patient.getGender().equals("m")) {
             info.append(getString(R.string.gender_is, getString(R.string.male))).append("\n");
         } else {
             info.append(getString(R.string.gender_is, getString(R.string.female))).append("\n");
         }
-        info.append(getString(R.string.height_is, SharedPreferencesManager.getPatientHeight(context))).append("\n");
-        info.append(getString(R.string.weight_is, SharedPreferencesManager.getPatientWeight(context))).append("\n");
+        info.append(getString(R.string.height_is, patient.getHeight())).append("\n");
+        info.append(getString(R.string.weight_is, patient.getWeight())).append("\n");
 
-        String birthString = SharedPreferencesManager.getPatientBirthday(context);
+        String birthString = patient.getBirthDay();
 
         try {
             long date = simpleDateFormat.parse(birthString).getTime();
@@ -473,27 +508,27 @@ public class PatientInformationFragment extends Fragment implements Observer {
             Log.e(getClass().getSimpleName(), e.toString());
         }
 
-        if (SharedPreferencesManager.getPatientSmokingIsNow(context) == 0) {
+        if (patient.getNowSmoking() == 0) {
             info.append(getString(R.string.smoking_now_is, getString(R.string.not_smoking))).append("\n");
         } else {
             info.append(getString(R.string.smoking_now_is, getString(R.string.smoking))).append("\n");
         }
 
-        String startSmokingDateString = SharedPreferencesManager.getPatientSmokingStartDate(context);
+        String startSmokingDateString = patient.getStartSmokingDay();
         if (startSmokingDateString == null) {
             info.append(getString(R.string.smoke_start_date_is, getString(R.string.not_applicable))).append("\n");
         } else {
             info.append(getString(R.string.smoke_start_date_is, startSmokingDateString)).append("\n");
         }
 
-        String stopSmokingDateString = SharedPreferencesManager.getPatientSmokingStopDate(context);
+        String stopSmokingDateString = patient.getStopSmokingDay();
         if (stopSmokingDateString == null) {
             info.append(getString(R.string.smoke_start_date_is, getString(R.string.not_applicable))).append("\n");
         } else {
             info.append(getString(R.string.smoke_start_date_is, stopSmokingDateString)).append("\n");
         }
 
-        String smokingAmount = SharedPreferencesManager.getPatientSmokingAmountPerDay(context);
+        String smokingAmount = patient.getSmokingAmountPerDay();
         if (startSmokingDateString == null) {
             info.append(getString(R.string.smoking_per_day_is, getString(R.string.not_applicable))).append("\n");
         } else {
@@ -501,7 +536,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
         }
 
         //인종
-        String humanRace = SharedPreferencesManager.getPatientHumanRace(context);
+        String humanRace = patient.getHumanRace();
 
         //info.append(getString(R.string.human_race_is, humanRace)).append("\n")
 
@@ -515,7 +550,16 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
 
-        patientNameText.setText(SharedPreferencesManager.getPatientName(context));
+        Patient patient = SpiroKitDatabase.getInstance(context).patientDao()
+                .selectPatientByHash(SharedPreferencesManager.getPatientHashed(context));
+
+        if (patient.getIsDeleted() == 1) {
+
+            patientNameText.setText(getString(R.string.not_applicable));
+            //patientInfoText.setText(getString(R.string.please_select_patient));
+            return;
+        }
+
         StringBuilder info = new StringBuilder();
 
         /*

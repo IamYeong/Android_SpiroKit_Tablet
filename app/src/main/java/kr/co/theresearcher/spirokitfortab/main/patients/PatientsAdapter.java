@@ -146,23 +146,7 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsViewHolder> {
             public void onClick(View v) {
 
                 Log.d(getClass().getSimpleName(), patient.getName());
-                //선택 UI 처리 후 리스너로 전달, 리사이클러뷰 닫고 환자 정보 보여주면 됨.
-                SharedPreferencesManager.setPatientID(context, patient.getId());
                 SharedPreferencesManager.setPatientHash(context, patient.getHashed());
-                SharedPreferencesManager.setPatientOfficeHash(context, patient.getOfficeHashed());
-                SharedPreferencesManager.setPatientGender(context, patient.getGender());
-                SharedPreferencesManager.setPatientName(context, patient.getName());
-                SharedPreferencesManager.setPatientWeight(context, patient.getWeight());
-                SharedPreferencesManager.setPatientHeight(context, patient.getHeight());
-                SharedPreferencesManager.setPatientChartNumber(context, patient.getChartNumber());
-                SharedPreferencesManager.setPatientHumanRace(context, patient.getHumanRace());
-                SharedPreferencesManager.setPatientSmokingIsNow(context, patient.getNowSmoking());
-                SharedPreferencesManager.setPatientSmokingStartDate(context, patient.getStartSmokingDay());
-                SharedPreferencesManager.setPatientSmokingStopDate(context, patient.getStopSmokingDay());
-                SharedPreferencesManager.setPatientSmokingPeriod(context,patient.getSmokingPeriod());
-                SharedPreferencesManager.setPatientBirthday(context, patient.getBirthDay());
-
-                //주치의 입력
 
                 simpleSelectedListener.onSimpleSelected();
 
@@ -184,8 +168,11 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsViewHolder> {
                                 super.run();
                                 Looper.prepare();
 
-                                SpiroKitDatabase.getInstance(context)
-                                        .patientDao().deletePatient(patient.getHashed());
+                                SpiroKitDatabase database = SpiroKitDatabase.getInstance(context);
+                                database.calHistoryDao().deleteReference(patient.getHashed());
+                                database.patientDao().deletePatient(patient.getHashed());
+
+                                SpiroKitDatabase.removeInstance();
 
                                 handler.post(new Runnable() {
                                     @Override

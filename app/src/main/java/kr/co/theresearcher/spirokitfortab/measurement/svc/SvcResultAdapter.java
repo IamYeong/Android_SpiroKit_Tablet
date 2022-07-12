@@ -175,19 +175,6 @@ public class SvcResultAdapter extends RecyclerView.Adapter<SvcResultViewHolder> 
         return (results != null ? results.size() : 0);
     }
 
-    private void removeThisData(long timestamp, int order) {
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmssSS", Locale.getDefault());
-
-        String dirName = dateFormat.format(timestamp);
-        File dir = context.getExternalFilesDir("data/"
-                + SharedPreferencesManager.getOfficeID(context) + "/"
-                + SharedPreferencesManager.getPatientId(context) + "/"
-                + dirName + "/" + order);
-
-        deleteFileWithChildren(dir);
-
-    }
 
     private void deleteFileWithChildren(File fileOrDirectory) {
 

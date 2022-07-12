@@ -354,8 +354,28 @@ public class MeasurementSvcActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                removeThisData();
-                finish();
+                Thread thread = new Thread() {
+                    @Override
+                    public void run() {
+                        super.run();
+                        Looper.prepare();
+
+                        SpiroKitDatabase database = SpiroKitDatabase.getInstance(MeasurementSvcActivity.this);
+                        database.calHistoryRawDataDao().deleteNotCompleteData();
+                        SpiroKitDatabase.removeInstance();
+
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                finish();
+                            }
+                        });
+
+                        Looper.loop();
+                    }
+                };
+                thread.start();
             }
         });
 
@@ -650,18 +670,6 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         resultSVC.setPost(isPost);
 
         adapter.addResult(resultSVC);
-
-    }
-
-    private void removeThisData() {
-
-        String dirName = simpleDateFormat.format(startTimestamp);
-        File dir = getExternalFilesDir("data/"
-                + SharedPreferencesManager.getOfficeID(MeasurementSvcActivity.this) + "/"
-                + SharedPreferencesManager.getPatientId(MeasurementSvcActivity.this) + "/"
-                + dirName);
-
-        deleteFileWithChildren(dir);
 
     }
 

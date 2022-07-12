@@ -46,6 +46,7 @@ import kr.co.theresearcher.spirokitfortab.calc.CalcSpiroKitE;
 import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
 import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
 import kr.co.theresearcher.spirokitfortab.db.cal_history_raw_data.CalHistoryRawData;
+import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
 import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowResultView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeTimeResultView;
@@ -67,8 +68,6 @@ public class FvcResultFragment extends Fragment implements Observer {
     private List<VolumeTimeResultView> volumeTimeResultViews = new ArrayList<>();
     private CalHistory history;
     private Handler handler = new Handler(Looper.getMainLooper());
-
-
 
     public FvcResultFragment(CalHistory history) {
         this.history = history;
@@ -256,6 +255,9 @@ public class FvcResultFragment extends Fragment implements Observer {
                 super.run();
                 Looper.prepare();
 
+                Patient patient = SpiroKitDatabase.getInstance(context).patientDao()
+                        .selectPatientByHash(SharedPreferencesManager.getPatientHashed(context));
+
                 SpiroKitDatabase database = SpiroKitDatabase.getInstance(context);
 
                 List<CalHistoryRawData> rawData = database.calHistoryRawDataDao().selectRawDataByHistory(
@@ -271,7 +273,10 @@ public class FvcResultFragment extends Fragment implements Observer {
 
                 Log.d(getClass().getSimpleName(), "RAW DATA SIZE : " + rawData.size());
 
-                if (rawData.size() == 0) return;
+                if (rawData.size() == 0) {
+
+                    return;
+                }
 
                 for (int i = 0; i < rawData.size(); i++) {
 
@@ -296,16 +301,16 @@ public class FvcResultFragment extends Fragment implements Observer {
 
                     double fvcP = calc.getFVCp(
                             0,
-                            SharedPreferencesManager.getPatientHeight(context),
-                            SharedPreferencesManager.getPatientWeight(context),
-                            SharedPreferencesManager.getPatientGender(context)
+                            patient.getHeight(),
+                            patient.getWeight(),
+                            patient.getGender()
                     );
 
                     double fev1P = calc.getFEV1p(
                             0,
-                            SharedPreferencesManager.getPatientHeight(context),
-                            SharedPreferencesManager.getPatientWeight(context),
-                            SharedPreferencesManager.getPatientGender(context)
+                            patient.getHeight(),
+                            patient.getWeight(),
+                            patient.getGender()
                     );
 
                     //System.out.println(fvc + ", " + fev1 + ", " + pef);

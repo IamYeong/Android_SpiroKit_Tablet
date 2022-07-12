@@ -22,7 +22,7 @@ public interface OperatorDao {
     @Update
     void updateOperator(Operator operator);
 
-    @Query("SELECT COUNT(id) FROM OPERATOR")
+    @Query("SELECT COUNT(id) FROM OPERATOR WHERE is_deleted is 0")
     int getItemCount();
 
     @Query("UPDATE operator SET is_deleted = 1 WHERE hashed = :hash")

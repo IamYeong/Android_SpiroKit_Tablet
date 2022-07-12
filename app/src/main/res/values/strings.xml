@@ -130,6 +130,9 @@
     <string name="smoking_per_day_is">하루 흡연량 : %1$s</string>
     <string name="smoking_now_is">현재 흡연 여부 : %1$s</string>
 
+    <string name="please_select_patient">환자를 선택해주세요</string>
+    <string name="please_add_operator">작업자를 먼저 추가해주세요</string>
+
     <!-- FVC Activity -->
     <string name="fvc_meas">FVC 검사</string>
 

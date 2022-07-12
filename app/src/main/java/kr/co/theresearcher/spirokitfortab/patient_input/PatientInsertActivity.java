@@ -457,20 +457,8 @@ public class PatientInsertActivity extends AppCompatActivity {
 
     private void setPatientInfoInPreferences(Context context, Patient patient) {
 
-        SharedPreferencesManager.setPatientID(context, patient.getId());
-        SharedPreferencesManager.setPatientName(context, patient.getName());
         SharedPreferencesManager.setPatientHash(context, patient.getHashed());
-        SharedPreferencesManager.setPatientChartNumber(context, patient.getChartNumber());
-        SharedPreferencesManager.setPatientGender(context, patient.getGender());
-        SharedPreferencesManager.setPatientHeight(context, patient.getHeight());
-        SharedPreferencesManager.setPatientWeight(context, patient.getWeight());
-        SharedPreferencesManager.setPatientHumanRace(context, patient.getHumanRace());
-        SharedPreferencesManager.setPatientSmokingIsNow(context, patient.getNowSmoking());
-        SharedPreferencesManager.setPatientSmokingStartDate(context, patient.getStartSmokingDay());
-        SharedPreferencesManager.setPatientSmokingStopDate(context, patient.getStopSmokingDay());
-        SharedPreferencesManager.setPatientSmokingAmountPerDay(context, patient.getSmokingAmountPerDay());
-        SharedPreferencesManager.setPatientSmokingPeriod(context, patient.getSmokingPeriod());
-        SharedPreferencesManager.setPatientBirthday(context, patient.getBirthDay());
+
     }
 
     private int diffDateMonth(long from, long to) {

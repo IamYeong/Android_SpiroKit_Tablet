@@ -221,11 +221,20 @@ public class CalcSvcSpiroKitE {
 
     public double getVC() {
 
-        List<ResultCoordinate> volumeTimes = getForcedVolumeTimeGraph();
+        for (int i = 1; i < measuredPulseWidth.size(); i++) {
 
-        for (int i = 0; i < volumeTimes.size(); i++) {
+            int prePW = measuredPulseWidth.get(i - 1);
+            int pw = measuredPulseWidth.get(i);
 
-            svc += volumeTimes.get(i).getY();
+            if (pw < 100_000_000) {
+                double volume = Fluid.calcVolume(
+                        Fluid.conversionLiterPerSecond(Fluid.calcRevolutionPerSecond(prePW * HERTZ_80MHZ)),
+                        Fluid.conversionLiterPerSecond(Fluid.calcRevolutionPerSecond(pw * HERTZ_80MHZ)),
+                        pw * HERTZ_80MHZ
+                );
+
+                svc += volume;
+            }
 
         }
 

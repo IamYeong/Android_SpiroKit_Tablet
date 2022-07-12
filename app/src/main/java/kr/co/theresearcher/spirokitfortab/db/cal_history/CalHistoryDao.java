@@ -11,7 +11,14 @@ import java.util.List;
 @Dao
 public interface CalHistoryDao {
 
-    @Query("SELECT * FROM CAL_HISTORY WHERE patient_hashed = :patientHashed AND is_deleted is 0")
+    @Query("SELECT * FROM CAL_HISTORY " +
+            "WHERE (patient_hashed = :patientHashed) " +
+            "AND (is_deleted is 0) " +
+            "AND (is_deleted_reference is 0)" +
+            "AND ((SELECT COUNT(id) FROM CAL_HISTORY_RAW_DATA " +
+            "WHERE (CAL_HISTORY.hashed = cal_history_hashed) " +
+            "AND (is_deleted is 0)) " +
+            "is not 0)")
     List<CalHistory> selectHistoryByPatient(String patientHashed);
 
     @Insert

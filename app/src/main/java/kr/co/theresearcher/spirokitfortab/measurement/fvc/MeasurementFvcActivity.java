@@ -63,6 +63,7 @@ import kr.co.theresearcher.spirokitfortab.calc.CalcSpiroKitE;
 import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
 import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
 import kr.co.theresearcher.spirokitfortab.db.cal_history_raw_data.CalHistoryRawData;
+import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
 import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
 import kr.co.theresearcher.spirokitfortab.dialog.LoadingDialog;
 import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
@@ -99,6 +100,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
     private TextView patientNameText;
     private TextView emptyText;
     private LoadingDialog loadingDialog;
+
 
     private boolean isStart = false;
     private int dataReceivedCount = 0;
@@ -332,8 +334,6 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         resultAdapter.addEmptyObject(new ResultFVC(""));
         rv.setLayoutManager(linearLayoutManager);
         rv.setAdapter(resultAdapter);
-
-        patientNameText.setText(SharedPreferencesManager.getPatientName(this));
 
         connectButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -917,18 +917,6 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
     }
 
-    private void removeThisData() {
-
-        String dirName = simpleDateFormat.format(startTimestamp);
-        File dir = getExternalFilesDir("data/"
-        + SharedPreferencesManager.getOfficeID(MeasurementFvcActivity.this) + "/"
-        + SharedPreferencesManager.getPatientId(MeasurementFvcActivity.this) + "/"
-        + dirName);
-
-        deleteFileWithChildren(dir);
-
-    }
-
     private void deleteFileWithChildren(File fileOrDirectory) {
 
         if (fileOrDirectory.isDirectory()) {
@@ -944,6 +932,8 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
     private void addResult(String hash, int order, Instant timestamp, int isPost) {
 
+        Patient patient = SpiroKitDatabase.getInstance(MeasurementFvcActivity.this).patientDao()
+                .selectPatientByHash(SharedPreferencesManager.getPatientHashed(MeasurementFvcActivity.this));
         //여기서는 어댑터에 추가랑 뷰배열에 추가만 해두고
         //핸들러에서 notify 수행, addVIew 하면 될 듯.
 
@@ -963,16 +953,16 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
         double fvcP = calc.getFVCp(
                 0,
-                SharedPreferencesManager.getPatientHeight(this),
-                SharedPreferencesManager.getPatientWeight(this),
-                SharedPreferencesManager.getPatientGender(this)
+                patient.getHeight(),
+                patient.getWeight(),
+                patient.getGender()
         );
 
         double fev1P = calc.getFEV1p(
                 0,
-                SharedPreferencesManager.getPatientHeight(this),
-                SharedPreferencesManager.getPatientWeight(this),
-                SharedPreferencesManager.getPatientGender(this)
+                patient.getHeight(),
+                patient.getWeight(),
+                patient.getGender()
         );
 
         volumeFlowResultViewList.add(createVolumeFlowGraph(calc.getVolumeFlowGraph()));

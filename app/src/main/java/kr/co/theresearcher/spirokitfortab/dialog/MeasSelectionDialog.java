@@ -97,7 +97,7 @@ public class MeasSelectionDialog extends Dialog {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 Log.d(getClass().getSimpleName(), familyDoctorOperators.get(position).getName() + " SELECTED");
-                SharedPreferencesManager.setPatientOperatorDoctorHash(getContext(), familyDoctorOperators.get(position).getHashed());
+                SharedPreferencesManager.setFamilyDoctorHash(getContext(), familyDoctorOperators.get(position).getHashed());
 
             }
 
