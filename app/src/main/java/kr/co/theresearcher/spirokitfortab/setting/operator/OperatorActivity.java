@@ -76,8 +76,7 @@ public class OperatorActivity extends AppCompatActivity {
 
 
         works = SpiroKitDatabase.getInstance(OperatorActivity.this).workDao().selectAllWork();
-        List<String> workNames = new ArrayList<>();
-        for (Work work : works) workNames.add(work.getWork());
+        String[] workNames = getResources().getStringArray(R.array.works);
 
         //for (Work work : Work.values()) works.add(work.name().toUpperCase(Locale.ROOT));
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(

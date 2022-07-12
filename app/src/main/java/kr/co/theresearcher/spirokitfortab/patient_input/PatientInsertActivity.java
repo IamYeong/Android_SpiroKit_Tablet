@@ -47,7 +47,8 @@ public class PatientInsertActivity extends AppCompatActivity {
             , birthSelectButton, startSmokeDateSelectButton, stopSmokeDateSelectButton;
     private AppCompatSpinner humanRaceSpinner;
 
-    private ArrayAdapter<String> humanRaceAdapter, doctorAdapter;
+    private ArrayAdapter<String> humanRaceAdapter;
+    private List<HumanRace> humanRaceDatabases;
 
     private ImageButton backButton;
 
@@ -59,8 +60,7 @@ public class PatientInsertActivity extends AppCompatActivity {
     private long startSmokeDate = Long.MAX_VALUE;
     private long stopSmokeDate = Long.MAX_VALUE;
 
-    private int humanRaceID = 0;
-    private int doctorID = 0;
+    private int humanRaceID = -1;
 
     private InputMethodManager inputMethodManager;
 
@@ -272,17 +272,11 @@ public class PatientInsertActivity extends AppCompatActivity {
             }
         });
 
-        List<String> humanRaces = new ArrayList<>();
-        List<String> doctors = new ArrayList<>();
-        //for (HumanRace humanRace : HumanRace.values()) humanRaces.add(humanRace.getValue());
-        //연도부터 선택하면 활성화 하는 방향도 좋을 듯
+        String[] humanRaces = getResources().getStringArray(R.array.human_races);
+        humanRaceDatabases = SpiroKitDatabase.getInstance(PatientInsertActivity.this).humanRaceDao().selectAllHumanRace();
 
         humanRaceAdapter = new ArrayAdapter<String>(
                 this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, humanRaces
-        );
-
-        doctorAdapter = new ArrayAdapter<String>(
-                PatientInsertActivity.this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, doctors
         );
 
         humanRaceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -343,7 +337,7 @@ public class PatientInsertActivity extends AppCompatActivity {
                                         .weight(weight)
                                         .chartNumber(chartNumber)
                                         .hashed(patientHashed)
-                                        .humanRace("y")
+                                        .humanRace(humanRaceDatabases.get(humanRaceID).getRace())
                                         .nowSmoking(nowSmoking)
                                         .smokingAmountDay(smokeAmount)
                                         .birthDay(conversionDate(birthDate))
@@ -434,6 +428,12 @@ public class PatientInsertActivity extends AppCompatActivity {
                 Log.d(getClass().getSimpleName(), "BIRTH");
                 return false;
             }
+
+            if (humanRaceID == -1) {
+                Log.d(getClass().getSimpleName(), "HUMAN_RACE");
+                return false;
+            }
+
             if ((haveSmoking) && (startSmokeDate == Long.MAX_VALUE)) {
                 Log.d(getClass().getSimpleName(), "HAVE & NOT START");
                 return false;

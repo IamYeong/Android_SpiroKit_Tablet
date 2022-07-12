@@ -239,7 +239,6 @@ public class PatientInformationFragment extends Fragment implements Observer {
             }
         });
 
-
         linearLayoutManager = new LinearLayoutManager(container.getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
@@ -493,8 +492,11 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
     private void updatePatientInformation() {
 
-        Patient patient = SpiroKitDatabase.getInstance(context).patientDao()
+        SpiroKitDatabase database = SpiroKitDatabase.getInstance(context);
+        Patient patient = database.patientDao()
                 .selectPatientByHash(SharedPreferencesManager.getPatientHashed(context));
+        List<HumanRace> humanRaces = database.humanRaceDao().selectAllHumanRace();
+        SpiroKitDatabase.removeInstance();
 
         if (patient == null) {
             patientNameText.setText(getString(R.string.not_applicable));
@@ -562,12 +564,18 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
         //인종
         String humanRace = patient.getHumanRace();
-
+        String[] humanResources = getResources().getStringArray(R.array.human_races);
+        for (int i = 0; i < humanRaces.size(); i++) {
+            HumanRace race = humanRaces.get(i);
+            if (race.getRace().equals(humanRace)) {
+                info.append(getString(R.string.human_race_is, humanResources[i])).append("\n");
+                break;
+            }
+        }
         //info.append(getString(R.string.human_race_is, humanRace)).append("\n")
 
         Log.d(getClass().getSimpleName(), info.toString());
         patientInfoText.setText(info.toString());
-
 
     }
 

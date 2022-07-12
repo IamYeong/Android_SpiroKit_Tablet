@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
@@ -32,11 +33,14 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorViewHolder> {
 
     private Handler handler = new Handler(Looper.getMainLooper());
     private OnItemChangedListener changedListener;
+    private List<Work> works;
 
     public OperatorAdapter(Context context) {
         this.context = context;
         operators = new ArrayList<>();
         searchResults = new ArrayList<>();
+        works = SpiroKitDatabase.getInstance(context).workDao().selectAllWork();
+        SpiroKitDatabase.removeInstance();
     }
 
     public void setOperators(List<Operator> operators) {
@@ -70,7 +74,15 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorViewHolder> {
         Operator operator = searchResults.get(holder.getAdapterPosition());
 
         holder.getNameText().setText(operator.getName());
-        holder.getWorkText().setText(operator.getWork());
+        for (int i = 0; i < works.size(); i++) {
+            if (works.get(i).getWork().equals(operator.getWork())) {
+
+                holder.getWorkText().setText(
+                        context.getResources().getStringArray(R.array.works)[i]
+                );
+                break;
+            }
+        }
 
         holder.getDeleteButton().setOnClickListener(new View.OnClickListener() {
             @Override

@@ -4,8 +4,8 @@
 
     <!-- Application -->
 
-    <string name="spirokit_title">The SpiroKit</string>
-    <string name="app_v">V 1.0</string>
+    <string name="spirokit_title" translatable="false">The SpiroKit</string>
+    <string name="app_v" translatable="false">V 1.0</string>
 
     <string name="confirm">확인</string>
     <string name="cancel">취소</string>
@@ -13,7 +13,7 @@
     <string name="fail_server_response">서버응답 실패</string>
     
     <string name="checkup">검사</string>
-    <string name="state_null">NULL</string>
+    <string name="state_null" translatable="false">NULL</string>
 
     <!-- Splash activity -->
 
@@ -223,7 +223,24 @@
     <string name="post">POST</string>
     <string name="pre">PRE</string>
 
-
     <!-- human races -->
+    <string-array name="human_races">
+
+        <item>황인종</item>
+        <item>백인종</item>
+        <item>흑인종</item>
+
+
+    </string-array>
+
+
+    <!-- works -->
+    <string-array name="works">
+
+        <item>의사</item>
+        <item>간호사</item>
+        <item>임상병리사</item>
+
+    </string-array>
 
 </resources>
