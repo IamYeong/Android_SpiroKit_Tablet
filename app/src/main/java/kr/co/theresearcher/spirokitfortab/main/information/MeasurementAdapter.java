@@ -180,8 +180,9 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
                                 super.run();
                                 Looper.prepare();
 
-                                SpiroKitDatabase.getInstance(context)
-                                        .calHistoryDao().delete(calHistory.getHashed());
+                                SpiroKitDatabase database = SpiroKitDatabase.getInstance(context);
+                                database.calHistoryRawDataDao().deleteReference(calHistory.getHashed());
+                                database.calHistoryDao().delete(calHistory.getHashed());
 
                                 handler.post(new Runnable() {
                                     @Override
