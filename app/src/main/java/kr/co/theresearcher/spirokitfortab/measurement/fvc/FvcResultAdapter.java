@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Locale;
 
 import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
+import kr.co.theresearcher.spirokitfortab.OnItemDeletedListener;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
@@ -36,6 +37,7 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
     private List<ResultFVC> fvcResults;
     private OnOrderSelectedListener orderSelectedListener;
     private OnItemChangedListener changedListener;
+    private OnItemDeletedListener deletedListener;
     private long rootTimestamp;
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
@@ -50,6 +52,10 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
 
     public void setRootTimestamp(long timestamp) {
         this.rootTimestamp = timestamp;
+    }
+
+    public void setDeletedListener(OnItemDeletedListener deletedListener) {
+        this.deletedListener = deletedListener;
     }
 
     public void setChangedListener(OnItemChangedListener listener) {
@@ -71,14 +77,25 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
         if (nothing) this.fvcResults.clear();
         nothing = false;
         this.fvcResults.add(resultFVC);
+        autoSelect();
     }
 
     public void addEmptyObject(ResultFVC resultFVC) {
+        nothing = true;
         this.fvcResults.add(resultFVC);
     }
 
     public void clear() {
         fvcResults.clear();
+    }
+
+    private void autoSelect() {
+
+        if (fvcResults.size() == 0) return;
+
+        for (ResultFVC result : fvcResults) result.setSelected(false);
+        fvcResults.get(fvcResults.size() - 1).setSelected(true);
+
     }
 
     @NonNull
@@ -162,10 +179,15 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
                                     SpiroKitDatabase.getInstance(context)
                                             .calHistoryRawDataDao().delete(resultFVC.getHashed());
 
+                                    int deleteIndex = holder.getAdapterPosition();
+                                    fvcResults.remove(deleteIndex);
+                                    autoSelect();
+
                                     handler.post(new Runnable() {
                                         @Override
                                         public void run() {
-                                            changedListener.onChanged();
+
+                                            deletedListener.onDeleted(deleteIndex);
                                         }
                                     });
 

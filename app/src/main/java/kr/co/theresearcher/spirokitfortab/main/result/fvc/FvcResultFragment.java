@@ -40,6 +40,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
+import kr.co.theresearcher.spirokitfortab.OnItemDeletedListener;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.calc.CalcSpiroKitE;
@@ -112,6 +113,14 @@ public class FvcResultFragment extends Fragment implements Observer {
 
                 selectData(order);
 
+            }
+        });
+
+        adapter.setDeletedListener(new OnItemDeletedListener() {
+            @Override
+            public void onDeleted(int index) {
+                adapter.clear();
+                startDrawing(volumeFlowLayout.getWidth(), volumeFlowLayout.getHeight());
             }
         });
 

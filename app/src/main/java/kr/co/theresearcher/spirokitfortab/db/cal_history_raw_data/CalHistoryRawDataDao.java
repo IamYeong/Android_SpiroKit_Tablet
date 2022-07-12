@@ -22,7 +22,7 @@ public interface CalHistoryRawDataDao {
     @Update
     void updateRawData(CalHistoryRawData rawData);
 
-    @Query("UPDATE CAL_HISTORY_RAW_DATA SET cal_history_hashed = :historyHashed WHERE cal_history_hashed is null")
+    @Query("UPDATE CAL_HISTORY_RAW_DATA SET cal_history_hashed = :historyHashed WHERE (cal_history_hashed is null) AND (is_deleted is 0)")
     void fillHistoryHash(String historyHashed);
 
     @Query("DELETE FROM cal_history_raw_data WHERE cal_history_hashed = null")

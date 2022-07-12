@@ -22,12 +22,14 @@ import java.util.List;
 import java.util.Locale;
 
 import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
+import kr.co.theresearcher.spirokitfortab.OnItemDeletedListener;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
 import kr.co.theresearcher.spirokitfortab.dialog.OnSelectedInDialogListener;
 import kr.co.theresearcher.spirokitfortab.dialog.SelectionDialog;
 import kr.co.theresearcher.spirokitfortab.main.result.OnOrderSelectedListener;
+import kr.co.theresearcher.spirokitfortab.measurement.fvc.ResultFVC;
 
 public class SvcResultAdapter extends RecyclerView.Adapter<SvcResultViewHolder> {
 
@@ -36,6 +38,7 @@ public class SvcResultAdapter extends RecyclerView.Adapter<SvcResultViewHolder> 
     private boolean isNothing = true;
     private OnOrderSelectedListener orderSelectedListener;
     private OnItemChangedListener onItemChangedListener;
+    private OnItemDeletedListener deletedListener;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd (HH:mm)", Locale.getDefault());
 
     private long rootTimestamp;
@@ -46,6 +49,10 @@ public class SvcResultAdapter extends RecyclerView.Adapter<SvcResultViewHolder> 
         this.context = context;
         results = new ArrayList<>();
 
+    }
+
+    public void setDeletedListener(OnItemDeletedListener deletedListener) {
+        this.deletedListener = deletedListener;
     }
 
     public void setOnItemChangedListener(OnItemChangedListener listener) {
@@ -72,15 +79,26 @@ public class SvcResultAdapter extends RecyclerView.Adapter<SvcResultViewHolder> 
         }
 
         results.add(resultSVC);
+        autoSelect();
 
     }
 
     public void addEmptyResult(ResultSVC resultSVC) {
+        isNothing = true;
         this.results.add(resultSVC);
     }
 
     public void clear() {
         results.clear();
+    }
+
+    private void autoSelect() {
+
+        if (results.size() == 0) return;
+
+        for (ResultSVC result : results) result.setSelected(false);
+        results.get(results.size() - 1).setSelected(true);
+
     }
 
 
@@ -145,10 +163,15 @@ public class SvcResultAdapter extends RecyclerView.Adapter<SvcResultViewHolder> 
                                     SpiroKitDatabase.getInstance(context)
                                             .calHistoryRawDataDao().delete(resultSVC.getHashed());
 
+                                    int deleteIndex = holder.getAdapterPosition();
+                                    results.remove(deleteIndex);
+                                    autoSelect();
+
                                     handler.post(new Runnable() {
                                         @Override
                                         public void run() {
-                                            onItemChangedListener.onChanged();
+
+                                            deletedListener.onDeleted(deleteIndex);
                                         }
                                     });
 

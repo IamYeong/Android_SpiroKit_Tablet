@@ -35,6 +35,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
+import kr.co.theresearcher.spirokitfortab.OnItemDeletedListener;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.calc.CalcSvcSpiroKitE;
@@ -93,6 +94,14 @@ public class SvcResultFragment extends Fragment implements Observer {
             @Override
             public void onOrderSelected(int order) {
                 selectResult(order);
+            }
+        });
+
+        svcResultAdapter.setDeletedListener(new OnItemDeletedListener() {
+            @Override
+            public void onDeleted(int index) {
+                svcResultAdapter.clear();
+                startDrawing(graphLayout.getWidth(), graphLayout.getHeight());
             }
         });
 

@@ -52,6 +52,7 @@ import java.util.Locale;
 
 import kr.co.theresearcher.spirokitfortab.Fluid;
 import kr.co.theresearcher.spirokitfortab.HashConverter;
+import kr.co.theresearcher.spirokitfortab.OnItemDeletedListener;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.bluetooth.SpiroKitBluetoothLeService;
@@ -61,6 +62,7 @@ import kr.co.theresearcher.spirokitfortab.calc.CalcSvcSpiroKitE;
 import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
 import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
 import kr.co.theresearcher.spirokitfortab.db.cal_history_raw_data.CalHistoryRawData;
+import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
 import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
 import kr.co.theresearcher.spirokitfortab.dialog.LoadingDialog;
 import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
@@ -80,7 +82,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
     private ConstraintLayout connectButton;
     private ImageView connectStateImage;
-    private TextView connectStateText;
+    private TextView connectStateText, patientNameText;
     private ProgressBar connectStateProgressBar;
 
     private SvcResultAdapter adapter;
@@ -255,6 +257,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         startTimestamp = Calendar.getInstance().getTime().getTime();
 
         resultRV = findViewById(R.id.rv_svc_meas);
+        patientNameText = findViewById(R.id.tv_patient_name_svc_meas);
         volumeTimeGraphLayout = findViewById(R.id.frame_volume_time_graph_svc_meas);
         resultGraphLayout = findViewById(R.id.frame_volume_time_graph_result_svc);
         startButton = findViewById(R.id.btn_start_stop_svc_meas);
@@ -281,6 +284,27 @@ public class MeasurementSvcActivity extends AppCompatActivity {
             }
         });
         adapter.addEmptyResult(new ResultSVC(""));
+
+
+        adapter.setDeletedListener(new OnItemDeletedListener() {
+            @Override
+            public void onDeleted(int index) {
+
+                volumeTimeRunViews.remove(index);
+
+                if (adapter.getItemCount() > 0) {
+                    selectData(adapter.getItemCount() - 1);
+                } else {
+
+                    adapter.addEmptyResult(new ResultSVC(""));
+                    emptyText.setVisibility(View.VISIBLE);
+                    initializeResultGraph(resultGraphLayout.getWidth(), resultGraphLayout.getHeight());
+                }
+
+                adapter.notifyDataSetChanged();
+
+            }
+        });
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -329,6 +353,9 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         completeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (adapter.getItemCount() == 0) {
+                    return;
+                }
                 complete();
             }
         });
@@ -450,23 +477,13 @@ public class MeasurementSvcActivity extends AppCompatActivity {
                 int width = resultGraphLayout.getWidth();
                 int height = resultGraphLayout.getHeight();
 
-                SlowVolumeTimeRunView graphView = new SlowVolumeTimeRunView(MeasurementSvcActivity.this);
-                graphView.setId(View.generateViewId());
-                graphView.setCanvasSize(width, height);
-                graphView.setMarkingCount(10, 8);
-                graphView.setX(60f, 0f);
-                graphView.setY(0.1f, -0.1f);
-
-                graphView.commit();
-
-               resultGraphLayout.addView(graphView);
-
+                initializeResultGraph(width, height);
 
             }
         });
 
         loadingDialog = new LoadingDialog(MeasurementSvcActivity.this);
-
+        setPatientInfo();
 
     }
 
@@ -625,7 +642,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
                         adapter.notifyDataSetChanged();
 
                         resultGraphLayout.removeAllViews();
-                        resultGraphLayout.addView(volumeTimeRunViews.get(testOrder - 1));
+                        resultGraphLayout.addView(volumeTimeRunViews.get(volumeTimeRunViews.size() - 1));
 
                         emptyText.setVisibility(View.GONE);
 
@@ -718,7 +735,6 @@ public class MeasurementSvcActivity extends AppCompatActivity {
     private void selectData(int order) {
 
         resultGraphLayout.removeAllViews();
-
         resultGraphLayout.addView(volumeTimeRunViews.get(order));
 
     }
@@ -759,6 +775,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
                 database.calHistoryDao().insertHistory(calHistory);
 
                 database.calHistoryRawDataDao().fillHistoryHash(historyHash);
+                database.calHistoryRawDataDao().deleteNotCompleteData();
 
                 SharedPreferencesManager.setHistoryHash(MeasurementSvcActivity.this, historyHash);
 
@@ -777,6 +794,46 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
         thread.start();
 
+    }
+
+    private void setPatientInfo() {
+
+        Thread thread = new Thread() {
+
+            @Override
+            public void run() {
+                super.run();
+                Looper.prepare();
+
+                Patient patient = SpiroKitDatabase.getInstance(MeasurementSvcActivity.this).patientDao().selectPatientByHash(SharedPreferencesManager.getPatientHashed(MeasurementSvcActivity.this));
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        patientNameText.setText(patient.getName());
+
+                    }
+                });
+
+                Looper.loop();
+            }
+        };
+        thread.start();
+
+    }
+
+    private void initializeResultGraph(int width, int height) {
+        SlowVolumeTimeRunView graphView = new SlowVolumeTimeRunView(MeasurementSvcActivity.this);
+        graphView.setId(View.generateViewId());
+        graphView.setCanvasSize(width, height);
+        graphView.setMarkingCount(10, 8);
+        graphView.setX(60f, 0f);
+        graphView.setY(0.1f, -0.1f);
+
+        graphView.commit();
+
+        resultGraphLayout.addView(graphView);
     }
 
 }
