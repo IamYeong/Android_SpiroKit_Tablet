@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import java.io.File;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
     private List<CalHistory> searchResults;
     private OnCalHistorySelectedListener selectedListener;
     private OnItemChangedListener onItemChangedListener;
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.getDefault());
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
 
     private Handler handler = new Handler(Looper.getMainLooper());
 
@@ -125,7 +126,20 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
 
         }
 
-        holder.getMeasTitle().setText(calHistory.getFinishDate());
+        String dateString = calHistory.getFinishDate();
+        dateString = dateString.substring(0, dateString.length() - 10);
+
+        try {
+
+            long time = simpleDateFormat.parse(dateString).getTime();
+            holder.getMeasTitle().setText(simpleDateFormat.format(time));
+
+        } catch (ParseException e) {
+
+            holder.getMeasTitle().setText(simpleDateFormat.format(0));
+
+        }
+
         if (calHistory.getMeasDiv().equals("f")) holder.getGroupText().setText(context.getString(R.string.fvc));
         else if (calHistory.getMeasDiv().equals("s")) holder.getGroupText().setText(context.getString(R.string.svc));
         //else if (calHistory.getMeasDiv().equals("m")) holder.getGroupText().setText(context.getString(R.string.mvv));

@@ -14,7 +14,7 @@ public interface PatientDao {
     @Query("SELECT * FROM PATIENT")
     List<Patient> selectAllPatient();
 
-    @Query("SELECT * FROM PATIENT WHERE office_hashed = :officeHash")
+    @Query("SELECT * FROM PATIENT WHERE office_hashed = :officeHash AND is_deleted is 0")
     List<Patient> selectPatientByOffice(String officeHash);
 
     @Query("SELECT * FROM PATIENT WHERE hashed = :hash")
@@ -26,7 +26,7 @@ public interface PatientDao {
     @Update
     void updatePatient(Patient patient);
 
-    @Delete
-    void deletePatient(Patient patient);
+    @Query("UPDATE patient SET is_deleted = 1 WHERE hashed = :hash")
+    void deletePatient(String hash);
 
 }

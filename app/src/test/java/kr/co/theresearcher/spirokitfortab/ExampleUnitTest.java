@@ -21,8 +21,11 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.FormatStyle;
+import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalField;
 import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
@@ -41,13 +44,35 @@ public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
 
+        String dateString = "2022-07-12 09:58:26.453264";
+        String subString = dateString.substring(0, dateString.length() - 7);
+        System.out.println(subString);
 
-        long date = -1000000000;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
-        System.out.println(simpleDateFormat.format(date));
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+
+        try {
+            long time = simpleDateFormat.parse(subString).getTime();
+            SimpleDateFormat resultFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            System.out.println(resultFormat.format(time));
+        } catch (ParseException e) {
+
+        }
+
 
         /*
-        Instant instant = Instant.now().truncatedTo(ChronoUnit.MICROS);
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS");
+        long date = dateTimeFormatter.parse(dateString)
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        System.out.println(simpleDateFormat.format(date));
+
+         */
+
+        //long date = -1000000000;
+        //SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+        //System.out.println(simpleDateFormat.format(date));
+
+        /*
+        Instant instant = Instant.now().truncatedTo(ChronoUnit.MICROS);xc
         System.out.println(instant.toString());
         long date = instant.toEpochMilli();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.getDefault());

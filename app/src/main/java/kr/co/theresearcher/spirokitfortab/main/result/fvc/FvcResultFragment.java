@@ -27,6 +27,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalField;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -253,7 +259,7 @@ public class FvcResultFragment extends Fragment implements Observer {
                 SpiroKitDatabase database = SpiroKitDatabase.getInstance(context);
 
                 List<CalHistoryRawData> rawData = database.calHistoryRawDataDao().selectRawDataByHistory(
-                        SharedPreferencesManager.getCalHistoryHash(context)
+                        history.getHashed()
                 );
 
                 List<CalHistoryRawData> allData = database.calHistoryRawDataDao().selectAll();
@@ -329,7 +335,19 @@ public class FvcResultFragment extends Fragment implements Observer {
 
                     resultFVC.setPef(pef);
 
-                    resultFVC.setTimestamp(0);
+                    String dateString = rawData.get(i).getCalDate();
+                    dateString = dateString.substring(0, dateString.length() - 7);
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+
+                    try {
+
+                        long time = simpleDateFormat.parse(dateString).getTime();
+                        resultFVC.setTimestamp(time);
+
+                    } catch (ParseException e) {
+                        resultFVC.setTimestamp(0);
+                    }
+
                     resultFVC.setPost(rawData.get(i).getIsPost());
 
                     if (i == 0) resultFVC.setSelected(true);

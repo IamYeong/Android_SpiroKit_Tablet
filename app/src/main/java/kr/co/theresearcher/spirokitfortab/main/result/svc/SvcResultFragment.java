@@ -26,8 +26,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -155,7 +158,7 @@ public class SvcResultFragment extends Fragment implements Observer {
                 SpiroKitDatabase database = SpiroKitDatabase.getInstance(context);
 
                 List<CalHistoryRawData> rawData = database.calHistoryRawDataDao().selectRawDataByHistory(
-                        SharedPreferencesManager.getCalHistoryHash(context)
+                        history.getHashed()
                 );
 
                 List<CalHistoryRawData> allData = database.calHistoryRawDataDao().selectAll();
@@ -188,7 +191,19 @@ public class SvcResultFragment extends Fragment implements Observer {
                     graphViews.add(createVolumeTimeGraph(calc.getVolumeTimeGraph(), width, height));
 
                     ResultSVC resultSVC = new ResultSVC();
-                    resultSVC.setTimestamp(0);
+
+                    String dateString = rawData.get(i).getCalDate();
+                    dateString = dateString.substring(0, dateString.length() - 7);
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+
+                    try {
+
+                        long time = simpleDateFormat.parse(dateString).getTime();
+                        resultSVC.setTimestamp(time);
+
+                    } catch (ParseException e) {
+                        resultSVC.setTimestamp(0);
+                    }
                     resultSVC.setVc(vc);
                     resultSVC.setPost(rawData.get(i).getIsPost());
 

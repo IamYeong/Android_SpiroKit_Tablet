@@ -25,4 +25,7 @@ public interface OperatorDao {
     @Query("SELECT COUNT(id) FROM OPERATOR")
     int getItemCount();
 
+    @Query("UPDATE operator SET is_deleted = 1 WHERE hashed = :hash")
+    void delete(String hash);
+
 }

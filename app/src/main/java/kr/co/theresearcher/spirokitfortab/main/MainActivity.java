@@ -251,31 +251,25 @@ public class MainActivity extends AppCompatActivity {
 
         if (history == null) return;
 
-        switch (history.getMeasDiv()) {
+        if (history.getMeasDiv().equals("f")) {
+            FvcResultFragment fvcResultFragment = new FvcResultFragment(history);
+            observer.deleteObservers();
+            observer.addObserver(informationFragment);
+            observer.addObserver(fvcResultFragment);
+            replaceFragment(R.id.fragment_container_result_main, fvcResultFragment);
 
-            case "f" :
-                FvcResultFragment fvcResultFragment = new FvcResultFragment(history);
-                observer.deleteObservers();
-                observer.addObserver(informationFragment);
-                observer.addObserver(fvcResultFragment);
-                replaceFragment(R.id.fragment_container_result_main, fvcResultFragment);
-                break;
+        } else if (history.getMeasDiv().equals("s")) {
+            SvcResultFragment svcResultFragment = new SvcResultFragment(history);
+            observer.deleteObservers();
+            observer.addObserver(informationFragment);
+            observer.addObserver(svcResultFragment);
+            replaceFragment(R.id.fragment_container_result_main, svcResultFragment);
 
-            case "s"  :
-                SvcResultFragment svcResultFragment = new SvcResultFragment(history);
-                observer.deleteObservers();
-                observer.addObserver(informationFragment);
-                observer.addObserver(svcResultFragment);
-                replaceFragment(R.id.fragment_container_result_main, svcResultFragment);
+        } else if (history.getMeasDiv().equals("m")) {
 
-                break;
-
-            case "m" :
-
-                break;
+        } else {
 
         }
-
 
     }
 

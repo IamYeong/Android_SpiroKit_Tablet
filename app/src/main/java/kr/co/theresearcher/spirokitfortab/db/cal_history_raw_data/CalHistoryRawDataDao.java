@@ -10,7 +10,7 @@ import java.util.List;
 @Dao
 public interface CalHistoryRawDataDao {
 
-    @Query("SELECT * FROM CAL_HISTORY_RAW_DATA WHERE cal_history_hashed = :calHistoryHashed")
+    @Query("SELECT * FROM CAL_HISTORY_RAW_DATA WHERE cal_history_hashed = :calHistoryHashed AND is_deleted is 0")
     List<CalHistoryRawData> selectRawDataByHistory(String calHistoryHashed);
 
     @Query("SELECT * FROM CAL_HISTORY_RAW_DATA")
@@ -27,5 +27,11 @@ public interface CalHistoryRawDataDao {
 
     @Query("DELETE FROM cal_history_raw_data WHERE cal_history_hashed = null")
     void deleteNotCompleteData();
+
+    @Query("UPDATE cal_history_raw_data SET is_deleted = 1 WHERE hashed = :hash")
+    void delete(String hash);
+
+    @Query("UPDATE cal_history_raw_data SET is_deleted_reference = 1 WHERE cal_history_hashed = :historyHashed")
+    void deleteReference(String historyHashed);
 
 }
