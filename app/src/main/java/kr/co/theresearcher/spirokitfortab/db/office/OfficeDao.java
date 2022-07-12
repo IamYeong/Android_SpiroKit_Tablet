@@ -8,7 +8,7 @@ import java.util.List;
 @Dao
 public interface OfficeDao {
 
-    @Query("SELECT * FROM OFFICE WHERE office_id = :id")
+    @Query("SELECT * FROM OFFICE WHERE office_id == :id")
     Office selectOfficeByID(String id);
 
     @Query("SELECT * FROM office")

@@ -302,6 +302,14 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
                 SpiroKitDatabase.removeInstance();
 
+                if (patient == null) {
+                    ConfirmDialog confirmDialog = new ConfirmDialog(context);
+                    confirmDialog.setTitle(getString(R.string.please_select_patient));
+                    confirmDialog.show();
+
+                    return;
+                }
+
                 if (patient.getIsDeleted() == 1) {
 
                     ConfirmDialog confirmDialog = new ConfirmDialog(context);
@@ -488,6 +496,12 @@ public class PatientInformationFragment extends Fragment implements Observer {
         Patient patient = SpiroKitDatabase.getInstance(context).patientDao()
                 .selectPatientByHash(SharedPreferencesManager.getPatientHashed(context));
 
+        if (patient == null) {
+            patientNameText.setText(getString(R.string.not_applicable));
+            patientInfoText.setText(getString(R.string.please_select_patient));
+            return;
+        }
+
         if (patient.getIsDeleted() == 1) {
 
             patientNameText.setText(getString(R.string.not_applicable));
@@ -563,6 +577,12 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
         Patient patient = SpiroKitDatabase.getInstance(context).patientDao()
                 .selectPatientByHash(SharedPreferencesManager.getPatientHashed(context));
+
+        if (patient == null) {
+            patientNameText.setText(getString(R.string.not_applicable));
+            patientInfoText.setText(getString(R.string.please_select_patient));
+            return;
+        }
 
         if (patient.getIsDeleted() == 1) {
 

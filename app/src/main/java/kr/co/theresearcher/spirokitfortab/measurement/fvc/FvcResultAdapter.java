@@ -77,7 +77,7 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
         if (nothing) this.fvcResults.clear();
         nothing = false;
         this.fvcResults.add(resultFVC);
-        autoSelect();
+        setSelection(fvcResults.size() - 1);
     }
 
     public void addEmptyObject(ResultFVC resultFVC) {
@@ -89,12 +89,12 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
         fvcResults.clear();
     }
 
-    private void autoSelect() {
+    public void setSelection(int index) {
 
         if (fvcResults.size() == 0) return;
 
         for (ResultFVC result : fvcResults) result.setSelected(false);
-        fvcResults.get(fvcResults.size() - 1).setSelected(true);
+        fvcResults.get(index).setSelected(true);
 
     }
 
@@ -161,8 +161,6 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
             @Override
             public void onClick(View v) {
 
-                //File path = context.getExternalFilesDir("data/")
-
                 SelectionDialog selectionDialog = new SelectionDialog(context);
                 selectionDialog.setTitle(context.getString(R.string.question_delete_history));
                 selectionDialog.setSelectedListener(new OnSelectedInDialogListener() {
@@ -181,7 +179,7 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
 
                                     int deleteIndex = holder.getAdapterPosition();
                                     fvcResults.remove(deleteIndex);
-                                    autoSelect();
+                                    setSelection(fvcResults.size() - 1);
 
                                     handler.post(new Runnable() {
                                         @Override

@@ -294,6 +294,7 @@
         android:background="@color/white"
         android:visibility="visible"
         android:gravity="center"
+        android:layout_marginEnd="20dp"
         />
 
 

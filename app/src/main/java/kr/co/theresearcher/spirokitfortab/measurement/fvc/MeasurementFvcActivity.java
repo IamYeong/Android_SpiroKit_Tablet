@@ -559,57 +559,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                     return;
                 }
 
-                Thread thread = new Thread() {
-
-                    @Override
-                    public void run() {
-                        super.run();
-                        Looper.prepare();
-
-                        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS")
-                                .withZone(ZoneId.systemDefault());
-
-                        Instant instant = Instant.now().truncatedTo(ChronoUnit.MICROS);
-
-                        String historyHash = "";
-
-                        try {
-                            historyHash = HashConverter.hashingFromString(dateTimeFormatter.format(instant));
-                        } catch (NoSuchAlgorithmException e) {
-
-                        }
-
-                        CalHistory calHistory = new CalHistory(
-                                historyHash,
-                                SharedPreferencesManager.getOfficeHash(MeasurementFvcActivity.this),
-                                SharedPreferencesManager.getOperatorHash(MeasurementFvcActivity.this),
-                                SharedPreferencesManager.getPatientHashed(MeasurementFvcActivity.this),
-                                dateTimeFormatter.format(instant),
-                                "f",
-                                "e",
-                                0);
-
-                        SpiroKitDatabase database = SpiroKitDatabase.getInstance(MeasurementFvcActivity.this);
-                        database.calHistoryDao().insertHistory(calHistory);
-
-                        database.calHistoryRawDataDao().fillHistoryHash(historyHash);
-                        database.calHistoryRawDataDao().deleteNotCompleteData();
-                        SharedPreferencesManager.setHistoryHash(MeasurementFvcActivity.this, historyHash);
-
-                        SpiroKitDatabase.removeInstance();
-
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                finish();
-                            }
-                        });
-
-                        Looper.loop();
-                    }
-                };
-
-                thread.start();
+                complete();
 
             }
         });
@@ -993,6 +943,61 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
         resultAdapter.addFvcResult(resultFVC);
 
+    }
+
+    private void complete() {
+
+        Thread thread = new Thread() {
+
+            @Override
+            public void run() {
+                super.run();
+                Looper.prepare();
+
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS")
+                        .withZone(ZoneId.systemDefault());
+
+                Instant instant = Instant.now().truncatedTo(ChronoUnit.MICROS);
+
+                String historyHash = "";
+
+                try {
+                    historyHash = HashConverter.hashingFromString(dateTimeFormatter.format(instant));
+                } catch (NoSuchAlgorithmException e) {
+
+                }
+
+                CalHistory calHistory = new CalHistory(
+                        historyHash,
+                        SharedPreferencesManager.getOfficeHash(MeasurementFvcActivity.this),
+                        SharedPreferencesManager.getOperatorHash(MeasurementFvcActivity.this),
+                        SharedPreferencesManager.getPatientHashed(MeasurementFvcActivity.this),
+                        dateTimeFormatter.format(instant),
+                        "f",
+                        "e",
+                        0);
+
+                SpiroKitDatabase database = SpiroKitDatabase.getInstance(MeasurementFvcActivity.this);
+                database.calHistoryDao().insertHistory(calHistory);
+
+                database.calHistoryRawDataDao().fillHistoryHash(historyHash);
+                database.calHistoryRawDataDao().deleteNotCompleteData();
+                SharedPreferencesManager.setHistoryHash(MeasurementFvcActivity.this, historyHash);
+
+                SpiroKitDatabase.removeInstance();
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        finish();
+                    }
+                });
+
+                Looper.loop();
+            }
+        };
+
+        thread.start();
     }
 
     private VolumeTimeResultView createVolumeTimeGraph(List<ResultCoordinate> coordinates) {

@@ -229,13 +229,12 @@ public class SvcResultFragment extends Fragment implements Observer {
                     resultSVC.setVc(vc);
                     resultSVC.setPost(rawData.get(i).getIsPost());
 
-                    if (i == 0) resultSVC.setSelected(true);
-                    else resultSVC.setSelected(false);
-
                     svcResultAdapter.addResult(resultSVC);
 
 
                 }
+
+                svcResultAdapter.setSelection(0);
 
                 handler.post(new Runnable() {
                     @Override

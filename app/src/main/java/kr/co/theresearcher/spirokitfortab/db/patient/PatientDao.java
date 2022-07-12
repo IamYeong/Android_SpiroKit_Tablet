@@ -14,10 +14,10 @@ public interface PatientDao {
     @Query("SELECT * FROM PATIENT")
     List<Patient> selectAllPatient();
 
-    @Query("SELECT * FROM PATIENT WHERE office_hashed = :officeHash AND is_deleted is 0")
+    @Query("SELECT * FROM PATIENT WHERE (office_hashed == :officeHash) AND (is_deleted == 0)")
     List<Patient> selectPatientByOffice(String officeHash);
 
-    @Query("SELECT * FROM PATIENT WHERE hashed = :hash")
+    @Query("SELECT * FROM PATIENT WHERE hashed == :hash")
     Patient selectPatientByHash(String hash);
 
     @Insert
@@ -26,7 +26,7 @@ public interface PatientDao {
     @Update
     void updatePatient(Patient patient);
 
-    @Query("UPDATE patient SET is_deleted = 1 WHERE hashed = :hash")
+    @Query("UPDATE patient SET is_deleted = 1 WHERE hashed == :hash")
     void deletePatient(String hash);
 
 }

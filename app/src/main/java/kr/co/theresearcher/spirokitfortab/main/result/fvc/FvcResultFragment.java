@@ -376,12 +376,11 @@ public class FvcResultFragment extends Fragment implements Observer {
 
                     resultFVC.setPost(rawData.get(i).getIsPost());
 
-                    if (i == 0) resultFVC.setSelected(true);
-                    else resultFVC.setSelected(false);
-
                     adapter.addFvcResult(resultFVC);
 
                 }
+
+                adapter.setSelection(0);
 
                 handler.post(new Runnable() {
                     @Override

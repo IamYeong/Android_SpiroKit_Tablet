@@ -79,7 +79,7 @@ public class SvcResultAdapter extends RecyclerView.Adapter<SvcResultViewHolder> 
         }
 
         results.add(resultSVC);
-        autoSelect();
+        setSelection(results.size() - 1);
 
     }
 
@@ -92,12 +92,12 @@ public class SvcResultAdapter extends RecyclerView.Adapter<SvcResultViewHolder> 
         results.clear();
     }
 
-    private void autoSelect() {
+    public void setSelection(int index) {
 
         if (results.size() == 0) return;
 
         for (ResultSVC result : results) result.setSelected(false);
-        results.get(results.size() - 1).setSelected(true);
+        results.get(index).setSelected(true);
 
     }
 
@@ -165,7 +165,7 @@ public class SvcResultAdapter extends RecyclerView.Adapter<SvcResultViewHolder> 
 
                                     int deleteIndex = holder.getAdapterPosition();
                                     results.remove(deleteIndex);
-                                    autoSelect();
+                                    setSelection(results.size() - 1);
 
                                     handler.post(new Runnable() {
                                         @Override
