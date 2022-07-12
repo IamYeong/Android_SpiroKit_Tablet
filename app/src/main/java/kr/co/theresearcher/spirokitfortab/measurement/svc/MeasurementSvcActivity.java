@@ -280,7 +280,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
             }
         });
-        adapter.addEmptyResult(new ResultSVC());
+        adapter.addEmptyResult(new ResultSVC(""));
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -587,7 +587,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
                 //CalHistoryRawDataDatabase.removeInstance();
 
-                addResult(testOrder, instant, isPost);
+                addResult(hashed, testOrder, instant, isPost);
 
                 handler.post(new Runnable() {
                     @Override
@@ -622,7 +622,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
     }
 
-    private void addResult(int order, Instant timestamp, int isPost) {
+    private void addResult(String hash, int order, Instant timestamp, int isPost) {
 
         //여기서는 어댑터에 추가랑 뷰배열에 추가만 해두고
         //핸들러에서 notify 수행, addVIew 하면 될 듯.
@@ -642,7 +642,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         volumeTimeRunViews.add(createVolumeTimeGraph(calc.getVolumeTimeGraph()));
 
 
-        ResultSVC resultSVC = new ResultSVC();
+        ResultSVC resultSVC = new ResultSVC(hash);
 
         resultSVC.setVc(vc);
 

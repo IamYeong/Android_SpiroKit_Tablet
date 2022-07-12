@@ -2,6 +2,7 @@ package kr.co.theresearcher.spirokitfortab.measurement.fvc;
 
 public class ResultFVC {
 
+    private String hashed;
     private double fvc;
     private double fev1;
     private double pef;
@@ -14,8 +15,16 @@ public class ResultFVC {
     private boolean isPost;
     private long timestamp;
 
-    public ResultFVC() {
+    public ResultFVC(String hash) {
+        hashed = hash;
+    }
 
+    public String getHashed() {
+        return hashed;
+    }
+
+    public void setHashed(String hashed) {
+        this.hashed = hashed;
     }
 
     public long getTimestamp() {

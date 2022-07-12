@@ -121,7 +121,7 @@ public class FvcResultFragment extends Fragment implements Observer {
             }
         });
 
-        adapter.addFvcResult(new ResultFVC());
+        adapter.addFvcResult(new ResultFVC(""));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rv.setLayoutManager(linearLayoutManager);
@@ -323,7 +323,7 @@ public class FvcResultFragment extends Fragment implements Observer {
                     System.out.println(volumeTimeResultViews.size());
                     Log.d(getClass().getSimpleName(), volumeFlowResultViews.size() + ", " + volumeTimeResultViews.size());
 
-                    ResultFVC resultFVC = new ResultFVC();
+                    ResultFVC resultFVC = new ResultFVC(rawData.get(i).getHashed());
                     resultFVC.setFvc(fvc);
                     resultFVC.setFvcPredict(fvcP);
 

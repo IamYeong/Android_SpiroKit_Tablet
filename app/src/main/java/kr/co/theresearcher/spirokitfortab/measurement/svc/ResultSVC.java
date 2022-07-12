@@ -2,6 +2,7 @@ package kr.co.theresearcher.spirokitfortab.measurement.svc;
 
 public class ResultSVC {
 
+    private String hashed;
     private double vc;
     private double ic;
     private double erv;
@@ -11,8 +12,8 @@ public class ResultSVC {
     private boolean isSelected;
     private boolean isPost;
 
-    public ResultSVC() {
-
+    public ResultSVC(String hash) {
+        this.hashed = hash;
     }
 
     public boolean isPost() {
@@ -25,6 +26,14 @@ public class ResultSVC {
         } else {
             isPost = true;
         }
+    }
+
+    public String getHashed() {
+        return hashed;
+    }
+
+    public void setHashed(String hashed) {
+        this.hashed = hashed;
     }
 
     public boolean isSelected() {

@@ -54,6 +54,7 @@ import java.util.TimerTask;
 
 import kr.co.theresearcher.spirokitfortab.Fluid;
 import kr.co.theresearcher.spirokitfortab.HashConverter;
+import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.bluetooth.SpiroKitBluetoothLeService;
@@ -318,10 +319,17 @@ public class MeasurementFvcActivity extends AppCompatActivity {
             }
         });
 
+        resultAdapter.setChangedListener(new OnItemChangedListener() {
+            @Override
+            public void onChanged() {
+                //다시 조회
+            }
+        });
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
-        resultAdapter.addEmptyObject(new ResultFVC());
+        resultAdapter.addEmptyObject(new ResultFVC(""));
         rv.setLayoutManager(linearLayoutManager);
         rv.setAdapter(resultAdapter);
 
@@ -872,7 +880,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
                 //CalHistoryRawDataDatabase.removeInstance();
 
-                addResult(testOrder, instant, isPost);
+                addResult(hashed, testOrder, instant, isPost);
 
                 handler.post(new Runnable() {
                     @Override
@@ -934,7 +942,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
     }
 
-    private void addResult(int order, Instant timestamp, int isPost) {
+    private void addResult(String hash, int order, Instant timestamp, int isPost) {
 
         //여기서는 어댑터에 추가랑 뷰배열에 추가만 해두고
         //핸들러에서 notify 수행, addVIew 하면 될 듯.
@@ -970,7 +978,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         volumeFlowResultViewList.add(createVolumeFlowGraph(calc.getVolumeFlowGraph()));
         volumeTimeResultViewList.add(createVolumeTimeGraph(calc.getForcedVolumeTimeGraph()));
 
-        ResultFVC resultFVC = new ResultFVC();
+        ResultFVC resultFVC = new ResultFVC(hash);
         resultFVC.setFvc(calc.getFVC());
 
         resultFVC.setFvc(fvc);

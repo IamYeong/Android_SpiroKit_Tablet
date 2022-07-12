@@ -1,6 +1,8 @@
 package kr.co.theresearcher.spirokitfortab.measurement.svc;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,7 @@ import java.util.Locale;
 import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
+import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
 import kr.co.theresearcher.spirokitfortab.dialog.OnSelectedInDialogListener;
 import kr.co.theresearcher.spirokitfortab.dialog.SelectionDialog;
 import kr.co.theresearcher.spirokitfortab.main.result.OnOrderSelectedListener;
@@ -36,6 +39,7 @@ public class SvcResultAdapter extends RecyclerView.Adapter<SvcResultViewHolder> 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd (HH:mm)", Locale.getDefault());
 
     private long rootTimestamp;
+    private Handler handler = new Handler(Looper.getMainLooper());
 
     public SvcResultAdapter(Context context) {
 
@@ -132,8 +136,28 @@ public class SvcResultAdapter extends RecyclerView.Adapter<SvcResultViewHolder> 
 
                         if (select) {
 
-                            removeThisData(rootTimestamp, holder.getAdapterPosition() + 1);
-                            onItemChangedListener.onChanged();
+                            Thread thread = new Thread() {
+                                @Override
+                                public void run() {
+                                    super.run();
+                                    Looper.prepare();
+
+                                    SpiroKitDatabase.getInstance(context)
+                                            .calHistoryRawDataDao().delete(resultSVC.getHashed());
+
+                                    handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            onItemChangedListener.onChanged();
+                                        }
+                                    });
+
+                                    Looper.loop();
+                                }
+                            };
+                            thread.start();
+
+
 
                         }
                     }

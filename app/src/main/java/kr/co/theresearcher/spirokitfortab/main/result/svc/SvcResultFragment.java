@@ -101,7 +101,7 @@ public class SvcResultFragment extends Fragment implements Observer {
             }
         });
 
-        svcResultAdapter.addEmptyResult(new ResultSVC());
+        svcResultAdapter.addEmptyResult(new ResultSVC(""));
 
         rv.setLayoutManager(linearLayoutManager);
         rv.setAdapter(svcResultAdapter);
@@ -190,7 +190,7 @@ public class SvcResultFragment extends Fragment implements Observer {
 
                     graphViews.add(createVolumeTimeGraph(calc.getVolumeTimeGraph(), width, height));
 
-                    ResultSVC resultSVC = new ResultSVC();
+                    ResultSVC resultSVC = new ResultSVC(rawData.get(i).getHashed());
 
                     String dateString = rawData.get(i).getCalDate();
                     dateString = dateString.substring(0, dateString.length() - 7);
