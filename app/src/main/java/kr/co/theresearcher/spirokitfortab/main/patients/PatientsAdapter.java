@@ -146,6 +146,7 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsViewHolder> {
                 SharedPreferencesManager.setPatientID(context, patient.getId());
                 SharedPreferencesManager.setPatientHash(context, patient.getHashed());
                 SharedPreferencesManager.setPatientOfficeHash(context, patient.getOfficeHashed());
+                SharedPreferencesManager.setPatientGender(context, patient.getGender());
                 SharedPreferencesManager.setPatientName(context, patient.getName());
                 SharedPreferencesManager.setPatientWeight(context, patient.getWeight());
                 SharedPreferencesManager.setPatientHeight(context, patient.getHeight());

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -54,9 +55,9 @@ public class PatientInsertActivity extends AppCompatActivity {
     private boolean isSmoking = false;
     private boolean haveSmoking = false;
 
-    private long birthDate = -1;
-    private long startSmokeDate = -1;
-    private long stopSmokeDate = -1;
+    private long birthDate = Long.MAX_VALUE;
+    private long startSmokeDate = Long.MAX_VALUE;
+    private long stopSmokeDate = Long.MAX_VALUE;
 
     private int humanRaceID = 0;
     private int doctorID = 0;
@@ -98,6 +99,7 @@ public class PatientInsertActivity extends AppCompatActivity {
         stopSmokeDateSelectButton = findViewById(R.id.btn_stop_smoke_date_insert_patient);
 
         smokeAmountField.setFocusableInTouchMode(true);
+        smokeAmountField.setText("0");
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,8 +167,8 @@ public class PatientInsertActivity extends AppCompatActivity {
                 stopSmokeDateSelectButton.setText(dateFormat);
 
                 isSmoking = false;
-                startSmokeDate = -1L;
-                stopSmokeDate = -1L;
+                startSmokeDate = Long.MAX_VALUE;
+                stopSmokeDate = Long.MAX_VALUE;
 
             }
         });
@@ -203,7 +205,6 @@ public class PatientInsertActivity extends AppCompatActivity {
 
                 MaterialDatePicker<Long> materialDatePicker = MaterialDatePicker.Builder.datePicker()
                         .setTitleText(getString(R.string.select_birth_date))
-
 
                         .build();
 
@@ -318,16 +319,21 @@ public class PatientInsertActivity extends AppCompatActivity {
 
                             String name = nameField.getText().toString();
                             String chartNumber = chartNumberField.getText().toString();
-                            int height = Integer.parseInt("0" + heightField.getText().toString());
-                            int weight = Integer.parseInt("0" + weightField.getText().toString());
-                            String smokeAmount = smokeAmountField.getText().toString() + "0";
-                            SimpleDateFormat birthDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                            int height = Integer.parseInt(heightField.getText().toString());
+                            int weight = Integer.parseInt(weightField.getText().toString());
+                            String smokeAmount = smokeAmountField.getText().toString();
                             char gender = 'm';
                             int nowSmoking = 0;
                             if (!isMale) gender = 'f';
                             if (isSmoking) nowSmoking = 1;
 
                             try {
+
+                                String patientHashed = HashConverter.hashingFromString(
+                                        chartNumber +
+                                                name +
+                                                conversionDate(birthDate) +
+                                                SharedPreferencesManager.getOfficeHash(PatientInsertActivity.this));
 
                                 Patient patient = new Patient.Builder()
                                         .officeHashed(SharedPreferencesManager.getOfficeHash(PatientInsertActivity.this))
@@ -336,24 +342,25 @@ public class PatientInsertActivity extends AppCompatActivity {
                                         .height(height)
                                         .weight(weight)
                                         .chartNumber(chartNumber)
-                                        .hashed(HashConverter.hashingFromString(
-                                                chartNumber +
-                                                        name +
-                                                        birthDateFormat.format(birthDate) +
-                                                        SharedPreferencesManager.getOfficeHash(PatientInsertActivity.this)))
+                                        .hashed(patientHashed)
                                         .humanRace("y")
                                         .nowSmoking(nowSmoking)
                                         .smokingAmountDay(smokeAmount)
-                                        .birthDay(birthDateFormat.format(birthDate))
+                                        .birthDay(conversionDate(birthDate))
                                         .build();
 
-                                patient.setStartSmokingDay(birthDateFormat.format(startSmokeDate));
-                                patient.setStopSmokingDay(birthDateFormat.format(stopSmokeDate));
+                                patient.setStartSmokingDay(conversionDate(startSmokeDate));
+                                patient.setStopSmokingDay(conversionDate(stopSmokeDate));
                                 patient.setSmokingPeriod(diffDateMonth(startSmokeDate, stopSmokeDate));
 
                                 SpiroKitDatabase database = SpiroKitDatabase.getInstance(getApplicationContext());
                                 database.patientDao().insertPatient(patient);
+
+                                setPatientInfoInPreferences(PatientInsertActivity.this, database.patientDao().selectPatientByHash(patientHashed));
+
                                 SpiroKitDatabase.removeInstance();
+
+
 
                             } catch (NoSuchAlgorithmException e) {
 
@@ -405,37 +412,65 @@ public class PatientInsertActivity extends AppCompatActivity {
 
     private boolean checkInputData() {
 
-        if (chartNumberField.getText().toString().length() == 0) return false;
-        if (nameField.getText().toString().length() == 0) return false;
-        if (heightField.getText().toString().length() == 0) return false;
-        if (weightField.getText().toString().length() == 0) return false;
-        if (chartNumberField.getText().toString().length() == 0) return false;
-        if (birthDate == -1) return false;
+        try {
+
+            if (chartNumberField.getText().toString().length() == 0) {
+                Log.d(getClass().getSimpleName(), "CHART");
+                return false;
+            }
+            if (nameField.getText().toString().length() == 0) {
+                Log.d(getClass().getSimpleName(), "NAME");
+                return false;
+            }
+            if (!(Integer.parseInt(heightField.getText().toString()) > 0)) {
+                Log.d(getClass().getSimpleName(), "HEIGHT");
+                return false;
+            }
+            if (!(Integer.parseInt(weightField.getText().toString()) > 0)) {
+                Log.d(getClass().getSimpleName(), "WEIGHT");
+                return false;
+            }
+            if (birthDate == Long.MAX_VALUE) {
+                Log.d(getClass().getSimpleName(), "BIRTH");
+                return false;
+            }
+            if ((haveSmoking) && (startSmokeDate == Long.MAX_VALUE)) {
+                Log.d(getClass().getSimpleName(), "HAVE & NOT START");
+                return false;
+            }
+            if (haveSmoking && (!isSmoking) && (stopSmokeDate == Long.MAX_VALUE)) {
+                Log.d(getClass().getSimpleName(), "STOP & NOT SELECT DATE");
+                return false;
+            }
+            if ((haveSmoking) && (Float.parseFloat(smokeAmountField.getText().toString()) == 0f)) {
+                Log.d(getClass().getSimpleName(), "HAVE & NOT ENTER AMOUNT");
+                return false;
+            }
+
+        } catch(NumberFormatException e) {
+            Log.d(getClass().getSimpleName(), e.toString());
+            return false;
+        }
 
         return true;
     }
 
     private void setPatientInfoInPreferences(Context context, Patient patient) {
 
-        /*
-        SharedPreferencesManager.setPatientID(context, );
-        SharedPreferencesManager.setPatientName(context, );
-        SharedPreferencesManager.setPatientHash(context, );
-        SharedPreferencesManager.setPatientChartNumber(context, );
-        SharedPreferencesManager.setPatientGender(context, );
-        SharedPreferencesManager.setPatientHeight(context, );
-        SharedPreferencesManager.setPatientWeight(context, );
-        SharedPreferencesManager.setPatientOperatorDoctorHash(context, );
-        SharedPreferencesManager.setPatientHumanRace(context, );
-
-        SharedPreferencesManager.setPatientSmokingIsNow(context, );
-        SharedPreferencesManager.setPatientSmokingStartDate(context, );
-        SharedPreferencesManager.setPatientSmokingStopDate(context, );
-        SharedPreferencesManager.setPatientSmokingAmountPerDay(context, );
-        SharedPreferencesManager.setPatientSmokingPeriod(context, );
-
-
-         */
+        SharedPreferencesManager.setPatientID(context, patient.getId());
+        SharedPreferencesManager.setPatientName(context, patient.getName());
+        SharedPreferencesManager.setPatientHash(context, patient.getHashed());
+        SharedPreferencesManager.setPatientChartNumber(context, patient.getChartNumber());
+        SharedPreferencesManager.setPatientGender(context, patient.getGender());
+        SharedPreferencesManager.setPatientHeight(context, patient.getHeight());
+        SharedPreferencesManager.setPatientWeight(context, patient.getWeight());
+        SharedPreferencesManager.setPatientHumanRace(context, patient.getHumanRace());
+        SharedPreferencesManager.setPatientSmokingIsNow(context, patient.getNowSmoking());
+        SharedPreferencesManager.setPatientSmokingStartDate(context, patient.getStartSmokingDay());
+        SharedPreferencesManager.setPatientSmokingStopDate(context, patient.getStopSmokingDay());
+        SharedPreferencesManager.setPatientSmokingAmountPerDay(context, patient.getSmokingAmountPerDay());
+        SharedPreferencesManager.setPatientSmokingPeriod(context, patient.getSmokingPeriod());
+        SharedPreferencesManager.setPatientBirthday(context, patient.getBirthDay());
     }
 
     private int diffDateMonth(long from, long to) {
@@ -492,6 +527,18 @@ public class PatientInsertActivity extends AppCompatActivity {
         editText.setHintTextColor(getColor(R.color.gray_dark));
         editText.setEnabled(false);
         inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+
+    }
+
+    private String conversionDate(long date) {
+
+        if (date == Long.MAX_VALUE) {
+            return null;
+        } else {
+
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+            return simpleDateFormat.format(date);
+        }
 
     }
 

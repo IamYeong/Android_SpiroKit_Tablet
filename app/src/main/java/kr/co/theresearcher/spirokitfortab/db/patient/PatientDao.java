@@ -17,6 +17,9 @@ public interface PatientDao {
     @Query("SELECT * FROM PATIENT WHERE office_hashed = :officeHash")
     List<Patient> selectPatientByOffice(String officeHash);
 
+    @Query("SELECT * FROM PATIENT WHERE hashed = :hash")
+    Patient selectPatientByHash(String hash);
+
     @Insert
     void insertPatient(Patient patient);
 

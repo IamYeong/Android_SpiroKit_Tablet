@@ -369,6 +369,16 @@ public class Patient {
             return this;
         }
 
+        public Builder startSmokingDate(String dateString) {
+            this.startSmokingDay = dateString;
+            return this;
+        }
+
+        public Builder stopSmokingDate(String dateString) {
+            this.stopSmokingDay = dateString;
+            return this;
+        }
+
         public Patient build() {
             return new Patient(this);
         }

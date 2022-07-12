@@ -34,6 +34,7 @@ import android.widget.TextView;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,6 +50,7 @@ import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
 import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
 import kr.co.theresearcher.spirokitfortab.db.human_race.HumanRace;
 import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
+import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
 import kr.co.theresearcher.spirokitfortab.dialog.MeasSelectionDialog;
 import kr.co.theresearcher.spirokitfortab.main.patients.OnItemSimpleSelectedListener;
 import kr.co.theresearcher.spirokitfortab.main.patients.PatientsAdapter;
@@ -151,6 +153,10 @@ public class PatientInformationFragment extends Fragment implements Observer {
         modifyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (SharedPreferencesManager.getPatientHashed(context).equals("")) {
+                    return;
+                }
                 Intent intent = new Intent(context, PatientModifyActivity.class);
                 startActivity(intent);
             }
@@ -269,6 +275,15 @@ public class PatientInformationFragment extends Fragment implements Observer {
         startMeasButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                SpiroKitDatabase database = SpiroKitDatabase.getInstance(context);
+                if (database.operatorDao().getItemCount() == 0) {
+                    ConfirmDialog confirmDialog = new ConfirmDialog(context);
+                    confirmDialog.setTitle("");
+                    confirmDialog.show();
+
+                    return;
+                }
 
                 MeasSelectionDialog dialog = new MeasSelectionDialog(context);
                 dialog.show();
@@ -434,7 +449,8 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
     private void updatePatientInformation() {
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        SimpleDateFormat birthDateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
 
         patientNameText.setText(SharedPreferencesManager.getPatientName(context));
         StringBuilder info = new StringBuilder();
@@ -447,8 +463,49 @@ public class PatientInformationFragment extends Fragment implements Observer {
         }
         info.append(getString(R.string.height_is, SharedPreferencesManager.getPatientHeight(context))).append("\n");
         info.append(getString(R.string.weight_is, SharedPreferencesManager.getPatientWeight(context))).append("\n");
-        info.append(getString(R.string.birth_is, SharedPreferencesManager.getPatientBirthday(context))).append("\n");
 
+        String birthString = SharedPreferencesManager.getPatientBirthday(context);
+
+        try {
+            long date = simpleDateFormat.parse(birthString).getTime();
+            info.append(getString(R.string.birth_is, birthDateFormat.format(date))).append("\n");
+        } catch (ParseException e) {
+            Log.e(getClass().getSimpleName(), e.toString());
+        }
+
+        if (SharedPreferencesManager.getPatientSmokingIsNow(context) == 0) {
+            info.append(getString(R.string.smoking_now_is, getString(R.string.not_smoking))).append("\n");
+        } else {
+            info.append(getString(R.string.smoking_now_is, getString(R.string.smoking))).append("\n");
+        }
+
+        String startSmokingDateString = SharedPreferencesManager.getPatientSmokingStartDate(context);
+        if (startSmokingDateString == null) {
+            info.append(getString(R.string.smoke_start_date_is, getString(R.string.not_applicable))).append("\n");
+        } else {
+            info.append(getString(R.string.smoke_start_date_is, startSmokingDateString)).append("\n");
+        }
+
+        String stopSmokingDateString = SharedPreferencesManager.getPatientSmokingStopDate(context);
+        if (stopSmokingDateString == null) {
+            info.append(getString(R.string.smoke_start_date_is, getString(R.string.not_applicable))).append("\n");
+        } else {
+            info.append(getString(R.string.smoke_start_date_is, stopSmokingDateString)).append("\n");
+        }
+
+        String smokingAmount = SharedPreferencesManager.getPatientSmokingAmountPerDay(context);
+        if (startSmokingDateString == null) {
+            info.append(getString(R.string.smoking_per_day_is, getString(R.string.not_applicable))).append("\n");
+        } else {
+            info.append(getString(R.string.smoking_per_day_is, smokingAmount)).append("\n");
+        }
+
+        //인종
+        String humanRace = SharedPreferencesManager.getPatientHumanRace(context);
+
+        //info.append(getString(R.string.human_race_is, humanRace)).append("\n")
+
+        Log.d(getClass().getSimpleName(), info.toString());
         patientInfoText.setText(info.toString());
 
 

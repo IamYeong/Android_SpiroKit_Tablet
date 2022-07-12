@@ -22,4 +22,7 @@ public interface OperatorDao {
     @Update
     void updateOperator(Operator operator);
 
+    @Query("SELECT COUNT(id) FROM OPERATOR")
+    int getItemCount();
+
 }

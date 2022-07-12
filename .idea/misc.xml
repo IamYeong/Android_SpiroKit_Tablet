@@ -73,7 +73,7 @@
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.12" />
         <entry key="app/src/main/res/layout/dialog_confirm.xml" value="0.16276041666666666" />
         <entry key="app/src/main/res/layout/dialog_loading.xml" value="0.16276041666666666" />
-        <entry key="app/src/main/res/layout/dialog_meas_selection.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/dialog_meas_selection.xml" value="0.16" />
         <entry key="app/src/main/res/layout/dialog_selection.xml" value="0.16276041666666666" />
         <entry key="app/src/main/res/layout/dialog_text_input.xml" value="0.16276041666666666" />
         <entry key="app/src/main/res/layout/fragment_empty_result.xml" value="0.20442708333333334" />

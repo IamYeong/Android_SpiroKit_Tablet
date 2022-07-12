@@ -127,7 +127,7 @@
     <string name="human_race_is">인종 : %1$s</string>
     <string name="smoke_start_date_is">흡연시작일 : %1$s</string>
     <string name="smoke_stop_date_is">금연일 : %1$s</string>
-    <string name="smoking_per_day_is">하루 흡연량 : %1f</string>
+    <string name="smoking_per_day_is">하루 흡연량 : %1$s</string>
     <string name="smoking_now_is">현재 흡연 여부 : %1$s</string>
 
     <!-- FVC Activity -->

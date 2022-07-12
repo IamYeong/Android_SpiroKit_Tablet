@@ -274,13 +274,13 @@ public class SharedPreferencesManager {
     public static String getPatientName(Context context) { return getPreferences(context).getString(PATIENT_NAME, ""); }
     public static String getPatientOperatorWorkHashed(Context context) { return getPreferences(context).getString(PATIENT_OPERATOR_WORK_HASHED, ""); }
     public static String getPatientOperatorDoctorHashed(Context context) { return getPreferences(context).getString(PATIENT_OPERATOR_DOCTOR_HASHED, ""); }
-    public static String getPatientGender(Context context) { return getPreferences(context).getString(PATIENT_GENDER, ""); }
+    public static String getPatientGender(Context context) { return getPreferences(context).getString(PATIENT_GENDER, "m"); }
     public static int getPatientHeight(Context context) { return getPreferences(context).getInt(PATIENT_HEIGHT, 0); }
     public static int getPatientWeight(Context context) { return getPreferences(context).getInt(PATIENT_WEIGHT, 0); }
-    public static String getPatientSmokingStartDate(Context context) { return getPreferences(context).getString(PATIENT_SMOKING_START_DATE, ""); }
-    public static String getPatientSmokingStopDate(Context context) { return getPreferences(context).getString(PATIENT_SMOKING_STOP_DATE, ""); }
-    public static String getPatientSmokingIsNow(Context context) { return getPreferences(context).getString(PATIENT_SMOKING_IS_NOW, ""); }
-    public static String getPatientSmokingAmountPerDay(Context context) { return getPreferences(context).getString(PATIENT_SMOKING_AMOUNT_PER_DAY, ""); }
+    public static String getPatientSmokingStartDate(Context context) { return getPreferences(context).getString(PATIENT_SMOKING_START_DATE, null); }
+    public static String getPatientSmokingStopDate(Context context) { return getPreferences(context).getString(PATIENT_SMOKING_STOP_DATE, null); }
+    public static int getPatientSmokingIsNow(Context context) { return getPreferences(context).getInt(PATIENT_SMOKING_IS_NOW, 0); }
+    public static String getPatientSmokingAmountPerDay(Context context) { return getPreferences(context).getString(PATIENT_SMOKING_AMOUNT_PER_DAY, null); }
     public static int getPatientSmokingPeriod(Context context) { return getPreferences(context).getInt(PATIENT_SMOKING_PERIOD, 0); }
     public static String getPatientBirthday(Context context) { return getPreferences(context).getString(PATIENT_BIRTHDAY, ""); }
     public static String getPatientHumanRace(Context context) { return getPreferences(context).getString(PATIENT_HUMAN_RACE, ""); }

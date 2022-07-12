@@ -9,7 +9,9 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -19,23 +21,30 @@ import android.widget.ImageButton;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
+import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import kr.co.theresearcher.spirokitfortab.HashConverter;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 
+import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
 import kr.co.theresearcher.spirokitfortab.db.human_race.HumanRace;
 import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
+import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
 
 public class PatientModifyActivity extends AppCompatActivity {
 
     private EditText chartNumberField, nameField, heightField, weightField, smokeAmountField;
-    private Button modifyButton, maleButton, femaleButton, smokeButton, nonSmokeButton, haveSmokeButton, haveNotSmokeButton
+    private Button insertButton, maleButton, femaleButton, smokeButton, nonSmokeButton, haveSmokeButton, haveNotSmokeButton
             , birthSelectButton, startSmokeDateSelectButton, stopSmokeDateSelectButton;
-    private AppCompatSpinner matchDoctorSpinner, humanRaceSpinner;
+    private AppCompatSpinner humanRaceSpinner;
 
     private ArrayAdapter<String> humanRaceAdapter, doctorAdapter;
 
@@ -45,12 +54,14 @@ public class PatientModifyActivity extends AppCompatActivity {
     private boolean isSmoking = false;
     private boolean haveSmoking = false;
 
-    private long birthDate = -1;
-    private long startSmokeDate = -1;
-    private long stopSmokeDate = -1;
+    private long birthDate = Long.MAX_VALUE;
+    private long startSmokeDate = Long.MAX_VALUE;
+    private long stopSmokeDate = Long.MAX_VALUE;
 
     private int humanRaceID = 0;
     private int doctorID = 0;
+
+    private InputMethodManager inputMethodManager;
 
     private Handler handler = new Handler(Looper.getMainLooper());
     private String dateFormat = "yyyy-MM-dd";
@@ -63,7 +74,7 @@ public class PatientModifyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_insert);
 
-        patient = getPatientFromPreferences(PatientModifyActivity.this);
+        inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
         backButton = findViewById(R.id.img_btn_back_insert_patient);
 
@@ -73,7 +84,7 @@ public class PatientModifyActivity extends AppCompatActivity {
         heightField = findViewById(R.id.et_height_insert_patient);
         weightField = findViewById(R.id.et_weight_insert_patient);
         smokeAmountField = findViewById(R.id.et_smoke_amount_insert_patient);
-        modifyButton = findViewById(R.id.btn_insert_patient);
+        insertButton = findViewById(R.id.btn_insert_patient);
         maleButton = findViewById(R.id.btn_male_insert_patient);
         femaleButton = findViewById(R.id.btn_female_insert_patient);
         smokeButton = findViewById(R.id.btn_now_smoke_insert_patient);
@@ -88,6 +99,13 @@ public class PatientModifyActivity extends AppCompatActivity {
         startSmokeDateSelectButton = findViewById(R.id.btn_start_smoke_date_insert_patient);
         stopSmokeDateSelectButton = findViewById(R.id.btn_stop_smoke_date_insert_patient);
 
+        smokeAmountField.setFocusableInTouchMode(true);
+        smokeAmountField.setText("0");
+
+        disableButton(birthSelectButton);
+        disableTextField(chartNumberField);
+        disableTextField(nameField);
+
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,13 +116,11 @@ public class PatientModifyActivity extends AppCompatActivity {
         maleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 isMale = true;
 
-                maleButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.primary_color)));
-                maleButton.setTextColor(ColorStateList.valueOf(getColor(R.color.white)));
-
-                femaleButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-                femaleButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
+                enableButton(maleButton, true);
+                enableButton(femaleButton, false);
             }
         });
 
@@ -114,11 +130,8 @@ public class PatientModifyActivity extends AppCompatActivity {
 
                 isMale = false;
 
-                femaleButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.primary_color)));
-                femaleButton.setTextColor(ColorStateList.valueOf(getColor(R.color.white)));
-
-                maleButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-                maleButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
+                enableButton(maleButton, false);
+                enableButton(femaleButton, true);
             }
         });
 
@@ -128,31 +141,13 @@ public class PatientModifyActivity extends AppCompatActivity {
 
                 haveSmoking = true;
 
-                haveSmokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.primary_color)));
-                haveSmokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.white)));
-
-                haveNotSmokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-                haveNotSmokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
-
-                smokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-                smokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
-                smokeButton.setClickable(true);
-
-                nonSmokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-                nonSmokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
-                nonSmokeButton.setClickable(true);
-
-                startSmokeDateSelectButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-                startSmokeDateSelectButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
-                startSmokeDateSelectButton.setClickable(true);
-
-                smokeAmountField.setBackgroundResource(R.drawable.text_field_inner_shadow_white);
-                smokeAmountField.setHintTextColor(getColor(R.color.gray_dark));
-                smokeAmountField.setFocusable(true);
-
-                stopSmokeDateSelectButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-                stopSmokeDateSelectButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
-                stopSmokeDateSelectButton.setClickable(true);
+                enableButton(haveSmokeButton, true);
+                enableButton(haveNotSmokeButton, false);
+                enableButton(smokeButton, false);
+                enableButton(nonSmokeButton, false);
+                enableButton(startSmokeDateSelectButton, false);
+                enableButton(stopSmokeDateSelectButton, false);
+                enableTextField(smokeAmountField);
 
             }
         });
@@ -163,38 +158,22 @@ public class PatientModifyActivity extends AppCompatActivity {
 
                 haveSmoking = false;
 
-                haveNotSmokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.primary_color)));
-                haveNotSmokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.white)));
+                enableButton(haveNotSmokeButton, true);
+                enableButton(haveSmokeButton, false);
 
-                haveSmokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-                haveSmokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
+                disableButton(smokeButton);
+                disableButton(nonSmokeButton);
+                disableButton(startSmokeDateSelectButton);
+                disableButton(stopSmokeDateSelectButton);
 
-                //하위 선택지 비활성화
-                smokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.gray_background)));
-                smokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.gray_dark)));
-                smokeButton.setClickable(false);
+                disableTextField(smokeAmountField);
 
-                nonSmokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.gray_background)));
-                nonSmokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.gray_dark)));
-                nonSmokeButton.setClickable(false);
-
-                startSmokeDateSelectButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.gray_background)));
-                startSmokeDateSelectButton.setTextColor(ColorStateList.valueOf(getColor(R.color.gray_dark)));
                 startSmokeDateSelectButton.setText(dateFormat);
-                startSmokeDateSelectButton.setClickable(false);
-
-                smokeAmountField.setBackgroundResource(R.drawable.text_field_background_round_gray);
-                smokeAmountField.setHintTextColor(getColor(R.color.gray_dark));
-                smokeAmountField.setFocusable(false);
-
-                stopSmokeDateSelectButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.gray_background)));
-                stopSmokeDateSelectButton.setTextColor(ColorStateList.valueOf(getColor(R.color.gray_dark)));
                 stopSmokeDateSelectButton.setText(dateFormat);
-                stopSmokeDateSelectButton.setClickable(false);
 
                 isSmoking = false;
-                startSmokeDate = -1L;
-                stopSmokeDate = -1L;
+                startSmokeDate = Long.MAX_VALUE;
+                stopSmokeDate = Long.MAX_VALUE;
 
             }
         });
@@ -205,15 +184,9 @@ public class PatientModifyActivity extends AppCompatActivity {
 
                 isSmoking = true;
 
-                smokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.primary_color)));
-                smokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.white)));
-
-                nonSmokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-                nonSmokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
-
-                stopSmokeDateSelectButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.gray_background)));
-                stopSmokeDateSelectButton.setTextColor(ColorStateList.valueOf(getColor(R.color.gray_dark)));
-                stopSmokeDateSelectButton.setClickable(false);
+                enableButton(smokeButton, true);
+                enableButton(nonSmokeButton, false);
+                disableButton(stopSmokeDateSelectButton);
 
             }
         });
@@ -224,40 +197,9 @@ public class PatientModifyActivity extends AppCompatActivity {
 
                 isSmoking = false;
 
-                nonSmokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.primary_color)));
-                nonSmokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.white)));
-
-                smokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-                smokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
-
-                stopSmokeDateSelectButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-                stopSmokeDateSelectButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
-                stopSmokeDateSelectButton.setClickable(true);
-
-            }
-        });
-
-        birthSelectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                MaterialDatePicker<Long> materialDatePicker = MaterialDatePicker.Builder.datePicker()
-                        .setTitleText(getString(R.string.select_birth_date))
-
-
-                        .build();
-
-                materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
-                    @Override
-                    public void onPositiveButtonClick(Long selection) {
-
-                        birthDate = selection;
-                        birthSelectButton.setText(simpleDateFormat.format(birthDate));
-
-                    }
-                });
-
-                materialDatePicker.show(getSupportFragmentManager(), "DATE_PICKER");
+                enableButton(nonSmokeButton, true);
+                enableButton(smokeButton, false);
+                enableButton(stopSmokeDateSelectButton, false);
 
             }
         });
@@ -294,7 +236,6 @@ public class PatientModifyActivity extends AppCompatActivity {
                 MaterialDatePicker<Long> materialDatePicker = MaterialDatePicker.Builder.datePicker()
                         .setTitleText(getString(R.string.select_stop_smoke_date))
 
-
                         .build();
 
                 materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
@@ -302,7 +243,7 @@ public class PatientModifyActivity extends AppCompatActivity {
                     public void onPositiveButtonClick(Long selection) {
 
                         stopSmokeDate = selection;
-                        stopSmokeDateSelectButton.setText(simpleDateFormat.format(birthDate));
+                        stopSmokeDateSelectButton.setText(simpleDateFormat.format(stopSmokeDate));
 
                     }
                 });
@@ -325,19 +266,6 @@ public class PatientModifyActivity extends AppCompatActivity {
                 PatientModifyActivity.this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, doctors
         );
 
-        matchDoctorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                doctorID = position;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-
         humanRaceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -352,57 +280,79 @@ public class PatientModifyActivity extends AppCompatActivity {
             }
         });
 
-        modifyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Thread thread = new Thread() {
-
-                    @Override
-                    public void run() {
-                        super.run();
-                        Looper.prepare();
-
-                        String name = nameField.getText().toString();
-                        String chartNumber = chartNumberField.getText().toString();
-                        int height = Integer.parseInt(heightField.getText().toString());
-                        int weight = Integer.parseInt(weightField.getText().toString());
-                        float smokeAmount = Float.parseFloat(smokeAmountField.getText().toString());
-
-                        Patient patient = new Patient.Builder()
-                                .officeHashed(SharedPreferencesManager.getOfficeHash(PatientModifyActivity.this))
-                                .name(name)
-                                .height(height)
-                                .weight(weight)
-                                .chartNumber(chartNumber)
-
-
-                                .build();
-
-                        patient.setId(SharedPreferencesManager.getPatientId(PatientModifyActivity.this));
-                        setPatientInfoInPreferences(PatientModifyActivity.this, patient);
-
-                        //PatientDatabase.getInstance(PatientModifyActivity.this).patientDao().updatePatient(patient);
-
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                finish();
-                            }
-                        });
-
-                        Looper.loop();
-                    }
-                };
-                thread.start();
-
-            }
-        });
-
         humanRaceSpinner.setAdapter(humanRaceAdapter);
 
 
 
+        insertButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                boolean check = checkInputData();
+                if (check) {
+
+                    Thread thread = new Thread() {
+
+                        @Override
+                        public void run() {
+                            super.run();
+                            Looper.prepare();
+
+                            int height = Integer.parseInt(heightField.getText().toString());
+                            int weight = Integer.parseInt(weightField.getText().toString());
+                            String smokeAmount = smokeAmountField.getText().toString();
+                            char gender = 'm';
+                            int nowSmoking = 0;
+                            if (!isMale) gender = 'f';
+                            if (isSmoking) nowSmoking = 1;
+
+                            patient.setGender(gender + "");
+                            patient.setHeight(height);
+                            patient.setWeight(weight);
+                            patient.setHumanRace("y");
+                            patient.setNowSmoking(nowSmoking);
+                            patient.setSmokingAmountPerDay(smokeAmount);
+
+                            SpiroKitDatabase database = SpiroKitDatabase.getInstance(getApplicationContext());
+
+                            database.patientDao().updatePatient(patient);
+                            setPatientInfoInPreferences(PatientModifyActivity.this, patient);
+
+                            SpiroKitDatabase.removeInstance();
+
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    finish();
+
+                                }
+                            });
+
+
+                            Looper.loop();
+
+                        }
+                    };
+                    thread.start();
+
+                } else {
+                    ConfirmDialog confirmDialog = new ConfirmDialog(PatientModifyActivity.this);
+                    confirmDialog.setTitle("");
+                    confirmDialog.show();
+                }
+
+            }
+        });
+
+        patient = getPatientFromPreferences(PatientModifyActivity.this);
+        setViewState(patient);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
@@ -414,185 +364,246 @@ public class PatientModifyActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        selectDoctors();
-        setViewStateByPatientInfo();
     }
 
-    private void selectDoctors() {
 
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                Looper.prepare();
+    private boolean checkInputData() {
 
+        try {
 
-                /*
-
-                doctorAdapter = new ArrayAdapter<String>(
-                        PatientModifyActivity.this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, operatorNames
-                );
-
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        matchDoctorSpinner.setAdapter(doctorAdapter);
-                    }
-                });
-
-                 */
-
-
-                Looper.loop();
+            if (chartNumberField.getText().toString().length() == 0) {
+                Log.d(getClass().getSimpleName(), "CHART");
+                return false;
             }
-        };
-        thread.start();
+            if (nameField.getText().toString().length() == 0) {
+                Log.d(getClass().getSimpleName(), "NAME");
+                return false;
+            }
+            if (!(Integer.parseInt(heightField.getText().toString()) > 0)) {
+                Log.d(getClass().getSimpleName(), "HEIGHT");
+                return false;
+            }
+            if (!(Integer.parseInt(weightField.getText().toString()) > 0)) {
+                Log.d(getClass().getSimpleName(), "WEIGHT");
+                return false;
+            }
+            if (birthDate == Long.MAX_VALUE) {
+                Log.d(getClass().getSimpleName(), "BIRTH");
+                return false;
+            }
+            if ((haveSmoking) && (startSmokeDate == Long.MAX_VALUE)) {
+                Log.d(getClass().getSimpleName(), "HAVE & NOT START");
+                return false;
+            }
+            if (haveSmoking && (!isSmoking) && (stopSmokeDate == Long.MAX_VALUE)) {
+                Log.d(getClass().getSimpleName(), "STOP & NOT SELECT DATE");
+                return false;
+            }
+            if ((haveSmoking) && (Float.parseFloat(smokeAmountField.getText().toString()) == 0f)) {
+                Log.d(getClass().getSimpleName(), "HAVE & NOT ENTER AMOUNT");
+                return false;
+            }
 
+        } catch(NumberFormatException e) {
+            Log.d(getClass().getSimpleName(), e.toString());
+            return false;
+        }
+
+        return true;
     }
 
-    private void setViewStateByPatientInfo() {
+    private void setPatientInfoInPreferences(Context context, Patient patient) {
 
-        chartNumberField.setText(patient.getChartNumber());
-        nameField.setText(patient.getName());
-        if (patient.getGender().equals("m")) {
-            isMale = true;
-
-            maleButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.primary_color)));
-            maleButton.setTextColor(ColorStateList.valueOf(getColor(R.color.white)));
-
-            femaleButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-            femaleButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
-        } else {
-            isMale = false;
-
-            femaleButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.primary_color)));
-            femaleButton.setTextColor(ColorStateList.valueOf(getColor(R.color.white)));
-
-            maleButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-            maleButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
-        }
-
-        birthSelectButton.setText(patient.getBirthDay());
-        heightField.setText(Integer.toString(patient.getHeight()));
-        weightField.setText(Integer.toString(patient.getWeight()));
-        humanRaceSpinner.setSelection(0);
-
-        //doctorSpinner.setSelection(patient.getDoctorID)
-        if (patient.getNowSmoking() == 1) {
-
-            isSmoking = true;
-
-            smokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.primary_color)));
-            smokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.white)));
-
-            nonSmokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-            nonSmokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
-
-            stopSmokeDateSelectButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.gray_background)));
-            stopSmokeDateSelectButton.setTextColor(ColorStateList.valueOf(getColor(R.color.gray_dark)));
-            stopSmokeDateSelectButton.setClickable(false);
-
-            smokeAmountField.setText(patient.getSmokingAmountPerDay());
-
-            //startSmokeDateSelectButton.setText(simpleDateFormat.format(patient.getStartSmokeDate()));
-
-            haveSmokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.primary_color)));
-            haveSmokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.white)));
-
-            haveNotSmokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-            haveNotSmokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
-
-        } else {
-
-            if (patient.getStartSmokingDay().equals("")) {
-
-                haveSmoking = false;
-
-                haveNotSmokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.primary_color)));
-                haveNotSmokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.white)));
-
-                haveSmokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-                haveSmokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
-
-                //하위 선택지 비활성화
-                smokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.gray_background)));
-                smokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.gray_dark)));
-                smokeButton.setClickable(false);
-
-                nonSmokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.gray_background)));
-                nonSmokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.gray_dark)));
-                nonSmokeButton.setClickable(false);
-
-                startSmokeDateSelectButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.gray_background)));
-                startSmokeDateSelectButton.setTextColor(ColorStateList.valueOf(getColor(R.color.gray_dark)));
-                startSmokeDateSelectButton.setText(dateFormat);
-                startSmokeDateSelectButton.setClickable(false);
-
-                smokeAmountField.setBackgroundResource(R.drawable.text_field_background_round_gray);
-                smokeAmountField.setHintTextColor(getColor(R.color.gray_dark));
-                smokeAmountField.setFocusable(false);
-
-                stopSmokeDateSelectButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.gray_background)));
-                stopSmokeDateSelectButton.setTextColor(ColorStateList.valueOf(getColor(R.color.gray_dark)));
-                stopSmokeDateSelectButton.setText(dateFormat);
-                stopSmokeDateSelectButton.setClickable(false);
-
-                isSmoking = false;
-                startSmokeDate = -1L;
-                stopSmokeDate = -1L;
-
-
-            } else {
-
-                haveSmoking = true;
-
-                haveSmokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.primary_color)));
-                haveSmokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.white)));
-
-                haveNotSmokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-                haveNotSmokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
-
-                smokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-                smokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
-                smokeButton.setClickable(true);
-
-                nonSmokeButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-                nonSmokeButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
-                nonSmokeButton.setClickable(true);
-
-                startSmokeDateSelectButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-                startSmokeDateSelectButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
-                startSmokeDateSelectButton.setClickable(true);
-
-                smokeAmountField.setBackgroundResource(R.drawable.text_field_inner_shadow_white);
-                smokeAmountField.setHintTextColor(getColor(R.color.gray_dark));
-                smokeAmountField.setFocusable(true);
-
-                stopSmokeDateSelectButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-                stopSmokeDateSelectButton.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
-                stopSmokeDateSelectButton.setClickable(true);
-
-
-            }
-
-        }
-
-
-
+        SharedPreferencesManager.setPatientID(context, patient.getId());
+        SharedPreferencesManager.setPatientName(context, patient.getName());
+        SharedPreferencesManager.setPatientHash(context, patient.getHashed());
+        SharedPreferencesManager.setPatientChartNumber(context, patient.getChartNumber());
+        SharedPreferencesManager.setPatientGender(context, patient.getGender());
+        SharedPreferencesManager.setPatientHeight(context, patient.getHeight());
+        SharedPreferencesManager.setPatientWeight(context, patient.getWeight());
+        SharedPreferencesManager.setPatientHumanRace(context, patient.getHumanRace());
+        SharedPreferencesManager.setPatientSmokingIsNow(context, patient.getNowSmoking());
+        SharedPreferencesManager.setPatientSmokingStartDate(context, patient.getStartSmokingDay());
+        SharedPreferencesManager.setPatientSmokingStopDate(context, patient.getStopSmokingDay());
+        SharedPreferencesManager.setPatientSmokingAmountPerDay(context, patient.getSmokingAmountPerDay());
+        SharedPreferencesManager.setPatientSmokingPeriod(context, patient.getSmokingPeriod());
+        SharedPreferencesManager.setPatientBirthday(context, patient.getBirthDay());
     }
 
     private Patient getPatientFromPreferences(Context context) {
 
         Patient patient = new Patient.Builder()
-
+                .hashed(SharedPreferencesManager.getPatientHashed(context))
+                .gender(SharedPreferencesManager.getPatientGender(context))
+                .name(SharedPreferencesManager.getPatientName(context))
+                .chartNumber(SharedPreferencesManager.getPatientChartNumber(context))
+                .birthDay(SharedPreferencesManager.getPatientBirthday(context))
+                .height(SharedPreferencesManager.getPatientHeight(context))
+                .weight(SharedPreferencesManager.getPatientWeight(context))
+                .officeHashed(SharedPreferencesManager.getOfficeHash(context))
+                .humanRace(SharedPreferencesManager.getPatientHumanRace(context))
+                .nowSmoking(SharedPreferencesManager.getPatientSmokingIsNow(context))
+                .smokingAmountDay(SharedPreferencesManager.getPatientSmokingAmountPerDay(context))
+                .startSmokingDate(SharedPreferencesManager.getPatientSmokingStartDate(context))
+                .stopSmokingDate(SharedPreferencesManager.getPatientSmokingStopDate(context))
                 .build();
 
+        patient.setId(SharedPreferencesManager.getPatientId(context));
+
         return patient;
+
     }
 
-    private void setPatientInfoInPreferences(Context context, Patient patient) {
+    private void setViewState(Patient patient) {
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String formatString = "yyyy-mm-dd";
+
+        chartNumberField.setText(patient.getChartNumber());
+        nameField.setText(patient.getName());
+        heightField.setText(Integer.toString(patient.getHeight()));
+        weightField.setText(Integer.toString(patient.getWeight()));
+
+        String humanRace = patient.getHumanRace();
+
+        if (patient.getGender().equals("m")) {
+            enableButton(maleButton, true);
+            enableButton(femaleButton, false);
+        } else if (patient.getGender().equals("f")) {
+            enableButton(maleButton, false);
+            enableButton(femaleButton, true);
+        }
+        try {
+            birthDate = simpleDateFormat.parse(patient.getBirthDay()).getTime();
+            birthSelectButton.setText(dateFormat.format(birthDate));
+
+            if (patient.getStartSmokingDay() != null) {
+
+                startSmokeDate = simpleDateFormat.parse(patient.getStartSmokingDay()).getTime();
+                startSmokeDateSelectButton.setText(dateFormat.format(startSmokeDate));
+
+                enableButton(haveNotSmokeButton, false);
+                enableButton(haveSmokeButton, true);
+
+                if (patient.getStopSmokingDay() != null) {
+
+                    stopSmokeDate = simpleDateFormat.parse(patient.getStopSmokingDay()).getTime();
+                    stopSmokeDateSelectButton.setText(dateFormat.format(stopSmokeDate));
+
+                    enableButton(nonSmokeButton, true);
+                    enableButton(smokeButton, false);
+
+                } else {
+
+                    stopSmokeDateSelectButton.setText(formatString);
+                    enableButton(nonSmokeButton, false);
+                    enableButton(smokeButton, true);
+
+                }
+
+                smokeAmountField.setText(patient.getSmokingAmountPerDay());
+
+            } else {
+                //시작날짜가 없으면
+                haveSmoking = false;
+
+                enableButton(haveNotSmokeButton, true);
+                enableButton(haveSmokeButton, false);
+
+                disableButton(smokeButton);
+                disableButton(nonSmokeButton);
+                disableButton(startSmokeDateSelectButton);
+                disableButton(stopSmokeDateSelectButton);
+
+                disableTextField(smokeAmountField);
+
+                startSmokeDateSelectButton.setText(formatString);
+                stopSmokeDateSelectButton.setText(formatString);
+
+                isSmoking = false;
+                startSmokeDate = Long.MAX_VALUE;
+                stopSmokeDate = Long.MAX_VALUE;
 
 
+
+            }
+
+
+        } catch (ParseException e) {
+            Log.d(getClass().getSimpleName(), e.toString());
+        }
+
+
+
+    }
+
+    private int diffDateMonth(long from, long to) {
+
+        Date fromDate = new Date(from);
+        Date toDate = new Date(to);
+
+        Calendar fromCal = Calendar.getInstance();
+        fromCal.setTime(fromDate);
+
+        Calendar toCal = Calendar.getInstance();
+        toCal.setTime(toDate);
+
+        int diffYear = toCal.get(Calendar.YEAR) - fromCal.get(Calendar.YEAR);
+        int diffMonth = toCal.get(Calendar.MONTH) - fromCal.get(Calendar.MONTH);
+
+        return (diffYear * 12) + diffMonth;
+
+    }
+
+    private void enableButton(Button button, boolean isSelected) {
+
+        if (isSelected) {
+            button.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.primary_color)));
+            button.setTextColor(ColorStateList.valueOf(getColor(R.color.white)));
+            button.setClickable(true);
+        } else {
+            button.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
+            button.setTextColor(ColorStateList.valueOf(getColor(R.color.black)));
+            button.setClickable(true);
+        }
+
+    }
+
+    private void disableButton(Button button) {
+
+        button.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.gray_background)));
+        button.setTextColor(ColorStateList.valueOf(getColor(R.color.gray_dark)));
+        button.setClickable(false);
+
+    }
+
+    private void enableTextField(EditText editText) {
+
+        editText.setBackgroundResource(R.drawable.text_field_inner_shadow_white);
+        editText.setHintTextColor(getColor(R.color.gray_dark));
+        editText.setEnabled(true);
+
+    }
+
+    private void disableTextField(EditText editText) {
+
+        editText.setBackgroundResource(R.drawable.text_field_background_round_gray);
+        editText.setHintTextColor(getColor(R.color.gray_dark));
+        editText.setEnabled(false);
+        inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+
+    }
+
+    private String conversionDate(long date) {
+
+        if (date == Long.MAX_VALUE) {
+            return null;
+        } else {
+
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+            return simpleDateFormat.format(date);
+        }
 
     }
 

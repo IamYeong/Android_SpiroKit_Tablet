@@ -41,12 +41,20 @@ public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
 
+
+        long date = -1000000000;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+        System.out.println(simpleDateFormat.format(date));
+
+        /*
         Instant instant = Instant.now().truncatedTo(ChronoUnit.MICROS);
         System.out.println(instant.toString());
         long date = instant.toEpochMilli();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.getDefault());
         System.out.println(simpleDateFormat.format(date));
 
+
+         */
         /*
         String string = "1909403 ";
         byte[] data = string.getBytes();
