@@ -56,11 +56,16 @@ public class SvcResultFragment extends Fragment implements Observer {
     private SvcResultAdapter svcResultAdapter;
     private Context context;
     private TextView matchDoctorText, measDoctorText;
+    private OnItemChangedListener changedListener;
 
     private Handler handler = new Handler(Looper.getMainLooper());
 
     public SvcResultFragment(CalHistory history) {
         this.history = history;
+    }
+
+    public void setChangedListener(OnItemChangedListener listener) {
+        this.changedListener = listener;
     }
 
     @Override
@@ -146,8 +151,6 @@ public class SvcResultFragment extends Fragment implements Observer {
 
     private void startDrawing(int width, int height) {
 
-        //svcResultAdapter.clear();
-
         Thread thread = new Thread() {
 
             @Override
@@ -170,7 +173,17 @@ public class SvcResultFragment extends Fragment implements Observer {
 
                 Log.d(getClass().getSimpleName(), "RAW DATA SIZE : " + rawData.size());
 
-                if (rawData.size() == 0) return;
+                if (rawData.size() == 0) {
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            changedListener.onChanged();
+                        }
+                    });
+
+                    return;
+                }
 
                 for (int i = 0; i < rawData.size(); i++) {
 

@@ -92,19 +92,29 @@ public class PatientInformationFragment extends Fragment implements Observer {
     @Override
     public void update(Observable o, Object arg) {
 
-        if (isFocused) {
+        if ((Integer) arg == 404) {
 
-            isFocused = false;
-            patientsRV.setVisibility(View.INVISIBLE);
-            patientsEmptyText.setVisibility(View.INVISIBLE);
-            patientsRV.setClickable(true);
-            patientSearchField.clearFocus();
+            selectMeasurements();
 
-            inputMethodManager.hideSoftInputFromWindow(patientSearchField.getWindowToken(), 0);
+        } else {
+            // arg == 1
 
+            if (isFocused) {
+
+                isFocused = false;
+                patientsRV.setVisibility(View.INVISIBLE);
+                patientsEmptyText.setVisibility(View.INVISIBLE);
+                patientsRV.setClickable(true);
+                patientSearchField.clearFocus();
+
+                inputMethodManager.hideSoftInputFromWindow(patientSearchField.getWindowToken(), 0);
+
+            }
+
+            Log.d(getClass().getSimpleName(), "INFO FRAGMENT : TOUCH");
         }
 
-        Log.d(getClass().getSimpleName(), "INFO FRAGMENT : TOUCH");
+
     }
 
     public void setHistorySelectedListener(OnCalHistorySelectedListener listener) {
@@ -147,6 +157,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
                 selectPatients();
                 updatePatientInformation();
+                selectMeasurements();
 
             }
         });

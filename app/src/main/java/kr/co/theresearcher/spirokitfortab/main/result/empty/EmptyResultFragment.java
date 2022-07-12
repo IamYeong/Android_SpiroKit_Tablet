@@ -25,8 +25,6 @@ public class EmptyResultFragment extends Fragment {
 
 
 
-
-
         return view;
     }
 }

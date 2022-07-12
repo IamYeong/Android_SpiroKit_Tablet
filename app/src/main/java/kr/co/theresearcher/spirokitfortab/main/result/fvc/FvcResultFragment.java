@@ -68,6 +68,7 @@ public class FvcResultFragment extends Fragment implements Observer {
     private List<VolumeTimeResultView> volumeTimeResultViews = new ArrayList<>();
     private CalHistory history;
     private Handler handler = new Handler(Looper.getMainLooper());
+    private OnItemChangedListener changedListener;
 
     public FvcResultFragment(CalHistory history) {
         this.history = history;
@@ -78,6 +79,10 @@ public class FvcResultFragment extends Fragment implements Observer {
 
         Log.d(getClass().getSimpleName(), "FVC FRAGMENT : TOUCH");
 
+    }
+
+    public void setChangedListener(OnItemChangedListener listener) {
+        this.changedListener = listener;
     }
 
     @Override
@@ -274,6 +279,13 @@ public class FvcResultFragment extends Fragment implements Observer {
                 Log.d(getClass().getSimpleName(), "RAW DATA SIZE : " + rawData.size());
 
                 if (rawData.size() == 0) {
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            changedListener.onChanged();
+                        }
+                    });
 
                     return;
                 }

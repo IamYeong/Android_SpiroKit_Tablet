@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.bluetooth.SpiroKitBluetoothLeService;
 import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
@@ -256,6 +257,14 @@ public class MainActivity extends AppCompatActivity {
             observer.deleteObservers();
             observer.addObserver(informationFragment);
             observer.addObserver(fvcResultFragment);
+
+            fvcResultFragment.setChangedListener(new OnItemChangedListener() {
+                @Override
+                public void onChanged() {
+                    observer.notificationObservers(404);
+                }
+            });
+
             replaceFragment(R.id.fragment_container_result_main, fvcResultFragment);
 
         } else if (history.getMeasDiv().equals("s")) {
@@ -263,6 +272,14 @@ public class MainActivity extends AppCompatActivity {
             observer.deleteObservers();
             observer.addObserver(informationFragment);
             observer.addObserver(svcResultFragment);
+
+            svcResultFragment.setChangedListener(new OnItemChangedListener() {
+                @Override
+                public void onChanged() {
+                    observer.notificationObservers(404);
+                }
+            });
+
             replaceFragment(R.id.fragment_container_result_main, svcResultFragment);
 
         } else if (history.getMeasDiv().equals("m")) {
