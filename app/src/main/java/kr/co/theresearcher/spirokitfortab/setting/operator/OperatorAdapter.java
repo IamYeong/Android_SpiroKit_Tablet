@@ -17,8 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
+import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
 import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
 import kr.co.theresearcher.spirokitfortab.db.work.Work;
 
@@ -29,6 +31,7 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorViewHolder> {
     private List<Operator> searchResults;
 
     private Handler handler = new Handler(Looper.getMainLooper());
+    private OnItemChangedListener changedListener;
 
     public OperatorAdapter(Context context) {
         this.context = context;
@@ -48,6 +51,10 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorViewHolder> {
         operators.add(operator);
         searchResults.add(operator);
 
+    }
+
+    public void setChangedListener(OnItemChangedListener listener) {
+        this.changedListener = listener;
     }
 
     @NonNull
@@ -75,14 +82,13 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorViewHolder> {
                         super.run();
                         Looper.prepare();
 
-                        //OperatorDatabase.getInstance(context).operatorDao().update()
-
-                        //setOperators(operatorDao.selectByOfficeID(SharedPreferencesManager.getOfficeID(context)));
+                        SpiroKitDatabase.getInstance(context)
+                                .operatorDao().delete(operator.getHashed());
 
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                notifyDataSetChanged();
+                                changedListener.onChanged();
                             }
                         });
 

@@ -26,6 +26,7 @@ import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 
+import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
 import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
 import kr.co.theresearcher.spirokitfortab.dialog.OnSelectedInDialogListener;
 import kr.co.theresearcher.spirokitfortab.dialog.SelectionDialog;
@@ -114,6 +115,7 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsViewHolder> {
 
         Patient patient = searchResults.get(holder.getAdapterPosition());
 
+        /*
         Log.d(getClass().getSimpleName(), "==============================\n" +
                 patient.getChartNumber() + "\n"
                 + patient.getHashed() + "\n"
@@ -132,6 +134,8 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsViewHolder> {
                 + patient.getOfficeHashed() + "\n"
                 + patient.getIsDeleted() +
                 "\n======================");
+
+         */
 
         holder.getNameText().setText(patient.getName());
         holder.getChartNumberText().setText(patient.getChartNumber());
@@ -180,9 +184,8 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsViewHolder> {
                                 super.run();
                                 Looper.prepare();
 
-                                removeThisData(patient.getId());
-
-                                //PatientDatabase.getInstance(context).patientDao().deletePatient();
+                                SpiroKitDatabase.getInstance(context)
+                                        .patientDao().deletePatient(patient.getHashed());
 
                                 handler.post(new Runnable() {
                                     @Override

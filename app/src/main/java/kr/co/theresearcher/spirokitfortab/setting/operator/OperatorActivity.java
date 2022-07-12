@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Locale;
 
 import kr.co.theresearcher.spirokitfortab.HashConverter;
+import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
@@ -62,6 +63,12 @@ public class OperatorActivity extends AppCompatActivity {
         });
 
         adapter = new OperatorAdapter(this);
+        adapter.setChangedListener(new OnItemChangedListener() {
+            @Override
+            public void onChanged() {
+                updateOperators();
+            }
+        });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rv.setLayoutManager(linearLayoutManager);

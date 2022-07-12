@@ -27,6 +27,7 @@ import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 
+import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
 import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
 import kr.co.theresearcher.spirokitfortab.dialog.OnSelectedInDialogListener;
 import kr.co.theresearcher.spirokitfortab.dialog.SelectionDialog;
@@ -179,8 +180,8 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
                                 super.run();
                                 Looper.prepare();
 
-                                //calHIstory .isDeleted = 1
-                                //rawData .isDeletedReference = 1
+                                SpiroKitDatabase.getInstance(context)
+                                        .calHistoryDao().delete(calHistory.getHashed());
 
                                 handler.post(new Runnable() {
                                     @Override
