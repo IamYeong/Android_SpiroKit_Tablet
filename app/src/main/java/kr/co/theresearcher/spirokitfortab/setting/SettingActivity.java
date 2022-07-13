@@ -6,9 +6,11 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
@@ -76,6 +78,7 @@ public class SettingActivity extends AppCompatActivity {
     private Runnable stopScanRunnable = new Runnable() {
         @Override
         public void run() {
+
             bluetoothLeScanner.stopScan(scanCallback);
             scanProgress.setVisibility(View.INVISIBLE);
             startScanText.setVisibility(View.VISIBLE);
@@ -219,7 +222,7 @@ public class SettingActivity extends AppCompatActivity {
             public void onDeviceLookup(ScanResult result) {
 
                 SelectionDialog selectionDialog = new SelectionDialog(SettingActivity.this);
-                selectionDialog.setTitle(getString(R.string.question_connect));
+                selectionDialog.setTitle(getString(R.string.question_connect, result.getDevice().getName()));
                 selectionDialog.setSelectedListener(new OnSelectedInDialogListener() {
                     @Override
                     public void onSelected(boolean select) {

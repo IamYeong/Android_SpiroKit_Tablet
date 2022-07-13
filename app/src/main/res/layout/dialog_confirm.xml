@@ -18,10 +18,10 @@
 
         android:layout_margin="10dp"
         android:fontFamily="@font/nanum_gothic"
-        android:text="test"
+        android:text="@string/not_applicable"
 
         android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textSize="21dp"
         android:textAlignment="center"
 
         android:padding="30dp"

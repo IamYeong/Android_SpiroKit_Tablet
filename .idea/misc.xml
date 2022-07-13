@@ -72,7 +72,7 @@
         <entry key="app/src/main/res/layout/activity_patient_modify.xml" value="0.20442708333333334" />
         <entry key="app/src/main/res/layout/activity_setting.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.12" />
-        <entry key="app/src/main/res/layout/dialog_confirm.xml" value="0.16276041666666666" />
+        <entry key="app/src/main/res/layout/dialog_confirm.xml" value="0.33" />
         <entry key="app/src/main/res/layout/dialog_loading.xml" value="0.16276041666666666" />
         <entry key="app/src/main/res/layout/dialog_meas_selection.xml" value="0.16" />
         <entry key="app/src/main/res/layout/dialog_selection.xml" value="0.16276041666666666" />

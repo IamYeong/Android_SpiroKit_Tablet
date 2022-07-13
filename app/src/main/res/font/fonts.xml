@@ -26,4 +26,24 @@
         android:fontStyle="normal"
         />
 
+    <font
+        android:font="@font/nanum_barun_gothic_bold"
+        android:fontStyle="normal"
+        />
+
+    <font
+        android:font="@font/nanum_barun_gothic_light"
+        android:fontStyle="normal"
+        />
+
+    <font
+        android:font="@font/nanum_barun_gothic_ultra_light"
+        android:fontStyle="normal"
+        />
+
+    <font
+        android:font="@font/nanum_barun_gothic"
+        android:fontStyle="normal"
+        />
+
 </font-family>
