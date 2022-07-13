@@ -283,59 +283,64 @@ public class PatientModifyActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                boolean check = checkInputData();
-                if (check) {
+                if (!checkInputData()) {
 
-                    Thread thread = new Thread() {
-
-                        @Override
-                        public void run() {
-                            super.run();
-                            Looper.prepare();
-
-                            int height = Integer.parseInt(heightField.getText().toString());
-                            int weight = Integer.parseInt(weightField.getText().toString());
-                            String smokeAmount = smokeAmountField.getText().toString();
-                            char gender = 'm';
-                            int nowSmoking = 0;
-                            if (!isMale) gender = 'f';
-                            if (isSmoking) nowSmoking = 1;
-
-                            patient.setGender(gender + "");
-                            patient.setHeight(height);
-                            patient.setWeight(weight);
-                            patient.setHumanRace(humanRaceDatabases.get(humanRaceID).getRace());
-                            patient.setNowSmoking(nowSmoking);
-                            patient.setSmokingAmountPerDay(smokeAmount);
-
-                            SpiroKitDatabase database = SpiroKitDatabase.getInstance(getApplicationContext());
-
-                            database.patientDao().updatePatient(patient);
-                            setPatientInfoInPreferences(PatientModifyActivity.this, patient);
-
-                            SpiroKitDatabase.removeInstance();
-
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-
-                                    finish();
-
-                                }
-                            });
-
-
-                            Looper.loop();
-
-                        }
-                    };
-                    thread.start();
-
-                } else {
                     ConfirmDialog confirmDialog = new ConfirmDialog(PatientModifyActivity.this);
                     confirmDialog.setTitle("");
                     confirmDialog.show();
+
+                    return;
                 }
+
+
+                Thread thread = new Thread() {
+
+                    @Override
+                    public void run() {
+                        super.run();
+                        Looper.prepare();
+
+                        int height = Integer.parseInt(heightField.getText().toString());
+                        int weight = Integer.parseInt(weightField.getText().toString());
+                        String smokeAmount = smokeAmountField.getText().toString();
+                        char gender = 'm';
+                        int nowSmoking = 0;
+                        if (!isMale) gender = 'f';
+                        if (isSmoking) nowSmoking = 1;
+
+                        patient.setGender(gender + "");
+                        patient.setHeight(height);
+                        patient.setWeight(weight);
+                        patient.setHumanRace(humanRaceDatabases.get(humanRaceID).getRace());
+                        patient.setNowSmoking(nowSmoking);
+                        patient.setSmokingAmountPerDay(smokeAmount);
+
+                        SpiroKitDatabase database = SpiroKitDatabase.getInstance(getApplicationContext());
+
+                        //해시관여 부분은 막아뒀으므로 중복검사는 할 필요 없음.
+
+                        database.patientDao().updatePatient(patient);
+                        setPatientInfoInPreferences(PatientModifyActivity.this, patient);
+
+                        SpiroKitDatabase.removeInstance();
+
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                finish();
+
+                            }
+                        });
+
+
+                        Looper.loop();
+
+                    }
+                };
+                thread.start();
+
+
 
             }
         });

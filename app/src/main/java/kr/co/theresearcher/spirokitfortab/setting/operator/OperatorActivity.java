@@ -29,6 +29,7 @@ import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
 import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
 import kr.co.theresearcher.spirokitfortab.db.work.Work;
+import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
 
 public class OperatorActivity extends AppCompatActivity {
 
@@ -101,6 +102,8 @@ public class OperatorActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                if (!check()) return;
+
                 Thread thread = new Thread() {
 
                     @Override
@@ -111,17 +114,6 @@ public class OperatorActivity extends AppCompatActivity {
                         String name = nameTextField.getText().toString();
                         String work = works.get(workID).getWork();
 
-                        if (name.length() == 0) {
-
-
-                            return;
-                        }
-
-                        if (workID < 0) {
-
-                            return;
-                        }
-
                         try {
 
                             Operator operator = new Operator();
@@ -130,9 +122,32 @@ public class OperatorActivity extends AppCompatActivity {
                             operator.setName(name);
                             operator.setWork(work);
 
-                            SpiroKitDatabase.getInstance(OperatorActivity.this).operatorDao().insertOperator(operator);
+                            SpiroKitDatabase database = SpiroKitDatabase.getInstance(OperatorActivity.this);
+                            if (database.operatorDao().isExists(operator.getHashed())) {
 
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ConfirmDialog confirmDialog = new ConfirmDialog(OperatorActivity.this);
+                                        confirmDialog.setTitle(getString(R.string.can_not_insert_same_name_in_work));
+                                        confirmDialog.show();
+                                    }
+                                });
+
+
+                                return;
+                            }
+
+                            database.operatorDao().insertOperator(operator);
                             adapter.addOperator(operator);
+
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    adapter.notifyDataSetChanged();
+                                }
+                            });
+
 
                         } catch (NoSuchAlgorithmException e) {
 
@@ -140,12 +155,7 @@ public class OperatorActivity extends AppCompatActivity {
 
                         }
 
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                adapter.notifyDataSetChanged();
-                            }
-                        });
+
 
                         Looper.loop();
                     }
@@ -204,6 +214,19 @@ public class OperatorActivity extends AppCompatActivity {
 
     }
 
+    private boolean check() {
+
+        if (nameTextField.getText().toString().length() == 0) {
+            return false;
+        }
+
+        if (workID < 0) {
+
+            return false;
+        }
+
+        return true;
+    }
 
 
 }

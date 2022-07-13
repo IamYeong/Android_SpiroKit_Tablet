@@ -301,86 +301,101 @@ public class PatientInsertActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                boolean check = checkInputData();
-                if (check) {
+                if (!checkInputData()) {
 
-                    Thread thread = new Thread() {
-
-                        @Override
-                        public void run() {
-                            super.run();
-                            Looper.prepare();
-
-                            String name = nameField.getText().toString();
-                            String chartNumber = chartNumberField.getText().toString();
-                            int height = Integer.parseInt(heightField.getText().toString());
-                            int weight = Integer.parseInt(weightField.getText().toString());
-                            String smokeAmount = smokeAmountField.getText().toString();
-                            char gender = 'm';
-                            int nowSmoking = 0;
-                            if (!isMale) gender = 'f';
-                            if (isSmoking) nowSmoking = 1;
-
-                            try {
-
-                                String patientHashed = HashConverter.hashingFromString(
-                                        chartNumber +
-                                                name +
-                                                conversionDate(birthDate) +
-                                                SharedPreferencesManager.getOfficeHash(PatientInsertActivity.this));
-
-                                Patient patient = new Patient.Builder()
-                                        .officeHashed(SharedPreferencesManager.getOfficeHash(PatientInsertActivity.this))
-                                        .name(name)
-                                        .gender(gender + "")
-                                        .height(height)
-                                        .weight(weight)
-                                        .chartNumber(chartNumber)
-                                        .hashed(patientHashed)
-                                        .humanRace(humanRaceDatabases.get(humanRaceID).getRace())
-                                        .nowSmoking(nowSmoking)
-                                        .smokingAmountDay(smokeAmount)
-                                        .birthDay(conversionDate(birthDate))
-                                        .build();
-
-                                patient.setStartSmokingDay(conversionDate(startSmokeDate));
-                                patient.setStopSmokingDay(conversionDate(stopSmokeDate));
-                                patient.setSmokingPeriod(diffDateMonth(startSmokeDate, stopSmokeDate));
-
-                                SpiroKitDatabase database = SpiroKitDatabase.getInstance(getApplicationContext());
-                                database.patientDao().insertPatient(patient);
-
-                                setPatientInfoInPreferences(PatientInsertActivity.this, database.patientDao().selectPatientByHash(patientHashed));
-
-                                SpiroKitDatabase.removeInstance();
-
-
-
-                            } catch (NoSuchAlgorithmException e) {
-
-                            }
-
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-
-                                    finish();
-
-                                }
-                            });
-
-
-                            Looper.loop();
-
-                        }
-                    };
-                    thread.start();
-
-                } else {
                     ConfirmDialog confirmDialog = new ConfirmDialog(PatientInsertActivity.this);
                     confirmDialog.setTitle("");
                     confirmDialog.show();
+
+                    return;
                 }
+
+
+                Thread thread = new Thread() {
+
+                    @Override
+                    public void run() {
+                        super.run();
+                        Looper.prepare();
+
+                        String name = nameField.getText().toString();
+                        String chartNumber = chartNumberField.getText().toString();
+                        int height = Integer.parseInt(heightField.getText().toString());
+                        int weight = Integer.parseInt(weightField.getText().toString());
+                        String smokeAmount = smokeAmountField.getText().toString();
+                        char gender = 'm';
+                        int nowSmoking = 0;
+                        if (!isMale) gender = 'f';
+                        if (isSmoking) nowSmoking = 1;
+
+                        try {
+
+                            String patientHashed = HashConverter.hashingFromString(
+                                    chartNumber +
+                                            name +
+                                            conversionDate(birthDate) +
+                                            SharedPreferencesManager.getOfficeHash(PatientInsertActivity.this));
+
+
+                            Patient patient = new Patient.Builder()
+                                    .officeHashed(SharedPreferencesManager.getOfficeHash(PatientInsertActivity.this))
+                                    .name(name)
+                                    .gender(gender + "")
+                                    .height(height)
+                                    .weight(weight)
+                                    .chartNumber(chartNumber)
+                                    .hashed(patientHashed)
+                                    .humanRace(humanRaceDatabases.get(humanRaceID).getRace())
+                                    .nowSmoking(nowSmoking)
+                                    .smokingAmountDay(smokeAmount)
+                                    .birthDay(conversionDate(birthDate))
+                                    .build();
+
+                            patient.setStartSmokingDay(conversionDate(startSmokeDate));
+                            patient.setStopSmokingDay(conversionDate(stopSmokeDate));
+                            patient.setSmokingPeriod(diffDateMonth(startSmokeDate, stopSmokeDate));
+
+                            SpiroKitDatabase database = SpiroKitDatabase.getInstance(getApplicationContext());
+                            if (database.patientDao().isExists(patientHashed)) {
+
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ConfirmDialog confirmDialog = new ConfirmDialog(PatientInsertActivity.this);
+                                        confirmDialog.setTitle(getString(R.string.duplicate_hash));
+                                        confirmDialog.show();
+                                    }
+                                });
+
+                                return;
+                            }
+
+                            database.patientDao().insertPatient(patient);
+                            setPatientInfoInPreferences(PatientInsertActivity.this, database.patientDao().selectPatientByHash(patientHashed));
+
+                            SpiroKitDatabase.removeInstance();
+
+                        } catch (NoSuchAlgorithmException e) {
+
+                        }
+
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                finish();
+
+                            }
+                        });
+
+
+                        Looper.loop();
+
+                    }
+                };
+                thread.start();
+
+
 
             }
         });
