@@ -16,6 +16,9 @@ public interface OperatorDao {
     @Query("SELECT * FROM OPERATOR WHERE (work == :work) AND (office_hashed == :officeHashed)")
     List<Operator> selectOperatorByWork(String officeHashed, String work);
 
+    @Query("SELECT * FROM operator WHERE (hashed == :hash)")
+    Operator selectOperatorByHash(String hash);
+
     @Insert
     void insertOperator(Operator operator);
 

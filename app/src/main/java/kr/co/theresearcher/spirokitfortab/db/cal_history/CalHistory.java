@@ -14,14 +14,6 @@ import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
 @Entity(tableName = "cal_history",foreignKeys = {
 
         @ForeignKey(
-                entity = Operator.class,
-                parentColumns = "hashed",
-                childColumns = "operator_hashed",
-                onDelete = ForeignKey.CASCADE,
-                onUpdate = ForeignKey.CASCADE
-        )
-        ,
-        @ForeignKey(
                 entity = Office.class,
                 parentColumns = "hashed",
                 childColumns = "office_hashed",
@@ -49,6 +41,9 @@ public class CalHistory{
 
     @ColumnInfo(name = "office_hashed")
     private String officeHashed;
+
+    @ColumnInfo(name = "operator_doctor_hash")
+    private String familyDoctorHash;
 
     @ColumnInfo(name = "operator_hashed")
     private String operatorHashed;
@@ -89,6 +84,14 @@ public class CalHistory{
         this.measDiv = measDiv;
         this.deviceDiv = deviceDiv;
         this.isDeleted = isDeleted;
+    }
+
+    public String getFamilyDoctorHash() {
+        return familyDoctorHash;
+    }
+
+    public void setFamilyDoctorHash(String familyDoctorHash) {
+        this.familyDoctorHash = familyDoctorHash;
     }
 
     public long getTimestamp() {

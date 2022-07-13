@@ -42,6 +42,8 @@ import kr.co.theresearcher.spirokitfortab.calc.CalcSvcSpiroKitE;
 import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
 import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
 import kr.co.theresearcher.spirokitfortab.db.cal_history_raw_data.CalHistoryRawData;
+import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
+import kr.co.theresearcher.spirokitfortab.db.work.Work;
 import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
 import kr.co.theresearcher.spirokitfortab.graph.SlowVolumeTimeRunView;
 import kr.co.theresearcher.spirokitfortab.main.result.OnOrderSelectedListener;
@@ -133,6 +135,7 @@ public class SvcResultFragment extends Fragment implements Observer {
             }
         });
 
+        setDoctors();
 
         return view;
     }
@@ -195,6 +198,15 @@ public class SvcResultFragment extends Fragment implements Observer {
                 }
 
                 for (int i = 0; i < rawData.size(); i++) {
+
+                    CalHistoryRawData raw = rawData.get(i);
+                    Log.d(getClass().getSimpleName(), ""
+                                    + "HASH : " + raw.getHashed() + "\n"
+                                    + "HISTORY HASH : " + raw.getCalHistoryHashed() + "\n"
+                                    + "ORDER : " + raw.getOrderNumber() + "\n"
+                                    + "IS_DELETED : " + raw.getIsDeleted() + "\n"
+                                    + "IS_DELETED_REF : " + raw.getIsDeletedReference() + "\n"
+                            );
 
                     String[] data = rawData.get(i).getData().split(" ");
                     List<Integer> pulseWidth = new ArrayList<>();
@@ -340,6 +352,49 @@ public class SvcResultFragment extends Fragment implements Observer {
     }
 
     private void setDoctors() {
+
+
+        SpiroKitDatabase database = SpiroKitDatabase.getInstance(context);
+
+        List<Work> works = database.workDao().selectAllWork();
+        String[] workNames = context.getResources().getStringArray(R.array.works);
+
+        Operator familyDoctor = database.operatorDao().selectOperatorByHash(history.getFamilyDoctorHash());
+        Operator checkupDoctor = database.operatorDao().selectOperatorByHash(history.getOperatorHashed());
+
+        String familyDoctorString = "";
+        String checkupDoctorString = "";
+
+        if (familyDoctor == null) {
+            familyDoctorString = getString(R.string.not_applicable);
+        } else {
+
+            for (int i = 0; i < works.size(); i++) {
+                if (works.get(i).getWork().equals(familyDoctor.getWork())) {
+                    familyDoctorString = getString(R.string.family_doctor_is, familyDoctor.getName(), workNames[i]);
+
+                    break;
+                }
+            }
+
+        }
+
+        if (checkupDoctor == null) {
+            checkupDoctorString = getString(R.string.not_applicable);
+        } else {
+
+            for (int i = 0; i < works.size(); i++) {
+                if (works.get(i).getWork().equals(checkupDoctor.getWork())) {
+                    checkupDoctorString = getString(R.string.checkup_doctor_is, checkupDoctor.getName(), workNames[i]);
+                    break;
+                }
+            }
+
+        }
+
+        matchDoctorText.setText(familyDoctorString);
+        measDoctorText.setText(checkupDoctorString);
+
 
     }
 

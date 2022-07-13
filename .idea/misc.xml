@@ -43,6 +43,7 @@
         <entry key="app/src/main/res/drawable/item_selected_fvc_result_stroke.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/item_selected_meas.xml" value="0.3375" />
         <entry key="app/src/main/res/drawable/item_selected_result.xml" value="0.3375" />
+        <entry key="app/src/main/res/drawable/item_selected_scan_result.xml" value="0.284" />
         <entry key="app/src/main/res/drawable/item_text_outline_black.xml" value="0.3375" />
         <entry key="app/src/main/res/drawable/paddingtest.xml" value="0.346" />
         <entry key="app/src/main/res/drawable/person_add.xml" value="0.2615" />
@@ -65,7 +66,7 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.14" />
         <entry key="app/src/main/res/layout/activity_measurement_fvc.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_measurement_mvv.xml" value="0.20442708333333334" />
-        <entry key="app/src/main/res/layout/activity_measurement_svc.xml" value="0.16" />
+        <entry key="app/src/main/res/layout/activity_measurement_svc.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_operator.xml" value="0.18" />
         <entry key="app/src/main/res/layout/activity_patient_insert.xml" value="0.18" />
         <entry key="app/src/main/res/layout/activity_patient_modify.xml" value="0.20442708333333334" />
@@ -90,7 +91,7 @@
         <entry key="app/src/main/res/layout/item_patient_box.xml" value="0.16276041666666666" />
         <entry key="app/src/main/res/layout/item_result.xml" value="0.2479273588630083" />
         <entry key="app/src/main/res/layout/item_result_svc.xml" value="0.5" />
-        <entry key="app/src/main/res/layout/item_scan_result.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/item_scan_result.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_setting_app_version.xml" value="0.16276041666666666" />
         <entry key="app/src/main/res/layout/item_setting_auto_pairing.xml" value="0.16276041666666666" />
         <entry key="app/src/main/res/layout/item_setting_manual.xml" value="0.16276041666666666" />

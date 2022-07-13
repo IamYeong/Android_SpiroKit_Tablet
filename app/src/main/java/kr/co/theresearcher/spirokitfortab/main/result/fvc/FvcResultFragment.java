@@ -47,7 +47,9 @@ import kr.co.theresearcher.spirokitfortab.calc.CalcSpiroKitE;
 import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
 import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
 import kr.co.theresearcher.spirokitfortab.db.cal_history_raw_data.CalHistoryRawData;
+import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
 import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
+import kr.co.theresearcher.spirokitfortab.db.work.Work;
 import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowResultView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeTimeResultView;
@@ -99,11 +101,6 @@ public class FvcResultFragment extends Fragment implements Observer {
         measGroupText = view.findViewById(R.id.tv_meas_group_main_result);
         matchDoctorText = view.findViewById(R.id.tv_match_doctor_main_result);
         measDoctorText = view.findViewById(R.id.tv_meas_doctor_main_result);
-
-        //measGroupText.setText(measGroups[measurement.getMeasurementID()].toString().toUpperCase(Locale.ROOT) + getString(R.string.checkup));
-
-        matchDoctorText.setText(getString(R.string.family_doctor_is, "TEST"));
-        measDoctorText.setText(getString(R.string.checkup_doctor_is, "TEST"));
 
         adapter = new FvcResultAdapter(context);
         //adapter.setRootTimestamp(measurement.getMeasDate());
@@ -278,14 +275,7 @@ public class FvcResultFragment extends Fragment implements Observer {
                         history.getHashed()
                 );
 
-                List<CalHistoryRawData> allData = database.calHistoryRawDataDao().selectAll();
-                for (CalHistoryRawData cal : allData) {
-                    Log.d(getClass().getSimpleName(), "CAL HISTORY HASH : " + cal.getCalHistoryHashed() + "\nDATA : " + cal.getData());
-                }
-
                 SpiroKitDatabase.removeInstance();
-
-                Log.d(getClass().getSimpleName(), "RAW DATA SIZE : " + rawData.size());
 
                 if (rawData.size() == 0) {
 
@@ -345,8 +335,6 @@ public class FvcResultFragment extends Fragment implements Observer {
                     volumeFlowResultViews.add(createVolumeFlowGraph(volumeFlowGraph, width, height));
                     volumeTimeResultViews.add(createVolumeTimeGraph(volumeTimeGraph, width, height));
 
-                    System.out.println(volumeFlowResultViews.size());
-                    System.out.println(volumeTimeResultViews.size());
                     Log.d(getClass().getSimpleName(), volumeFlowResultViews.size() + ", " + volumeTimeResultViews.size());
 
                     ResultFVC resultFVC = new ResultFVC(rawData.get(i).getHashed());
@@ -459,20 +447,50 @@ public class FvcResultFragment extends Fragment implements Observer {
     }
 
     private void setDoctors() {
-        Thread thread = new Thread() {
 
-            @Override
-            public void run() {
-                super.run();
-                Looper.prepare();
 
-                //주치의, 검사자 란에 이름(직함) 넣기
+                SpiroKitDatabase database = SpiroKitDatabase.getInstance(context);
 
-                Looper.loop();
-            }
-        };
+                List<Work> works = database.workDao().selectAllWork();
+                String[] workNames = context.getResources().getStringArray(R.array.works);
 
-        thread.start();
+                Operator familyDoctor = database.operatorDao().selectOperatorByHash(history.getFamilyDoctorHash());
+                Operator checkupDoctor = database.operatorDao().selectOperatorByHash(history.getOperatorHashed());
+
+                String familyDoctorString = "";
+                String checkupDoctorString = "";
+
+                if (familyDoctor == null) {
+                    familyDoctorString = getString(R.string.not_applicable);
+                } else {
+
+                    for (int i = 0; i < works.size(); i++) {
+                        if (works.get(i).getWork().equals(familyDoctor.getWork())) {
+                            familyDoctorString = getString(R.string.family_doctor_is, familyDoctor.getName(), workNames[i]);
+
+                            break;
+                        }
+                    }
+
+                }
+
+                if (checkupDoctor == null) {
+                    checkupDoctorString = getString(R.string.not_applicable);
+                } else {
+
+                    for (int i = 0; i < works.size(); i++) {
+                        if (works.get(i).getWork().equals(checkupDoctor.getWork())) {
+                            checkupDoctorString = getString(R.string.checkup_doctor_is, checkupDoctor.getName(), workNames[i]);
+                            break;
+                        }
+                    }
+
+                }
+
+                matchDoctorText.setText(familyDoctorString);
+                measDoctorText.setText(checkupDoctorString);
+
+
     }
 
 }

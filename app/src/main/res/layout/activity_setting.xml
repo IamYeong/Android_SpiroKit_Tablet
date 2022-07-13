@@ -189,11 +189,12 @@
                 android:layout_marginTop="10dp"
                 />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingVertical="10dp"
                 android:layout_marginHorizontal="40dp"
+                android:orientation="horizontal"
                 >
 
                 <TextView
@@ -208,6 +209,9 @@
                     app:layout_constraintStart_toStartOf="parent"
 
                     android:text="@string/device"
+                    android:layout_weight="1"
+                    android:paddingStart="10dp"
+
                     />
 
                 <TextView
@@ -223,6 +227,9 @@
                     app:layout_constraintEnd_toEndOf="parent"
 
                     android:text="@string/mac_address"
+                    android:layout_weight="1"
+
+                    android:textAlignment="center"
                     />
 
                 <TextView
@@ -238,11 +245,15 @@
 
                     android:text="@string/decibel"
                     android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+
+                    android:textAlignment="textEnd"
+                    android:paddingEnd="10dp"
                     />
 
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"

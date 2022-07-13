@@ -3,6 +3,7 @@ package kr.co.theresearcher.spirokitfortab.measurement.svc;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -160,6 +161,7 @@ public class SvcResultAdapter extends RecyclerView.Adapter<SvcResultViewHolder> 
                                     super.run();
                                     Looper.prepare();
 
+                                    //Log.d(getClass().getSimpleName(), "DELETE HASH : " + resultSVC.getHashed());
                                     SpiroKitDatabase.getInstance(context)
                                             .calHistoryRawDataDao().delete(resultSVC.getHashed());
 

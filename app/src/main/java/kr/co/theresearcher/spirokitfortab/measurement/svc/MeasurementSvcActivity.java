@@ -381,28 +381,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Thread thread = new Thread() {
-                    @Override
-                    public void run() {
-                        super.run();
-                        Looper.prepare();
-
-                        SpiroKitDatabase database = SpiroKitDatabase.getInstance(MeasurementSvcActivity.this);
-                        database.calHistoryRawDataDao().deleteNotCompleteData();
-                        SpiroKitDatabase.removeInstance();
-
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                finish();
-                            }
-                        });
-
-                        Looper.loop();
-                    }
-                };
-                thread.start();
+                finish();
             }
         });
 
@@ -505,6 +484,47 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         bindService(new Intent(MeasurementSvcActivity.this, SpiroKitBluetoothLeService.class), serviceConnection, Context.BIND_AUTO_CREATE);
 
         if (loadingDialog.isShowing()) loadingDialog.dismiss();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                Looper.prepare();
+
+                SpiroKitDatabase database = SpiroKitDatabase.getInstance(MeasurementSvcActivity.this);
+                database.calHistoryRawDataDao().deleteNotCompleteData();
+                SpiroKitDatabase.removeInstance();
+
+                Looper.loop();Thread thread = new Thread() {
+                    @Override
+                    public void run() {
+                        super.run();
+                        Looper.prepare();
+
+                        SpiroKitDatabase database = SpiroKitDatabase.getInstance(MeasurementSvcActivity.this);
+                        database.calHistoryRawDataDao().deleteNotCompleteData();
+                        SpiroKitDatabase.removeInstance();
+
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                finish();
+                            }
+                        });
+
+                        Looper.loop();
+                    }
+                };
+                thread.start();
+            }
+        };
+        thread.start();
     }
 
     private int conversionIntegerFromByteArray(byte[] data) {
@@ -770,6 +790,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
                         "s",
                         "e",
                         0);
+                calHistory.setFamilyDoctorHash(SharedPreferencesManager.getFamilyDoctorHash(MeasurementSvcActivity.this));
 
                 SpiroKitDatabase database = SpiroKitDatabase.getInstance(MeasurementSvcActivity.this);
                 database.calHistoryDao().insertHistory(calHistory);
@@ -833,6 +854,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
         graphView.commit();
 
+        resultGraphLayout.removeAllViews();
         resultGraphLayout.addView(graphView);
     }
 

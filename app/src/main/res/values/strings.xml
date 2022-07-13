@@ -117,8 +117,8 @@
     <string name="select_history_range">조회할 기록 기간 선택</string>
     <string name="date_to_date">%1$s ~ %2$s</string>
 
-    <string name="checkup_doctor_is">검사자 : %1$s</string>
-    <string name="family_doctor_is">주치의 : %1$s</string>
+    <string name="checkup_doctor_is">검사자 : %1$s (%2$s)</string>
+    <string name="family_doctor_is">주치의 : %1$s (%2$s)</string>
     <string name="chart_number_is">차트넘버 : %1$s</string>
     <string name="gender_is">성별 : %1$s</string>
     <string name="height_is">신장 : %1$d cm</string>
@@ -127,7 +127,7 @@
     <string name="human_race_is">인종 : %1$s</string>
     <string name="smoke_start_date_is">흡연시작일 : %1$s</string>
     <string name="smoke_stop_date_is">금연일 : %1$s</string>
-    <string name="smoking_per_day_is">하루 흡연량 : %1$s</string>
+    <string name="smoking_per_day_is">하루 흡연량 : %1$s 갑</string>
     <string name="smoking_now_is">현재 흡연 여부 : %1$s</string>
 
     <string name="please_select_patient">환자를 선택해주세요</string>

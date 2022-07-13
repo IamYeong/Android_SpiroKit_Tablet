@@ -9,7 +9,6 @@
     android:layout_marginStart="20dp"
     app:cardCornerRadius="20dp"
     app:cardBackgroundColor="@color/white"
-
     >
 
     <ImageButton

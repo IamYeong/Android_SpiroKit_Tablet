@@ -40,7 +40,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_margin="20dp"
 
-                android:text="@string/svc"
+                android:text="@string/svc_meas"
                 />
 
             <TextView
@@ -84,7 +84,8 @@
                 android:textSize="15sp"
                 android:text="@string/volume_time_graph"
 
-                android:layout_margin="15dp"
+                android:layout_marginVertical="15dp"
+                android:layout_marginStart="20dp"
                 app:layout_constraintTop_toBottomOf="@id/tv_meas_group_main_svc_result"
                 app:layout_constraintStart_toStartOf="parent"
                 />

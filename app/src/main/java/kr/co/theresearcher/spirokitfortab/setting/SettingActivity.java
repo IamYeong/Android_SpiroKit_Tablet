@@ -238,6 +238,8 @@ public class SettingActivity extends AppCompatActivity {
                                 //loadingDialog.setTitle(getString(R.string.connecting));
                                 //loadingDialog.show();
                                 mService.connect(macAddress);
+                                adapter.clear();
+
 
                             }
 

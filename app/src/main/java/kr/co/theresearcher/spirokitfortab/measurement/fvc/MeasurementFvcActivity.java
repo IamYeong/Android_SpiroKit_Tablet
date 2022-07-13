@@ -102,11 +102,8 @@ public class MeasurementFvcActivity extends AppCompatActivity {
     private TextView emptyText;
     private LoadingDialog loadingDialog;
 
-
     private boolean isStart = false;
-    //private int dataReceivedCount = 0;
     private boolean flowToggle = false;
-    private boolean saveSomething = false;
 
     private int testOrder = 1;
 
@@ -262,8 +259,16 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                 connectStateText.setText(getString(R.string.state_disconnect));
                 connectingProgressBar.setVisibility(View.INVISIBLE);
 
+                if (SharedPreferencesManager.getDeviceMacAddress(MeasurementFvcActivity.this) == null) {
 
-                mService.connect(SharedPreferencesManager.getDeviceMacAddress(MeasurementFvcActivity.this));
+                    ConfirmDialog confirmDialog = new ConfirmDialog(MeasurementFvcActivity.this);
+                    confirmDialog.setTitle("CANT CONNECT");
+                    confirmDialog.show();
+
+
+                } else {
+                    mService.connect(SharedPreferencesManager.getDeviceMacAddress(MeasurementFvcActivity.this));
+                }
 
             }
 
@@ -369,10 +374,21 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                     return;
                 }
 
-                mService.connect(SharedPreferencesManager.getDeviceMacAddress(MeasurementFvcActivity.this));
-                connectStateImage.setVisibility(View.INVISIBLE);
-                connectingProgressBar.setVisibility(View.VISIBLE);
-                connectStateText.setText(getString(R.string.connecting));
+                if (SharedPreferencesManager.getDeviceMacAddress(MeasurementFvcActivity.this) == null) {
+
+                    ConfirmDialog confirmDialog = new ConfirmDialog(MeasurementFvcActivity.this);
+                    confirmDialog.setTitle("CANT CONNECT");
+                    confirmDialog.show();
+
+
+                } else {
+                    mService.connect(SharedPreferencesManager.getDeviceMacAddress(MeasurementFvcActivity.this));
+                    connectStateImage.setVisibility(View.INVISIBLE);
+                    connectingProgressBar.setVisibility(View.VISIBLE);
+                    connectStateText.setText(getString(R.string.connecting));
+                }
+
+
 
             }
         });
@@ -381,36 +397,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (saveSomething) {
-                    //removeThisData();
-
-                    Thread thread = new Thread() {
-                        @Override
-                        public void run() {
-                            super.run();
-                            Looper.prepare();
-
-                            SpiroKitDatabase database = SpiroKitDatabase.getInstance(MeasurementFvcActivity.this);
-                            database.calHistoryRawDataDao().deleteNotCompleteData();
-                            SpiroKitDatabase.removeInstance();
-
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-
-                                    finish();
-                                }
-                            });
-
-                            Looper.loop();
-                        }
-                    };
-                    thread.start();
-
-                } else {
-
-                    finish();
-                }
+                finish();
 
             }
         });
@@ -536,7 +523,6 @@ public class MeasurementFvcActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                saveSomething = true;
                 saveData(0);
 
             }
@@ -977,6 +963,8 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                         "e",
                         0);
 
+                calHistory.setFamilyDoctorHash(SharedPreferencesManager.getFamilyDoctorHash(MeasurementFvcActivity.this));
+
                 SpiroKitDatabase database = SpiroKitDatabase.getInstance(MeasurementFvcActivity.this);
                 database.calHistoryDao().insertHistory(calHistory);
 
@@ -1060,10 +1048,10 @@ public class MeasurementFvcActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
+    protected void onDestroy() {
+        super.onDestroy();
 
-        if (saveSomething) {
+        if (resultAdapter.getItemCount() > 0) {
             //removeThisData();
 
             Thread thread = new Thread() {
@@ -1076,22 +1064,11 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                     database.calHistoryRawDataDao().deleteNotCompleteData();
                     SpiroKitDatabase.removeInstance();
 
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            finish();
-                        }
-                    });
-
                     Looper.loop();
                 }
             };
             thread.start();
 
-        } else {
-
-            finish();
         }
 
     }

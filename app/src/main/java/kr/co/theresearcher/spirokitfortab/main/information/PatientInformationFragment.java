@@ -524,7 +524,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
         }
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        SimpleDateFormat birthDateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+        SimpleDateFormat birthDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
         patientNameText.setText(patient.getName());
         StringBuilder info = new StringBuilder();
@@ -557,14 +557,14 @@ public class PatientInformationFragment extends Fragment implements Observer {
         if (startSmokingDateString == null) {
             info.append(getString(R.string.smoke_start_date_is, getString(R.string.not_applicable))).append("\n");
         } else {
-            info.append(getString(R.string.smoke_start_date_is, startSmokingDateString)).append("\n");
+            info.append(getString(R.string.smoke_start_date_is, startSmokingDateString.substring(0, startSmokingDateString.length() - 9))).append("\n");
         }
 
         String stopSmokingDateString = patient.getStopSmokingDay();
         if (stopSmokingDateString == null) {
             info.append(getString(R.string.smoke_start_date_is, getString(R.string.not_applicable))).append("\n");
         } else {
-            info.append(getString(R.string.smoke_start_date_is, stopSmokingDateString)).append("\n");
+            info.append(getString(R.string.smoke_start_date_is, stopSmokingDateString.subSequence(0, stopSmokingDateString.length() - 9))).append("\n");
         }
 
         String smokingAmount = patient.getSmokingAmountPerDay();
@@ -593,7 +593,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
     private void updatePatientSimpleInfo() {
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+        //SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
 
         Patient patient = SpiroKitDatabase.getInstance(context).patientDao()
                 .selectPatientByHash(SharedPreferencesManager.getPatientHashed(context));
@@ -607,25 +607,14 @@ public class PatientInformationFragment extends Fragment implements Observer {
         if (patient.getIsDeleted() == 1) {
 
             patientNameText.setText(getString(R.string.not_applicable));
-            //patientInfoText.setText(getString(R.string.please_select_patient));
+            patientInfoText.setText(getString(R.string.please_select_patient));
             return;
         }
 
+        patientNameText.setText(patient.getName());
         StringBuilder info = new StringBuilder();
+        //info.append ~
 
-        /*
-
-        info.append(getString(R.string.chart_number_for_input, SharedPreferencesManager.getPatientChartNumber(context))).append("\n");
-        if (SharedPreferencesManager.getPatientGender(context)) {
-            info.append(getString(R.string.gender_for_input, getString(R.string.male))).append("\n");
-        } else {
-            info.append(getString(R.string.gender_for_input, getString(R.string.female))).append("\n");
-        }
-        info.append(getString(R.string.height_for_input, SharedPreferencesManager.getPatientHeight(context))).append("\n");
-        info.append(getString(R.string.weight_for_input, SharedPreferencesManager.getPatientWeight(context))).append("\n");
-        info.append(getString(R.string.birth_for_input, simpleDateFormat.format(SharedPreferencesManager.getPatientBirth(context)))).append("\n");
-
-         */
         patientInfoText.setText(info.toString());
     }
 
