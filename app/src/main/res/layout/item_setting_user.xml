@@ -42,7 +42,7 @@
 
             android:textColor="@color/gray_dark"
             android:text="@string/logout"
-            android:fontFamily="@font/nanum_gothic"
+
             android:textSize="15sp"
 
             android:paddingHorizontal="10dp"

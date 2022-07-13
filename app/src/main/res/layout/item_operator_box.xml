@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:textSize="15sp"
-        android:fontFamily="@font/nanum_gothic"
+
 
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -31,7 +31,7 @@
 
         android:textColor="@color/black"
         android:textSize="15sp"
-        android:fontFamily="@font/nanum_gothic"
+
 
         app:layout_constraintStart_toEndOf="@id/tv_operator_work_operator"
         app:layout_constraintTop_toTopOf="parent"

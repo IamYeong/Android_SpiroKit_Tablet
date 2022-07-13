@@ -114,7 +114,7 @@
                         android:layout_marginTop="20dp"
 
                         android:layout_marginBottom="10dp"
-                        android:fontFamily="@font/nanum_gothic"
+
                         android:text="@string/chart_number"
                         android:textSize="15sp"
 
@@ -202,7 +202,7 @@
                         android:layout_marginTop="20dp"
 
                         android:layout_marginBottom="10dp"
-                        android:fontFamily="@font/nanum_gothic"
+
                         android:text="@string/name"
                         android:textSize="15sp" />
 
@@ -228,7 +228,7 @@
                         android:layout_marginTop="20dp"
 
                         android:layout_marginBottom="10dp"
-                        android:fontFamily="@font/nanum_gothic"
+
                         android:text="@string/gender"
                         android:textSize="15sp" />
 
@@ -271,7 +271,7 @@
                         android:layout_marginTop="20dp"
 
                         android:layout_marginBottom="10dp"
-                        android:fontFamily="@font/nanum_gothic"
+
                         android:text="@string/birth"
                         android:textSize="15sp" />
 
@@ -300,7 +300,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="10dp"
-                            android:fontFamily="@font/nanum_gothic"
+
 
                             android:text="@string/height"
                             android:textSize="15sp"
@@ -340,7 +340,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="10dp"
-                            android:fontFamily="@font/nanum_gothic"
+
 
                             android:text="@string/weight"
                             android:textSize="15sp"
@@ -381,7 +381,7 @@
                         android:layout_marginTop="20dp"
 
                         android:layout_marginBottom="10dp"
-                        android:fontFamily="@font/nanum_gothic"
+
                         android:text="@string/human_race"
                         android:textSize="15sp" />
 
@@ -428,7 +428,7 @@
                         android:layout_marginTop="20dp"
 
                         android:layout_marginBottom="10dp"
-                        android:fontFamily="@font/nanum_gothic"
+
                         android:text="흡연경험"
                         android:textSize="15sp" />
 
@@ -471,7 +471,7 @@
                         android:layout_marginTop="20dp"
 
                         android:layout_marginBottom="10dp"
-                        android:fontFamily="@font/nanum_gothic"
+
                         android:text="@string/is_smoking"
                         android:textSize="15sp" />
 
@@ -514,7 +514,7 @@
                         android:layout_marginTop="20dp"
 
                         android:layout_marginBottom="10dp"
-                        android:fontFamily="@font/nanum_gothic"
+
                         android:text="@string/start_smoke_date"
                         android:textSize="15sp" />
 
@@ -538,7 +538,7 @@
                         android:layout_marginTop="20dp"
 
                         android:layout_marginBottom="10dp"
-                        android:fontFamily="@font/nanum_gothic"
+
                         android:text="@string/smoke_amount_day"
                         android:textSize="15sp" />
 
@@ -595,7 +595,7 @@
                         android:layout_marginTop="20dp"
 
                         android:layout_marginBottom="10dp"
-                        android:fontFamily="@font/nanum_gothic"
+
                         android:text="@string/stop_smoke_date"
                         android:textSize="15sp" />
 

@@ -12,5 +12,13 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+
+        <item name="android:textViewStyle">@style/SpiroKitTextView</item>
+        <item name="android:buttonStyle">@style/SpiroKitButton</item>
+        <item name="android:editTextStyle">@style/SpiroKitEditText</item>
+        <item name="android:radioButtonStyle">@style/SpiroKitRadioButton</item>
+        <item name="android:checkboxStyle">@style/SpiroKitCheckBox</item>
+
     </style>
+
 </resources>

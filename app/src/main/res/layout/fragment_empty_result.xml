@@ -29,7 +29,6 @@
             android:layout_height="match_parent"
             android:textAlignment="center"
 
-            android:fontFamily="@font/nanum_gothic_bold"
             android:textSize="15sp"
             android:text="@string/empty_result"
             android:gravity="center"

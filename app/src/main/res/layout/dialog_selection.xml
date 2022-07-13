@@ -15,7 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
 
         android:layout_margin="10dp"
-        android:fontFamily="@font/nanum_gothic"
+
         android:text="test"
 
         android:textColor="@color/black"

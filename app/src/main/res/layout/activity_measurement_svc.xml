@@ -30,7 +30,7 @@
             android:id="@+id/tv_patient_name_svc_meas"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/nanum_gothic"
+
             android:textColor="@color/black"
             android:textSize="20sp"
             android:text="NAME"

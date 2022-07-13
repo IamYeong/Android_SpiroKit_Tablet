@@ -30,7 +30,7 @@
         android:textColor="@color/black"
         android:textSize="20sp"
         android:text="사용자 로그인"
-        android:fontFamily="@font/nanum_gothic"
+
 
         app:layout_constraintBottom_toTopOf="@id/et_id_login"
         android:layout_marginBottom="20dp"
@@ -54,7 +54,7 @@
 
         android:hint="@string/user_email"
 
-        android:fontFamily="@font/nanum_gothic"
+
         android:inputType="textEmailAddress"
 
         android:paddingBottom="10dp"

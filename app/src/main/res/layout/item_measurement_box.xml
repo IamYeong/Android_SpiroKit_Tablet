@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        android:fontFamily="@font/nanum_gothic"
+
         android:textColor="@color/secondary_color"
         android:text="@string/fvc"
         android:textSize="12sp"
@@ -35,7 +35,7 @@
         android:layout_marginStart="10dp"
 
 
-        android:fontFamily="@font/nanum_gothic"
+
         android:textSize="15sp"
         android:textColor="@color/black"
         android:text="MEAS_NAME"

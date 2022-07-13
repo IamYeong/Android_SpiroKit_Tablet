@@ -112,7 +112,7 @@
                     android:id="@+id/tv_spirokit_connect_state_setting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/nanum_gothic"
+
                     android:textColor="@color/black"
                     android:textSize="15sp"
 
@@ -140,7 +140,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginHorizontal="20dp"
                 android:textColor="@color/highlight_color"
-                android:fontFamily="@font/nanum_gothic"
+
                 android:textSize="15sp"
                 android:text="@string/scan"
                 android:padding="10dp"
@@ -153,7 +153,7 @@
                     android:layout_gravity="center"
                     android:textAlignment="center"
                     android:textColor="@color/highlight_color"
-                    android:fontFamily="@font/nanum_gothic"
+
                     android:textSize="18sp"
                     android:text="@string/scan"
                     />
@@ -178,7 +178,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/nanum_gothic"
+
                 android:textColor="@color/gray_dark"
                 android:textSize="11sp"
                 android:layout_marginHorizontal="20dp"

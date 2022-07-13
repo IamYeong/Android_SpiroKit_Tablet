@@ -27,4 +27,24 @@
 
     </style>
 
+    <style name="SpiroKitTextView" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:fontFamily">@font/nanum_barun_gothic</item>
+    </style>
+
+    <style name="SpiroKitButton" parent="@style/Widget.AppCompat.Button">
+        <item name="android:fontFamily">@font/nanum_barun_gothic</item>
+    </style>
+
+    <style name="SpiroKitEditText" parent="@style/Widget.AppCompat.EditText">
+        <item name="android:fontFamily">@font/nanum_barun_gothic</item>
+    </style>
+
+    <style name="SpiroKitCheckBox" parent="@style/Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:fontFamily">@font/nanum_barun_gothic</item>
+    </style>
+
+    <style name="SpiroKitRadioButton" parent="@style/Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:fontFamily">@font/nanum_barun_gothic</item>
+    </style>
+
 </resources>

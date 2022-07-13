@@ -20,7 +20,7 @@
 
         android:text="NAME"
 
-        android:fontFamily="@font/nanum_gothic"
+
         android:textColor="@color/black"
         android:textSize="15sp"
 
@@ -34,7 +34,7 @@
         app:layout_constraintTop_toBottomOf="@id/tv_name_patient_box"
         app:layout_constraintStart_toStartOf="parent"
 
-        android:fontFamily="@font/nanum_gothic"
+
         android:textColor="@color/black"
         android:textSize="15sp"
         android:text="yyyy.MM.dd"
@@ -45,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:fontFamily="@font/nanum_gothic"
+
         android:textColor="@color/gray_dark"
         android:textSize="12sp"
 
