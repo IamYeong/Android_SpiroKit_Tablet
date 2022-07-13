@@ -36,6 +36,7 @@ import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClic
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -77,7 +78,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
     private boolean isFocused = false;
     private InputMethodManager inputMethodManager;
 
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
+    private SimpleDateFormat resultDateFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
     private long minDate = Calendar.getInstance().getTime().getTime();
     private long maxDate = Calendar.getInstance().getTime().getTime();
 
@@ -349,16 +350,13 @@ public class PatientInformationFragment extends Fragment implements Observer {
                     @Override
                     public void onPositiveButtonClick(Pair<Long, Long> selection) {
 
-                        System.out.println(simpleDateFormat.format(selection.first));
-                        System.out.println(simpleDateFormat.format(selection.second));
-
                         if (!measurementAdapter.searchMeasInRange(selection.first, selection.second)) {
                             //Toast.makeText(context, getString(R.string.time_select_error), Toast.LENGTH_SHORT).show();
                             measurementAdapter.initializing();
                             measurementAdapter.notifyDataSetChanged();
                         } else {
                             measurementAdapter.notifyDataSetChanged();
-                            dateRangeText.setText(getString(R.string.date_to_date, simpleDateFormat.format(selection.first), simpleDateFormat.format(selection.second)));
+                            dateRangeText.setText(getString(R.string.date_to_date, resultDateFormat.format(selection.first), resultDateFormat.format(selection.second)));
                             //testsPeriodText.setText(simpleDateFormat.format(selection.first) + " ~ " + simpleDateFormat.format(selection.second));
                         }
 
@@ -441,11 +439,25 @@ public class PatientInformationFragment extends Fragment implements Observer {
                 Looper.prepare();
 
                 List<CalHistory> histories = SpiroKitDatabase.getInstance(context).calHistoryDao().selectHistoryByPatient(SharedPreferencesManager.getPatientHashed(context));
-                //parse
+
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 
                 for (CalHistory history : histories) {
-                    //if (minDate > measurement.getMeasDate()) minDate = measurement.getMeasDate();
-                    //if (maxDate < measurement.getMeasDate()) maxDate = measurement.getMeasDate();
+
+                    //yyyy-MM-dd HH:mm:ss.SSSSSS
+                    String stringDate = history.getFinishDate();
+                    stringDate = stringDate.substring(0, stringDate.length() - 7);
+
+                    try {
+
+                        long date = simpleDateFormat.parse(stringDate).getTime();
+                        history.setTimestamp(date);
+                        if (minDate > date) minDate = date;
+                        if (maxDate < date) maxDate = date;
+
+                    } catch (ParseException e) {
+                        Log.e(getClass().getSimpleName(), e.toString());
+                    }
 
                 }
 
@@ -457,13 +469,13 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
                         if (histories.size() > 0) {
                             measurementsEmptyText.setVisibility(View.INVISIBLE);
-                            historySelectedListener.onHistorySelected(histories.get(histories.size() - 1));
+                            //historySelectedListener.onHistorySelected(histories.get(0));
                         } else {
                             measurementsEmptyText.setVisibility(View.VISIBLE);
-                            historySelectedListener.onHistorySelected(null);
+                            //historySelectedListener.onHistorySelected(null);
                         }
                         measurementAdapter.notifyDataSetChanged();
-                        dateRangeText.setText(getString(R.string.date_to_date, simpleDateFormat.format(minDate), simpleDateFormat.format(maxDate)));
+                        dateRangeText.setText(getString(R.string.date_to_date, resultDateFormat.format(minDate), resultDateFormat.format(maxDate)));
                     }
                 });
 

@@ -75,6 +75,9 @@ public class CalHistory{
     private int isDeletedReference;
 
     @Ignore
+    private long timestamp;
+
+    @Ignore
     private boolean isSelected;
 
     public CalHistory(String hashed, String officeHashed, String operatorHashed, String patientHashed, String finishDate, String measDiv, String deviceDiv, int isDeleted) {
@@ -86,6 +89,14 @@ public class CalHistory{
         this.measDiv = measDiv;
         this.deviceDiv = deviceDiv;
         this.isDeleted = isDeleted;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 
     public int getIsDeletedReference() {

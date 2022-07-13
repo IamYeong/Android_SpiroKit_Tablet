@@ -55,31 +55,58 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
 
     public boolean searchMeasInRange(long from, long to) {
 
-
         if (from > to) return false;
         if (from < 0) return false;
 
-        /*
+
         searchResults.clear();
 
-        for (CalHistory CalHistory : histories) {
+        for (CalHistory history : histories) {
 
-            if ((CalHistory.getMeasDate() >= from) && (CalHistory.getMeasDate() <= to)) {
-                searchResults.add(CalHistory);
+            if ((history.getTimestamp() >= from) && (history.getTimestamp() <= to)) {
+                searchResults.add(history);
             }
 
         }
 
-         */
+        sortByDate();
 
         return true;
 
     }
 
+    private void sortByDate() {
+
+        //Bubble
+        for (int i = searchResults.size() - 1; i >= 0; i--) {
+
+            for (int j = 1; j <= i; j++) {
+
+                long date = searchResults.get(j - 1).getTimestamp();
+                long compareDate = searchResults.get(j).getTimestamp();
+
+                if (compareDate > date) {
+
+                    //swap
+                    CalHistory temp = searchResults.get(j);
+                    searchResults.set(j, searchResults.get(j - 1));
+                    searchResults.set(j - 1, temp);
+
+                }
+
+            }
+
+
+        }
+
+    }
+
+
     public void initializing() {
 
         searchResults.clear();
         searchResults.addAll(histories);
+        sortByDate();
 
     }
 
@@ -94,8 +121,13 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
         this.histories.addAll(CalHistoryList);
         this.searchResults.addAll(CalHistoryList);
 
+        sortByDate();
+
         if (searchResults.size() > 0) {
-            searchResults.get(searchResults.size() - 1).setSelected(true);
+            searchResults.get(0).setSelected(true);
+            selectedListener.onHistorySelected(searchResults.get(0));
+        } else {
+            selectedListener.onHistorySelected(null);
         }
 
     }
