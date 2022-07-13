@@ -13,9 +13,8 @@
                 android:radius="10dp"
                 />
 
-            <stroke
-                android:width="2dp"
-                android:color="@color/primary_color"
+            <solid
+                android:color="@color/secondary_color"
                 />
 
         </shape>

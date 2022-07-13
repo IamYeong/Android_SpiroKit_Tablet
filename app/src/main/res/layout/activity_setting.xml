@@ -38,7 +38,7 @@
 
             android:textColor="@color/black"
             android:text="@string/setting"
-            android:textSize="20sp"
+            android:textSize="15sp"
 
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -88,7 +88,8 @@
                 android:orientation="horizontal"
 
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginVertical="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
                 >
 
                 <TextView
@@ -96,7 +97,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nanum_gothic_bold"
                     android:textColor="@color/black"
-                    android:textSize="15sp"
+                    android:textSize="12sp"
                     android:text="@string/device_info"
 
                     app:layout_constraintTop_toTopOf="parent"
@@ -114,7 +115,7 @@
                     android:layout_height="wrap_content"
 
                     android:textColor="@color/black"
-                    android:textSize="15sp"
+                    android:textSize="12sp"
 
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toTopOf="@id/frame_btn_start_scan_setting"
@@ -135,15 +136,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_out_line_highlight"
+
                 app:layout_constraintTop_toBottomOf="@id/tv_spirokit_connect_state_setting"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+
                 android:layout_marginHorizontal="20dp"
                 android:textColor="@color/highlight_color"
 
                 android:textSize="15sp"
                 android:text="@string/scan"
-                android:padding="10dp"
+                android:padding="5dp"
                 >
 
                 <TextView
@@ -154,7 +157,6 @@
                     android:textAlignment="center"
                     android:textColor="@color/highlight_color"
 
-                    android:textSize="18sp"
                     android:text="@string/scan"
                     />
 
@@ -180,7 +182,7 @@
                 android:layout_height="wrap_content"
 
                 android:textColor="@color/gray_dark"
-                android:textSize="11sp"
+                android:textSize="8sp"
                 android:layout_marginHorizontal="20dp"
                 android:text="@string/scan_info"
                 android:paddingVertical="10dp"
@@ -201,8 +203,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    android:fontFamily="@font/nanum_gothic_bold"
-                    android:textSize="15sp"
+                    android:textSize="12sp"
 
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -218,8 +219,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    android:fontFamily="@font/nanum_gothic_bold"
-                    android:textSize="15sp"
+                    android:textSize="12sp"
 
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -236,8 +236,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    android:fontFamily="@font/nanum_gothic_bold"
-                    android:textSize="15sp"
+                    android:textSize="12sp"
 
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"

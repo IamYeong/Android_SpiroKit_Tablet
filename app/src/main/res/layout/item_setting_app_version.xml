@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
 
         android:textColor="@color/black"
-        android:textSize="15sp"
+        android:textSize="12sp"
 
         android:text="@string/app_version"
 
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
 
         android:textColor="@color/black"
-        android:textSize="15sp"
+        android:textSize="12sp"
 
         android:text="@string/app_v"
 

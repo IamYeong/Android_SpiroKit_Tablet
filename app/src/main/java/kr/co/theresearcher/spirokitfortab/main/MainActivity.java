@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(getClass().getSimpleName(), "Density : " + density + ", Width : " + displayWidth + ", Height : " + displayHeight);
 
         ViewGroup.LayoutParams layoutParams = (ViewGroup.LayoutParams) patientInfoContainer.getLayoutParams();
-        layoutParams.width = (int)(displayHeight / 2f);
+        layoutParams.width = (int)(displayHeight / 2.2f);
         patientInfoContainer.setLayoutParams(layoutParams);
 
 

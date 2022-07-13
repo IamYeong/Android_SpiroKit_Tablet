@@ -6,8 +6,10 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/item_selected_meas"
-    android:layout_marginBottom="5dp"
     android:foreground="?attr/selectableItemBackground"
+
+    android:paddingVertical="10dp"
+    android:paddingHorizontal="10dp"
     >
 
     <TextView
@@ -18,10 +20,9 @@
 
         android:textColor="@color/secondary_color"
         android:text="@string/fvc"
-        android:textSize="12sp"
+        android:textSize="10sp"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
+
         />
 
     <TextView
@@ -31,12 +32,8 @@
         app:layout_constraintTop_toBottomOf="@id/tv_group_measurement_box"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginBottom="10dp"
-        android:layout_marginStart="10dp"
 
-
-
-        android:textSize="15sp"
+        android:textSize="12sp"
         android:textColor="@color/black"
         android:text="MEAS_NAME"
 
@@ -50,7 +47,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="10dp"
+
         android:background="?attr/selectableItemBackgroundBorderless"
         />
 

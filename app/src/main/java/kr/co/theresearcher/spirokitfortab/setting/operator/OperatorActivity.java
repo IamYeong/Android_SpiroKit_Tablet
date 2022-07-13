@@ -88,6 +88,8 @@ public class OperatorActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 workID = position;
+
+                adapter.filterByWork(works.get(workID).getWork());
             }
 
             @Override
@@ -133,7 +135,6 @@ public class OperatorActivity extends AppCompatActivity {
                                         confirmDialog.show();
                                     }
                                 });
-
 
                                 return;
                             }

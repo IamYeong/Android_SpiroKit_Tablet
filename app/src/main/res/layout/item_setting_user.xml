@@ -26,6 +26,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
 
+            android:textColor="@color/black"
+            android:textSize="12sp"
 
             android:text="NICKNAME"
             />
@@ -33,7 +35,7 @@
         <android.widget.Button
             android:id="@+id/btn_logout_setting"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:background="@drawable/button_shape"
             android:backgroundTint="@color/gray_light"
 
@@ -43,7 +45,7 @@
             android:textColor="@color/gray_dark"
             android:text="@string/logout"
 
-            android:textSize="15sp"
+            android:textSize="12sp"
 
             android:paddingHorizontal="10dp"
 

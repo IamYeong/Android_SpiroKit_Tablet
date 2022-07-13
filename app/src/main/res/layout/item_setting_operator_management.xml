@@ -19,7 +19,7 @@
 
         android:fontFamily="@font/nanum_gothic"
         android:text="@string/management_medical_staff"
-        android:textSize="15sp"
+        android:textSize="12sp"
         android:textColor="@color/black"
         />
 

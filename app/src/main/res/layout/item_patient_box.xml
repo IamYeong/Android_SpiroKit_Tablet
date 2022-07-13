@@ -6,9 +6,19 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginHorizontal="20dp"
-    android:layout_marginBottom="10dp"
 
-    android:padding="10dp">
+    android:paddingHorizontal="10dp"
+    android:paddingTop="10dp"
+    >
+
+    <View
+        android:id="@+id/view_line_patient_box"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray_text"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 
     <TextView
         android:id="@+id/tv_name_patient_box"
@@ -22,7 +32,7 @@
 
 
         android:textColor="@color/black"
-        android:textSize="15sp"
+        android:textSize="12sp"
 
         />
 
@@ -36,7 +46,7 @@
 
 
         android:textColor="@color/black"
-        android:textSize="15sp"
+        android:textSize="12sp"
         android:text="yyyy.MM.dd"
         />
 
@@ -50,24 +60,25 @@
         android:textSize="12sp"
 
         app:layout_constraintTop_toBottomOf="@id/tv_birth_patient_box"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/view_line_patient_box"
         app:layout_constraintStart_toStartOf="parent"
 
         android:text="0001"
-        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+
         />
 
     <ImageButton
         android:id="@+id/img_btn_remove_patient_box"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/person_remove"
+        android:src="@drawable/ic_baseline_close_30_black"
         android:background="?attr/selectableItemBackgroundBorderless"
 
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="10dp"
+        android:layout_marginVertical="10dp"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

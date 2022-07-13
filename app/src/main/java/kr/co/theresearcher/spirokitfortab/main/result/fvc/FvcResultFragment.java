@@ -65,7 +65,7 @@ public class FvcResultFragment extends Fragment implements Observer {
     private FvcResultAdapter adapter;
     private FrameLayout volumeFlowLayout, volumeTimeLayout;
 
-    private TextView measGroupText, matchDoctorText, measDoctorText;
+    private TextView doctorText;
 
     private List<VolumeFlowResultView> volumeFlowResultViews = new ArrayList<>();
     private List<VolumeTimeResultView> volumeTimeResultViews = new ArrayList<>();
@@ -98,9 +98,7 @@ public class FvcResultFragment extends Fragment implements Observer {
         volumeFlowLayout = view.findViewById(R.id.frame_volume_flow_graph_result_fragment);
         volumeTimeLayout = view.findViewById(R.id.frame_volume_time_graph_result_fragment);
 
-        measGroupText = view.findViewById(R.id.tv_meas_group_main_result);
-        matchDoctorText = view.findViewById(R.id.tv_match_doctor_main_result);
-        measDoctorText = view.findViewById(R.id.tv_meas_doctor_main_result);
+        doctorText = view.findViewById(R.id.tv_doctor_main_result);
 
         adapter = new FvcResultAdapter(context);
         //adapter.setRootTimestamp(measurement.getMeasDate());
@@ -448,48 +446,28 @@ public class FvcResultFragment extends Fragment implements Observer {
 
     private void setDoctors() {
 
+        SpiroKitDatabase database = SpiroKitDatabase.getInstance(context);
 
-                SpiroKitDatabase database = SpiroKitDatabase.getInstance(context);
+        List<Work> works = database.workDao().selectAllWork();
+        String[] workNames = context.getResources().getStringArray(R.array.works);
 
-                List<Work> works = database.workDao().selectAllWork();
-                String[] workNames = context.getResources().getStringArray(R.array.works);
+        Operator familyDoctor = database.operatorDao().selectOperatorByHash(history.getFamilyDoctorHash());
+        Operator checkupDoctor = database.operatorDao().selectOperatorByHash(history.getOperatorHashed());
 
-                Operator familyDoctor = database.operatorDao().selectOperatorByHash(history.getFamilyDoctorHash());
-                Operator checkupDoctor = database.operatorDao().selectOperatorByHash(history.getOperatorHashed());
-
-                String familyDoctorString = "";
-                String checkupDoctorString = "";
+        for (int i = 0; i < works.size(); i++) {
+            if (works.get(i).getWork().equals(checkupDoctor.getWork())) {
 
                 if (familyDoctor == null) {
-                    familyDoctorString = getString(R.string.not_applicable);
+                    doctorText.setText(getString(R.string.doctor_is, getString(R.string.not_applicable), getString(R.string.not_applicable), checkupDoctor.getName(), workNames[i]));
+
                 } else {
-
-                    for (int i = 0; i < works.size(); i++) {
-                        if (works.get(i).getWork().equals(familyDoctor.getWork())) {
-                            familyDoctorString = getString(R.string.family_doctor_is, familyDoctor.getName(), workNames[i]);
-
-                            break;
-                        }
-                    }
-
+                    doctorText.setText(getString(R.string.doctor_is, familyDoctor.getName(), getString(R.string.doctor), checkupDoctor.getName(), workNames[i]));
                 }
 
-                if (checkupDoctor == null) {
-                    checkupDoctorString = getString(R.string.not_applicable);
-                } else {
 
-                    for (int i = 0; i < works.size(); i++) {
-                        if (works.get(i).getWork().equals(checkupDoctor.getWork())) {
-                            checkupDoctorString = getString(R.string.checkup_doctor_is, checkupDoctor.getName(), workNames[i]);
-                            break;
-                        }
-                    }
-
-                }
-
-                matchDoctorText.setText(familyDoctorString);
-                measDoctorText.setText(checkupDoctorString);
-
+                break;
+            }
+        }
 
     }
 

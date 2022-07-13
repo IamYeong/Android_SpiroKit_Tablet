@@ -138,7 +138,7 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsViewHolder> {
          */
 
         holder.getNameText().setText(patient.getName());
-        holder.getChartNumberText().setText(patient.getChartNumber());
+        holder.getChartNumberText().setText(context.getString(R.string.chart_number_is, patient.getChartNumber()));
         holder.getBirthText().setText(patient.getBirthDay().substring(0, patient.getBirthDay().length() - 9));
 
         holder.getLayout().setOnClickListener(new View.OnClickListener() {

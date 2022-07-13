@@ -111,8 +111,12 @@
     <string name="duplicate_hash">중복데이터를 발견했습니다.\n차트넘버, 이름, 생년월일 구분으로 중복을 피할 수 있습니다</string>
 
     <!-- Main Activity -->
-    <string name="empty_result">측정한 이력이 있다면 그래프와 수치가 이 곳에 표기됩니다</string>
-    <string name="history">기록</string>
+    <string name="empty_result">측정한 이력이 있다면 수치가 이 곳에 표기됩니다</string>
+    <string name="empty_chart">측정한 이력이 있다면 그래프가 이 곳에 표기됩니다</string>
+    <string name="empty_history">측정한 이력이 표기됩니다</string>
+    <string name="empty_patient">추가한 환자목록이 표기됩니다</string>
+
+    <string name="history">검사기록</string>
     <string name="question_delete_history">해당 검사결과를 삭제하시겠습니까?</string>
     <string name="question_delete_patient">해당 환자를 삭제하시겠습니까?</string>
 
@@ -120,7 +124,8 @@
     <string name="date_to_date">%1$s ~ %2$s</string>
 
     <string name="checkup_doctor_is">검사자 : %1$s (%2$s)</string>
-    <string name="family_doctor_is">주치의 : %1$s (%2$s)</string>
+    <string name="family_doctor_is">주치의 : %1$s</string>
+    <string name="doctor_is">주치의 : %1$s (%2$s)\n검사자 : %3$s (%4$s)</string>
     <string name="chart_number_is">차트넘버 : %1$s</string>
     <string name="gender_is">성별 : %1$s</string>
     <string name="height_is">신장 : %1$d cm</string>
@@ -155,6 +160,8 @@
 
     <string name="spirokit_initializing">측정 준비 중입니다</string>
     <string name="spirokit_terminating">정상 종료 중입니다.\n재측정을 원하시면 다시 전원을 켜주세요</string>
+    <string name="already_connect">이미 연결상태입니다</string>
+    <string name="not_found_saved_device">연동했던 기기정보가 없습니다\n설정화면에서 먼저 연결해주세요</string>
 
     <!-- SVC Activity -->
     <string name="svc_meas">SVC 검사</string>
@@ -206,7 +213,7 @@
 
     <string name="n_order_meas">%1$d차 검사(%2$s)</string>
     <string name="date_colon_what">날짜 : %1$s</string>
-    <string name="time_colon_what">시간 : %1$s</string>
+    <string name="time_colon_what">( %1$s )</string>
 
     <string name="meas">meas</string>
     <string name="pred">pred</string>
@@ -246,5 +253,7 @@
         <item>임상병리사</item>
 
     </string-array>
+
+    <string name="doctor">의사</string>
 
 </resources>

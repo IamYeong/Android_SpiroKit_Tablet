@@ -58,7 +58,7 @@ public class SvcResultFragment extends Fragment implements Observer {
     private List<SlowVolumeTimeRunView> graphViews = new ArrayList<>();
     private SvcResultAdapter svcResultAdapter;
     private Context context;
-    private TextView matchDoctorText, measDoctorText;
+    private TextView doctorText;
     private OnItemChangedListener changedListener;
 
     private Handler handler = new Handler(Looper.getMainLooper());
@@ -85,8 +85,7 @@ public class SvcResultFragment extends Fragment implements Observer {
         rv = view.findViewById(R.id.rv_result_svc_fragment);
         graphLayout = view.findViewById(R.id.frame_svc_graph_result_fragment);
 
-        measDoctorText = view.findViewById(R.id.tv_meas_doctor_main_svc_result);
-        matchDoctorText = view.findViewById(R.id.tv_match_doctor_main_svc_result);
+        doctorText = view.findViewById(R.id.tv_match_doctor_main_svc_result);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(container.getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -353,7 +352,6 @@ public class SvcResultFragment extends Fragment implements Observer {
 
     private void setDoctors() {
 
-
         SpiroKitDatabase database = SpiroKitDatabase.getInstance(context);
 
         List<Work> works = database.workDao().selectAllWork();
@@ -362,38 +360,19 @@ public class SvcResultFragment extends Fragment implements Observer {
         Operator familyDoctor = database.operatorDao().selectOperatorByHash(history.getFamilyDoctorHash());
         Operator checkupDoctor = database.operatorDao().selectOperatorByHash(history.getOperatorHashed());
 
-        String familyDoctorString = "";
-        String checkupDoctorString = "";
+        for (int i = 0; i < works.size(); i++) {
+            if (works.get(i).getWork().equals(checkupDoctor.getWork())) {
 
-        if (familyDoctor == null) {
-            familyDoctorString = getString(R.string.not_applicable);
-        } else {
+                if (familyDoctor == null) {
+                    doctorText.setText(getString(R.string.doctor_is, getString(R.string.not_applicable), getString(R.string.not_applicable), checkupDoctor.getName(), workNames[i]));
 
-            for (int i = 0; i < works.size(); i++) {
-                if (works.get(i).getWork().equals(familyDoctor.getWork())) {
-                    familyDoctorString = getString(R.string.family_doctor_is, familyDoctor.getName(), workNames[i]);
-
-                    break;
+                } else {
+                    doctorText.setText(getString(R.string.doctor_is, familyDoctor.getName(), getString(R.string.doctor), checkupDoctor.getName(), workNames[i]));
                 }
+
+                break;
             }
-
         }
-
-        if (checkupDoctor == null) {
-            checkupDoctorString = getString(R.string.not_applicable);
-        } else {
-
-            for (int i = 0; i < works.size(); i++) {
-                if (works.get(i).getWork().equals(checkupDoctor.getWork())) {
-                    checkupDoctorString = getString(R.string.checkup_doctor_is, checkupDoctor.getName(), workNames[i]);
-                    break;
-                }
-            }
-
-        }
-
-        matchDoctorText.setText(familyDoctorString);
-        measDoctorText.setText(checkupDoctorString);
 
 
     }

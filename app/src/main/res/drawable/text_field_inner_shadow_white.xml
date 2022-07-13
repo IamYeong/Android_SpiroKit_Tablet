@@ -17,7 +17,7 @@
                 android:radius="12dp"
 
                 />
-            <solid android:color="#E5E5E5" />
+            <solid android:color="#FFE5E5E5" />
         </shape>
 
     </item>
@@ -36,7 +36,7 @@
                 android:radius="12dp"
 
                 />
-            <solid android:color="#E8E8E8" />
+            <solid android:color="#DFE5E5E5" />
         </shape>
 
     </item>
@@ -56,7 +56,7 @@
                 android:radius="12dp"
 
                 />
-            <solid android:color="#ECECEC" />
+            <solid android:color="#BFE5E5E5" />
         </shape>
 
     </item>
@@ -77,7 +77,7 @@
                 android:radius="12dp"
 
                 />
-            <solid android:color="#EFEFEF" />
+            <solid android:color="#9FE5E5E5" />
         </shape>
 
     </item>
@@ -97,7 +97,7 @@
                 android:radius="12dp"
 
                 />
-            <solid android:color="#F3F3F3" />
+            <solid android:color="#7FE5E5E5" />
         </shape>
 
     </item>
@@ -117,7 +117,7 @@
                 android:radius="12dp"
 
                 />
-            <solid android:color="#F5F5F5" />
+            <solid android:color="#5FE5E5E5" />
         </shape>
 
     </item>
@@ -137,7 +137,7 @@
                 android:radius="12dp"
 
                 />
-            <solid android:color="#F8F8F8" />
+            <solid android:color="#3FE5E5E5" />
         </shape>
 
     </item>
@@ -157,7 +157,7 @@
                 android:radius="12dp"
 
                 />
-            <solid android:color="#FCFCFC" />
+            <solid android:color="#2FE5E5E5" />
         </shape>
 
     </item>
@@ -181,7 +181,7 @@
                 android:bottomRightRadius="12dp"
 
                 />
-            <solid android:color="#FFFFFF" />
+            <solid android:color="#1FE5E5E5" />
         </shape>
 
     </item>
@@ -207,7 +207,7 @@
             >
 
             <corners android:radius="12dp"/>
-            <solid android:color="@color/white" />
+            <solid android:color="@color/gray_background" />
         </shape>
     </item>
 

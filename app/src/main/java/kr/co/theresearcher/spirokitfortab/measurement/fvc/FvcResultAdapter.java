@@ -40,7 +40,7 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
     private OnItemDeletedListener deletedListener;
     private long rootTimestamp;
 
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd (HH:mm)", Locale.getDefault());
 
     private boolean nothing = true;
     private Handler handler = new Handler(Looper.getMainLooper());

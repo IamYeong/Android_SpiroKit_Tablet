@@ -368,7 +368,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
                 if (mService.isConnect()) {
                     ConfirmDialog confirmDialog = new ConfirmDialog(MeasurementFvcActivity.this);
-                    confirmDialog.setTitle("이미 연결돼있습니다, 검사를 시작하세요");
+                    confirmDialog.setTitle(getString(R.string.already_connect));
                     confirmDialog.show();
 
                     return;
@@ -377,7 +377,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                 if (SharedPreferencesManager.getDeviceMacAddress(MeasurementFvcActivity.this) == null) {
 
                     ConfirmDialog confirmDialog = new ConfirmDialog(MeasurementFvcActivity.this);
-                    confirmDialog.setTitle("CANT CONNECT");
+                    confirmDialog.setTitle(getString(R.string.not_found_saved_device));
                     confirmDialog.show();
 
 

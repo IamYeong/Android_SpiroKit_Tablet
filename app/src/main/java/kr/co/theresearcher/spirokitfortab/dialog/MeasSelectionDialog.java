@@ -36,7 +36,7 @@ import kr.co.theresearcher.spirokitfortab.setting.operator.OperatorActivity;
 public class MeasSelectionDialog extends Dialog {
 
     private Button fvcButton, svcButton;
-    private AppCompatSpinner workSpinnerFamilyDoctor, workSpinnerCheckupDoctor,
+    private AppCompatSpinner workSpinnerCheckupDoctor,
     operatorSpinnerFamilyDoctor, operatorSpinnerCheckupDoctor;
     private TextView matchDoctorText;
     private ImageButton closeButton;
@@ -65,7 +65,6 @@ public class MeasSelectionDialog extends Dialog {
         setContentView(R.layout.dialog_meas_selection);
         setCancelable(false);
 
-        workSpinnerFamilyDoctor = findViewById(R.id.spinner_work_group_family_doctor_dialog);
         workSpinnerCheckupDoctor = findViewById(R.id.spinner_work_group_checkup_doctor_dialog);
         operatorSpinnerFamilyDoctor = findViewById(R.id.spinner_operator_group_family_doctor_dialog);
         operatorSpinnerCheckupDoctor = findViewById(R.id.spinner_operator_group_checkup_doctor_dialog);
@@ -81,20 +80,22 @@ public class MeasSelectionDialog extends Dialog {
         jobArrayAdapter = new ArrayAdapter<String>(
                 getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, workNames
         );
-        
-        workSpinnerFamilyDoctor.setAdapter(jobArrayAdapter);
+
         workSpinnerCheckupDoctor.setAdapter(jobArrayAdapter);
 
         checkupArrayAdapter = new ArrayAdapter<String>(
                 getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, new String[]{}
         );
 
+        familyDoctorOperators = SpiroKitDatabase.getInstance(getContext()).operatorDao().selectOperatorByWork(SharedPreferencesManager.getOfficeHash(getContext()), "doctor");
+        List<String> familyOperatorNames = new ArrayList<>();
+        for (Operator operator : familyDoctorOperators) familyOperatorNames.add(operator.getName());
         familyArrayAdapter = new ArrayAdapter<String>(
-                getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, new String[]{}
+                getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, familyOperatorNames
         );
 
-        operatorSpinnerCheckupDoctor.setAdapter(checkupArrayAdapter);
         operatorSpinnerFamilyDoctor.setAdapter(familyArrayAdapter);
+        operatorSpinnerCheckupDoctor.setAdapter(checkupArrayAdapter);
 
 
         closeButton.setOnClickListener(new View.OnClickListener() {
@@ -127,27 +128,6 @@ public class MeasSelectionDialog extends Dialog {
                 Log.d(getClass().getSimpleName(), checkupOperators.get(position).getName() + " SELECTED");
                 SharedPreferencesManager.setOperatorHash(getContext(), checkupOperators.get(position).getHashed());
 
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        workSpinnerFamilyDoctor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                String selectedWork = works.get(position).getWork();
-                familyDoctorOperators = SpiroKitDatabase.getInstance(getContext()).operatorDao().selectOperatorByWork(SharedPreferencesManager.getOfficeHash(getContext()), selectedWork);
-
-                List<String> familyOperatorNames = new ArrayList<>();
-                for (Operator operator : familyDoctorOperators) familyOperatorNames.add(operator.getName());
-                familyArrayAdapter = new ArrayAdapter<String>(
-                        getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, familyOperatorNames
-                );
-                operatorSpinnerFamilyDoctor.setAdapter(familyArrayAdapter);
             }
 
             @Override

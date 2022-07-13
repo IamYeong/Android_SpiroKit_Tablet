@@ -33,7 +33,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="15sp"
             android:fontFamily="@font/nanum_gothic_bold"
             android:text="@string/add_patient"
             app:layout_constraintStart_toEndOf="@id/img_btn_back_insert_patient"
@@ -52,7 +52,6 @@
             android:backgroundTint="@color/primary_color"
             android:textColor="@color/white"
             android:text="@string/add"
-            android:textSize="15sp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -116,7 +115,7 @@
                         android:layout_marginBottom="10dp"
 
                         android:text="@string/chart_number"
-                        android:textSize="15sp"
+
 
                         app:layout_constraintBottom_toTopOf="@id/et_chart_number_insert_patient"
                         app:layout_constraintStart_toStartOf="@id/et_chart_number_insert_patient"
@@ -125,17 +124,18 @@
                     <EditText
                         android:id="@+id/et_chart_number_insert_patient"
                         android:layout_width="0dp"
-                        android:layout_height="50dp"
+                        android:layout_height="40dp"
                         android:layout_marginVertical="10dp"
                         android:layout_marginStart="40dp"
                         android:layout_marginEnd="40dp"
+
 
                         android:background="@drawable/text_field_inner_shadow_white"
                         app:layout_constraintBottom_toBottomOf="parent"
 
                         app:layout_constraintEnd_toStartOf="@id/view_line_upper_card_center_patient_insert"
                         app:layout_constraintStart_toStartOf="parent"
-
+                        android:textSize="12sp"
                         android:paddingBottom="10dp"
                         android:paddingHorizontal="20dp"
                         />
@@ -156,7 +156,7 @@
                 android:fontFamily="@font/nanum_gothic_bold"
                 android:text="기본정보"
                 android:textColor="@color/black"
-                android:textSize="19sp"
+                android:textSize="15sp"
                 app:layout_constraintBottom_toTopOf="@id/card_require_input_insert_patient"
                 app:layout_constraintStart_toStartOf="@id/card_require_input_insert_patient"
 
@@ -170,7 +170,7 @@
                 android:fontFamily="@font/nanum_gothic_bold"
                 android:text="추가정보"
                 android:textColor="@color/black"
-                android:textSize="19sp"
+                android:textSize="15sp"
                 app:layout_constraintBottom_toTopOf="@id/card_optional_input_insert_patient"
                 app:layout_constraintStart_toStartOf="@id/card_optional_input_insert_patient" />
 
@@ -204,12 +204,12 @@
                         android:layout_marginBottom="10dp"
 
                         android:text="@string/name"
-                        android:textSize="15sp" />
+                         />
 
                     <EditText
                         android:id="@+id/et_name_insert_patient"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="40dp"
                         android:layout_marginHorizontal="40dp"
                         android:layout_marginBottom="20dp"
                         android:background="@drawable/text_field_inner_shadow_white"
@@ -217,7 +217,8 @@
                         android:maxLines="1"
                         android:paddingHorizontal="20dp"
                         android:textColorHint="@color/gray"
-                        android:textSize="15sp"
+                        android:textSize="12sp"
+
                         android:paddingBottom="10dp"
                         />
 
@@ -225,12 +226,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="40dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="10dp"
 
                         android:layout_marginBottom="10dp"
 
                         android:text="@string/gender"
-                        android:textSize="15sp" />
+                         />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -268,30 +269,32 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="40dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="10dp"
 
                         android:layout_marginBottom="10dp"
 
                         android:text="@string/birth"
-                        android:textSize="15sp" />
+
+                        />
 
                     <android.widget.Button
                         android:id="@+id/btn_birth_date_insert_patient"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:layout_marginHorizontal="40dp"
                         android:layout_marginBottom="20dp"
                         android:background="@drawable/button_shape"
                         android:backgroundTint="@color/white"
                         android:drawableEnd="@drawable/ic_baseline_date_range_30_black"
                         android:paddingHorizontal="20dp"
+
                         android:text="yyyy.MM.dd" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="30dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="10dp"
 
                         android:layout_marginBottom="20dp"
                         android:orientation="horizontal">
@@ -303,7 +306,7 @@
 
 
                             android:text="@string/height"
-                            android:textSize="15sp"
+
 
                             app:layout_constraintBottom_toTopOf="@id/et_height_insert_patient"
                             app:layout_constraintStart_toStartOf="@id/et_height_insert_patient"
@@ -315,15 +318,16 @@
                         <EditText
                             android:id="@+id/et_height_insert_patient"
                             android:layout_width="0dp"
-                            android:layout_height="50dp"
+                            android:layout_height="40dp"
                             android:layout_marginStart="10dp"
                             android:layout_marginEnd="10dp"
+
 
                             android:layout_weight="1"
                             android:background="@drawable/text_field_inner_shadow_white"
                             android:gravity="center_vertical"
                             android:hint="@string/height"
-
+                            android:textSize="12sp"
                             android:paddingHorizontal="20dp"
                             android:inputType="number"
 
@@ -343,7 +347,7 @@
 
 
                             android:text="@string/weight"
-                            android:textSize="15sp"
+
 
                             app:layout_constraintBottom_toTopOf="@id/et_weight_insert_patient"
                             app:layout_constraintStart_toStartOf="@id/et_weight_insert_patient"
@@ -354,16 +358,17 @@
                         <EditText
                             android:id="@+id/et_weight_insert_patient"
                             android:layout_width="0dp"
-                            android:layout_height="50dp"
+                            android:layout_height="40dp"
                             android:layout_marginStart="10dp"
                             android:layout_marginEnd="10dp"
+
 
                             android:layout_weight="1"
                             android:background="@drawable/text_field_inner_shadow_white"
                             android:hint="@string/weight"
                             android:textColorHint="@color/gray"
                             android:inputType="number"
-
+                            android:textSize="12sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@id/et_height_insert_patient"
@@ -378,7 +383,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="40dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="10dp"
 
                         android:layout_marginBottom="10dp"
 
@@ -388,7 +393,7 @@
                     <androidx.appcompat.widget.AppCompatSpinner
                         android:id="@+id/spinner_human_race_insert_patient"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="40dp"
                         android:layout_marginHorizontal="40dp"
                         android:layout_marginBottom="20dp"
                         android:background="@drawable/spinner_background_white"
@@ -429,8 +434,8 @@
 
                         android:layout_marginBottom="10dp"
 
-                        android:text="흡연경험"
-                        android:textSize="15sp" />
+                        android:text="@string/have_smoked"
+                         />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -443,23 +448,25 @@
                         <android.widget.Button
                             android:id="@+id/btn_have_smoking_insert_patient"
                             android:layout_width="wrap_content"
-                            android:layout_height="50dp"
+                            android:layout_height="40dp"
                             android:layout_margin="10dp"
                             android:layout_weight="1"
                             android:background="@drawable/button_shape"
                             android:backgroundTint="@color/white"
                             android:elevation="10dp"
+
                             android:text="있음" />
 
                         <android.widget.Button
                             android:id="@+id/btn_have_not_smoking_insert_patient"
                             android:layout_width="wrap_content"
-                            android:layout_height="50dp"
+                            android:layout_height="40dp"
                             android:layout_margin="10dp"
                             android:layout_weight="1"
                             android:background="@drawable/button_shape"
                             android:backgroundTint="@color/white"
                             android:elevation="10dp"
+
                             android:text="없음" />
 
                     </LinearLayout>
@@ -468,7 +475,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="40dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="10dp"
 
                         android:layout_marginBottom="10dp"
 
@@ -486,7 +493,7 @@
                         <android.widget.Button
                             android:id="@+id/btn_now_smoke_insert_patient"
                             android:layout_width="wrap_content"
-                            android:layout_height="50dp"
+                            android:layout_height="40dp"
                             android:layout_margin="10dp"
                             android:layout_weight="1"
                             android:background="@drawable/button_shape"
@@ -497,7 +504,7 @@
                         <android.widget.Button
                             android:id="@+id/btn_not_now_smoke_insert_patient"
                             android:layout_width="wrap_content"
-                            android:layout_height="50dp"
+                            android:layout_height="40dp"
                             android:layout_margin="10dp"
                             android:layout_weight="1"
                             android:background="@drawable/button_shape"
@@ -511,7 +518,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="40dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="10dp"
 
                         android:layout_marginBottom="10dp"
 
@@ -521,7 +528,7 @@
                     <android.widget.Button
                         android:id="@+id/btn_start_smoke_date_insert_patient"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:layout_marginHorizontal="40dp"
                         android:layout_marginBottom="20dp"
                         android:background="@drawable/button_shape"
@@ -535,7 +542,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="40dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="10dp"
 
                         android:layout_marginBottom="10dp"
 
@@ -550,7 +557,7 @@
                         <EditText
                             android:id="@+id/et_smoke_amount_insert_patient"
                             android:layout_width="match_parent"
-                            android:layout_height="50dp"
+                            android:layout_height="40dp"
                             android:layout_marginHorizontal="40dp"
                             android:layout_marginBottom="20dp"
                             android:autofillHints="2121"
@@ -564,7 +571,7 @@
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"
 
-                            android:textSize="15sp"
+                            android:textSize="12sp"
                             />
 
                         <TextView
@@ -592,7 +599,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="40dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="10dp"
 
                         android:layout_marginBottom="10dp"
 

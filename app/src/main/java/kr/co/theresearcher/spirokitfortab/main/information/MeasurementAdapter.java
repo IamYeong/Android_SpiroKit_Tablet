@@ -152,11 +152,16 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
         if (calHistory.isSelected()) {
 
             holder.getConstraintLayout().setBackground(AppCompatResources.getDrawable(context, R.drawable.item_selected_meas));
+            holder.getMeasTitle().setTextColor(context.getColor(R.color.white));
+            holder.getGroupText().setTextColor(context.getColor(R.color.white));
+            holder.getRemoveButton().setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.ic_baseline_close_30_white));
 
         } else {
 
             holder.getConstraintLayout().setBackgroundResource(0);
-
+            holder.getMeasTitle().setTextColor(context.getColor(R.color.black));
+            holder.getGroupText().setTextColor(context.getColor(R.color.secondary_color));
+            holder.getRemoveButton().setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.ic_baseline_close_30_black));
         }
 
         String dateString = calHistory.getFinishDate();

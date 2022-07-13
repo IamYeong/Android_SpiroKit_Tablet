@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".main.result.svc.SvcResultFragment">
+    tools:context=".main.result.svc.SvcResultFragment"
+    android:background="@color/gray_background"
+    >
 
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"
@@ -32,7 +34,7 @@
                 android:id="@+id/tv_meas_group_main_svc_result"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/nanum_gothic"
+                android:fontFamily="@font/nanum_gothic_bold"
                 android:textSize="15sp"
                 android:textColor="@color/black"
 
@@ -48,29 +50,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/nanum_gothic"
-                android:textColor="@color/gray_dark"
+                android:textColor="@color/black"
                 android:textSize="12sp"
 
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
 
-                android:text="@string/family_doctor_is"
+                android:text="@string/doctor_is"
 
-                android:layout_margin="20dp"
-                />
-
-            <TextView
-                android:id="@+id/tv_meas_doctor_main_svc_result"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/nanum_gothic"
-                android:textColor="@color/gray_dark"
-                android:textSize="12sp"
-
-                app:layout_constraintTop_toBottomOf="@id/tv_match_doctor_main_svc_result"
-                app:layout_constraintEnd_toEndOf="parent"
-
-                android:text="@string/checkup_doctor_is"
                 android:layout_margin="20dp"
                 />
 
@@ -81,8 +68,9 @@
                 android:layout_height="wrap_content"
 
                 android:fontFamily="@font/nanum_gothic_bold"
-                android:textSize="15sp"
+                android:textSize="12sp"
                 android:text="@string/volume_time_graph"
+                android:textColor="@color/black"
 
                 android:layout_marginVertical="15dp"
                 android:layout_marginStart="20dp"

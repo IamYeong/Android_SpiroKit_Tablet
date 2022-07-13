@@ -547,33 +547,6 @@ public class PatientInformationFragment extends Fragment implements Observer {
             Log.e(getClass().getSimpleName(), e.toString());
         }
 
-        if (patient.getNowSmoking() == 0) {
-            info.append(getString(R.string.smoking_now_is, getString(R.string.not_smoking))).append("\n");
-        } else {
-            info.append(getString(R.string.smoking_now_is, getString(R.string.smoking))).append("\n");
-        }
-
-        String startSmokingDateString = patient.getStartSmokingDay();
-        if (startSmokingDateString == null) {
-            info.append(getString(R.string.smoke_start_date_is, getString(R.string.not_applicable))).append("\n");
-        } else {
-            info.append(getString(R.string.smoke_start_date_is, startSmokingDateString.substring(0, startSmokingDateString.length() - 9))).append("\n");
-        }
-
-        String stopSmokingDateString = patient.getStopSmokingDay();
-        if (stopSmokingDateString == null) {
-            info.append(getString(R.string.smoke_start_date_is, getString(R.string.not_applicable))).append("\n");
-        } else {
-            info.append(getString(R.string.smoke_start_date_is, stopSmokingDateString.subSequence(0, stopSmokingDateString.length() - 9))).append("\n");
-        }
-
-        String smokingAmount = patient.getSmokingAmountPerDay();
-        if (startSmokingDateString == null) {
-            info.append(getString(R.string.smoking_per_day_is, getString(R.string.not_applicable))).append("\n");
-        } else {
-            info.append(getString(R.string.smoking_per_day_is, smokingAmount)).append("\n");
-        }
-
         //인종
         String humanRace = patient.getHumanRace();
         String[] humanResources = getResources().getStringArray(R.array.human_races);
@@ -584,10 +557,40 @@ public class PatientInformationFragment extends Fragment implements Observer {
                 break;
             }
         }
+
+        String startSmokingDateString = patient.getStartSmokingDay();
+        if (startSmokingDateString == null) {
+            info.append(getString(R.string.smoke_start_date_is, getString(R.string.not_applicable))).append("\n");
+        } else {
+            info.append(getString(R.string.smoke_start_date_is, startSmokingDateString.substring(0, startSmokingDateString.length() - 9))).append("\n");
+        }
+
+        String smokingAmount = patient.getSmokingAmountPerDay();
+        if (startSmokingDateString == null) {
+            info.append(getString(R.string.smoking_per_day_is, getString(R.string.not_applicable))).append("\n");
+        } else {
+            info.append(getString(R.string.smoking_per_day_is, smokingAmount)).append("\n");
+        }
+
+        if (patient.getNowSmoking() == 0) {
+            info.append(getString(R.string.smoking_now_is, getString(R.string.not_smoking))).append("\n");
+        } else {
+            info.append(getString(R.string.smoking_now_is, getString(R.string.smoking))).append("\n");
+        }
+
+        String stopSmokingDateString = patient.getStopSmokingDay();
+        if (stopSmokingDateString == null) {
+            info.append(getString(R.string.smoke_stop_date_is, getString(R.string.not_applicable))).append("\n");
+        } else {
+            info.append(getString(R.string.smoke_stop_date_is, stopSmokingDateString.subSequence(0, stopSmokingDateString.length() - 9))).append("\n");
+        }
+
+
         //info.append(getString(R.string.human_race_is, humanRace)).append("\n")
 
         Log.d(getClass().getSimpleName(), info.toString());
         patientInfoText.setText(info.toString());
+        patientInfoText.setVisibility(View.VISIBLE);
 
     }
 
@@ -612,10 +615,8 @@ public class PatientInformationFragment extends Fragment implements Observer {
         }
 
         patientNameText.setText(patient.getName());
-        StringBuilder info = new StringBuilder();
-        //info.append ~
 
-        patientInfoText.setText(info.toString());
+        patientInfoText.setVisibility(View.GONE);
     }
 
     public void changeSearchFieldFocus(boolean enable) {

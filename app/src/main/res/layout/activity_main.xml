@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:textSize="30sp"
+            android:textSize="24sp"
 
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -34,8 +34,8 @@
 
         <ImageView
             android:id="@+id/img_ble_connection_main"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@drawable/ic_disconnect_spirokit"
 
             app:layout_constraintTop_toTopOf="parent"
@@ -48,8 +48,8 @@
 
         <ImageButton
             android:id="@+id/img_btn_setting_main"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@drawable/ic_setting"
 
             app:layout_constraintTop_toTopOf="parent"
@@ -57,12 +57,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_margin="20dp"
             android:background="@drawable/item_img_btn_bg_gray"
+
+            android:elevation="10dp"
             />
 
         <ImageButton
             android:id="@+id/img_btn_insert_patient_main"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@drawable/ic_person_insert"
 
             app:layout_constraintTop_toTopOf="parent"
@@ -71,6 +73,8 @@
             android:layout_marginHorizontal="20dp"
             android:padding="10dp"
             android:background="@drawable/item_img_btn_bg_gray"
+
+            android:elevation="10dp"
             />
 
 

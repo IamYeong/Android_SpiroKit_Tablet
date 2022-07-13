@@ -57,6 +57,21 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorViewHolder> {
 
     }
 
+    public void filterByWork(String work) {
+
+        searchResults.clear();
+
+        for (Operator operator : operators) {
+            if (operator.getWork().equals(work)) {
+
+                searchResults.add(operator);
+            }
+        }
+
+        notifyDataSetChanged();
+
+    }
+
     public void setChangedListener(OnItemChangedListener listener) {
         this.changedListener = listener;
     }
@@ -74,15 +89,6 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorViewHolder> {
         Operator operator = searchResults.get(holder.getAdapterPosition());
 
         holder.getNameText().setText(operator.getName());
-        for (int i = 0; i < works.size(); i++) {
-            if (works.get(i).getWork().equals(operator.getWork())) {
-
-                holder.getWorkText().setText(
-                        context.getResources().getStringArray(R.array.works)[i]
-                );
-                break;
-            }
-        }
 
         holder.getDeleteButton().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,24 +130,16 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorViewHolder> {
 
 class OperatorViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView workText, nameText;
+    private TextView nameText;
     private ImageButton deleteButton;
 
     public OperatorViewHolder(@NonNull View itemView) {
         super(itemView);
 
-        workText = itemView.findViewById(R.id.tv_operator_work_operator);
+
         nameText = itemView.findViewById(R.id.tv_operator_name_operator);
         deleteButton = itemView.findViewById(R.id.img_btn_delete_operator);
 
-    }
-
-    public TextView getWorkText() {
-        return workText;
-    }
-
-    public void setWorkText(TextView workText) {
-        this.workText = workText;
     }
 
     public TextView getNameText() {
