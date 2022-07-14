@@ -11,6 +11,9 @@ import java.util.List;
 @Dao
 public interface PatientDao {
 
+    @Query("SELECT * FROM PATIENT WHERE (office_hashed == :officeHashed)")
+    List<Patient> selectAll(String officeHashed);
+
     @Query("SELECT * FROM PATIENT")
     List<Patient> selectAllPatient();
 

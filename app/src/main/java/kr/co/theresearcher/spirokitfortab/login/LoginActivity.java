@@ -58,8 +58,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private Handler handler = new Handler(Looper.getMainLooper());
 
-    RequestQueue requestQueue;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -158,35 +156,7 @@ public class LoginActivity extends AppCompatActivity {
                 };
                 thread.start();
 
-                /*
 
-                JSONObject jsonObject = new JSONObject();
-
-                try {
-
-                    jsonObject.put("email", "wjdrhkddud2@gmail.com");
-                    jsonObject.put("pass", "1234ab");
-                    jsonObject.put("from_os", "a");
-
-                } catch (JSONException e) {
-
-                }
-
-                SpiroKitVolley.setVolleyListener(new VolleyResponseListener() {
-                    @Override
-                    public void onResponse(JSONObject jsonResponse) {
-                        Log.d(getClass().getSimpleName(), jsonResponse.toString());
-                    }
-
-                    @Override
-                    public void onError(ErrorResponse errorResponse) {
-                        Log.d(getClass().getSimpleName(), errorResponse.toString());
-                    }
-                });
-
-                SpiroKitVolley.postJson(jsonObject);
-
-                 */
 
             }
         });

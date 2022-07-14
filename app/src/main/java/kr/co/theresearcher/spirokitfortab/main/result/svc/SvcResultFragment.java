@@ -175,11 +175,6 @@ public class SvcResultFragment extends Fragment implements Observer {
                         history.getHashed()
                 );
 
-                List<CalHistoryRawData> allData = database.calHistoryRawDataDao().selectAll();
-                for (CalHistoryRawData cal : allData) {
-                    Log.d(getClass().getSimpleName(), "CAL HISTORY HASH : " + cal.getCalHistoryHashed() + "\nDATA : " + cal.getData());
-                }
-
                 SpiroKitDatabase.removeInstance();
 
                 Log.d(getClass().getSimpleName(), "RAW DATA SIZE : " + rawData.size());

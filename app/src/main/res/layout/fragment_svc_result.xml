@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".main.result.svc.SvcResultFragment"
-    android:background="@color/gray_background"
+    android:background="@drawable/layout_inner_shadow_square_gray"
     >
 
     <androidx.cardview.widget.CardView

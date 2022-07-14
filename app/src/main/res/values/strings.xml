@@ -193,6 +193,9 @@
     <string name="setting">설정</string>
 
     <string name="app_version">앱 버전</string>
+    <string name="server_sync">서버 동기화</string>
+
+    <string name="server_sync_waiting">서버와 데이터 동기화 중입니다</string>
 
     <string name="disconnected_with_device">디바이스와 연결이 끊어졌습니다</string>
     <string name="connected_with_device">디바이스와 연결되었습니다</string>

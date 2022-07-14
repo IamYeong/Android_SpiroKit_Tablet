@@ -11,6 +11,9 @@ public interface OfficeDao {
     @Query("SELECT * FROM OFFICE WHERE office_id == :id")
     Office selectOfficeByID(String id);
 
+    @Query("SELECT * FROM OFFICE WHERE hashed == :hash")
+    Office selectOfficeByHash(String hash);
+
     @Query("SELECT * FROM office")
     List<Office> selectAllOffices();
 

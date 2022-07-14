@@ -38,7 +38,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -47,11 +52,21 @@ import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.bluetooth.BluetoothAttributes;
 import kr.co.theresearcher.spirokitfortab.bluetooth.SpiroKitBluetoothLeService;
+import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
+import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
+import kr.co.theresearcher.spirokitfortab.db.cal_history_raw_data.CalHistoryRawData;
+import kr.co.theresearcher.spirokitfortab.db.office.Office;
+import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
+import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
 import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
 import kr.co.theresearcher.spirokitfortab.dialog.LoadingDialog;
 import kr.co.theresearcher.spirokitfortab.dialog.OnSelectedInDialogListener;
 import kr.co.theresearcher.spirokitfortab.dialog.SelectionDialog;
 import kr.co.theresearcher.spirokitfortab.setting.operator.OperatorActivity;
+import kr.co.theresearcher.spirokitfortab.volley.ErrorResponse;
+import kr.co.theresearcher.spirokitfortab.volley.JsonKeys;
+import kr.co.theresearcher.spirokitfortab.volley.SpiroKitVolley;
+import kr.co.theresearcher.spirokitfortab.volley.VolleyResponseListener;
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -63,6 +78,7 @@ public class SettingActivity extends AppCompatActivity {
     private RecyclerView rv;
     private BluetoothScanResultsAdapter adapter;
     private TextView connectStateText, startScanText, userNickname;
+    private ImageButton syncButton;
     private boolean enableAutoPairing, enableSleepMode;
 
     private BluetoothAdapter bluetoothAdapter;
@@ -72,7 +88,7 @@ public class SettingActivity extends AppCompatActivity {
     private ScanSettings scanSettings;
 
     private SpiroKitBluetoothLeService mService;
-    //private LoadingDialog loadingDialog;
+    private LoadingDialog loadingDialog;
     private Handler handler = new Handler(Looper.getMainLooper());
 
     private Runnable stopScanRunnable = new Runnable() {
@@ -201,6 +217,7 @@ public class SettingActivity extends AppCompatActivity {
         backButton = findViewById(R.id.img_btn_back_setting);
         scanProgress = findViewById(R.id.progress_scan_loading);
         startScanText = findViewById(R.id.tv_start_scan);
+        syncButton = findViewById(R.id.img_btn_sync_setting);
 
         logoutButton = findViewById(R.id.btn_logout_setting);
 
@@ -296,9 +313,21 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
+        syncButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                sync();
+
+            }
+        });
+
         userNickname.setText(SharedPreferencesManager.getOfficeName(SettingActivity.this));
 
         scanStandBy();
+
+        loadingDialog = new LoadingDialog(SettingActivity.this);
+
 
     }
 
@@ -410,6 +439,182 @@ public class SettingActivity extends AppCompatActivity {
 
             }
         };
+
+    }
+
+    private void sync() {
+
+        loadingDialog = new LoadingDialog(SettingActivity.this);
+        loadingDialog.setTitle(getString(R.string.server_sync_waiting));
+        loadingDialog.show();
+
+        Thread thread = new Thread() {
+
+            @Override
+            public void run() {
+                super.run();
+                Looper.prepare();
+
+                SpiroKitDatabase database = SpiroKitDatabase.getInstance(SettingActivity.this);
+                JSONObject jsonObject = new JSONObject();
+
+                Office office = database.officeDao().selectOfficeByHash(SharedPreferencesManager.getOfficeHash(SettingActivity.this));
+
+                try {
+
+                    jsonObject.put(JsonKeys.JSON_KEY_HASHED, office.getHashed());
+                    jsonObject.put(JsonKeys.JSON_KEY_NAME, office.getName());
+                    jsonObject.put(JsonKeys.JSON_KEY_TEL, office.getTel());
+                    jsonObject.put(JsonKeys.JSON_KEY_ADDRESS, office.getAddress());
+                    jsonObject.put(JsonKeys.JSON_KEY_COUNTRY_CODE, office.getCountryCode());
+                    jsonObject.put(JsonKeys.JSON_KEY_IS_USE, office.getIsUse());
+                    jsonObject.put(JsonKeys.JSON_KEY_IS_USE_SYNC, office.getIsUseSync());
+
+                    JSONArray operatorArray = new JSONArray();
+                    List<Operator> operators = database.operatorDao().selectAll(office.getHashed());
+                    for (Operator operator : operators) {
+                        JSONObject operatorJsonObject = new JSONObject();
+                        operatorJsonObject.put(JsonKeys.JSON_KEY_HASHED, operator.getHashed());
+                        operatorJsonObject.put(JsonKeys.JSON_KEY_OFFICE_HASHED, office.getHashed());
+                        operatorJsonObject.put(JsonKeys.JSON_KEY_NAME, operator.getName());
+                        operatorJsonObject.put(JsonKeys.JSON_KEY_WORK, operator.getWork());
+                        operatorJsonObject.put(JsonKeys.JSON_KEY_IS_DELETED, operator.getIsDeleted());
+
+                        operatorArray.put(operatorJsonObject);
+                    }
+                    operators.clear();
+
+                    jsonObject.put(JsonKeys.JSON_KEY_OPERATOR, operatorArray);
+
+                    List<Patient> patients = database.patientDao().selectAll(office.getHashed());
+                    JSONArray patientJsonArray = new JSONArray();
+
+                    for (Patient patient : patients) {
+
+                        String start = patient.getStartSmokingDay();
+
+                        JSONObject patientJsonObject = new JSONObject();
+                        patientJsonObject.put(JsonKeys.JSON_KEY_OFFICE_HASHED, patient.getOfficeHashed());
+                        patientJsonObject.put(JsonKeys.JSON_KEY_CHART_NO, patient.getChartNumber());
+                        patientJsonObject.put(JsonKeys.JSON_KEY_NAME, patient.getName());
+                        patientJsonObject.put(JsonKeys.JSON_KEY_GENDER, patient.getGender());
+                        patientJsonObject.put(JsonKeys.JSON_KEY_HEIGHT, patient.getHeight());
+                        patientJsonObject.put(JsonKeys.JSON_KEY_WEIGHT, patient.getWeight());
+                        patientJsonObject.put(JsonKeys.JSON_KEY_BIRTHDAY, patient.getBirthDay());
+                        patientJsonObject.put(JsonKeys.JSON_KEY_HUMAN_RACE, patient.getHumanRace());
+
+                        if (start == null) {
+                            patientJsonObject.put(JsonKeys.JSON_KEY_SMOKING_AMOUNT, null);
+                            patientJsonObject.put(JsonKeys.JSON_KEY_SMOKING_PERIOD, null);
+                            patientJsonObject.put(JsonKeys.JSON_KEY_SMOKING_IS_NOW, null);
+                        } else {
+                            patientJsonObject.put(JsonKeys.JSON_KEY_SMOKING_AMOUNT, patient.getSmokingAmountPerDay());
+                            patientJsonObject.put(JsonKeys.JSON_KEY_SMOKING_PERIOD, patient.getSmokingPeriod());
+                            patientJsonObject.put(JsonKeys.JSON_KEY_SMOKING_IS_NOW, patient.getNowSmoking());
+                        }
+
+                        patientJsonObject.put(JsonKeys.JSON_KEY_STOP_SMOKING_WHEN, patient.getStopSmokingDay());
+                        patientJsonObject.put(JsonKeys.JSON_KEY_START_SMOKING_WHEN, patient.getStartSmokingDay());
+                        patientJsonObject.put(JsonKeys.JSON_KEY_FROM_OS, patient.getOs());
+                        patientJsonObject.put(JsonKeys.JSON_KEY_IS_DELETED, patient.getIsDeleted());
+
+                    }
+                    jsonObject.put(JsonKeys.JSON_KEY_PATIENT, patientJsonArray);
+
+                    patients.clear();
+
+                    List<CalHistory> calHistories = database.calHistoryDao().selectAll(office.getHashed());
+                    List<CalHistoryRawData> rawDataList = new ArrayList<>();
+
+                    JSONArray historyArray = new JSONArray();
+                    JSONArray rawDataArray = new JSONArray();
+
+                    for (CalHistory calHistory : calHistories) {
+
+                        JSONObject historyJsonObject = new JSONObject();
+                        historyJsonObject.put(JsonKeys.JSON_KEY_HASHED, calHistory.getHashed());
+                        historyJsonObject.put(JsonKeys.JSON_KEY_OFFICE_HASHED, calHistory.getHashed());
+                        historyJsonObject.put(JsonKeys.JSON_KEY_OPERATOR_DOCTOR_HASH, calHistory.getFamilyDoctorHash());
+                        historyJsonObject.put(JsonKeys.JSON_KEY_OPERATOR_HASH, calHistory.getOperatorHashed());
+                        historyJsonObject.put(JsonKeys.JSON_KEY_PATIENT_HASH, calHistory.getPatientHashed());
+                        historyJsonObject.put(JsonKeys.JSON_KEY_CAL_HISTORY_DATE, calHistory.getFinishDate());
+                        historyJsonObject.put(JsonKeys.JSON_KEY_CAL_DIV, calHistory.getMeasDiv());
+                        historyJsonObject.put(JsonKeys.JSON_KEY_DEVICE_DIV, calHistory.getDeviceDiv());
+                        historyJsonObject.put(JsonKeys.JSON_KEY_IS_DELETED_REF, calHistory.getIsDeletedReference());
+                        historyJsonObject.put(JsonKeys.JSON_KEY_IS_DELETED, calHistory.getIsDeleted());
+
+                        historyArray.put(historyJsonObject);
+
+                        List<CalHistoryRawData> rawData = database.calHistoryRawDataDao().selectRawDataByHistory(calHistory.getHashed());
+
+                        rawDataList.addAll(rawData);
+
+                    }
+
+                    calHistories.clear();
+
+                    jsonObject.put(JsonKeys.JSON_KEY_CAL_HISTORY, historyArray);
+
+                    for (CalHistoryRawData raw : rawDataList) {
+
+                        JSONObject rawJsonObject = new JSONObject();
+                        rawJsonObject.put(JsonKeys.JSON_KEY_HASHED, raw.getHashed());
+                        rawJsonObject.put(JsonKeys.JSON_KEY_HISTORY_HASH, raw.getCalHistoryHashed());
+                        rawJsonObject.put(JsonKeys.JSON_KEY_CAL_DATE, raw.getCalDate());
+                        rawJsonObject.put(JsonKeys.JSON_KEY_IS_POST, raw.getIsPost());
+                        rawJsonObject.put(JsonKeys.JSON_KEY_IS_DELETED_REF, raw.getIsDeletedReference());
+                        rawJsonObject.put(JsonKeys.JSON_KEY_IS_DELETED, raw.getIsDeleted());
+                        rawJsonObject.put(JsonKeys.JSON_KEY_ORDER, raw.getOrderNumber());
+
+                        rawDataArray.put(rawJsonObject);
+
+                    }
+
+                    rawDataList.clear();
+
+                    jsonObject.put(JsonKeys.JSON_KEY_RAW_DATA, rawDataArray);
+
+                    Log.e(getClass().getSimpleName(), "++++++++++++++++++++++++++\n" + jsonObject.toString());
+
+                    //POST
+                    SpiroKitVolley.setVolleyListener(new VolleyResponseListener() {
+                        @Override
+                        public void onResponse(JSONObject jsonResponse) {
+
+                            Log.e(getClass().getSimpleName(),"=++++++++++++++++++++++++\n" + jsonResponse.toString());
+                            loadingDialog.dismiss();
+                        }
+
+                        @Override
+                        public void onError(ErrorResponse errorResponse) {
+                            Log.e(getClass().getSimpleName(),"++++++++++++++++++++++++\n" + errorResponse.toString());
+                            loadingDialog.dismiss();
+                        }
+                    });
+
+                    SpiroKitVolley.postJson(jsonObject);
+
+
+                } catch (JSONException e) {
+
+                }
+
+                /*
+
+                응답으로 reuslt 정수코드와 메시지, 동기화로 다시 저장할 데이터들이 온다.
+
+
+
+                 */
+
+
+
+
+                Looper.loop();
+            }
+        };
+
+        thread.start();
 
     }
 

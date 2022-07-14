@@ -10,11 +10,12 @@ import java.util.List;
 @Dao
 public interface CalHistoryRawDataDao {
 
+
     @Query("SELECT * FROM CAL_HISTORY_RAW_DATA WHERE (cal_history_hashed = :calHistoryHashed) AND (is_deleted == 0) AND (is_deleted_reference == 0)")
     List<CalHistoryRawData> selectRawDataByHistory(String calHistoryHashed);
 
-    @Query("SELECT * FROM CAL_HISTORY_RAW_DATA")
-    List<CalHistoryRawData> selectAll();
+    @Query("SELECT * FROM CAL_HISTORY_RAW_DATA WHERE (cal_history_hashed == :historyHashed)")
+    List<CalHistoryRawData> selectAll(String historyHashed);
 
     @Insert
     void insertRawData(CalHistoryRawData rawData);

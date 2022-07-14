@@ -10,6 +10,9 @@ import java.util.List;
 @Dao
 public interface OperatorDao {
 
+    @Query("SELECT * FROM OPERATOR WHERE (office_hashed == :officeHashed)")
+    List<Operator> selectAll(String officeHashed);
+
     @Query("SELECT * FROM OPERATOR WHERE (office_hashed == :officeHashed) AND (is_deleted == 0)")
     List<Operator> selectAllOperator(String officeHashed);
 
