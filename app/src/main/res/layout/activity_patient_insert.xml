@@ -136,7 +136,7 @@
                         app:layout_constraintEnd_toStartOf="@id/view_line_upper_card_center_patient_insert"
                         app:layout_constraintStart_toStartOf="parent"
                         android:textSize="12sp"
-                        android:paddingBottom="10dp"
+                        android:padding="10dp"
                         android:paddingHorizontal="20dp"
                         />
 
@@ -218,8 +218,7 @@
                         android:paddingHorizontal="20dp"
                         android:textColorHint="@color/gray"
                         android:textSize="12sp"
-
-                        android:paddingBottom="10dp"
+                        android:padding="10dp"
                         />
 
                     <TextView
@@ -337,7 +336,7 @@
                             app:layout_constraintEnd_toStartOf="@id/et_weight_insert_patient"
 
                             app:layout_constraintStart_toStartOf="parent"
-                            android:paddingBottom="10dp"
+                            android:padding="10dp"
                             />
 
                         <TextView
@@ -373,8 +372,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@id/et_height_insert_patient"
 
-                            android:paddingBottom="10dp"
-                            android:paddingHorizontal="20dp"
+                            android:padding="10dp"
                             />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -566,11 +564,10 @@
                             app:hintTextColor="@color/gray_dark"
                             android:inputType="numberDecimal"
                             android:textAlignment="center"
-                            android:paddingBottom="14dp"
 
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"
-
+                            android:padding="10dp"
                             android:textSize="12sp"
                             />
 
@@ -585,9 +582,7 @@
                             android:text="갑"
 
                             android:textColor="@color/gray"
-                            android:textSize="15sp"
                             />
-
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
