@@ -58,7 +58,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingHorizontal="15dp"
-                android:paddingVertical="20dp"
+                android:paddingVertical="10dp"
                 >
 
                 <ImageView
@@ -113,8 +113,9 @@
                     android:textColor="@color/black"
 
                     app:layout_constraintTop_toBottomOf="@id/tv_name_patient_info_fragment"
+                    app:layout_constraintBottom_toTopOf="@id/btn_test_start_patient_info"
 
-                    android:layout_marginVertical="10dp"
+
                     android:lineSpacingExtra="3sp"
 
                     />
@@ -131,7 +132,6 @@
                     android:textSize="15sp"
                     android:background="@drawable/button_out_line_highlight"
 
-                    android:layout_marginTop="10dp"
                     />
 
 
@@ -148,7 +148,7 @@
             app:cardCornerRadius="20dp"
 
             android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="10dp"
+            android:layout_marginVertical="15dp"
 
             app:cardElevation="5dp"
 
@@ -193,7 +193,7 @@
                     android:id="@+id/img_btn_date_range_picker"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_calendar"
+                    android:src="@drawable/calendar"
                     android:background="?attr/selectableItemBackgroundBorderless"
 
                     app:layout_constraintTop_toTopOf="@id/tv_test_history_title"

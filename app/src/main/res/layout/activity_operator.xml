@@ -163,7 +163,7 @@
                     android:background="@drawable/button_shape"
                     android:backgroundTint="@color/white"
                     android:textColor="@color/black"
-                    android:drawableStart="@drawable/ic_person_insert"
+                    android:drawableStart="@drawable/patient_insert"
                     android:padding="10dp"
                     android:text="@string/additional"
 

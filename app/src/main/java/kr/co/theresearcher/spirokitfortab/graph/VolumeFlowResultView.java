@@ -25,7 +25,7 @@ public class VolumeFlowResultView extends View {
     private List<Coordinate> values;
 
     private Path path;
-    private Paint labelPaint, linePaint, pathPaint;
+    private Paint labelPaint, linePaint, pathPaint, detailLinePaint;
 
     private float xInterval, yInterval;
     private float xPadding, yPadding;
@@ -39,11 +39,13 @@ public class VolumeFlowResultView extends View {
         labelPaint = new Paint();
         linePaint = new Paint();
         pathPaint = new Paint();
+        detailLinePaint = new Paint();
         path = new Path();
 
         setLabelPaint();
         setLinePaint();
         setPathPaint();
+        setDetailLinePaint();
     }
 
 
@@ -51,12 +53,33 @@ public class VolumeFlowResultView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+
+        //제목 라벨
+        //canvas.drawText("Volume|Flow Graph", canvasWidth / 2f, 30f, labelPaint);
+
+        for (int i = 1; i < xMarking; i++) {
+
+            canvas.drawLine((float)xPadding * (float)i, canvasHeight, ((float)xPadding * (float)i), 0f, detailLinePaint);
+
+            canvas.drawLine((float)xPadding * (float)i, canvasHeight, ((float)xPadding * (float)i), (canvasHeight) - 20f, linePaint); // 중앙에 x축 눈금 그리기
+            //canvas.drawText(Float.toString(Fluid.autoRound(1, ((float)xInterval * (float) i))), ((float)xPadding * (float)i) - 20f, (canvasHeight * 0.5f) - 25f, labelPaint);
+            canvas.drawText(Float.toString(Fluid.autoRound(1, maxX - (xInterval * (double) i))), (xPadding * (float)i) - 5f, (canvasHeight) - 25f, labelPaint);
+        }
+
+        for (int i = 1; i < yMarking; i++) {
+
+            canvas.drawLine(0f, yPadding * (float)i, canvasWidth, yPadding * (float)i, detailLinePaint);
+
+            canvas.drawLine(0f, yPadding * (float)i, 20f, yPadding * (float)i,linePaint);
+            canvas.drawText(Float.toString(Fluid.autoRound(1, (maxY - (yInterval * (double)i)))), 25f, (yPadding * (float)i) + 10f, labelPaint);
+
+
+        }
+
         //축 라벨
         canvas.drawText("Flow(l/s)", 30f, 30f, labelPaint);
         canvas.drawText("Volume(L)", canvasWidth - 100f, canvasHeight - 30f, labelPaint);
 
-        //제목 라벨
-        //canvas.drawText("Volume|Flow Graph", canvasWidth / 2f, 30f, labelPaint);
 
         //X 축 중앙선
         canvas.drawLine(0f, canvasHeight * 0.5f, canvasWidth, canvasHeight * 0.5f, linePaint);
@@ -65,20 +88,6 @@ public class VolumeFlowResultView extends View {
 
         //경로 그리기
         canvas.drawPath(path, pathPaint);
-
-        for (int i = 1; i < xMarking; i++) {
-            canvas.drawLine((float)xPadding * (float)i, canvasHeight, ((float)xPadding * (float)i), (canvasHeight) - 20f, linePaint); // 중앙에 x축 눈금 그리기
-            //canvas.drawText(Float.toString(Fluid.autoRound(1, ((float)xInterval * (float) i))), ((float)xPadding * (float)i) - 20f, (canvasHeight * 0.5f) - 25f, labelPaint);
-            canvas.drawText(Float.toString(Fluid.autoRound(1, maxX - (xInterval * (double) i))), (xPadding * (float)i) - 5f, (canvasHeight) - 25f, labelPaint);
-        }
-
-        for (int i = 1; i < yMarking; i++) {
-
-            canvas.drawLine(0f, yPadding * (float)i, 20f, yPadding * (float)i,linePaint);
-            canvas.drawText(Float.toString(Fluid.autoRound(1, (maxY - (yInterval * (double)i)))), 25f, (yPadding * (float)i) + 10f, labelPaint);
-
-
-        }
 
     }
 
@@ -261,6 +270,13 @@ public class VolumeFlowResultView extends View {
         pathPaint.setStrokeWidth(3f);
         pathPaint.setStyle(Paint.Style.STROKE);
         pathPaint.setColor(getContext().getColor(R.color.primary_color));
+
+    }
+
+    private void setDetailLinePaint() {
+
+        detailLinePaint.setColor(getContext().getColor(R.color.gray));
+        detailLinePaint.setStrokeWidth(2f);
 
     }
 

@@ -59,12 +59,12 @@ public class MainActivity extends AppCompatActivity {
 
             if (mService.isConnect()) {
                 //bleConnectionImage.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.ble_connection)));
-                bleConnectionImage.setImageDrawable(AppCompatResources.getDrawable(MainActivity.this, R.drawable.ic_connect_spirokit));
+                bleConnectionImage.setImageDrawable(AppCompatResources.getDrawable(MainActivity.this, R.drawable.connected_device));
                 //macAddressText.setText(SharedPreferencesManager.getBluetoothDeviceMacAddress(SettingActivity.this));
             } else {
                 //macAddressText.setText(getString(R.string.state_disconnect));
                 //bleConnectionImage.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.gray_light)));
-                bleConnectionImage.setImageDrawable(AppCompatResources.getDrawable(MainActivity.this, R.drawable.ic_disconnect_spirokit));
+                bleConnectionImage.setImageDrawable(AppCompatResources.getDrawable(MainActivity.this, R.drawable.disconnected_device));
             }
 
             mService.setBluetoothLeCallback(new SpiroKitBluetoothLeService.BluetoothLeCallback() {
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onWriteCharacteristic() {
                     //testTitleText.setText("WRITE CHARACTERISTIC");
                     //bleConnectionImage.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.ble_connection)));
-                    bleConnectionImage.setImageDrawable(AppCompatResources.getDrawable(MainActivity.this, R.drawable.ic_connect_spirokit));
+                    bleConnectionImage.setImageDrawable(AppCompatResources.getDrawable(MainActivity.this, R.drawable.connected_device));
                 }
 
                 @Override
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                     } else if (status == BluetoothProfile.STATE_DISCONNECTED) {
 
                         //bleConnectionImage.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.gray_light)));
-                        bleConnectionImage.setImageDrawable(AppCompatResources.getDrawable(MainActivity.this, R.drawable.ic_disconnect_spirokit));
+                        bleConnectionImage.setImageDrawable(AppCompatResources.getDrawable(MainActivity.this, R.drawable.disconnected_device));
 
                     }
                 }

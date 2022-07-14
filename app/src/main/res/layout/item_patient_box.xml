@@ -15,7 +15,7 @@
         android:id="@+id/view_line_patient_box"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/gray_text"
+        android:background="@color/gray_light"
 
         app:layout_constraintBottom_toBottomOf="parent"
         />

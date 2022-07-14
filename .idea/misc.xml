@@ -70,7 +70,7 @@
         <entry key="app/src/main/res/layout/activity_exception.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_join_user.xml" value="0.18" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.14" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.5" />
         <entry key="app/src/main/res/layout/activity_measurement_fvc.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_measurement_mvv.xml" value="0.20442708333333334" />
         <entry key="app/src/main/res/layout/activity_measurement_svc.xml" value="0.25" />
@@ -88,7 +88,7 @@
         <entry key="app/src/main/res/layout/fragment_fvc_value_list.xml" value="0.16276041666666666" />
         <entry key="app/src/main/res/layout/fragment_mvv_result.xml" value="0.20442708333333334" />
         <entry key="app/src/main/res/layout/fragment_mvv_value_list.xml" value="0.20442708333333334" />
-        <entry key="app/src/main/res/layout/fragment_patient_information.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_patient_information.xml" value="0.38220551378446116" />
         <entry key="app/src/main/res/layout/fragment_patients.xml" value="0.16276041666666666" />
         <entry key="app/src/main/res/layout/fragment_result.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_svc_result.xml" value="0.18" />

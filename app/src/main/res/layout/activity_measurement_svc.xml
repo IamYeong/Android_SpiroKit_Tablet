@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
 
             android:textColor="@color/black"
-            android:textSize="20sp"
+            android:textSize="15sp"
             android:text="NAME"
             app:layout_constraintTop_toTopOf="@id/img_btn_back_svc_meas"
             app:layout_constraintBottom_toBottomOf="@id/img_btn_back_svc_meas"
@@ -46,12 +46,11 @@
         <android.widget.Button
             android:id="@+id/btn_complete_svc_meas"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:background="@drawable/button_shape"
             android:backgroundTint="@color/white"
             android:textColor="@color/black"
             android:text="최종완료"
-            android:textSize="15sp"
             android:paddingVertical="10dp"
             android:paddingHorizontal="30dp"
 
@@ -60,13 +59,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_margin="20dp"
 
-            android:elevation="5dp"
+            android:elevation="6dp"
+
             />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint_connect_button_svc_meas"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="40dp"
 
             app:layout_constraintEnd_toStartOf="@id/btn_complete_svc_meas"
             app:layout_constraintTop_toTopOf="parent"
@@ -76,9 +76,11 @@
             android:background="@drawable/button_shape"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:backgroundTint="@color/white"
-            android:elevation="1dp"
+            android:elevation="6dp"
             android:layout_marginVertical="10dp"
             android:paddingHorizontal="10dp"
+
+            android:padding="5dp"
             >
 
             <ProgressBar
@@ -103,14 +105,13 @@
                 android:id="@+id/img_connect_state_svc_meas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_connect_spirokit"
+                android:src="@drawable/disconnected_device"
 
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_margin="10dp"
                 app:layout_constraintEnd_toStartOf="@id/tv_connect_title_svc_meas"
-
                 android:visibility="visible"
 
                 />
@@ -120,7 +121,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:textSize="15sp"
+
                 android:text="연결하기"
 
                 app:layout_constraintTop_toTopOf="parent"
@@ -199,6 +200,7 @@
                 android:layout_marginVertical="20dp"
                 android:paddingVertical="10dp"
                 app:cornerRadius="10dp"
+                android:textSize="12sp"
                 />
 
             <com.google.android.material.button.MaterialButton
@@ -217,36 +219,37 @@
                 android:layout_marginVertical="20dp"
                 android:paddingVertical="10dp"
                 app:cornerRadius="10dp"
+                android:textSize="12sp"
                 />
 
-            <android.widget.Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_pre_save_svc_meas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button_shape"
                 android:backgroundTint="@color/white"
-                android:textColor="@color/gray_dark"
+                android:textColor="@color/black"
                 android:text="@string/pre_save"
-
                 android:layout_weight="1"
-
                 android:layout_marginEnd="20dp"
                 android:layout_marginVertical="20dp"
+                android:paddingVertical="15dp"
+                app:cornerRadius="10dp"
+                android:textSize="12sp"
                 />
 
-            <android.widget.Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_post_save_svc_meas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button_shape"
                 android:backgroundTint="@color/white"
-                android:textColor="@color/gray_dark"
+                android:textColor="@color/black"
                 android:text="@string/post_save"
-
                 android:layout_weight="1"
-
                 android:layout_marginEnd="20dp"
                 android:layout_marginVertical="20dp"
+                android:paddingVertical="15dp"
+                app:cornerRadius="10dp"
+                android:textSize="12sp"
                 />
 
         </LinearLayout>

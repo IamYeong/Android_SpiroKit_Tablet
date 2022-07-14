@@ -125,12 +125,12 @@ public class MeasurementSvcActivity extends AppCompatActivity {
             mService.setBluetoothLeCallback(bluetoothLeCallback);
 
             if (mService.isConnect()) {
-                connectStateImage.setImageDrawable(AppCompatResources.getDrawable(MeasurementSvcActivity.this, R.drawable.ic_connect_spirokit));
+                connectStateImage.setImageDrawable(AppCompatResources.getDrawable(MeasurementSvcActivity.this, R.drawable.connected_device));
                 connectStateImage.setVisibility(View.VISIBLE);
                 connectStateText.setText(getString(R.string.state_connect));
                 connectStateProgressBar.setVisibility(View.INVISIBLE);
             } else {
-                connectStateImage.setImageDrawable(AppCompatResources.getDrawable(MeasurementSvcActivity.this, R.drawable.ic_disconnect_spirokit));
+                connectStateImage.setImageDrawable(AppCompatResources.getDrawable(MeasurementSvcActivity.this, R.drawable.disconnected_device));
                 connectStateImage.setVisibility(View.VISIBLE);
                 connectStateText.setText(getString(R.string.state_disconnect));
                 connectStateProgressBar.setVisibility(View.INVISIBLE);
@@ -215,7 +215,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    connectStateImage.setImageDrawable(AppCompatResources.getDrawable(MeasurementSvcActivity.this, R.drawable.ic_connect_spirokit));
+                    connectStateImage.setImageDrawable(AppCompatResources.getDrawable(MeasurementSvcActivity.this, R.drawable.connected_device));
                     connectStateImage.setVisibility(View.VISIBLE);
                     connectStateText.setText(getString(R.string.state_connect));
                     connectStateProgressBar.setVisibility(View.INVISIBLE);
@@ -237,7 +237,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        connectStateImage.setImageDrawable(AppCompatResources.getDrawable(MeasurementSvcActivity.this, R.drawable.ic_disconnect_spirokit));
+                        connectStateImage.setImageDrawable(AppCompatResources.getDrawable(MeasurementSvcActivity.this, R.drawable.disconnected_device));
                         connectStateImage.setVisibility(View.VISIBLE);
                         connectStateText.setText(getString(R.string.state_disconnect));
                         connectStateProgressBar.setVisibility(View.INVISIBLE);
