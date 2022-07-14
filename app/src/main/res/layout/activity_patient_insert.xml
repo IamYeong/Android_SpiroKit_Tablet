@@ -31,11 +31,14 @@
             />
 
         <TextView
+            android:id="@+id/tv_title_bar_patient"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="15sp"
             android:fontFamily="@font/nanum_gothic_bold"
             android:text="@string/add_patient"
+            android:textColor="@color/gray_dark"
+
             app:layout_constraintStart_toEndOf="@id/img_btn_back_insert_patient"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -51,7 +54,7 @@
             android:background="@drawable/button_shape"
             android:backgroundTint="@color/primary_color"
             android:textColor="@color/white"
-            android:text="@string/add"
+            android:text="@string/save"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -219,6 +222,7 @@
                         android:textColorHint="@color/gray"
                         android:textSize="12sp"
                         android:padding="10dp"
+                        android:fontFamily="@font/nanum_barun_gothic_light"
                         />
 
                     <TextView
@@ -243,24 +247,28 @@
                         <android.widget.Button
                             android:id="@+id/btn_male_insert_patient"
                             android:layout_width="wrap_content"
-                            android:layout_height="50dp"
+                            android:layout_height="40dp"
                             android:layout_margin="10dp"
                             android:layout_weight="1"
                             android:background="@drawable/button_shape"
                             android:backgroundTint="@color/white"
                             android:elevation="10dp"
-                            android:text="@string/male" />
+                            android:text="@string/male"
+                            android:fontFamily="@font/nanum_barun_gothic_light"
+                            />
 
                         <android.widget.Button
                             android:id="@+id/btn_female_insert_patient"
                             android:layout_width="wrap_content"
-                            android:layout_height="50dp"
+                            android:layout_height="40dp"
                             android:layout_margin="10dp"
                             android:layout_weight="1"
                             android:background="@drawable/button_shape"
                             android:backgroundTint="@color/white"
                             android:elevation="10dp"
-                            android:text="@string/female" />
+                            android:text="@string/female"
+                            android:fontFamily="@font/nanum_barun_gothic_light"
+                            />
 
                     </LinearLayout>
 
@@ -284,10 +292,13 @@
                         android:layout_marginBottom="20dp"
                         android:background="@drawable/button_shape"
                         android:backgroundTint="@color/white"
-                        android:drawableEnd="@drawable/ic_baseline_date_range_30_black"
+                        android:drawableEnd="@drawable/calendar"
                         android:paddingHorizontal="20dp"
 
-                        android:text="yyyy.MM.dd" />
+                        android:text="yyyy.MM.dd"
+
+                        android:fontFamily="@font/nanum_barun_gothic_light"
+                        />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -329,6 +340,7 @@
                             android:textSize="12sp"
                             android:paddingHorizontal="20dp"
                             android:inputType="number"
+                            android:fontFamily="@font/nanum_barun_gothic_light"
 
                             android:textColorHint="@color/gray"
 
@@ -371,6 +383,7 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@id/et_height_insert_patient"
+                            android:fontFamily="@font/nanum_barun_gothic_light"
 
                             android:padding="10dp"
                             />
@@ -386,7 +399,7 @@
                         android:layout_marginBottom="10dp"
 
                         android:text="@string/human_race"
-                        android:textSize="15sp" />
+                        />
 
                     <androidx.appcompat.widget.AppCompatSpinner
                         android:id="@+id/spinner_human_race_insert_patient"
@@ -395,7 +408,9 @@
                         android:layout_marginHorizontal="40dp"
                         android:layout_marginBottom="20dp"
                         android:background="@drawable/spinner_background_white"
-                        android:elevation="5dp" />
+                        android:elevation="2dp"
+                        android:fontFamily="@font/nanum_barun_gothic_light"
+                        />
 
 
                 </LinearLayout>
@@ -430,7 +445,7 @@
                         android:layout_marginStart="40dp"
                         android:layout_marginTop="20dp"
 
-                        android:layout_marginBottom="10dp"
+
 
                         android:text="@string/have_smoked"
                          />
@@ -453,6 +468,7 @@
                             android:backgroundTint="@color/white"
                             android:elevation="10dp"
 
+                            android:fontFamily="@font/nanum_barun_gothic_light"
                             android:text="있음" />
 
                         <android.widget.Button
@@ -465,6 +481,7 @@
                             android:backgroundTint="@color/white"
                             android:elevation="10dp"
 
+                            android:fontFamily="@font/nanum_barun_gothic_light"
                             android:text="없음" />
 
                     </LinearLayout>
@@ -473,12 +490,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="40dp"
-                        android:layout_marginTop="10dp"
+
 
                         android:layout_marginBottom="10dp"
 
                         android:text="@string/is_smoking"
-                        android:textSize="15sp" />
+
+                        />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -497,7 +515,9 @@
                             android:background="@drawable/button_shape"
                             android:backgroundTint="@color/white"
                             android:elevation="10dp"
-                            android:text="@string/smoking" />
+                            android:text="@string/smoking"
+                            android:fontFamily="@font/nanum_barun_gothic_light"
+                            />
 
                         <android.widget.Button
                             android:id="@+id/btn_not_now_smoke_insert_patient"
@@ -508,7 +528,9 @@
                             android:background="@drawable/button_shape"
                             android:backgroundTint="@color/white"
                             android:elevation="10dp"
-                            android:text="@string/not_smoking" />
+                            android:text="@string/not_smoking"
+                            android:fontFamily="@font/nanum_barun_gothic_light"
+                            />
 
                     </LinearLayout>
 
@@ -521,7 +543,8 @@
                         android:layout_marginBottom="10dp"
 
                         android:text="@string/start_smoke_date"
-                        android:textSize="15sp" />
+
+                        />
 
                     <android.widget.Button
                         android:id="@+id/btn_start_smoke_date_insert_patient"
@@ -531,9 +554,11 @@
                         android:layout_marginBottom="20dp"
                         android:background="@drawable/button_shape"
                         android:backgroundTint="@color/white"
-                        android:drawableEnd="@drawable/ic_baseline_date_range_30_black"
+                        android:drawableEnd="@drawable/calendar"
                         android:paddingHorizontal="20dp"
-                        android:text="yyyy.MM.dd" />
+                        android:text="yyyy.MM.dd"
+                        android:fontFamily="@font/nanum_barun_gothic_light"
+                        />
 
 
                     <TextView
@@ -545,7 +570,8 @@
                         android:layout_marginBottom="10dp"
 
                         android:text="@string/smoke_amount_day"
-                        android:textSize="15sp" />
+
+                        />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -569,6 +595,8 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             android:padding="10dp"
                             android:textSize="12sp"
+
+                            android:fontFamily="@font/nanum_barun_gothic_light"
                             />
 
                         <TextView
@@ -599,19 +627,22 @@
                         android:layout_marginBottom="10dp"
 
                         android:text="@string/stop_smoke_date"
-                        android:textSize="15sp" />
+
+                        />
 
                     <android.widget.Button
                         android:id="@+id/btn_stop_smoke_date_insert_patient"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="40dp"
                         android:layout_marginHorizontal="40dp"
                         android:layout_marginBottom="20dp"
                         android:background="@drawable/button_shape"
                         android:backgroundTint="@color/white"
-                        android:drawableEnd="@drawable/ic_baseline_date_range_30_black"
+                        android:drawableEnd="@drawable/calendar"
                         android:paddingHorizontal="20dp"
-                        android:text="yyyy.MM.dd" />
+                        android:text="yyyy.MM.dd"
+                        android:fontFamily="@font/nanum_barun_gothic_light"
+                        />
 
 
                 </LinearLayout>

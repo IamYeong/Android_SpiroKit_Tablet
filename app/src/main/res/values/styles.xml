@@ -29,16 +29,19 @@
 
     <style name="SpiroKitTextView" parent="@style/Widget.AppCompat.TextView">
         <item name="android:fontFamily">@font/nanum_barun_gothic</item>
+        <item name="android:textColor">@color/black</item>
         <item name="android:textSize">12sp</item>
     </style>
 
     <style name="SpiroKitButton" parent="@style/Widget.AppCompat.Button">
         <item name="android:fontFamily">@font/nanum_barun_gothic</item>
+        <item name="android:textColor">@color/black</item>
         <item name="android:textSize">12sp</item>
     </style>
 
     <style name="SpiroKitEditText" parent="@style/Widget.AppCompat.EditText">
         <item name="android:fontFamily">@font/nanum_barun_gothic</item>
+        <item name="android:textColor">@color/black</item>
         <item name="android:textSize">12sp</item>
 
     </style>

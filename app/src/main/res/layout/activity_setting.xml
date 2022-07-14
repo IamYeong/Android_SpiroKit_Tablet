@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/times"
 
-            android:textColor="@color/black"
+            android:textColor="@color/gray_dark"
             android:text="@string/setting"
             android:textSize="15sp"
 
@@ -293,10 +293,6 @@
             >
 
             <include
-                layout="@layout/item_setting_operator_management"
-                />
-
-            <include
                 layout="@layout/item_setting_user"
                 />
 
@@ -304,7 +300,9 @@
                 layout="@layout/item_setting_app_version"
                 />
 
-
+            <include
+                layout="@layout/item_setting_operator_management"
+                />
 
         </LinearLayout>
 

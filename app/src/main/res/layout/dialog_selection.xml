@@ -59,6 +59,8 @@
             android:paddingVertical="12dp"
             android:elevation="10dp"
             android:layout_margin="10dp"
+
+            android:fontFamily="@font/nanum_barun_gothic_light"
             />
 
         <android.widget.Button
@@ -79,6 +81,8 @@
             android:paddingHorizontal="70dp"
             android:paddingVertical="12dp"
             android:elevation="10dp"
+
+            android:fontFamily="@font/nanum_barun_gothic_light"
             />
 
     </LinearLayout>

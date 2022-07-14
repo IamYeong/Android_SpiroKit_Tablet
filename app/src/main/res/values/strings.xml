@@ -10,6 +10,7 @@
     <string name="confirm">확인</string>
     <string name="cancel">취소</string>
     <string name="delete">삭제</string>
+    <string name="save">저장</string>
     <string name="fail_server_response">서버응답 실패</string>
     
     <string name="checkup">검사</string>
@@ -82,7 +83,8 @@
     <string name="have">있음</string>
     <string name="have_not">없음</string>
 
-    <string name="add_patient">환자 추가</string>
+    <string name="add_patient">환자 등록</string>
+    <string name="modify_patient">환자 수정</string>
     <string name="close">닫기</string>
     <string name="add">등록</string>
     
@@ -126,16 +128,18 @@
     <string name="checkup_doctor_is">검사자 : %1$s (%2$s)</string>
     <string name="family_doctor_is">주치의 : %1$s</string>
     <string name="doctor_is">주치의 : %1$s (%2$s)\n검사자 : %3$s (%4$s)</string>
-    <string name="chart_number_is">차트넘버 : %1$s</string>
-    <string name="gender_is">성별 : %1$s</string>
-    <string name="height_is">신장 : %1$d cm</string>
-    <string name="weight_is">체중 : %1$d kg</string>
-    <string name="birth_is">생년월일 : %1$s</string>
-    <string name="human_race_is">인종 : %1$s</string>
-    <string name="smoke_start_date_is">흡연시작일 : %1$s</string>
-    <string name="smoke_stop_date_is">금연일 : %1$s</string>
-    <string name="smoking_per_day_is">하루 흡연량 : %1$s 갑</string>
-    <string name="smoking_now_is">현재 흡연 여부 : %1$s</string>
+    <string name="chart_number_is">• 차트넘버 : %1$s</string>
+    <string name="_chart_number_is">차트넘버 : %1$s</string>
+    <string name="gender_is">• 성별 : %1$s</string>
+    <string name="height_is">• 신장 : %1$d cm</string>
+    <string name="weight_is">• 체중 : %1$d kg</string>
+    <string name="birth_is">• 생년월일 : %1$s</string>
+    <string name="human_race_is">• 인종 : %1$s</string>
+    <string name="smoke_start_date_is">• 흡연시작일 : %1$s</string>
+    <string name="smoke_stop_date_is">• 금연일 : %1$s</string>
+    <string name="smoking_per_day_is">• 하루 흡연량 : %1$s 갑</string>
+    <string name="smoking_per_day_is_na">• 하루 흡연량 : %1$s</string>
+    <string name="smoking_now_is">• 현재 흡연 여부 : %1$s</string>
 
     <string name="please_select_patient">환자를 선택해주세요</string>
     <string name="please_add_operator">작업자를 먼저 추가해주세요</string>

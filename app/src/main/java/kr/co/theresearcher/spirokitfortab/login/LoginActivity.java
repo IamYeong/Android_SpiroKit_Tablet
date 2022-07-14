@@ -140,6 +140,7 @@ public class LoginActivity extends AppCompatActivity {
                         SharedPreferencesManager.setOfficeID(LoginActivity.this, id);
                         SharedPreferencesManager.setOfficePassword(LoginActivity.this, password);
                         SharedPreferencesManager.setOfficeHashed(LoginActivity.this, office.getHashed());
+                        SharedPreferencesManager.setOfficeName(LoginActivity.this, office.getName());
 
                         if ((office.getOfficeID().equals(id)) && (office.getOfficePassword().equals(password))) {
                             handler.post(new Runnable() {

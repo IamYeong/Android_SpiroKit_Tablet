@@ -32,8 +32,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textColor="@color/gray_dark"
+            android:textSize="15sp"
 
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -60,7 +60,7 @@
         <EditText
             android:id="@+id/et_nickname_join"
             android:layout_width="300dp"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
 
             android:background="@drawable/text_field_inner_shadow_white"
 
@@ -71,13 +71,16 @@
             android:hint="@string/nickname"
             android:inputType="textEmailAddress"
 
+            android:textSize="12sp"
+            android:padding="10dp"
+            android:fontFamily="@font/nanum_barun_gothic_light"
             />
 
 
         <EditText
             android:id="@+id/et_email_join"
             android:layout_width="300dp"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
 
             android:background="@drawable/text_field_inner_shadow_white"
 
@@ -89,12 +92,16 @@
             android:hint="@string/user_email"
             android:inputType="textEmailAddress"
 
+            android:textSize="12sp"
+            android:padding="10dp"
+            android:fontFamily="@font/nanum_barun_gothic_light"
+
             />
 
         <EditText
             android:id="@+id/et_password_join"
             android:layout_width="300dp"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
 
             android:background="@drawable/text_field_inner_shadow_white"
 
@@ -105,6 +112,10 @@
 
             android:hint="@string/user_password"
             android:inputType="textPassword"
+
+            android:textSize="12sp"
+            android:padding="10dp"
+            android:fontFamily="@font/nanum_barun_gothic_light"
 
             />
 
@@ -121,7 +132,7 @@
         <EditText
             android:id="@+id/et_password_confirm_join"
             android:layout_width="300dp"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
 
             android:background="@drawable/text_field_inner_shadow_white"
 
@@ -133,12 +144,16 @@
             android:hint="@string/confirm_password"
             android:inputType="textPassword"
 
+            android:textSize="12sp"
+            android:padding="10dp"
+            android:fontFamily="@font/nanum_barun_gothic_light"
+
             />
 
         <android.widget.Button
             android:id="@+id/btn_join_user"
             android:layout_width="300dp"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:background="@drawable/text_field_background_round_white"
             android:backgroundTint="@color/primary_color"
 

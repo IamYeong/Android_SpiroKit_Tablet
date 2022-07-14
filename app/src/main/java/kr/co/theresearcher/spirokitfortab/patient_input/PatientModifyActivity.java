@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
@@ -45,6 +46,7 @@ public class PatientModifyActivity extends AppCompatActivity {
     private Button insertButton, maleButton, femaleButton, smokeButton, nonSmokeButton, haveSmokeButton, haveNotSmokeButton
             , birthSelectButton, startSmokeDateSelectButton, stopSmokeDateSelectButton;
     private AppCompatSpinner humanRaceSpinner;
+    private TextView titleText;
 
     private ArrayAdapter<String> humanRaceAdapter;
     private List<HumanRace> humanRaceDatabases;
@@ -77,6 +79,7 @@ public class PatientModifyActivity extends AppCompatActivity {
         inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
         backButton = findViewById(R.id.img_btn_back_insert_patient);
+        titleText = findViewById(R.id.tv_title_bar_patient);
 
         chartNumberField = findViewById(R.id.et_chart_number_insert_patient);
 
@@ -98,6 +101,8 @@ public class PatientModifyActivity extends AppCompatActivity {
         birthSelectButton = findViewById(R.id.btn_birth_date_insert_patient);
         startSmokeDateSelectButton = findViewById(R.id.btn_start_smoke_date_insert_patient);
         stopSmokeDateSelectButton = findViewById(R.id.btn_stop_smoke_date_insert_patient);
+
+        titleText.setText(getString(R.string.modify_patient));
 
         smokeAmountField.setFocusableInTouchMode(true);
         smokeAmountField.setText("0");

@@ -204,6 +204,8 @@ public class SettingActivity extends AppCompatActivity {
 
         logoutButton = findViewById(R.id.btn_logout_setting);
 
+        userNickname.setText(SharedPreferencesManager.getOfficeName(SettingActivity.this));
+
         operatorCard = findViewById(R.id.card_operator_management);
         operatorCard.setOnClickListener(new View.OnClickListener() {
             @Override
