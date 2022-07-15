@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
@@ -44,6 +45,8 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.sql.Array;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -93,6 +96,7 @@ public class SettingActivity extends AppCompatActivity {
     private Handler handler = new Handler(Looper.getMainLooper());
 
     private Runnable stopScanRunnable = new Runnable() {
+        @SuppressLint("MissingPermission")
         @Override
         public void run() {
 
@@ -114,7 +118,7 @@ public class SettingActivity extends AppCompatActivity {
 
         @Override
         public void onError(ErrorResponse errorResponse) {
-            Log.e(getClass().getSimpleName(),"+++++++++++++ERROR RESPONSE+++++++++++\n" + errorResponse.getCode());
+            Log.e(getClass().getSimpleName(),"+++++++++++++ERROR RESPONSE+++++++++++\n" + errorResponse.getCode() + "\n" + errorResponse.getMessage());
             loadingDialog.dismiss();
         }
     };
@@ -202,6 +206,7 @@ public class SettingActivity extends AppCompatActivity {
             registerForActivityResult(
                     new ActivityResultContracts.StartActivityForResult(),
                     new ActivityResultCallback<ActivityResult>() {
+                        @SuppressLint("MissingPermission")
                         @Override
                         public void onActivityResult(ActivityResult result) {
 
@@ -255,6 +260,7 @@ public class SettingActivity extends AppCompatActivity {
         rv = findViewById(R.id.rv_setting);
         adapter = new BluetoothScanResultsAdapter(SettingActivity.this);
         adapter.setLookupListener(new OnDeviceLookupListener() {
+            @SuppressLint("MissingPermission")
             @Override
             public void onDeviceLookup(ScanResult result) {
 
@@ -397,6 +403,7 @@ public class SettingActivity extends AppCompatActivity {
         filters.add(scanFilter);
 
         scanCallback = new ScanCallback() {
+            @SuppressLint("MissingPermission")
             @Override
             public void onScanResult(int callbackType, ScanResult result) {
                 super.onScanResult(callbackType, result);
@@ -715,13 +722,32 @@ public class SettingActivity extends AppCompatActivity {
                         String stop = patient.getString(JsonKeys.JSON_KEY_STOP_SMOKING_WHEN);
                         String amount = patient.getString(JsonKeys.JSON_KEY_SMOKING_AMOUNT);
 
-                        Log.e(getClass().getSimpleName(), "start : " + start + ", stop" + stop + ", " + amount);
 
-                        p.setStartSmokingDay(start);
-                        p.setStopSmokingDay(stop);
-                        p.setSmokingAmountPerDay(amount);
-                        p.setSmokingPeriod(0);
-                        p.setNowSmoking(0);
+                        //Log.e(getClass().getSimpleName(), "start : " + start + ", stop : " + stop + ", " + "now : " + amount);
+
+                        if (start.contains("0000-00-00")) {
+                            p.setStartSmokingDay(null);
+                            p.setSmokingAmountPerDay("0");
+                            p.setStopSmokingDay(null);
+                            p.setNowSmoking(0);
+                            p.setSmokingPeriod(0);
+
+                        } else {
+                            p.setStartSmokingDay(start);
+                            p.setSmokingAmountPerDay(amount);
+
+                            if (stop.contains("0000-00-00")) {
+                                p.setStopSmokingDay(null);
+                                p.setNowSmoking(1);
+                                p.setSmokingPeriod(0);
+
+                            } else {
+                                p.setStopSmokingDay(stop);
+                                p.setNowSmoking(0);
+                                p.setSmokingPeriod(0);
+
+                            }
+                        }
 
                         p.setIsDeleted(patient.getInt(JsonKeys.JSON_KEY_IS_DELETED));
 

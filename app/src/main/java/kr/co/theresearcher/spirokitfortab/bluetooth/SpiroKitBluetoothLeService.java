@@ -1,5 +1,6 @@
 package kr.co.theresearcher.spirokitfortab.bluetooth;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -32,6 +33,7 @@ public class SpiroKitBluetoothLeService extends Service {
     private boolean isConnect = false;
 
     private BluetoothGattCallback gattCallback = new BluetoothGattCallback() {
+        @SuppressLint("MissingPermission")
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             super.onConnectionStateChange(gatt, status, newState);
@@ -70,6 +72,7 @@ public class SpiroKitBluetoothLeService extends Service {
 
         }
 
+        @SuppressLint("MissingPermission")
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             super.onServicesDiscovered(gatt, status);
@@ -168,6 +171,7 @@ public class SpiroKitBluetoothLeService extends Service {
 
     }
 
+    @SuppressLint("MissingPermission")
     public boolean connect(String deviceAddress) {
 
         Log.d(getClass().getSimpleName(), "service connect() call");
@@ -180,6 +184,7 @@ public class SpiroKitBluetoothLeService extends Service {
 
     }
 
+    @SuppressLint("MissingPermission")
     public void disconnect() {
 
         if (bluetoothGatt != null) {
@@ -191,6 +196,7 @@ public class SpiroKitBluetoothLeService extends Service {
 
     }
 
+    @SuppressLint("MissingPermission")
     public void close() {
         if (bluetoothGatt != null) {
             bluetoothGatt.close();
@@ -256,6 +262,7 @@ public class SpiroKitBluetoothLeService extends Service {
     }
 
 
+    @SuppressLint("MissingPermission")
     public void writeCharacteristic(String data) {
 
         Thread thread = new Thread() {

@@ -44,6 +44,21 @@ public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
 
+        String dateString = null;
+        SimpleDateFormat resultFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+        try {
+            long time = resultFormat.parse(dateString).getTime();
+
+            System.out.println(time);
+            System.out.println(resultFormat.format(time));
+        } catch (ParseException e) {
+            e.getMessage();
+            e.toString();
+            e.getCause();
+        }
+
+        /*
         String dateString = "2022-07-12 09:58:26.453264";
         String subString = dateString.substring(0, dateString.length() - 7);
         System.out.println(subString);
@@ -58,6 +73,8 @@ public class ExampleUnitTest {
 
         }
 
+
+         */
 
         /*
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS");

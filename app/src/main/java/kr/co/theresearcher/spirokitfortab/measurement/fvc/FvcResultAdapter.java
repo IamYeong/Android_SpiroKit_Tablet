@@ -149,6 +149,8 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
             @Override
             public void onClick(View v) {
 
+                if (holder.getAdapterPosition() == -1) return;
+
                 for (ResultFVC result : fvcResults) result.setSelected(false);
                 fvcResults.get(holder.getAdapterPosition()).setSelected(true);
                 orderSelectedListener.onOrderSelected(holder.getAdapterPosition());
@@ -160,6 +162,8 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
         holder.getDeleteButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (holder.getAdapterPosition() == -1) return;
 
                 SelectionDialog selectionDialog = new SelectionDialog(context);
                 selectionDialog.setTitle(context.getString(R.string.question_delete_history));

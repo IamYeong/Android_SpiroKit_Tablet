@@ -136,7 +136,16 @@ public class MeasurementSvcActivity extends AppCompatActivity {
                 connectStateProgressBar.setVisibility(View.INVISIBLE);
 
 
-                mService.connect(SharedPreferencesManager.getDeviceMacAddress(MeasurementSvcActivity.this));
+                if (SharedPreferencesManager.getDeviceMacAddress(MeasurementSvcActivity.this) == null) {
+
+                    ConfirmDialog confirmDialog = new ConfirmDialog(MeasurementSvcActivity.this);
+                    confirmDialog.setTitle(getString(R.string.not_found_saved_device));
+                    confirmDialog.show();
+
+
+                } else {
+                    mService.connect(SharedPreferencesManager.getDeviceMacAddress(MeasurementSvcActivity.this));
+                }
             }
 
         }
@@ -317,16 +326,22 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
                 if (mService.isConnect()) {
                     ConfirmDialog confirmDialog = new ConfirmDialog(MeasurementSvcActivity.this);
-                    confirmDialog.setTitle("이미 연결돼있습니다, 검사를 시작하세요");
+                    confirmDialog.setTitle(getString(R.string.already_connect));
                     confirmDialog.show();
 
                     return;
                 }
 
-                mService.connect(SharedPreferencesManager.getDeviceMacAddress(MeasurementSvcActivity.this));
-                connectStateImage.setVisibility(View.INVISIBLE);
-                connectStateProgressBar.setVisibility(View.VISIBLE);
-                connectStateText.setText(getString(R.string.connecting));
+                if (SharedPreferencesManager.getDeviceMacAddress(MeasurementSvcActivity.this) == null) {
+                    ConfirmDialog confirmDialog = new ConfirmDialog(MeasurementSvcActivity.this);
+                    confirmDialog.setTitle(getString(R.string.not_found_saved_device));
+                    confirmDialog.show();
+                } else {
+                    mService.connect(SharedPreferencesManager.getDeviceMacAddress(MeasurementSvcActivity.this));
+                    connectStateImage.setVisibility(View.INVISIBLE);
+                    connectStateProgressBar.setVisibility(View.VISIBLE);
+                    connectStateText.setText(getString(R.string.connecting));
+                }
 
             }
         });
@@ -619,13 +634,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
                 for (int i = 0; i < pulseWidthList.size(); i++) {
 
                     String value = pulseWidthList.get(i);
-                    if (pulseWidthList.size() - 1 == i) {
-                        byte[] data = value.getBytes();
-                        stringBuilder.append(Integer.toString(conversionIntegerFromByteArray(data)));
-                        break;
-                    }
                     stringBuilder.append(value);
-
 
                 }
 

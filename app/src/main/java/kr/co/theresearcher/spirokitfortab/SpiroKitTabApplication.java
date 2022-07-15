@@ -15,6 +15,7 @@ public class SpiroKitTabApplication extends Application {
         TheSpiroKitErrorHandler errorHandler = new TheSpiroKitErrorHandler(getApplicationContext());
         SpiroKitVolley.createRequestQueue(getApplicationContext());
 
+
     }
 
     @Override

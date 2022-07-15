@@ -262,7 +262,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                 if (SharedPreferencesManager.getDeviceMacAddress(MeasurementFvcActivity.this) == null) {
 
                     ConfirmDialog confirmDialog = new ConfirmDialog(MeasurementFvcActivity.this);
-                    confirmDialog.setTitle("CANT CONNECT");
+                    confirmDialog.setTitle(getString(R.string.not_found_saved_device));
                     confirmDialog.show();
 
 
@@ -796,11 +796,6 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                 for (int i = 0; i < pulseWidthList.size(); i++) {
 
                     String value = pulseWidthList.get(i);
-                    if (pulseWidthList.size() - 1 == i) {
-                        byte[] data = value.getBytes();
-                        stringBuilder.append(Integer.toString(conversionIntegerFromByteArray(data)));
-                        break;
-                    }
                     stringBuilder.append(value);
 
 

@@ -65,8 +65,9 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
     private RecyclerView patientsRV, measurementsRV;
     private ImageButton dateRangeButton, modifyButton;
-    private TextView patientNameText, patientInfoText, dateRangeText, patientsEmptyText, measurementsEmptyText;
+    private TextView patientNameText, patientInfoText, dateRangeText;
     private FrameLayout volumeFlowLayout, volumeTimeLayout;
+    private FrameLayout patientsEmptyView, calEmptyView;
     private CardView patientCard;
 
     private PatientsAdapter patientsAdapter;
@@ -104,7 +105,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
                 isFocused = false;
                 patientsRV.setVisibility(View.INVISIBLE);
-                patientsEmptyText.setVisibility(View.INVISIBLE);
+                patientsEmptyView.setVisibility(View.INVISIBLE);
                 patientsRV.setClickable(true);
                 patientSearchField.clearFocus();
 
@@ -140,8 +141,8 @@ public class PatientInformationFragment extends Fragment implements Observer {
         patientInfoText = view.findViewById(R.id.tv_content_patient_info_fragment);
         dateRangeText = view.findViewById(R.id.tv_date_range_patient_info_fragment);
         informationExpandImage = view.findViewById(R.id.img_expand_patient_info);
-        patientsEmptyText = view.findViewById(R.id.tv_empty_patients_notification);
-        measurementsEmptyText = view.findViewById(R.id.tv_empty_measurements_notification);
+        patientsEmptyView = view.findViewById(R.id.frame_empty_patients_notification);
+        calEmptyView = view.findViewById(R.id.frame_empty_measurements_notification);
         patientCard = view.findViewById(R.id.card_patient_info);
 
         volumeFlowLayout = view.findViewById(R.id.frame_volume_flow_graph_result_fragment);
@@ -406,12 +407,12 @@ public class PatientInformationFragment extends Fragment implements Observer {
                     @Override
                     public void run() {
                         if (patientList.size() > 0) {
-                            patientsEmptyText.setVisibility(View.INVISIBLE);
+                            patientsEmptyView.setVisibility(View.INVISIBLE);
                             patientsRV.setVisibility(View.VISIBLE);
                             patientsRV.setClickable(true);
                             updateUI();
                         } else {
-                            patientsEmptyText.setVisibility(View.VISIBLE);
+                            patientsEmptyView.setVisibility(View.VISIBLE);
                             patientInfoText.setText("");
                             patientNameText.setText("N/A");
 
@@ -468,10 +469,10 @@ public class PatientInformationFragment extends Fragment implements Observer {
                     public void run() {
 
                         if (histories.size() > 0) {
-                            measurementsEmptyText.setVisibility(View.INVISIBLE);
+                            calEmptyView.setVisibility(View.INVISIBLE);
                             //historySelectedListener.onHistorySelected(histories.get(0));
                         } else {
-                            measurementsEmptyText.setVisibility(View.VISIBLE);
+                            calEmptyView.setVisibility(View.VISIBLE);
                             //historySelectedListener.onHistorySelected(null);
                         }
                         measurementAdapter.notifyDataSetChanged();
@@ -566,8 +567,8 @@ public class PatientInformationFragment extends Fragment implements Observer {
         }
 
         String smokingAmount = patient.getSmokingAmountPerDay();
-        if ((smokingAmount == null) || (smokingAmount.equals("null")) || (smokingAmount.isEmpty())) {
-            info.append(getString(R.string.smoking_per_day_is, getString(R.string.not_applicable))).append("\n");
+        if ((startSmokingDateString == null) || (startSmokingDateString.equals("null")) || (startSmokingDateString.isEmpty())) {
+            info.append(getString(R.string.smoking_per_day_is_na, getString(R.string.not_applicable))).append("\n");
         } else {
             info.append(getString(R.string.smoking_per_day_is, smokingAmount)).append("\n");
         }

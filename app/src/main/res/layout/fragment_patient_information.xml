@@ -214,8 +214,8 @@
                     android:layout_marginVertical="10dp"
                     />
 
-                <TextView
-                    android:id="@+id/tv_empty_measurements_notification"
+                <FrameLayout
+                    android:id="@+id/frame_empty_measurements_notification"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     app:layout_constraintTop_toTopOf="@id/rv_test_history_patient_info_fragment"
@@ -223,14 +223,26 @@
                     app:layout_constraintStart_toStartOf="@id/rv_test_history_patient_info_fragment"
                     app:layout_constraintEnd_toEndOf="@id/rv_test_history_patient_info_fragment"
                     android:background="@color/white"
-
-                    android:fontFamily="@font/nanum_gothic_bold"
-                    android:textSize="12sp"
-                    android:text="@string/empty_history"
-                    android:gravity="center"
-
                     android:visibility="invisible"
-                    />
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nanum_gothic_bold"
+                        android:text="@string/empty_history"
+                        android:textColor="@color/gray_dark"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:drawableStart="@drawable/patient_insert"
+                        android:padding="10dp"
+                        android:drawablePadding="10dp"
+
+                        />
+
+                </FrameLayout>
+
+
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -252,23 +264,39 @@
         android:clickable="false"
         />
 
-    <TextView
-        android:id="@+id/tv_empty_patients_notification"
+    <FrameLayout
+        android:id="@+id/frame_empty_patients_notification"
         android:layout_width="0dp"
         android:layout_height="0dp"
+
         app:layout_constraintTop_toTopOf="@id/rv_patients_info_fragment"
         app:layout_constraintBottom_toBottomOf="@id/rv_patients_info_fragment"
         app:layout_constraintStart_toStartOf="@id/rv_patients_info_fragment"
         app:layout_constraintEnd_toEndOf="@id/rv_patients_info_fragment"
+
         android:background="@color/white"
-
-        android:fontFamily="@font/nanum_gothic_bold"
-        android:textSize="12sp"
-        android:text="@string/empty_patient"
-        android:gravity="center"
-
         android:visibility="invisible"
-        />
+        >
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:fontFamily="@font/nanum_gothic_bold"
+            android:text="@string/empty_patient"
+            android:textColor="@color/gray_dark"
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+
+            android:drawableStart="@drawable/patient_insert"
+            android:drawablePadding="10dp"
+            android:padding="10dp"
+            />
+
+    </FrameLayout>
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

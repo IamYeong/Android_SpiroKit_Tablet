@@ -136,6 +136,8 @@ public class SvcResultAdapter extends RecyclerView.Adapter<SvcResultViewHolder> 
             @Override
             public void onClick(View v) {
 
+                if (holder.getAdapterPosition() == -1) return;
+
                 for (ResultSVC result : results) result.setSelected(false);
                 results.get(holder.getAdapterPosition()).setSelected(true);
                 orderSelectedListener.onOrderSelected(holder.getAdapterPosition());
@@ -146,6 +148,8 @@ public class SvcResultAdapter extends RecyclerView.Adapter<SvcResultViewHolder> 
         holder.getDeleteButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (holder.getAdapterPosition() == -1) return;
 
                 SelectionDialog selectionDialog = new SelectionDialog(context);
                 selectionDialog.setTitle(context.getString(R.string.question_delete_history));
