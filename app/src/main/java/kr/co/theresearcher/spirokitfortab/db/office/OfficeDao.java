@@ -1,6 +1,7 @@
 package kr.co.theresearcher.spirokitfortab.db.office;
 
 import androidx.room.Dao;
+import androidx.room.Insert;
 import androidx.room.Query;
 
 import java.util.List;
@@ -19,5 +20,11 @@ public interface OfficeDao {
 
     @Query("UPDATE office SET is_deleted = 1")
     void deleteOffice();
+
+    @Query("DELETE FROM OFFICE WHERE hashed == :officeHash")
+    void removeOffice(String officeHash);
+
+    @Insert
+    void insert(Office office);
 
 }

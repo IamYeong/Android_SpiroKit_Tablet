@@ -40,5 +40,15 @@ public class JsonKeys {
     public static final String JSON_KEY_CAL_DATE = "cal_date";
     public static final String JSON_KEY_IS_POST = "is_post";
     public static final String JSON_KEY_ORDER = "order_num";
+    public static final String JSON_KEY_LATEST_DAY = "latest_day";
+    public static final String JSON_KEY_RESULT = "result";
+    public static final String JSON_KEY_INSTANCE = "instance";
+    public static final String JSON_KEY_ITEMS = "items";
+    public static final String JSON_KEY_OFFICE = "office";
+    public static final String JSON_KEY_CODE = "code";
+    public static final String JSON_KEY_OFFICE_ID = "office_id";
+    public static final String JSON_KEY_OPERATORS = "operators";
+    public static final String JSON_KEY_HISTORIES = "calHistorys";
+    public static final String JSON_KEY_RAW_DATA_LIST = "calHistoryRawDatas";
 
 }

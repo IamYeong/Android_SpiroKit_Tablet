@@ -101,6 +101,23 @@ public class SettingActivity extends AppCompatActivity {
         }
     };
 
+    VolleyResponseListener volleyResponseListener = new VolleyResponseListener() {
+        @Override
+        public void onResponse(JSONObject jsonResponse) {
+
+            Log.e(getClass().getSimpleName(),"=++++++++++++++++++++++++\n" + jsonResponse.toString());
+            loadingDialog.dismiss();
+
+            handleResponse(jsonResponse);
+        }
+
+        @Override
+        public void onError(ErrorResponse errorResponse) {
+            Log.e(getClass().getSimpleName(),"++++++++++++++++++++++++\n" + errorResponse.getMessage());
+            loadingDialog.dismiss();
+        }
+    };
+
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
@@ -472,6 +489,9 @@ public class SettingActivity extends AppCompatActivity {
 
                     JSONArray operatorArray = new JSONArray();
                     List<Operator> operators = database.operatorDao().selectAll(office.getHashed());
+
+                    Log.e(getClass().getSimpleName(), "OPERATOR SIZE : " + operators.size());
+
                     for (Operator operator : operators) {
                         JSONObject operatorJsonObject = new JSONObject();
                         operatorJsonObject.put(JsonKeys.JSON_KEY_HASHED, operator.getHashed());
@@ -487,6 +507,9 @@ public class SettingActivity extends AppCompatActivity {
                     jsonObject.put(JsonKeys.JSON_KEY_OPERATOR, operatorArray);
 
                     List<Patient> patients = database.patientDao().selectAll(office.getHashed());
+
+                    Log.e(getClass().getSimpleName(), "PATIENT SIZE : " + patients.size());
+
                     JSONArray patientJsonArray = new JSONArray();
 
                     for (Patient patient : patients) {
@@ -494,6 +517,7 @@ public class SettingActivity extends AppCompatActivity {
                         String start = patient.getStartSmokingDay();
 
                         JSONObject patientJsonObject = new JSONObject();
+                        patientJsonObject.put(JsonKeys.JSON_KEY_HASHED, patient.getHashed());
                         patientJsonObject.put(JsonKeys.JSON_KEY_OFFICE_HASHED, patient.getOfficeHashed());
                         patientJsonObject.put(JsonKeys.JSON_KEY_CHART_NO, patient.getChartNumber());
                         patientJsonObject.put(JsonKeys.JSON_KEY_NAME, patient.getName());
@@ -504,6 +528,7 @@ public class SettingActivity extends AppCompatActivity {
                         patientJsonObject.put(JsonKeys.JSON_KEY_HUMAN_RACE, patient.getHumanRace());
 
                         if (start == null) {
+
                             patientJsonObject.put(JsonKeys.JSON_KEY_SMOKING_AMOUNT, null);
                             patientJsonObject.put(JsonKeys.JSON_KEY_SMOKING_PERIOD, null);
                             patientJsonObject.put(JsonKeys.JSON_KEY_SMOKING_IS_NOW, null);
@@ -516,7 +541,10 @@ public class SettingActivity extends AppCompatActivity {
                         patientJsonObject.put(JsonKeys.JSON_KEY_STOP_SMOKING_WHEN, patient.getStopSmokingDay());
                         patientJsonObject.put(JsonKeys.JSON_KEY_START_SMOKING_WHEN, patient.getStartSmokingDay());
                         patientJsonObject.put(JsonKeys.JSON_KEY_FROM_OS, patient.getOs());
+                        patientJsonObject.put(JsonKeys.JSON_KEY_LATEST_DAY, null);
                         patientJsonObject.put(JsonKeys.JSON_KEY_IS_DELETED, patient.getIsDeleted());
+
+                        patientJsonArray.put(patientJsonObject);
 
                     }
                     jsonObject.put(JsonKeys.JSON_KEY_PATIENT, patientJsonArray);
@@ -526,6 +554,8 @@ public class SettingActivity extends AppCompatActivity {
                     List<CalHistory> calHistories = database.calHistoryDao().selectAll(office.getHashed());
                     List<CalHistoryRawData> rawDataList = new ArrayList<>();
 
+                    Log.e(getClass().getSimpleName(), "HISTORY SIZE : " + calHistories.size());
+
                     JSONArray historyArray = new JSONArray();
                     JSONArray rawDataArray = new JSONArray();
 
@@ -533,7 +563,7 @@ public class SettingActivity extends AppCompatActivity {
 
                         JSONObject historyJsonObject = new JSONObject();
                         historyJsonObject.put(JsonKeys.JSON_KEY_HASHED, calHistory.getHashed());
-                        historyJsonObject.put(JsonKeys.JSON_KEY_OFFICE_HASHED, calHistory.getHashed());
+                        historyJsonObject.put(JsonKeys.JSON_KEY_OFFICE_HASHED, office.getHashed());
                         historyJsonObject.put(JsonKeys.JSON_KEY_OPERATOR_DOCTOR_HASH, calHistory.getFamilyDoctorHash());
                         historyJsonObject.put(JsonKeys.JSON_KEY_OPERATOR_HASH, calHistory.getOperatorHashed());
                         historyJsonObject.put(JsonKeys.JSON_KEY_PATIENT_HASH, calHistory.getPatientHashed());
@@ -545,7 +575,9 @@ public class SettingActivity extends AppCompatActivity {
 
                         historyArray.put(historyJsonObject);
 
-                        List<CalHistoryRawData> rawData = database.calHistoryRawDataDao().selectRawDataByHistory(calHistory.getHashed());
+                        List<CalHistoryRawData> rawData = database.calHistoryRawDataDao().selectAll(calHistory.getHashed());
+
+                        Log.e(getClass().getSimpleName(), "RAW SIZE : " + rawData.size());
 
                         rawDataList.addAll(rawData);
 
@@ -555,11 +587,14 @@ public class SettingActivity extends AppCompatActivity {
 
                     jsonObject.put(JsonKeys.JSON_KEY_CAL_HISTORY, historyArray);
 
+                    Log.e(getClass().getSimpleName(), "RAW TOTAL SIZE : " + rawDataList.size());
+
                     for (CalHistoryRawData raw : rawDataList) {
 
                         JSONObject rawJsonObject = new JSONObject();
                         rawJsonObject.put(JsonKeys.JSON_KEY_HASHED, raw.getHashed());
                         rawJsonObject.put(JsonKeys.JSON_KEY_HISTORY_HASH, raw.getCalHistoryHashed());
+                        rawJsonObject.put(JsonKeys.JSON_KEY_DATA, raw.getData());
                         rawJsonObject.put(JsonKeys.JSON_KEY_CAL_DATE, raw.getCalDate());
                         rawJsonObject.put(JsonKeys.JSON_KEY_IS_POST, raw.getIsPost());
                         rawJsonObject.put(JsonKeys.JSON_KEY_IS_DELETED_REF, raw.getIsDeletedReference());
@@ -570,32 +605,22 @@ public class SettingActivity extends AppCompatActivity {
 
                     }
 
+                    SpiroKitDatabase.removeInstance();
+
                     rawDataList.clear();
 
                     jsonObject.put(JsonKeys.JSON_KEY_RAW_DATA, rawDataArray);
 
                     Log.e(getClass().getSimpleName(), "++++++++++++++++++++++++++\n" + jsonObject.toString());
 
+                    //Log.e(getClass().getSimpleName(), "JSON LENGTH : " + jsonObject.toString().length());
                     //POST
-                    SpiroKitVolley.setVolleyListener(new VolleyResponseListener() {
-                        @Override
-                        public void onResponse(JSONObject jsonResponse) {
-
-                            Log.e(getClass().getSimpleName(),"=++++++++++++++++++++++++\n" + jsonResponse.toString());
-                            loadingDialog.dismiss();
-                        }
-
-                        @Override
-                        public void onError(ErrorResponse errorResponse) {
-                            Log.e(getClass().getSimpleName(),"++++++++++++++++++++++++\n" + errorResponse.toString());
-                            loadingDialog.dismiss();
-                        }
-                    });
-
+                    SpiroKitVolley.setVolleyListener(volleyResponseListener);
                     SpiroKitVolley.postJson(jsonObject);
 
-
                 } catch (JSONException e) {
+
+                    Log.e(getClass().getSimpleName(), "++++++++++++++++++++++++++=\n" + e.toString());
 
                 }
 
@@ -607,6 +632,60 @@ public class SettingActivity extends AppCompatActivity {
 
                  */
 
+
+
+
+                Looper.loop();
+            }
+        };
+
+        thread.start();
+
+    }
+
+    private void handleResponse(JSONObject jsonObject) {
+
+        Thread thread = new Thread() {
+
+            @Override
+            public void run() {
+                super.run();
+                Looper.prepare();
+
+                SpiroKitDatabase database = SpiroKitDatabase.getInstance(SettingActivity.this);
+                //office 하나만 삭제하면 CASCADE 로 연쇄삭제됨.
+                database.officeDao().removeOffice(SharedPreferencesManager.getOfficeHash(SettingActivity.this));
+
+                try {
+
+                    int resultCode = jsonObject.getInt(JsonKeys.JSON_KEY_RESULT);
+                    String instance = jsonObject.getString(JsonKeys.JSON_KEY_INSTANCE);
+                    JSONObject items = jsonObject.getJSONObject(JsonKeys.JSON_KEY_ITEMS);
+
+                    Log.e(getClass().getSimpleName(), "RESPONSE JSON SIZE : " + items.length());
+
+                    JSONObject office = items.getJSONObject(JsonKeys.JSON_KEY_OFFICE);
+                    Office o = new Office();
+                    o.setHashed(office.getString(JsonKeys.JSON_KEY_HASHED));
+                    o.setName(office.getString(JsonKeys.JSON_KEY_NAME));
+                    o.setCode(office.getString(JsonKeys.JSON_KEY_CODE));
+                    o.setTel(office.getString(JsonKeys.JSON_KEY_TEL));
+                    o.setAddress(office.getString(JsonKeys.JSON_KEY_ADDRESS));
+                    o.setCountryCode(office.getString(JsonKeys.JSON_KEY_COUNTRY_CODE));
+                    o.setIsUse(office.getInt(JsonKeys.JSON_KEY_IS_USE));
+                    o.setIsUseSync(office.getInt(JsonKeys.JSON_KEY_IS_USE_SYNC));
+                    o.setOfficeID(office.getString(JsonKeys.JSON_KEY_OFFICE_ID));
+                    o.setIsDeleted(office.getInt(JsonKeys.JSON_KEY_IS_DELETED));
+                    o.setOfficePassword(SharedPreferencesManager.getOfficePass(SettingActivity.this));
+
+                    database.officeDao().insert(o);
+
+                    JSONArray operators = items.getJSONArray(JsonKeys.JSON_KEY_OPERATORS);
+                    //for (JSONObject operatorObject : operators.)
+
+                } catch (JSONException e) {
+                    Log.e(getClass().getSimpleName(), e.getMessage());
+                }
 
 
 
