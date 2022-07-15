@@ -13,6 +13,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -129,17 +130,12 @@ public class MainActivity extends AppCompatActivity {
         resultContainer = findViewById(R.id.fragment_container_result_main);
 
         Display display = getWindowManager().getDefaultDisplay();
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        display.getRealMetrics(displayMetrics);
-
-        float density = getResources().getDisplayMetrics().density;
-        float displayWidth = displayMetrics.heightPixels / density;
-        float displayHeight = displayMetrics.widthPixels / density;
-
-        Log.d(getClass().getSimpleName(), "Density : " + density + ", Width : " + displayWidth + ", Height : " + displayHeight);
+        Point point = new Point();
+        display.getSize(point);
+        Log.e(getClass().getSimpleName(), "X : " + point.x + ", Y : " + point.y);
 
         ViewGroup.LayoutParams layoutParams = (ViewGroup.LayoutParams) patientInfoContainer.getLayoutParams();
-        layoutParams.width = (int)(displayHeight / 2.2f);
+        layoutParams.width = (int)((float)point.y / (float)3f);
         patientInfoContainer.setLayoutParams(layoutParams);
 
 
