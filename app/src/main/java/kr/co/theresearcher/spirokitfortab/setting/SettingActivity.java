@@ -46,6 +46,7 @@ import java.io.File;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import kr.co.theresearcher.spirokitfortab.R;
@@ -105,7 +106,7 @@ public class SettingActivity extends AppCompatActivity {
         @Override
         public void onResponse(JSONObject jsonResponse) {
 
-            Log.e(getClass().getSimpleName(),"=++++++++++++++++++++++++\n" + jsonResponse.toString());
+            Log.e(getClass().getSimpleName(),"=+++++++++wwwwwwwwww+++++++++++++++\n" + jsonResponse.toString());
             loadingDialog.dismiss();
 
             handleResponse(jsonResponse);
@@ -113,7 +114,7 @@ public class SettingActivity extends AppCompatActivity {
 
         @Override
         public void onError(ErrorResponse errorResponse) {
-            Log.e(getClass().getSimpleName(),"++++++++++++++++++++++++\n" + errorResponse.getMessage());
+            Log.e(getClass().getSimpleName(),"+++++++++++++ERROR RESPONSE+++++++++++\n" + errorResponse.getCode());
             loadingDialog.dismiss();
         }
     };
@@ -611,7 +612,6 @@ public class SettingActivity extends AppCompatActivity {
 
                     jsonObject.put(JsonKeys.JSON_KEY_RAW_DATA, rawDataArray);
 
-                    Log.e(getClass().getSimpleName(), "++++++++++++++++++++++++++\n" + jsonObject.toString());
 
                     //Log.e(getClass().getSimpleName(), "JSON LENGTH : " + jsonObject.toString().length());
                     //POST
@@ -624,17 +624,6 @@ public class SettingActivity extends AppCompatActivity {
 
                 }
 
-                /*
-
-                응답으로 reuslt 정수코드와 메시지, 동기화로 다시 저장할 데이터들이 온다.
-
-
-
-                 */
-
-
-
-
                 Looper.loop();
             }
         };
@@ -644,6 +633,10 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     private void handleResponse(JSONObject jsonObject) {
+
+        loadingDialog = new LoadingDialog(SettingActivity.this);
+        loadingDialog.setTitle(getString(R.string.server_sync_writing));
+        loadingDialog.show();
 
         Thread thread = new Thread() {
 
@@ -660,8 +653,10 @@ public class SettingActivity extends AppCompatActivity {
 
                     int resultCode = jsonObject.getInt(JsonKeys.JSON_KEY_RESULT);
                     String instance = jsonObject.getString(JsonKeys.JSON_KEY_INSTANCE);
-                    JSONObject items = jsonObject.getJSONObject(JsonKeys.JSON_KEY_ITEMS);
 
+                    Log.e(getClass().getSimpleName(), "RESULT : " + resultCode);
+
+                    JSONObject items = jsonObject.getJSONObject(JsonKeys.JSON_KEY_ITEMS);
                     Log.e(getClass().getSimpleName(), "RESPONSE JSON SIZE : " + items.length());
 
                     JSONObject office = items.getJSONObject(JsonKeys.JSON_KEY_OFFICE);
@@ -682,6 +677,116 @@ public class SettingActivity extends AppCompatActivity {
 
                     JSONArray operators = items.getJSONArray(JsonKeys.JSON_KEY_OPERATORS);
                     //for (JSONObject operatorObject : operators.)
+
+                    for (int i = 0; i < operators.length(); i++) {
+
+                        JSONObject operator = operators.getJSONObject(i);
+                        Operator op = new Operator();
+                        op.setHashed(operator.getString(JsonKeys.JSON_KEY_HASHED));
+                        op.setOfficeHashed(operator.getString(JsonKeys.JSON_KEY_OFFICE_HASHED));
+                        op.setName(operator.getString(JsonKeys.JSON_KEY_NAME));
+                        op.setWork(operator.getString(JsonKeys.JSON_KEY_WORK));
+                        op.setIsDeleted(operator.getInt(JsonKeys.JSON_KEY_IS_DELETED));
+                        //c_time 패스
+
+                        database.operatorDao().insertOperator(op);
+                    }
+
+                    JSONArray patients = items.getJSONArray(JsonKeys.JSON_KEY_PATIENTS);
+
+                    for (int i = 0; i < patients.length(); i++) {
+
+                        JSONObject patient = patients.getJSONObject(i);
+                        Patient p = new Patient.Builder()
+                                .hashed(patient.getString(JsonKeys.JSON_KEY_HASHED))
+                                .officeHashed(patient.getString(JsonKeys.JSON_KEY_OFFICE_HASHED))
+                                .chartNumber(patient.getString(JsonKeys.JSON_KEY_CHART_NO))
+                                .name(patient.getString(JsonKeys.JSON_KEY_NAME))
+                                .gender(patient.getString(JsonKeys.JSON_KEY_GENDER))
+                                .height(patient.getInt(JsonKeys.JSON_KEY_HEIGHT))
+                                .weight(patient.getInt(JsonKeys.JSON_KEY_WEIGHT))
+                                .birthDay(patient.getString(JsonKeys.JSON_KEY_BIRTHDAY))
+                                .humanRace(patient.getString(JsonKeys.JSON_KEY_HUMAN_RACE))
+
+                                //os 기본 a
+                                .build();
+
+                        String start = patient.getString(JsonKeys.JSON_KEY_START_SMOKING_WHEN);
+                        String stop = patient.getString(JsonKeys.JSON_KEY_STOP_SMOKING_WHEN);
+                        String amount = patient.getString(JsonKeys.JSON_KEY_SMOKING_AMOUNT);
+
+                        Log.e(getClass().getSimpleName(), "start : " + start + ", stop" + stop + ", " + amount);
+
+                        p.setStartSmokingDay(start);
+                        p.setStopSmokingDay(stop);
+                        p.setSmokingAmountPerDay(amount);
+                        p.setSmokingPeriod(0);
+                        p.setNowSmoking(0);
+
+                        p.setIsDeleted(patient.getInt(JsonKeys.JSON_KEY_IS_DELETED));
+
+                        database.patientDao().insertPatient(p);
+                    }
+
+                    JSONArray histories = items.getJSONArray(JsonKeys.JSON_KEY_HISTORIES);
+
+                    for (int i = 0; i < histories.length(); i++) {
+
+                        JSONObject history = histories.getJSONObject(i);
+
+                        CalHistory h = new CalHistory(
+                                history.getString(JsonKeys.JSON_KEY_HASHED),
+                                history.getString(JsonKeys.JSON_KEY_OFFICE_HASHED),
+                                history.getString(JsonKeys.JSON_KEY_OPERATOR_HASH),
+                                history.getString(JsonKeys.JSON_KEY_PATIENT_HASH),
+                                history.getString(JsonKeys.JSON_KEY_CAL_HISTORY_DATE),
+                                history.getString(JsonKeys.JSON_KEY_CAL_DIV),
+                                history.getString(JsonKeys.JSON_KEY_DEVICE_DIV),
+                                history.getInt(JsonKeys.JSON_KEY_IS_DELETED)
+                        );
+
+                        h.setFamilyDoctorHash(history.getString(JsonKeys.JSON_KEY_OPERATOR_DOCTOR_HASH));
+                        h.setIsDeletedReference(history.getInt(JsonKeys.JSON_KEY_IS_DELETED_REF));
+
+                        database.calHistoryDao().insertHistory(h);
+
+                    }
+
+                    JSONArray rawData = items.getJSONArray(JsonKeys.JSON_KEY_RAW_DATA_LIST);
+
+                    for (int i = 0; i < rawData.length(); i++) {
+
+                        JSONObject data = rawData.getJSONObject(i);
+
+                        CalHistoryRawData d = new CalHistoryRawData(
+                                data.getString(JsonKeys.JSON_KEY_HASHED),
+                                data.getString(JsonKeys.JSON_KEY_HISTORY_HASH),
+                                data.getString(JsonKeys.JSON_KEY_ORDER),
+                                data.getString(JsonKeys.JSON_KEY_DATA),
+                                data.getString(JsonKeys.JSON_KEY_CAL_DATE),
+                                data.getInt(JsonKeys.JSON_KEY_IS_POST)
+                        );
+
+                        d.setIsDeleted(data.getInt(JsonKeys.JSON_KEY_IS_DELETED));
+                        d.setIsDeletedReference(data.getInt(JsonKeys.JSON_KEY_IS_DELETED_REF));
+
+                        database.calHistoryRawDataDao().insertRawData(d);
+
+                    }
+
+                    SpiroKitDatabase.removeInstance();
+                    items = null;
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            loadingDialog.dismiss();
+
+                            ConfirmDialog confirmDialog = new ConfirmDialog(SettingActivity.this);
+                            confirmDialog.setTitle(getString(R.string.success_sync));
+                            confirmDialog.show();
+                        }
+                    });
 
                 } catch (JSONException e) {
                     Log.e(getClass().getSimpleName(), e.getMessage());

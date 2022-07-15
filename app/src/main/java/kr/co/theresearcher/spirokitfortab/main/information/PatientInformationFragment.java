@@ -559,14 +559,14 @@ public class PatientInformationFragment extends Fragment implements Observer {
         }
 
         String startSmokingDateString = patient.getStartSmokingDay();
-        if (startSmokingDateString == null) {
+        if ((startSmokingDateString == null) || (startSmokingDateString.equals("null")) || (startSmokingDateString.isEmpty())) {
             info.append(getString(R.string.smoke_start_date_is, getString(R.string.not_applicable))).append("\n");
         } else {
             info.append(getString(R.string.smoke_start_date_is, startSmokingDateString.substring(0, startSmokingDateString.length() - 9))).append("\n");
         }
 
         String smokingAmount = patient.getSmokingAmountPerDay();
-        if (startSmokingDateString == null) {
+        if ((smokingAmount == null) || (smokingAmount.equals("null")) || (smokingAmount.isEmpty())) {
             info.append(getString(R.string.smoking_per_day_is, getString(R.string.not_applicable))).append("\n");
         } else {
             info.append(getString(R.string.smoking_per_day_is, smokingAmount)).append("\n");
@@ -579,7 +579,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
         }
 
         String stopSmokingDateString = patient.getStopSmokingDay();
-        if (stopSmokingDateString == null) {
+        if ((stopSmokingDateString == null) || (stopSmokingDateString.equals("null")) || (stopSmokingDateString.isEmpty())) {
             info.append(getString(R.string.smoke_stop_date_is, getString(R.string.not_applicable))).append("\n");
         } else {
             info.append(getString(R.string.smoke_stop_date_is, stopSmokingDateString.subSequence(0, stopSmokingDateString.length() - 9))).append("\n");

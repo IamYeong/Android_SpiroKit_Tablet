@@ -196,6 +196,8 @@
     <string name="server_sync">서버 동기화</string>
 
     <string name="server_sync_waiting">서버와 데이터 동기화 중입니다</string>
+    <string name="server_sync_writing">서버에서 받은 데이터를 저장 중입니다</string>
+    <string name="success_sync">서버와 동기화에 성공했습니다</string>
 
     <string name="disconnected_with_device">디바이스와 연결이 끊어졌습니다</string>
     <string name="connected_with_device">디바이스와 연결되었습니다</string>
