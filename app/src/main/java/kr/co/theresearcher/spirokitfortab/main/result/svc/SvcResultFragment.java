@@ -324,7 +324,7 @@ public class SvcResultFragment extends Fragment implements Observer {
         graphView.setId(View.generateViewId());
         graphView.setCanvasSize(width, height);
         graphView.setX(60f, 0f);
-        graphView.setY(0.5f, -0.5f);
+        graphView.setY(0.5f * ((float)height / (float)width), -0.5f * ((float)height / (float)width));
         graphView.setMargin(30,30,60,30);
 
         graphView.commit();

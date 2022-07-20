@@ -93,8 +93,8 @@ public class MeasurementFvcActivity extends AppCompatActivity {
     private VolumeTimeGraphView volumeTimeGraphView;
 
 
-    private List<VolumeFlowResultView> volumeFlowResultViewList = new ArrayList<>();
-    private List<VolumeTimeResultView> volumeTimeResultViewList = new ArrayList<>();
+    private List<VolumeFlowGraphView> volumeFlowResultViewList = new ArrayList<>();
+    private List<VolumeTimeGraphView> volumeTimeResultViewList = new ArrayList<>();
     private List<String> pulseWidthList = new ArrayList<>();
     private RecyclerView rv;
     private Button completeButton, preSaveButton, postSaveButton;
@@ -906,8 +906,8 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                 patient.getGender()
         );
 
-        volumeFlowResultViewList.add(createVolumeFlowGraph(calc.getVolumeFlowGraph()));
-        volumeTimeResultViewList.add(createVolumeTimeGraph(calc.getForcedVolumeTimeGraph()));
+        volumeFlowResultViewList.add(createVolumeFlowGraph(calc.getVolumeFlowGraph(), resultVolumeFlowGraphLayout.getWidth(), resultVolumeFlowGraphLayout.getHeight()));
+        volumeTimeResultViewList.add(createVolumeTimeGraph(calc.getForcedVolumeTimeGraph(), resultVolumeTimeGraphLayout.getWidth(), resultVolumeTimeGraphLayout.getHeight()));
 
         ResultFVC resultFVC = new ResultFVC(hash);
         resultFVC.setFvc(calc.getFVC());
@@ -988,14 +988,15 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         thread.start();
     }
 
-    private VolumeTimeResultView createVolumeTimeGraph(List<ResultCoordinate> coordinates) {
+    private VolumeTimeGraphView createVolumeTimeGraph(List<ResultCoordinate> coordinates, int width, int height) {
 
-        VolumeTimeResultView volumeTimeResultView = new VolumeTimeResultView(this);
+        VolumeTimeGraphView volumeTimeResultView = new VolumeTimeGraphView(this);
         volumeTimeResultView.setId(View.generateViewId());
-        volumeTimeResultView.setCanvasSize(resultVolumeTimeGraphLayout.getWidth(), resultVolumeTimeGraphLayout.getHeight());
-        volumeTimeResultView.setX(0.8f, 0f);
-        volumeTimeResultView.setY(0.4f, 0f);
-        volumeTimeResultView.setMarkingCount(6, 8);
+        volumeTimeResultView.setCanvasSize(width, height);
+        volumeTimeResultView.setX(1.5f * ((float)width / (float)height), 0f);
+        volumeTimeResultView.setY(1f, 0f);
+        volumeTimeResultView.setMargin(30,30,60,30);
+
         volumeTimeResultView.commit();
 
         for (int i = 0; i < coordinates.size(); i++) {
@@ -1012,15 +1013,15 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         return volumeTimeResultView;
     }
 
-    private VolumeFlowResultView createVolumeFlowGraph(List<ResultCoordinate> coordinates) {
+    private VolumeFlowGraphView createVolumeFlowGraph(List<ResultCoordinate> coordinates, int width, int height) {
 
-        VolumeFlowResultView volumeFlowResultView = new VolumeFlowResultView(this);
+        VolumeFlowGraphView volumeFlowResultView = new VolumeFlowGraphView(this);
         volumeFlowResultView.setId(View.generateViewId());
-        volumeFlowResultView.setCanvasSize(resultVolumeFlowGraphLayout.getWidth(), resultVolumeFlowGraphLayout.getHeight());
-        volumeFlowResultView.setX(2f, 0f);
-        volumeFlowResultView.setY(1.25f, -1.25f);
-        //startPosition 없어도 됨.
-        volumeFlowResultView.setMarkingCount(6, 8);
+        volumeFlowResultView.setCanvasSize(width, height);
+        volumeFlowResultView.setX(1.2f * (((float)width / (float)height)), 0f);
+        volumeFlowResultView.setY(1.4f, -0.8f);
+        volumeFlowResultView.setMargin(30,30,60,30);
+
         volumeFlowResultView.commit();
 
         for (int i = 0; i < coordinates.size(); i++) {
@@ -1102,13 +1103,12 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
     private void initializeVolumeFlowResultGraph(int width, int height) {
 
-        VolumeFlowRunView volumeFlowResultView = new VolumeFlowRunView(MeasurementFvcActivity.this);
+        VolumeFlowGraphView volumeFlowResultView = new VolumeFlowGraphView(this);
         volumeFlowResultView.setId(View.generateViewId());
         volumeFlowResultView.setCanvasSize(width, height);
-        volumeFlowResultView.setX(2f, 0f);
-        volumeFlowResultView.setY(1.25f, -1.25f);
-        volumeFlowResultView.setxStartPosition(0.5f);
-        volumeFlowResultView.setMarkingCount(6, 10);
+        volumeFlowResultView.setX(1.2f * (((float)width / (float)height)), 0f);
+        volumeFlowResultView.setY(1.4f, -0.8f);
+        volumeFlowResultView.setMargin(30,30,60,30);
 
         volumeFlowResultView.commit();
 
@@ -1119,14 +1119,12 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
     private void initializeVolumeTimeResultGraph(int width, int height) {
 
-        VolumeTimeRunView volumeTimeResultView = new VolumeTimeRunView(MeasurementFvcActivity.this);
+        VolumeTimeGraphView volumeTimeResultView = new VolumeTimeGraphView(this);
         volumeTimeResultView.setId(View.generateViewId());
-
         volumeTimeResultView.setCanvasSize(width, height);
-        volumeTimeResultView.setX(0.8f, 0f);
-        volumeTimeResultView.setY(0.4f, 0f);
-        volumeTimeResultView.setMarkingCount(8, 6);
-        volumeTimeResultView.setxStartPosition(0f);
+        volumeTimeResultView.setX(1.5f * ((float)width / (float)height), 0f);
+        volumeTimeResultView.setY(1f, 0f);
+        volumeTimeResultView.setMargin(30,30,60,30);
 
         volumeTimeResultView.commit();
 

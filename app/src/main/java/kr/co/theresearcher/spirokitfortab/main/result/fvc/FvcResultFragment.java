@@ -210,7 +210,7 @@ public class FvcResultFragment extends Fragment implements Observer {
         VolumeTimeGraphView volumeTimeResultView = new VolumeTimeGraphView(context);
         volumeTimeResultView.setId(View.generateViewId());
         volumeTimeResultView.setCanvasSize(width, height);
-        volumeTimeResultView.setX(1.5f, 0f);
+        volumeTimeResultView.setX(1.5f *  ((float)width / (float)height), 0f);
         volumeTimeResultView.setY(1f, 0f);
         volumeTimeResultView.setMargin(30,30,60,30);
 

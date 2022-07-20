@@ -455,7 +455,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
                 svcGraphView.setId(View.generateViewId());
                 svcGraphView.setCanvasSize(width, height);
                 svcGraphView.setX(60f, 0f);
-                svcGraphView.setY(0.5f, -0.5f);
+                svcGraphView.setY(0.5f  * ((float)height / (float)width), -0.5f * ((float)height / (float)width));
                 svcGraphView.setMargin(30,30,60,30);
 
                 svcGraphView.commit();
@@ -708,7 +708,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
         double vc = calc.getVC();
 
-        volumeTimeRunViews.add(createVolumeTimeGraph(calc.getVolumeTimeGraph()));
+        volumeTimeRunViews.add(createVolumeTimeGraph(calc.getVolumeTimeGraph(), resultGraphLayout.getWidth(), resultGraphLayout.getHeight()));
 
 
         ResultSVC resultSVC = new ResultSVC(hash);
@@ -735,13 +735,13 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
     }
 
-    private SlowVolumeTimeGraphView createVolumeTimeGraph(List<ResultCoordinate> coordinates) {
+    private SlowVolumeTimeGraphView createVolumeTimeGraph(List<ResultCoordinate> coordinates, int width, int height) {
 
         SlowVolumeTimeGraphView graphView = new SlowVolumeTimeGraphView(MeasurementSvcActivity.this);
         graphView.setId(View.generateViewId());
-        graphView.setCanvasSize(resultGraphLayout.getWidth(), resultGraphLayout.getHeight());
+        graphView.setCanvasSize(width, height);
         graphView.setX(60f, 0f);
-        graphView.setY(0.5f, -0.5f);
+        graphView.setY(0.5f * ((float)height / (float)width), -0.5f * ((float)height / (float)width));
         graphView.setMargin(30,30,60,30);
 
         graphView.commit();
