@@ -72,6 +72,7 @@ import kr.co.theresearcher.spirokitfortab.graph.TimerProgressView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowGraphView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowResultView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowRunView;
+import kr.co.theresearcher.spirokitfortab.graph.VolumeTimeGraphView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeTimeResultView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeTimeRunView;
 import kr.co.theresearcher.spirokitfortab.graph.WeakFlowProgressView;
@@ -87,8 +88,9 @@ public class MeasurementFvcActivity extends AppCompatActivity {
     private WeakFlowProgressView weakFlowProgressView;
 
     //private VolumeFlowRunView volumeFlowRunView;
-    private VolumeTimeRunView volumeTimeRunView;
+    //private VolumeTimeRunView volumeTimeRunView;
     private VolumeFlowGraphView volumeFlowGraphView;
+    private VolumeTimeGraphView volumeTimeGraphView;
 
 
     private List<VolumeFlowResultView> volumeFlowResultViewList = new ArrayList<>();
@@ -418,8 +420,8 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                 volumeFlowGraphView = new VolumeFlowGraphView(MeasurementFvcActivity.this);
                 volumeFlowGraphView.setId(View.generateViewId());
                 volumeFlowGraphView.setCanvasSize(width, height);
-                volumeFlowGraphView.setX(2f, 0f);
-                volumeFlowGraphView.setY(1.25f, -1.25f);
+                volumeFlowGraphView.setX(1.2f * ((float)width / (float)height), 0f);
+                volumeFlowGraphView.setY(1.4f, -0.8f);
                 volumeFlowGraphView.setMargin(30, 30, 60, 30);
 
                 volumeFlowGraphView.commit();
@@ -437,18 +439,17 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                 int width = realTimeVolumeTimeGraphLayout.getWidth();
                 int height = realTimeVolumeTimeGraphLayout.getHeight();
 
-                volumeTimeRunView = new VolumeTimeRunView(MeasurementFvcActivity.this);
-                volumeTimeRunView.setId(View.generateViewId());
+                volumeTimeGraphView = new VolumeTimeGraphView(MeasurementFvcActivity.this);
+                volumeTimeGraphView.setId(View.generateViewId());
 
-                volumeTimeRunView.setCanvasSize(width, height);
-                volumeTimeRunView.setX(0.8f, 0f);
-                volumeTimeRunView.setY(0.4f, 0f);
-                volumeTimeRunView.setMarkingCount(8, 8);
-                volumeTimeRunView.setxStartPosition(0f);
+                volumeTimeGraphView.setCanvasSize(width, height);
+                volumeTimeGraphView.setX(1.5f, 0f);
+                volumeTimeGraphView.setY(1f, 0f);
+                volumeTimeGraphView.setMargin(30,30,60,30);
 
-                volumeTimeRunView.commit();
+                volumeTimeGraphView.commit();
 
-                realTimeVolumeTimeGraphLayout.addView(volumeTimeRunView);
+                realTimeVolumeTimeGraphLayout.addView(volumeTimeGraphView);
 
             }
         });
@@ -567,10 +568,10 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                     public void run() {
 
                         volumeFlowGraphView.clear();
-                        volumeTimeRunView.clear();
+                        volumeTimeGraphView.clear();
 
                         volumeFlowGraphView.postInvalidate();
-                        volumeTimeRunView.postInvalidate();
+                        volumeTimeGraphView.postInvalidate();
 
 
                     }
@@ -674,7 +675,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                     public void run() {
                         timerProgressBar.setProgress(0);
                         weakFlowProgressBar.setProgress(0);
-                        volumeTimeRunView.clear();
+                        volumeTimeGraphView.clear();
                     }
                 });
 
@@ -757,13 +758,13 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
         weakFlowProgressBar.setProgress((int)(lps * 1000f));
         volumeFlowGraphView.setValue(volume, lps);
-        volumeTimeRunView.setValue(time, volume, lps);
+        volumeTimeGraphView.setValue(time, volume, lps);
 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 volumeFlowGraphView.postInvalidate();
-                volumeTimeRunView.postInvalidate();
+                volumeTimeGraphView.postInvalidate();
             }
         });
 
@@ -832,9 +833,9 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                         isStart = true;
 
                         volumeFlowGraphView.clear();
-                        volumeTimeRunView.clear();
+                        volumeTimeGraphView.clear();
                         volumeFlowGraphView.postInvalidate();
-                        volumeTimeRunView.postInvalidate();
+                        volumeTimeGraphView.postInvalidate();
 
                         resultAdapter.notifyDataSetChanged();
                         resultVolumeFlowGraphLayout.removeAllViews();

@@ -15,7 +15,6 @@ import kr.co.theresearcher.spirokitfortab.R;
 
 public class VolumeFlowGraphView extends View {
 
-
     private float canvasWidth, canvasHeight;
 
     private float maxX, minX;
@@ -114,7 +113,8 @@ public class VolumeFlowGraphView extends View {
         float center = (((canvasHeight - topMargin - bottomMargin - outLineLength - horizontalLabelMargin) * (maxY / (maxY - minY))) + topMargin);
 
         canvas.drawLine((leftMargin + verticalLabelMargin), center, (canvasWidth - rightMargin), center, linePaint);
-        canvas.drawText("0", (leftMargin), center + 10f, labelPaint);
+        String centerLabel = getContext().getString(R.string.with_lps, 0f);
+        canvas.drawText(centerLabel, (leftMargin), center + 10f, labelPaint);
 
         accGap = 0f;
         gapSize = gapToSizeY(yGap);
@@ -379,6 +379,7 @@ public class VolumeFlowGraphView extends View {
 
         labelPaint.setColor(getContext().getColor(R.color.secondary_color));
         labelPaint.setTextSize(20f);
+        //labelPaint.setTextAlign(Paint.Align.RIGHT);
 
     }
 
