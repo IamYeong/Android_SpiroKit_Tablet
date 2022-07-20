@@ -110,9 +110,15 @@ public class SlowVolumeTimeGraphView extends View {
 
         accGap = 0f;
         gapSize = gapToSizeY(yGap);
-        temp = 0f;
+        temp = gapSize;
 
-        for (accGap = 0f; accGap <= maxY;) {
+        float center = (((canvasHeight - topMargin - bottomMargin - outLineLength - horizontalLabelMargin) * (maxY / (maxY - minY))) + topMargin);
+
+        canvas.drawLine((leftMargin + verticalLabelMargin), center, (canvasWidth - rightMargin), center, linePaint);
+        String centerLabel = getContext().getString(R.string.with_L, 0f);
+        canvas.drawText(centerLabel, (leftMargin), center + 10f, labelPaint);
+
+        for (accGap += yGap; accGap <= maxY; accGap += yGap) {
 
             //canvas.drawLine(0f, yPadding * (float)i, canvasWidth, yPadding * (float)i, detailLinePaint);
 
@@ -120,23 +126,52 @@ public class SlowVolumeTimeGraphView extends View {
 
             canvas.drawLine(
                     (leftMargin + outLineLength + verticalLabelMargin),
-                    canvasHeight - horizontalLabelMargin - outLineLength - bottomMargin - temp,
+                    center - temp,
                     leftMargin + verticalLabelMargin,
-                    canvasHeight - horizontalLabelMargin - outLineLength - bottomMargin - temp,
+                    center - temp,
                     detailLinePaint);
 
             canvas.drawLine(
                     (leftMargin + outLineLength + verticalLabelMargin),
-                    canvasHeight - horizontalLabelMargin - outLineLength - bottomMargin - temp,
+                    center - temp,
                     canvasWidth - rightMargin,
-                    canvasHeight - horizontalLabelMargin - outLineLength - bottomMargin - temp,
+                    center - temp,
                     detailLinePaint);
 
             String label = getContext().getString(R.string.with_L, accGap);
-            canvas.drawText(label, leftMargin, canvasHeight - horizontalLabelMargin - outLineLength - bottomMargin - temp + 10f, labelPaint);
+            canvas.drawText(label, leftMargin, center - temp + 10f, labelPaint);
 
-            accGap += yGap;
             temp += gapSize;
+        }
+
+        accGap = 0f;
+        gapSize = gapToSizeY(yGap);
+        temp = gapSize;
+
+        for (accGap -= yGap; accGap >= minY;) {
+
+            //Log.e(getClass().getSimpleName(), "ACC GAP Y : " + accGap + ", MIN Y : " + minY);
+
+            canvas.drawLine(
+                    (leftMargin + outLineLength + verticalLabelMargin),
+                    center + temp,
+                    leftMargin + verticalLabelMargin,
+                    center + temp,
+                    detailLinePaint);
+
+            canvas.drawLine(
+                    (leftMargin + outLineLength + verticalLabelMargin),
+                    center + temp,
+                    canvasWidth - rightMargin,
+                    center + temp,
+                    detailLinePaint);
+
+            String label = getContext().getString(R.string.with_L, accGap);
+            canvas.drawText(label, leftMargin, center + temp + 10f, labelPaint);
+
+            accGap -= yGap;
+            temp += gapSize;
+
         }
 
         //경로 그리기
@@ -147,8 +182,8 @@ public class SlowVolumeTimeGraphView extends View {
     //초기 설정이 끝나거나 setValue 후 값 조정이 끝났을 때 사용
     public void commit() {
 
-        if ((maxX / xGap) > 9) {
-            xGap = (maxX * 0.2f);
+        if ((maxX / xGap) > 12) {
+            xGap = (maxX * 0.1f);
         }
 
         if (((maxY / yGap) > 9)) {
@@ -185,38 +220,33 @@ public class SlowVolumeTimeGraphView extends View {
 
     }
 
-    public void setValue(float x, float y, float flow) {
-
-        if (flow <= 0f) return;
+    public void setValue(float x, float y) {
 
         boolean isOver = false;
-
         values.add(new Coordinate(x, y));
 
-        if ((this.x + x) > maxX) {
-
+        if (maxY < this.y + y) {
             isOver = true;
 
-            maxY *= this.x / maxX;
-            maxX *= this.x / maxX;
+            minY *= ((y + maxY) / maxY);
+            maxY *= ((y + maxY) / maxY);
 
         }
 
-        if ((this.y + y) > maxY) {
-
+        if (minY > this.y + y) {
             isOver = true;
 
-            maxX *= this.y / maxY;
-            maxY *= this.y / maxY;
+            maxY *= Math.abs(y + minY) / Math.abs(minY);
+            minY *= Math.abs(y + minY) / Math.abs(minY);
 
         }
 
-        //Log.d(getClass().getSimpleName(), this.x + ", " + y + "___" + xValueMargin + ", " + (yValueMargin));
 
         if (isOver) {
 
             this.x = 0f;
             this.y = 0f;
+
             commit();
 
             for (int i = 0; i < values.size(); i++) {
@@ -228,11 +258,16 @@ public class SlowVolumeTimeGraphView extends View {
 
             }
 
+
         } else {
+
             this.x += x;
             this.y += y;
+
             path.lineTo(xToPosition(this.x), yToPosition(this.y));
+
         }
+
 
 
     }
@@ -285,7 +320,7 @@ public class SlowVolumeTimeGraphView extends View {
 
     private float gapToSizeY(float gap) {
 
-        return (canvasHeight - (topMargin + bottomMargin + outLineLength + horizontalLabelMargin)) * (gap / maxY);
+        return (canvasHeight - (topMargin + bottomMargin + outLineLength + horizontalLabelMargin)) * (gap / (maxY - minY));
 
     }
 
@@ -296,7 +331,7 @@ public class SlowVolumeTimeGraphView extends View {
     }
 
     private float yToPosition(double value) {
-        return (((float)((maxY - value) / maxY)) * (canvasHeight - topMargin - bottomMargin - outLineLength - horizontalLabelMargin)) + (topMargin);
+        return (((float)((maxY - value) / (maxY - minY))) * (canvasHeight - topMargin - bottomMargin - outLineLength - horizontalLabelMargin)) + (topMargin);
 
     }
 

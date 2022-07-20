@@ -51,7 +51,9 @@ import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
 import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
 import kr.co.theresearcher.spirokitfortab.db.work.Work;
 import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
+import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowGraphView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowResultView;
+import kr.co.theresearcher.spirokitfortab.graph.VolumeTimeGraphView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeTimeResultView;
 import kr.co.theresearcher.spirokitfortab.main.result.OnOrderSelectedListener;
 import kr.co.theresearcher.spirokitfortab.measurement.fvc.FvcResultAdapter;
@@ -67,8 +69,8 @@ public class FvcResultFragment extends Fragment implements Observer {
 
     private TextView doctorText;
 
-    private List<VolumeFlowResultView> volumeFlowResultViews = new ArrayList<>();
-    private List<VolumeTimeResultView> volumeTimeResultViews = new ArrayList<>();
+    private List<VolumeFlowGraphView> volumeFlowResultViews = new ArrayList<>();
+    private List<VolumeTimeGraphView> volumeTimeResultViews = new ArrayList<>();
     private CalHistory history;
     private Handler handler = new Handler(Looper.getMainLooper());
     private OnItemChangedListener changedListener;
@@ -203,14 +205,15 @@ public class FvcResultFragment extends Fragment implements Observer {
     }
 
 
-    private VolumeTimeResultView createVolumeTimeGraph(List<ResultCoordinate> coordinates, int width, int height) {
+    private VolumeTimeGraphView createVolumeTimeGraph(List<ResultCoordinate> coordinates, int width, int height) {
 
-        VolumeTimeResultView volumeTimeResultView = new VolumeTimeResultView(context);
+        VolumeTimeGraphView volumeTimeResultView = new VolumeTimeGraphView(context);
         volumeTimeResultView.setId(View.generateViewId());
         volumeTimeResultView.setCanvasSize(width, height);
-        volumeTimeResultView.setX(0.8f, 0f);
-        volumeTimeResultView.setY(0.4f, 0f);
-        volumeTimeResultView.setMarkingCount(6, 8);
+        volumeTimeResultView.setX(1.5f, 0f);
+        volumeTimeResultView.setY(1f, 0f);
+        volumeTimeResultView.setMargin(30,30,60,30);
+
         volumeTimeResultView.commit();
 
         for (int i = 0; i < coordinates.size(); i++) {
@@ -227,17 +230,15 @@ public class FvcResultFragment extends Fragment implements Observer {
         return volumeTimeResultView;
     }
 
-    private VolumeFlowResultView createVolumeFlowGraph(List<ResultCoordinate> coordinates, int width, int height) {
+    private VolumeFlowGraphView createVolumeFlowGraph(List<ResultCoordinate> coordinates, int width, int height) {
 
-        System.out.println("createVolumeFlowGraph()");
-
-        VolumeFlowResultView volumeFlowResultView = new VolumeFlowResultView(context);
+        VolumeFlowGraphView volumeFlowResultView = new VolumeFlowGraphView(context);
         volumeFlowResultView.setId(View.generateViewId());
         volumeFlowResultView.setCanvasSize(width, height);
-        volumeFlowResultView.setX(2f, 0f);
-        volumeFlowResultView.setY(1.25f, -1.25f);
-        //startPosition 없어도 됨.
-        volumeFlowResultView.setMarkingCount(6, 8);
+        volumeFlowResultView.setX(1.2f * ((float)width / (float)height), 0f);
+        volumeFlowResultView.setY(1.4f, -0.8f);
+        volumeFlowResultView.setMargin(30,30,60,30);
+
         volumeFlowResultView.commit();
 
         for (int i = 0; i < coordinates.size(); i++) {

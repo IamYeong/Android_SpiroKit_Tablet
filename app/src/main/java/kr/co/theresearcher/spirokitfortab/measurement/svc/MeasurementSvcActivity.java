@@ -66,6 +66,7 @@ import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
 import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
 import kr.co.theresearcher.spirokitfortab.dialog.LoadingDialog;
 import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
+import kr.co.theresearcher.spirokitfortab.graph.SlowVolumeTimeGraphView;
 import kr.co.theresearcher.spirokitfortab.graph.SlowVolumeTimeRunView;
 import kr.co.theresearcher.spirokitfortab.main.result.OnOrderSelectedListener;
 import kr.co.theresearcher.spirokitfortab.measurement.fvc.MeasurementFvcActivity;
@@ -89,9 +90,11 @@ public class MeasurementSvcActivity extends AppCompatActivity {
     private SpiroKitBluetoothLeService mService;
 
     private long startTimestamp;
-    private List<SlowVolumeTimeRunView> volumeTimeRunViews = new ArrayList<>();
+    private List<SlowVolumeTimeGraphView> volumeTimeRunViews = new ArrayList<>();
     private List<String> pulseWidthList = new ArrayList<>();
-    private SlowVolumeTimeRunView graphView;
+
+    //private SlowVolumeTimeRunView graphView;
+    private SlowVolumeTimeGraphView svcGraphView;
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd_HHmmssSS", Locale.getDefault());
 
@@ -411,8 +414,8 @@ public class MeasurementSvcActivity extends AppCompatActivity {
                     @Override
                     public void run() {
 
-                        graphView.clear();
-                        graphView.postInvalidate();
+                        svcGraphView.clear();
+                        svcGraphView.postInvalidate();
 
                     }
                 });
@@ -448,16 +451,16 @@ public class MeasurementSvcActivity extends AppCompatActivity {
                 int width = volumeTimeGraphLayout.getWidth();
                 int height = volumeTimeGraphLayout.getHeight();
 
-                graphView = new SlowVolumeTimeRunView(MeasurementSvcActivity.this);
-                graphView.setId(View.generateViewId());
-                graphView.setCanvasSize(width, height);
-                graphView.setMarkingCount(10, 8);
-                graphView.setX(60f, 0f);
-                graphView.setY(0.1f, -0.1f);
+                svcGraphView = new SlowVolumeTimeGraphView(MeasurementSvcActivity.this);
+                svcGraphView.setId(View.generateViewId());
+                svcGraphView.setCanvasSize(width, height);
+                svcGraphView.setX(60f, 0f);
+                svcGraphView.setY(0.5f, -0.5f);
+                svcGraphView.setMargin(30,30,60,30);
 
-                graphView.commit();
+                svcGraphView.commit();
 
-                volumeTimeGraphLayout.addView(graphView);
+                volumeTimeGraphLayout.addView(svcGraphView);
 
             }
         });
@@ -592,13 +595,13 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         }
 
         timerCount += time;
-        graphView.setValue(time, volume);
+        svcGraphView.setValue(time, volume);
 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
 
-                graphView.postInvalidate();
+                svcGraphView.postInvalidate();
 
             }
         });
@@ -665,8 +668,8 @@ public class MeasurementSvcActivity extends AppCompatActivity {
                         isStart = true;
                         timerCount = 0d;
 
-                        graphView.clear();
-                        graphView.postInvalidate();
+                        svcGraphView.clear();
+                        svcGraphView.postInvalidate();
 
                         adapter.notifyDataSetChanged();
 
@@ -732,14 +735,14 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
     }
 
-    private SlowVolumeTimeRunView createVolumeTimeGraph(List<ResultCoordinate> coordinates) {
+    private SlowVolumeTimeGraphView createVolumeTimeGraph(List<ResultCoordinate> coordinates) {
 
-        SlowVolumeTimeRunView graphView = new SlowVolumeTimeRunView(MeasurementSvcActivity.this);
+        SlowVolumeTimeGraphView graphView = new SlowVolumeTimeGraphView(MeasurementSvcActivity.this);
         graphView.setId(View.generateViewId());
         graphView.setCanvasSize(resultGraphLayout.getWidth(), resultGraphLayout.getHeight());
-        graphView.setMarkingCount(10, 8);
         graphView.setX(60f, 0f);
-        graphView.setY(0.1f, -0.1f);
+        graphView.setY(0.5f, -0.5f);
+        graphView.setMargin(30,30,60,30);
 
         graphView.commit();
 

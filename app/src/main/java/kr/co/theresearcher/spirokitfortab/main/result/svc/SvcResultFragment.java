@@ -45,8 +45,10 @@ import kr.co.theresearcher.spirokitfortab.db.cal_history_raw_data.CalHistoryRawD
 import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
 import kr.co.theresearcher.spirokitfortab.db.work.Work;
 import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
+import kr.co.theresearcher.spirokitfortab.graph.SlowVolumeTimeGraphView;
 import kr.co.theresearcher.spirokitfortab.graph.SlowVolumeTimeRunView;
 import kr.co.theresearcher.spirokitfortab.main.result.OnOrderSelectedListener;
+import kr.co.theresearcher.spirokitfortab.measurement.svc.MeasurementSvcActivity;
 import kr.co.theresearcher.spirokitfortab.measurement.svc.ResultSVC;
 import kr.co.theresearcher.spirokitfortab.measurement.svc.SvcResultAdapter;
 
@@ -55,7 +57,7 @@ public class SvcResultFragment extends Fragment implements Observer {
     private CalHistory history;
     private RecyclerView rv;
     private FrameLayout graphLayout;
-    private List<SlowVolumeTimeRunView> graphViews = new ArrayList<>();
+    private List<SlowVolumeTimeGraphView> graphViews = new ArrayList<>();
     private SvcResultAdapter svcResultAdapter;
     private Context context;
     private TextView doctorText;
@@ -316,14 +318,14 @@ public class SvcResultFragment extends Fragment implements Observer {
 
     }
 
-    private SlowVolumeTimeRunView createVolumeTimeGraph(List<ResultCoordinate> coordinates, int width, int height) {
+    private SlowVolumeTimeGraphView createVolumeTimeGraph(List<ResultCoordinate> coordinates, int width, int height) {
 
-        SlowVolumeTimeRunView graphView = new SlowVolumeTimeRunView(context);
+        SlowVolumeTimeGraphView graphView = new SlowVolumeTimeGraphView(context);
         graphView.setId(View.generateViewId());
         graphView.setCanvasSize(width, height);
-        graphView.setMarkingCount(10, 8);
         graphView.setX(60f, 0f);
-        graphView.setY(0.1f, -0.1f);
+        graphView.setY(0.5f, -0.5f);
+        graphView.setMargin(30,30,60,30);
 
         graphView.commit();
 
