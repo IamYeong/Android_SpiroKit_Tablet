@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -178,8 +179,11 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
                                     super.run();
                                     Looper.prepare();
 
+                                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                                    long time = Calendar.getInstance().getTime().getTime();
+
                                     SpiroKitDatabase.getInstance(context)
-                                            .calHistoryRawDataDao().delete(resultFVC.getHashed());
+                                            .calHistoryRawDataDao().delete(resultFVC.getHashed(), simpleDateFormat.format(time));
 
                                     int deleteIndex = holder.getAdapterPosition();
                                     fvcResults.remove(deleteIndex);

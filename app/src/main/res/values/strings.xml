@@ -208,6 +208,8 @@
     <string name="already_scanning">기존 진행중인 주변기기 탐색이 있습니다</string>
     <string name="not_available_ble">블루투스를 이용할 수 없는 장치입니다. 기종을 확인해주세요</string>
 
+    <string name="failed_server_connection">서버와 통신 중 오류가 발생했습니다\n(%1$s)</string>
+
 
     <!-- Operator Activity -->
     <string name="management_medical_staff">의료진 관리</string>

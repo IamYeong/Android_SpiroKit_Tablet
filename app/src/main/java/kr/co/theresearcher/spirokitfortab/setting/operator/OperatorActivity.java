@@ -18,7 +18,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -118,11 +120,16 @@ public class OperatorActivity extends AppCompatActivity {
 
                         try {
 
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                            long time = Calendar.getInstance().getTime().getTime();
+
                             Operator operator = new Operator();
                             operator.setHashed(HashConverter.hashingFromString(name + work + SharedPreferencesManager.getOfficeHash(OperatorActivity.this)));
                             operator.setOfficeHashed(SharedPreferencesManager.getOfficeHash(OperatorActivity.this));
                             operator.setName(name);
                             operator.setWork(work);
+                            operator.setCreateTimestamp(simpleDateFormat.format(time));
+                            operator.setUpdatedDate(simpleDateFormat.format(time));
 
                             SpiroKitDatabase database = SpiroKitDatabase.getInstance(OperatorActivity.this);
                             if (database.operatorDao().isExists(operator.getHashed())) {

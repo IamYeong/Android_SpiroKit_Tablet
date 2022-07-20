@@ -18,6 +18,7 @@ import androidx.room.Room;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -138,7 +139,7 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsViewHolder> {
          */
 
         holder.getNameText().setText(patient.getName());
-        holder.getChartNumberText().setText(context.getString(R.string.chart_number_is, patient.getChartNumber()));
+        holder.getChartNumberText().setText(context.getString(R.string._chart_number_is, patient.getChartNumber()));
         holder.getBirthText().setText(patient.getBirthDay().substring(0, patient.getBirthDay().length() - 9));
 
         holder.getLayout().setOnClickListener(new View.OnClickListener() {
@@ -168,9 +169,12 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsViewHolder> {
                                 super.run();
                                 Looper.prepare();
 
+                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                                long time = Calendar.getInstance().getTime().getTime();
+
                                 SpiroKitDatabase database = SpiroKitDatabase.getInstance(context);
                                 database.calHistoryDao().deleteReference(patient.getHashed());
-                                database.patientDao().deletePatient(patient.getHashed());
+                                database.patientDao().deletePatient(patient.getHashed(), simpleDateFormat.format(time));
 
                                 SpiroKitDatabase.removeInstance();
 

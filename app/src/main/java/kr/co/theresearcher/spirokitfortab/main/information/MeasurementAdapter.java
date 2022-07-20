@@ -20,6 +20,7 @@ import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -188,6 +189,8 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
             @Override
             public void onClick(View v) {
 
+                if (holder.getAdapterPosition() == -1) return;
+
                 for (CalHistory history : searchResults) history.setSelected(false);
                 searchResults.get(holder.getAdapterPosition()).setSelected(true);
 
@@ -217,9 +220,12 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
                                 super.run();
                                 Looper.prepare();
 
+                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                                long time = Calendar.getInstance().getTime().getTime();
+
                                 SpiroKitDatabase database = SpiroKitDatabase.getInstance(context);
                                 database.calHistoryRawDataDao().deleteReference(calHistory.getHashed());
-                                database.calHistoryDao().delete(calHistory.getHashed());
+                                database.calHistoryDao().delete(calHistory.getHashed(), simpleDateFormat.format(time));
 
                                 handler.post(new Runnable() {
                                     @Override

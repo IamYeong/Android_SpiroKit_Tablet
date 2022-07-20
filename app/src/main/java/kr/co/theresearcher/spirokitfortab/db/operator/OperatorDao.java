@@ -31,8 +31,8 @@ public interface OperatorDao {
     @Query("SELECT COUNT(id) FROM OPERATOR WHERE is_deleted == 0")
     int getItemCount();
 
-    @Query("UPDATE operator SET is_deleted = 1 WHERE hashed == :hash")
-    void delete(String hash);
+    @Query("UPDATE operator SET is_deleted = 1, updated_date = :updateDate WHERE hashed == :hash")
+    void delete(String hash, String updateDate);
 
     @Query("SELECT EXISTS(SELECT * FROM operator where hashed == :hash)")
     boolean isExists(String hash);

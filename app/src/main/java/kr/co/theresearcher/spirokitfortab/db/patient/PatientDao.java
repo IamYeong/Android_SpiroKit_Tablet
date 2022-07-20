@@ -29,8 +29,8 @@ public interface PatientDao {
     @Update
     void updatePatient(Patient patient);
 
-    @Query("UPDATE patient SET is_deleted = 1 WHERE hashed == :hash")
-    void deletePatient(String hash);
+    @Query("UPDATE patient SET is_deleted = 1, updated_date = :updateDate WHERE hashed == :hash")
+    void deletePatient(String hash, String updateDate);
 
     @Query("SELECT EXISTS(SELECT * FROM PATIENT WHERE hashed == :hash)")
     boolean isExists(String hash);

@@ -120,6 +120,10 @@ public class SettingActivity extends AppCompatActivity {
         public void onError(ErrorResponse errorResponse) {
             Log.e(getClass().getSimpleName(),"+++++++++++++ERROR RESPONSE+++++++++++\n" + errorResponse.getCode() + "\n" + errorResponse.getMessage());
             loadingDialog.dismiss();
+
+            ConfirmDialog confirmDialog = new ConfirmDialog(SettingActivity.this);
+            confirmDialog.setTitle(getString(R.string.failed_server_connection, errorResponse.getMessage()));
+            confirmDialog.show();
         }
     };
 
@@ -494,6 +498,7 @@ public class SettingActivity extends AppCompatActivity {
                     jsonObject.put(JsonKeys.JSON_KEY_COUNTRY_CODE, office.getCountryCode());
                     jsonObject.put(JsonKeys.JSON_KEY_IS_USE, office.getIsUse());
                     jsonObject.put(JsonKeys.JSON_KEY_IS_USE_SYNC, office.getIsUseSync());
+                    jsonObject.put(JsonKeys.JSON_KEY_UPDATED_DATE, office.getUpdateDate());
 
                     JSONArray operatorArray = new JSONArray();
                     List<Operator> operators = database.operatorDao().selectAll(office.getHashed());
@@ -507,6 +512,8 @@ public class SettingActivity extends AppCompatActivity {
                         operatorJsonObject.put(JsonKeys.JSON_KEY_NAME, operator.getName());
                         operatorJsonObject.put(JsonKeys.JSON_KEY_WORK, operator.getWork());
                         operatorJsonObject.put(JsonKeys.JSON_KEY_IS_DELETED, operator.getIsDeleted());
+                        operatorJsonObject.put(JsonKeys.JSON_KEY_C_DATE, operator.getCreateTimestamp());
+                        operatorJsonObject.put(JsonKeys.JSON_KEY_UPDATED_DATE, operator.getUpdatedDate());
 
                         operatorArray.put(operatorJsonObject);
                     }
@@ -534,6 +541,8 @@ public class SettingActivity extends AppCompatActivity {
                         patientJsonObject.put(JsonKeys.JSON_KEY_WEIGHT, patient.getWeight());
                         patientJsonObject.put(JsonKeys.JSON_KEY_BIRTHDAY, patient.getBirthDay());
                         patientJsonObject.put(JsonKeys.JSON_KEY_HUMAN_RACE, patient.getHumanRace());
+                        patientJsonObject.put(JsonKeys.JSON_KEY_C_DATE, patient.getCreateDate());
+                        patientJsonObject.put(JsonKeys.JSON_KEY_UPDATED_DATE, patient.getUpdatedDate());
 
                         if (start == null) {
 
@@ -580,6 +589,8 @@ public class SettingActivity extends AppCompatActivity {
                         historyJsonObject.put(JsonKeys.JSON_KEY_DEVICE_DIV, calHistory.getDeviceDiv());
                         historyJsonObject.put(JsonKeys.JSON_KEY_IS_DELETED_REF, calHistory.getIsDeletedReference());
                         historyJsonObject.put(JsonKeys.JSON_KEY_IS_DELETED, calHistory.getIsDeleted());
+                        historyJsonObject.put(JsonKeys.JSON_KEY_C_DATE, calHistory.getCreateDate());
+                        historyJsonObject.put(JsonKeys.JSON_KEY_UPDATED_DATE, calHistory.getUpdatedDate());
 
                         historyArray.put(historyJsonObject);
 
@@ -608,6 +619,8 @@ public class SettingActivity extends AppCompatActivity {
                         rawJsonObject.put(JsonKeys.JSON_KEY_IS_DELETED_REF, raw.getIsDeletedReference());
                         rawJsonObject.put(JsonKeys.JSON_KEY_IS_DELETED, raw.getIsDeleted());
                         rawJsonObject.put(JsonKeys.JSON_KEY_ORDER, raw.getOrderNumber());
+                        rawJsonObject.put(JsonKeys.JSON_KEY_C_DATE, raw.getCreateDate());
+                        rawJsonObject.put(JsonKeys.JSON_KEY_UPDATED_DATE, raw.getUpdatedDate());
 
                         rawDataArray.put(rawJsonObject);
 
@@ -679,6 +692,7 @@ public class SettingActivity extends AppCompatActivity {
                     o.setOfficeID(office.getString(JsonKeys.JSON_KEY_OFFICE_ID));
                     o.setIsDeleted(office.getInt(JsonKeys.JSON_KEY_IS_DELETED));
                     o.setOfficePassword(SharedPreferencesManager.getOfficePass(SettingActivity.this));
+                    o.setUpdateDate(office.getString(JsonKeys.JSON_KEY_UPDATED_DATE));
 
                     database.officeDao().insert(o);
 
@@ -694,6 +708,8 @@ public class SettingActivity extends AppCompatActivity {
                         op.setName(operator.getString(JsonKeys.JSON_KEY_NAME));
                         op.setWork(operator.getString(JsonKeys.JSON_KEY_WORK));
                         op.setIsDeleted(operator.getInt(JsonKeys.JSON_KEY_IS_DELETED));
+                        op.setCreateTimestamp(operator.getString(JsonKeys.JSON_KEY_C_DATE));
+                        op.setUpdatedDate(operator.getString(JsonKeys.JSON_KEY_UPDATED_DATE));
                         //c_time 패스
 
                         database.operatorDao().insertOperator(op);
@@ -714,9 +730,12 @@ public class SettingActivity extends AppCompatActivity {
                                 .weight(patient.getInt(JsonKeys.JSON_KEY_WEIGHT))
                                 .birthDay(patient.getString(JsonKeys.JSON_KEY_BIRTHDAY))
                                 .humanRace(patient.getString(JsonKeys.JSON_KEY_HUMAN_RACE))
-
+                                .createDate(patient.getString(JsonKeys.JSON_KEY_C_DATE))
+                                .updatedDate(patient.getString(JsonKeys.JSON_KEY_UPDATED_DATE))
                                 //os 기본 a
                                 .build();
+
+
 
                         String start = patient.getString(JsonKeys.JSON_KEY_START_SMOKING_WHEN);
                         String stop = patient.getString(JsonKeys.JSON_KEY_STOP_SMOKING_WHEN);
@@ -771,6 +790,8 @@ public class SettingActivity extends AppCompatActivity {
                                 history.getInt(JsonKeys.JSON_KEY_IS_DELETED)
                         );
 
+                        h.setCreateDate(history.getString(JsonKeys.JSON_KEY_C_DATE));
+                        h.setUpdatedDate(history.getString(JsonKeys.JSON_KEY_UPDATED_DATE));
                         h.setFamilyDoctorHash(history.getString(JsonKeys.JSON_KEY_OPERATOR_DOCTOR_HASH));
                         h.setIsDeletedReference(history.getInt(JsonKeys.JSON_KEY_IS_DELETED_REF));
 
@@ -793,6 +814,8 @@ public class SettingActivity extends AppCompatActivity {
                                 data.getInt(JsonKeys.JSON_KEY_IS_POST)
                         );
 
+                        d.setCreateDate(data.getString(JsonKeys.JSON_KEY_C_DATE));
+                        d.setUpdatedDate(data.getString(JsonKeys.JSON_KEY_UPDATED_DATE));
                         d.setIsDeleted(data.getInt(JsonKeys.JSON_KEY_IS_DELETED));
                         d.setIsDeletedReference(data.getInt(JsonKeys.JSON_KEY_IS_DELETED_REF));
 
@@ -815,7 +838,11 @@ public class SettingActivity extends AppCompatActivity {
                     });
 
                 } catch (JSONException e) {
-                    Log.e(getClass().getSimpleName(), e.getMessage());
+                    Log.e(getClass().getSimpleName(), e.toString());
+                    for (StackTraceElement stack : e.getStackTrace()) {
+                        Log.e(getClass().getSimpleName(), stack.toString());
+                    }
+
                 }
 
 

@@ -95,6 +95,7 @@
                 app:layout_constraintEnd_toStartOf="@id/view_line_center_result"
                 android:layout_margin="20dp"
                 android:background="@drawable/graph_out_line"
+
                 />
 
             <TextView

@@ -32,8 +32,8 @@ public interface CalHistoryDao {
     @Update
     void update(CalHistory history);
 
-    @Query("UPDATE cal_history SET is_deleted = 1 WHERE hashed == :hash")
-    void delete(String hash);
+    @Query("UPDATE cal_history SET is_deleted = 1, updated_date = :updateDate WHERE hashed == :hash")
+    void delete(String hash, String updateDate);
 
     @Query("UPDATE cal_history SET is_deleted_reference = 1 WHERE patient_hashed == :patientHash")
     void deleteReference(String patientHash);

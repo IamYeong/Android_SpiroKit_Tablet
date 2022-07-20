@@ -51,5 +51,8 @@ public class JsonKeys {
     public static final String JSON_KEY_HISTORIES = "calHistorys";
     public static final String JSON_KEY_RAW_DATA_LIST = "calHistoryRawDatas";
     public static final String JSON_KEY_PATIENTS = "patients";
+    public static final String JSON_KEY_UPDATED_DATE = "updated_date";
+    public static final String JSON_KEY_C_DATE = "c_date";
+
 
 }

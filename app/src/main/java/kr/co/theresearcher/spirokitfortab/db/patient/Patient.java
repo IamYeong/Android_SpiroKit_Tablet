@@ -75,7 +75,10 @@ public class Patient {
     private String latestDay;
 
     @ColumnInfo(name = "c_date")
-    private long createDate;
+    private String createDate;
+
+    @ColumnInfo(name = "updated_date")
+    private String updatedDate;
 
     @ColumnInfo(name = "is_deleted")
     private int isDeleted;
@@ -96,7 +99,6 @@ public class Patient {
         this.smokingAmountPerDay = smokingAmountPerDay;
         os = "a";
         isDeleted = 0;
-        createDate = 0;
         smokingPeriod = 0;
         latestDay = null;
 
@@ -123,6 +125,14 @@ public class Patient {
         createDate = builder.createDate;
         isDeleted = builder.isDeleted;
 
+    }
+
+    public String getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(String updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     public int getId() {
@@ -261,11 +271,11 @@ public class Patient {
         this.latestDay = latestDay;
     }
 
-    public long getCreateDate() {
+    public String getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(long createDate) {
+    public void setCreateDate(String createDate) {
         this.createDate = createDate;
     }
 
@@ -301,7 +311,8 @@ public class Patient {
 
         //Deprecated
         private String latestDay = "";
-        private long createDate = 0;
+        private String createDate;
+        private String updatedDate;
         private int isDeleted = 0;
 
         public Builder hashed(String hash) {
@@ -376,6 +387,16 @@ public class Patient {
 
         public Builder stopSmokingDate(String dateString) {
             this.stopSmokingDay = dateString;
+            return this;
+        }
+
+        public Builder createDate(String cDate) {
+            this.createDate = cDate;
+            return this;
+        }
+
+        public Builder updatedDate(String updatedDate) {
+            this.updatedDate = updatedDate;
             return this;
         }
 

@@ -61,7 +61,10 @@ public class CalHistory{
     private String deviceDiv;
 
     @ColumnInfo(name = "c_date")
-    private long createDate;
+    private String createDate;
+
+    @ColumnInfo(name = "updated_date")
+    private String updatedDate;
 
     @ColumnInfo(name = "is_deleted")
     private int isDeleted;
@@ -182,11 +185,11 @@ public class CalHistory{
         this.deviceDiv = deviceDiv;
     }
 
-    public long getCreateDate() {
+    public String getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(long createDate) {
+    public void setCreateDate(String createDate) {
         this.createDate = createDate;
     }
 
@@ -196,5 +199,13 @@ public class CalHistory{
 
     public void setIsDeleted(int isDeleted) {
         this.isDeleted = isDeleted;
+    }
+
+    public String getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(String updatedDate) {
+        this.updatedDate = updatedDate;
     }
 }

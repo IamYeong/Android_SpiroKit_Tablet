@@ -375,6 +375,7 @@ public class FvcResultFragment extends Fragment implements Observer {
                         adapter.notifyDataSetChanged();
                         volumeFlowLayout.removeAllViews();
                         volumeTimeLayout.removeAllViews();
+
                         volumeFlowLayout.addView(volumeFlowResultViews.get(0));
                         volumeTimeLayout.addView(volumeTimeResultViews.get(0));
                     }

@@ -14,7 +14,9 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -24,6 +26,8 @@ import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
 import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
 import kr.co.theresearcher.spirokitfortab.db.work.Work;
+import kr.co.theresearcher.spirokitfortab.dialog.OnSelectedInDialogListener;
+import kr.co.theresearcher.spirokitfortab.dialog.SelectionDialog;
 
 public class OperatorAdapter extends RecyclerView.Adapter<OperatorViewHolder> {
 
@@ -94,27 +98,44 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorViewHolder> {
             @Override
             public void onClick(View v) {
 
-                Thread thread = new Thread() {
+                SelectionDialog selectionDialog = new SelectionDialog(context);
+                selectionDialog.setTitle(context.getString(R.string.question_delete_staff));
+                selectionDialog.setSelectedListener(new OnSelectedInDialogListener() {
                     @Override
-                    public void run() {
-                        super.run();
-                        Looper.prepare();
+                    public void onSelected(boolean select) {
 
-                        SpiroKitDatabase.getInstance(context)
-                                .operatorDao().delete(operator.getHashed());
+                        if (select) {
+                            Thread thread = new Thread() {
+                                @Override
+                                public void run() {
+                                    super.run();
+                                    Looper.prepare();
 
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                changedListener.onChanged();
-                            }
-                        });
+                                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                                    long time = Calendar.getInstance().getTime().getTime();
 
-                        Looper.loop();
+                                    SpiroKitDatabase.getInstance(context)
+                                            .operatorDao().delete(operator.getHashed(), simpleDateFormat.format(time));
+
+                                    handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            changedListener.onChanged();
+                                        }
+                                    });
+
+                                    Looper.loop();
+                                }
+                            };
+
+                            thread.start();
+                        }
+
                     }
-                };
+                });
+                selectionDialog.show();
 
-                thread.start();
+
 
             }
         });

@@ -305,6 +305,9 @@ public class PatientModifyActivity extends AppCompatActivity {
                         super.run();
                         Looper.prepare();
 
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                        long time = Calendar.getInstance().getTime().getTime();
+
                         int height = Integer.parseInt(heightField.getText().toString());
                         int weight = Integer.parseInt(weightField.getText().toString());
                         String smokeAmount = smokeAmountField.getText().toString();
@@ -319,6 +322,8 @@ public class PatientModifyActivity extends AppCompatActivity {
                         patient.setHumanRace(humanRaceDatabases.get(humanRaceID).getRace());
                         patient.setNowSmoking(nowSmoking);
                         patient.setSmokingAmountPerDay(smokeAmount);
+                        patient.setUpdatedDate(simpleDateFormat.format(time));
+
 
                         SpiroKitDatabase database = SpiroKitDatabase.getInstance(getApplicationContext());
 

@@ -45,7 +45,10 @@ public class CalHistoryRawData {
     private int isPost;
 
     @ColumnInfo(name = "c_date")
-    private long createDate;
+    private String createDate;
+
+    @ColumnInfo(name = "updated_date")
+    private String updatedDate;
 
     @ColumnInfo(name = "is_deleted")
     private int isDeleted;
@@ -138,11 +141,11 @@ public class CalHistoryRawData {
         this.isPost = isPost;
     }
 
-    public long getCreateDate() {
+    public String getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(long createDate) {
+    public void setCreateDate(String createDate) {
         this.createDate = createDate;
     }
 
@@ -152,5 +155,13 @@ public class CalHistoryRawData {
 
     public void setIsDeleted(int isDeleted) {
         this.isDeleted = isDeleted;
+    }
+
+    public String getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(String updatedDate) {
+        this.updatedDate = updatedDate;
     }
 }

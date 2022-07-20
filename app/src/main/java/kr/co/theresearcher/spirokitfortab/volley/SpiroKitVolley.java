@@ -15,7 +15,7 @@ import org.json.JSONObject;
 
 public class SpiroKitVolley {
 
-    private static final String USER_LOGIN_POST_URL = "http://43.200.35.255:4500/apis/spirokit/e/sync";
+    private static final String USER_LOGIN_POST_URL = "http://43.200.35.255:4500/apis/spirokit/e/sync/01";
 
     private static RequestQueue requestQueue;
     private static VolleyResponseListener listener;

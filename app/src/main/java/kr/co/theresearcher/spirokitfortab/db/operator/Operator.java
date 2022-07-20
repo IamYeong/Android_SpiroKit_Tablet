@@ -37,15 +37,25 @@ public class Operator {
     private String work;
 
     @ColumnInfo(name = "c_date")
-    private long createTimestamp;
+    private String createTimestamp;
 
     @ColumnInfo(name = "is_deleted")
     private int isDeleted;
 
+    @ColumnInfo(name = "updated_date")
+    private String updatedDate;
+
     public Operator() {
         isDeleted = 0;
-        createTimestamp = 0;
 
+    }
+
+    public String getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(String updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     public int getId() {
@@ -88,11 +98,11 @@ public class Operator {
         this.work = work;
     }
 
-    public long getCreateTimestamp() {
+    public String getCreateTimestamp() {
         return createTimestamp;
     }
 
-    public void setCreateTimestamp(long createTimestamp) {
+    public void setCreateTimestamp(String createTimestamp) {
         this.createTimestamp = createTimestamp;
     }
 

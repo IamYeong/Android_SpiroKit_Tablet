@@ -351,9 +351,24 @@ public class PatientInsertActivity extends AppCompatActivity {
                                     .birthDay(conversionDate(birthDate))
                                     .build();
 
-                            patient.setStartSmokingDay(conversionDate(startSmokeDate));
-                            patient.setStopSmokingDay(conversionDate(stopSmokeDate));
-                            patient.setSmokingPeriod(diffDateMonth(startSmokeDate, stopSmokeDate));
+                            String start = conversionDate(startSmokeDate);
+                            patient.setStartSmokingDay(start);
+                            if (start == null) {
+                                patient.setSmokingAmountPerDay(null);
+                                patient.setStopSmokingDay(null);
+                                patient.setSmokingPeriod(0);
+                            } else {
+
+                                patient.setSmokingAmountPerDay(smokeAmount);
+                                String stop = conversionDate(stopSmokeDate);
+                                if (stop == null) {
+                                    patient.setStopSmokingDay(null);
+                                    patient.setSmokingPeriod(0);
+                                } else {
+                                    patient.setStopSmokingDay(conversionDate(stopSmokeDate));
+                                    patient.setSmokingPeriod(diffDateMonth(startSmokeDate, stopSmokeDate));
+                                }
+                            }
 
                             SpiroKitDatabase database = SpiroKitDatabase.getInstance(getApplicationContext());
                             if (database.patientDao().isExists(patientHashed)) {

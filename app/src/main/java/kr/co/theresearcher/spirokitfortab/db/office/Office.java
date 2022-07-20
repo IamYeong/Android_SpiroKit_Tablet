@@ -48,6 +48,17 @@ public class Office {
     @ColumnInfo(name = "is_deleted")
     private int isDeleted;
 
+    @ColumnInfo(name = "updated_date")
+    private String updateDate;
+
+    public String getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(String updateDate) {
+        this.updateDate = updateDate;
+    }
+
     public int getIsDeleted() {
         return isDeleted;
     }
