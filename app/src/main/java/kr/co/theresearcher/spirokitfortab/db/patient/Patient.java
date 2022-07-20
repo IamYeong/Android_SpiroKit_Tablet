@@ -123,6 +123,7 @@ public class Patient {
         latestDay = builder.latestDay;
         os = builder.os;
         createDate = builder.createDate;
+        updatedDate = builder.updatedDate;
         isDeleted = builder.isDeleted;
 
     }

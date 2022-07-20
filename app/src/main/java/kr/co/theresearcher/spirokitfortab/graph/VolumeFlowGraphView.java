@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -19,6 +20,11 @@ public class VolumeFlowGraphView extends View {
 
     private float maxX, minX;
     private float maxY, minY;
+    private float xOffset;
+
+    private float verticalLabelMargin;
+    private float horizontalLabelMargin;
+    private float outLineLength;
 
     private float x = 0f;
     private float y = 0f;
@@ -45,28 +51,32 @@ public class VolumeFlowGraphView extends View {
         detailLinePaint = new Paint();
         path = new Path();
 
-        //setLabelPaint();
-        //setLinePaint();
-        //setPathPaint();
-        //setDetailLinePaint();
+        outLineLength = 20f;
+        horizontalLabelMargin = 50f;
+        verticalLabelMargin = 80f;
+
+        setLabelPaint();
+        setLinePaint();
+        setPathPaint();
+        setDetailLinePaint();
     }
 
-    /*
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
         //제목 라벨
-        //canvas.drawText("Volume|Flow Graph", canvasWidth / 2f, 30f, labelPaint);
+        //canvas.drawText("Volume|Flow Graph", canvasWidth / 2f, horizontalLabelMargin, labelPaint);
 
         //축 라벨
-        canvas.drawText("Flow(l/s)", 30f, 30f, labelPaint);
+        canvas.drawText("Flow(l/s)", (leftMargin + verticalLabelMargin + outLineLength), 30f, labelPaint);
         canvas.drawText("Volume(L)", canvasWidth - 100f, canvasHeight - 30f, labelPaint);
 
         //Y축 선
-        canvas.drawLine((leftMargin + 20f + 30f), topMargin, (leftMargin + 20f + 30f), (canvasHeight - bottomMargin - 20f - 30f), linePaint);
+        canvas.drawLine((leftMargin + outLineLength + verticalLabelMargin), topMargin, (leftMargin + outLineLength + verticalLabelMargin), (canvasHeight - bottomMargin - outLineLength - horizontalLabelMargin), linePaint);
         //X축 선
-        canvas.drawLine((leftMargin + 20f + 30f), (canvasHeight - bottomMargin - 20f - 30f), (canvasWidth - rightMargin), (canvasHeight - bottomMargin - 20f - 30f), linePaint);
+        canvas.drawLine((leftMargin + outLineLength + verticalLabelMargin), (canvasHeight - bottomMargin - outLineLength - horizontalLabelMargin), (canvasWidth - rightMargin), (canvasHeight - bottomMargin - outLineLength - horizontalLabelMargin), linePaint);
 
 
         float temp = 0f;
@@ -77,45 +87,86 @@ public class VolumeFlowGraphView extends View {
 
             //canvas.drawLine((float)xPadding * (float)i, canvasHeight, ((float)xPadding * (float)i), 0f, detailLinePaint);
 
-            canvas.drawLine((leftMargin + 20f + 30f) + temp, (canvasHeight - bottomMargin - 20f - 30f), (leftMargin + 20f + 30f) + temp, (canvasHeight - bottomMargin - 30f), linePaint); // 중앙에 x축 눈금 그리기
-            //canvas.drawText(Float.toString(Fluid.autoRound(1, ((float)xInterval * (float) i))), ((float)xPadding * (float)i) - 20f, (canvasHeight * 0.5f) - 25f, labelPaint);
+
+            canvas.drawLine(
+                    (leftMargin + outLineLength + verticalLabelMargin) + temp,
+                    (canvasHeight - bottomMargin - outLineLength - horizontalLabelMargin),
+                    (leftMargin + outLineLength + verticalLabelMargin) + temp,
+                    (canvasHeight - bottomMargin - horizontalLabelMargin),
+                    detailLinePaint);
+
+            canvas.drawLine(
+                    (leftMargin + outLineLength + verticalLabelMargin) + temp,
+                    (canvasHeight - bottomMargin - outLineLength - horizontalLabelMargin),
+                    (leftMargin + outLineLength + verticalLabelMargin) + temp,
+                    (topMargin),
+                    detailLinePaint);
+
+            //canvas.drawText(Float.toString(Fluid.autoRound(1, ((float)xInterval * (float) i))), ((float)xPadding * (float)i) - outLineLength, (canvasHeight * 0.5f) - 25f, labelPaint);
             String label = getContext().getString(R.string.with_L, accGap);
-            canvas.drawText(label, (leftMargin + 20f + 30f) + temp - 10f, (canvasHeight - bottomMargin - 20f - 5f), labelPaint);
+            canvas.drawText(label, (leftMargin + outLineLength + horizontalLabelMargin) + temp - 10f, (canvasHeight - bottomMargin - outLineLength - 5f), labelPaint);
 
             accGap += xGap;
             temp += gapSize;
         }
 
         //y축 중앙선
-        float center = (((canvasHeight - topMargin - bottomMargin - 20f - 30f) / 2f) + topMargin);
+        float center = (((canvasHeight - topMargin - bottomMargin - outLineLength - horizontalLabelMargin) * (maxY / (maxY - minY))) + topMargin);
 
-        canvas.drawLine((leftMargin + 30f), center, (canvasWidth - rightMargin), center, linePaint);
+        canvas.drawLine((leftMargin + verticalLabelMargin), center, (canvasWidth - rightMargin), center, linePaint);
         canvas.drawText("0", (leftMargin), center + 10f, labelPaint);
 
         accGap = 0f;
         gapSize = gapToSizeY(yGap);
         temp = gapSize;
 
-        for (accGap += yGap; accGap <= maxY;) {
+        for (accGap += yGap; accGap <= maxY; accGap += yGap) {
 
             //canvas.drawLine(0f, yPadding * (float)i, canvasWidth, yPadding * (float)i, detailLinePaint);
 
-            canvas.drawLine((leftMargin + 20f + 30f), center - temp, leftMargin + 30f, center - temp,linePaint);
+            //Log.e(getClass().getSimpleName(), "ACC GAP Y : " + accGap + ", MAX Y : " + maxY);
+
+            canvas.drawLine(
+                    (leftMargin + outLineLength + verticalLabelMargin),
+                    center - temp,
+                    leftMargin + verticalLabelMargin,
+                    center - temp,
+                    detailLinePaint);
+
+            canvas.drawLine(
+                    (leftMargin + outLineLength + verticalLabelMargin),
+                    center - temp,
+                    canvasWidth - rightMargin,
+                    center - temp,
+                    detailLinePaint);
 
             String label = getContext().getString(R.string.with_lps, accGap);
             canvas.drawText(label, leftMargin, center - temp + 10f, labelPaint);
 
-            accGap += yGap;
             temp += gapSize;
         }
 
         accGap = 0f;
-        gapSize = gapToSizeY(yGap);
+        gapSize = gapToSizeBottomY(yGap);
         temp = gapSize;
 
         for (accGap -= yGap; accGap >= minY;) {
 
-            canvas.drawLine((leftMargin + 20f + 30f), center + temp, leftMargin + 30f, center + temp,linePaint);
+            //Log.e(getClass().getSimpleName(), "ACC GAP Y : " + accGap + ", MIN Y : " + minY);
+
+            canvas.drawLine(
+                    (leftMargin + outLineLength + verticalLabelMargin),
+                    center + temp,
+                    leftMargin + verticalLabelMargin,
+                    center + temp,
+                    detailLinePaint);
+
+            canvas.drawLine(
+                    (leftMargin + outLineLength + verticalLabelMargin),
+                    center + temp,
+                    canvasWidth - rightMargin,
+                    center + temp,
+                    detailLinePaint);
 
             String label = getContext().getString(R.string.with_lps, accGap);
             canvas.drawText(label, leftMargin, center + temp + 10f, labelPaint);
@@ -133,8 +184,14 @@ public class VolumeFlowGraphView extends View {
     //초기 설정이 끝나거나 setValue 후 값 조정이 끝났을 때 사용
     public void commit() {
 
+        if ((maxX / xGap) > 9) {
+            xGap = (maxX * 0.2f);
+        }
 
-        this.x = (maxX - (float)findOffset()) - xValueMargin;
+        if ((((maxY - minY) / yGap) > 10)) {
+            yGap = (maxY - minY) * 0.2f;
+        }
+
         path.reset();
         path.moveTo(xToPosition(this.x), yToPosition(0d));
 
@@ -143,7 +200,10 @@ public class VolumeFlowGraphView extends View {
 
     public void clear() {
         values.clear();
+        this.x = 0f;
+        xOffset = 0f;
         commit();
+
 
     }
 
@@ -164,47 +224,56 @@ public class VolumeFlowGraphView extends View {
     public void setValue(float x, float y) {
 
         boolean isOver = false;
-        if (y >= 0d) this.x -= x;
-        else this.x += x;
+        if (y >= 0d) this.x += x;
+        else this.x -= x;
         values.add(new Coordinate(x, y));
 
-        if ((this.x > (maxX - xValueMargin))) {
+        if (this.x > maxX) {
 
             isOver = true;
 
-            maxY *= (x + (maxX - minX)) / (maxX - minX);
-            minY *= (x + (maxX - minX)) / (maxX - minX);
-            maxX += (x * 2f);
+            maxY *= this.x / maxX;
+            minY *= this.x / maxX;
+            maxX = this.x;
 
         }
 
-        if ((this.x < minX )) {
+        if ((this.x < 0f )) {
 
             isOver = true;
 
+            xOffset -= x;
 
-            minX = this.x;
+            if (Math.abs(xOffset) > maxX) {
+
+                Log.e(getClass().getSimpleName(), "OFFSET : " + xOffset + ", MAX X : " + maxX);
+
+                maxY *= (x + maxX) / maxX;
+                minY *= (x + maxX) / maxX;
+                maxX += x;
+            }
+
+            this.x = 0f;
 
         }
 
-        if (y > (maxY - yValueMargin)) {
+        if (y > maxY) {
 
             isOver = true;
 
-            maxX *= y / (maxY - yValueMargin);
-            minY *= y / (maxY - yValueMargin);
-            maxY *= y / (maxY - yValueMargin);
+            maxX *= y / maxY;
+            minY *= y / maxY;
+            maxY *= y / maxY;
 
         }
 
-        if (y < (minY + yValueMargin)) {
+        if (y < minY) {
 
             isOver = true;
 
-
-            maxY *= Math.abs(y / (minY + yValueMargin));
-            maxX *= Math.abs(y / (minY + yValueMargin));
-            minY *= Math.abs(y / (minY + yValueMargin));
+            maxY *= Math.abs(y / minY);
+            maxX *= Math.abs(y / minY);
+            minY *= Math.abs(y / minY);
 
         }
 
@@ -212,7 +281,8 @@ public class VolumeFlowGraphView extends View {
 
         if (isOver) {
 
-            //this.x = (maxX - minX) * xStartPosition;
+            this.x = 0f;
+            this.x -= xOffset;
             commit();
 
             for (int i = 0; i < values.size(); i++) {
@@ -220,10 +290,10 @@ public class VolumeFlowGraphView extends View {
                 this.y = values.get(i).getY();
 
                 if (this.y >= 0d) {
-                    this.x -= values.get(i).getX();
+                    this.x += values.get(i).getX();
 
                 } else {
-                    this.x += values.get(i).getX();
+                    this.x -= values.get(i).getX();
 
                 }
                 path.lineTo(xToPosition(this.x), yToPosition(this.y));
@@ -245,6 +315,10 @@ public class VolumeFlowGraphView extends View {
     }
 
     public void setMargin(int left, int top, int right, int bottom) {
+        leftMargin = left;
+        topMargin = top;
+        rightMargin = right;
+        bottomMargin = bottom;
 
     }
 
@@ -275,23 +349,29 @@ public class VolumeFlowGraphView extends View {
 
     private float gapToSizeX(float gap) {
 
-        return (canvasWidth - (leftMargin + rightMargin + 20f + 30f)) * (gap / maxX);
+        return (canvasWidth - leftMargin - rightMargin - outLineLength - verticalLabelMargin) * (gap / maxX);
 
     }
 
     private float gapToSizeY(float gap) {
 
-        return (canvasHeight - (topMargin + bottomMargin + 20f + 30f)) * (gap / maxY);
+        return (canvasHeight - (topMargin + bottomMargin + outLineLength + horizontalLabelMargin)) * (gap / (maxY - minY));
+
+    }
+
+    private float gapToSizeBottomY(float gap) {
+
+        return (canvasHeight - topMargin - bottomMargin - outLineLength - horizontalLabelMargin) * (gap / (maxY - minY));
 
     }
 
     private float xToPosition(double value) {
-        return ((float)(1d - (value / (maxX - minX)))) * canvasWidth;
+        return (((float)(((value) / maxX))) * (canvasWidth - leftMargin - rightMargin - outLineLength - verticalLabelMargin)) + (leftMargin + outLineLength + verticalLabelMargin);
 
     }
 
     private float yToPosition(double value) {
-        return ((float)((maxY - value) / (maxY - minY))) * canvasHeight;
+        return (((float)((maxY - value) / (maxY - minY))) * (canvasHeight - topMargin - bottomMargin - outLineLength - horizontalLabelMargin)) + (topMargin);
 
     }
 
@@ -304,7 +384,7 @@ public class VolumeFlowGraphView extends View {
 
     private void setLinePaint() {
 
-        linePaint.setColor(getContext().getColor(R.color.gray));
+        linePaint.setColor(getContext().getColor(R.color.secondary_color));
         linePaint.setStrokeWidth(2f);
 
     }
@@ -324,7 +404,5 @@ public class VolumeFlowGraphView extends View {
         detailLinePaint.setStrokeWidth(1f);
 
     }
-
-     */
 
 }

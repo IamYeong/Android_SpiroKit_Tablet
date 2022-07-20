@@ -69,6 +69,7 @@ import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
 import kr.co.theresearcher.spirokitfortab.dialog.LoadingDialog;
 import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
 import kr.co.theresearcher.spirokitfortab.graph.TimerProgressView;
+import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowGraphView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowResultView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowRunView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeTimeResultView;
@@ -84,8 +85,12 @@ public class MeasurementFvcActivity extends AppCompatActivity {
     private FrameLayout timerFrameLayout, weakFlowFrameLayout;
     private TimerProgressView timerProgressView;
     private WeakFlowProgressView weakFlowProgressView;
-    private VolumeFlowRunView volumeFlowRunView;
+
+    //private VolumeFlowRunView volumeFlowRunView;
     private VolumeTimeRunView volumeTimeRunView;
+    private VolumeFlowGraphView volumeFlowGraphView;
+
+
     private List<VolumeFlowResultView> volumeFlowResultViewList = new ArrayList<>();
     private List<VolumeTimeResultView> volumeTimeResultViewList = new ArrayList<>();
     private List<String> pulseWidthList = new ArrayList<>();
@@ -410,17 +415,16 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                 int width = realTimeVolumeFlowGraphLayout.getWidth();
                 int height = realTimeVolumeFlowGraphLayout.getHeight();
 
-                volumeFlowRunView = new VolumeFlowRunView(MeasurementFvcActivity.this);
-                volumeFlowRunView.setId(View.generateViewId());
-                volumeFlowRunView.setCanvasSize(width, height);
-                volumeFlowRunView.setX(2f, 0f);
-                volumeFlowRunView.setY(1.25f, -1.25f);
-                volumeFlowRunView.setxStartPosition(0.5f);
-                volumeFlowRunView.setMarkingCount(8, 10);
+                volumeFlowGraphView = new VolumeFlowGraphView(MeasurementFvcActivity.this);
+                volumeFlowGraphView.setId(View.generateViewId());
+                volumeFlowGraphView.setCanvasSize(width, height);
+                volumeFlowGraphView.setX(2f, 0f);
+                volumeFlowGraphView.setY(1.25f, -1.25f);
+                volumeFlowGraphView.setMargin(30, 30, 60, 30);
 
-                volumeFlowRunView.commit();
+                volumeFlowGraphView.commit();
 
-                realTimeVolumeFlowGraphLayout.addView(volumeFlowRunView);
+                realTimeVolumeFlowGraphLayout.addView(volumeFlowGraphView);
 
             }
         });
@@ -562,10 +566,10 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                     @Override
                     public void run() {
 
-                        volumeFlowRunView.clear();
+                        volumeFlowGraphView.clear();
                         volumeTimeRunView.clear();
 
-                        volumeFlowRunView.postInvalidate();
+                        volumeFlowGraphView.postInvalidate();
                         volumeTimeRunView.postInvalidate();
 
 
@@ -752,13 +756,13 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         }
 
         weakFlowProgressBar.setProgress((int)(lps * 1000f));
-        volumeFlowRunView.setValue(volume, lps);
+        volumeFlowGraphView.setValue(volume, lps);
         volumeTimeRunView.setValue(time, volume, lps);
 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                volumeFlowRunView.postInvalidate();
+                volumeFlowGraphView.postInvalidate();
                 volumeTimeRunView.postInvalidate();
             }
         });
@@ -827,9 +831,9 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
                         isStart = true;
 
-                        volumeFlowRunView.clear();
+                        volumeFlowGraphView.clear();
                         volumeTimeRunView.clear();
-                        volumeFlowRunView.postInvalidate();
+                        volumeFlowGraphView.postInvalidate();
                         volumeTimeRunView.postInvalidate();
 
                         resultAdapter.notifyDataSetChanged();

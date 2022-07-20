@@ -330,12 +330,14 @@ public class PatientInsertActivity extends AppCompatActivity {
 
                         try {
 
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                            long time = Calendar.getInstance().getTime().getTime();
+
                             String patientHashed = HashConverter.hashingFromString(
                                     chartNumber +
                                             name +
                                             conversionDate(birthDate) +
                                             SharedPreferencesManager.getOfficeHash(PatientInsertActivity.this));
-
 
                             Patient patient = new Patient.Builder()
                                     .officeHashed(SharedPreferencesManager.getOfficeHash(PatientInsertActivity.this))
@@ -349,6 +351,8 @@ public class PatientInsertActivity extends AppCompatActivity {
                                     .nowSmoking(nowSmoking)
                                     .smokingAmountDay(smokeAmount)
                                     .birthDay(conversionDate(birthDate))
+                                    .createDate(simpleDateFormat.format(time))
+                                    .updatedDate(simpleDateFormat.format(time))
                                     .build();
 
                             String start = conversionDate(startSmokeDate);
