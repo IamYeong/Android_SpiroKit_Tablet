@@ -182,12 +182,22 @@ public class SlowVolumeTimeGraphView extends View {
     //초기 설정이 끝나거나 setValue 후 값 조정이 끝났을 때 사용
     public void commit() {
 
-        if ((maxX / xGap) > 12) {
-            xGap = (maxX * 0.1f);
-        }
 
-        if (((maxY / yGap) > 9)) {
-            yGap = maxY * 0.2f;
+        xGap = (maxX * 0.1f);
+
+        int count = 0;
+        float temp = 0.25f;
+
+        while (true) {
+
+            count = (int)((maxY - minY) / temp);
+            if (count > 10) {
+                temp += 0.25f;
+            } else {
+                yGap = temp;
+                break;
+            }
+
         }
 
         path.reset();

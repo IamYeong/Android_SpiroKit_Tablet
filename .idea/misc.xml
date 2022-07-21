@@ -104,6 +104,7 @@
         <entry key="app/src/main/res/layout/item_scan_result.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_setting_app_version.xml" value="0.16276041666666666" />
         <entry key="app/src/main/res/layout/item_setting_auto_pairing.xml" value="0.16276041666666666" />
+        <entry key="app/src/main/res/layout/item_setting_ble_device.xml" value="0.1515625" />
         <entry key="app/src/main/res/layout/item_setting_manual.xml" value="0.16276041666666666" />
         <entry key="app/src/main/res/layout/item_setting_operator_management.xml" value="0.20442708333333334" />
         <entry key="app/src/main/res/layout/item_setting_server_sync.xml" value="0.16276041666666666" />

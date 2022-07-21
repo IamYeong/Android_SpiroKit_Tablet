@@ -213,6 +213,7 @@ public class FvcResultFragment extends Fragment implements Observer {
         volumeTimeResultView.setX(1.5f *  ((float)width / (float)height), 0f);
         volumeTimeResultView.setY(1f, 0f);
         volumeTimeResultView.setMargin(30,30,60,30);
+        volumeTimeResultView.setFinalPath(true);
 
         volumeTimeResultView.commit();
 

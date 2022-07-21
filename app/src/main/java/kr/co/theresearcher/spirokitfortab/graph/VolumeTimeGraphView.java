@@ -39,6 +39,8 @@ public class VolumeTimeGraphView extends View {
     private float xGap = 0f;
     private float yGap = 0f;
 
+    private boolean hasFinalPath = false;
+
     public VolumeTimeGraphView(Context context) {
         super(context);
 
@@ -51,7 +53,7 @@ public class VolumeTimeGraphView extends View {
 
         outLineLength = 20f;
         horizontalLabelMargin = 50f;
-        verticalLabelMargin = 80f;
+        verticalLabelMargin = 50f;
 
         setLabelPaint();
         setLinePaint();
@@ -69,13 +71,16 @@ public class VolumeTimeGraphView extends View {
         //canvas.drawText("Volume|Flow Graph", canvasWidth / 2f, horizontalLabelMargin, labelPaint);
 
         //축 라벨
-        canvas.drawText("Volume(L)", (leftMargin + verticalLabelMargin + outLineLength), 30f, labelPaint);
+        canvas.drawText("Volume(L)", (leftMargin), topMargin * 0.8f, labelPaint);
         canvas.drawText("Time(s)", canvasWidth - 100f, canvasHeight - 30f, labelPaint);
 
         //Y축 선
         canvas.drawLine((leftMargin + outLineLength + verticalLabelMargin), topMargin, (leftMargin + outLineLength + verticalLabelMargin), (canvasHeight - bottomMargin - outLineLength - horizontalLabelMargin), linePaint);
+        canvas.drawLine((canvasWidth - rightMargin), topMargin, (canvasWidth - rightMargin), (canvasHeight - bottomMargin - outLineLength - horizontalLabelMargin), linePaint);
+
         //X축 선
         canvas.drawLine((leftMargin + outLineLength + verticalLabelMargin), (canvasHeight - bottomMargin - outLineLength - horizontalLabelMargin), (canvasWidth - rightMargin), (canvasHeight - bottomMargin - outLineLength - horizontalLabelMargin), linePaint);
+        canvas.drawLine((leftMargin + outLineLength + verticalLabelMargin), topMargin, (canvasWidth - rightMargin), topMargin, linePaint);
 
 
         float temp = 0f;
@@ -102,8 +107,8 @@ public class VolumeTimeGraphView extends View {
                     detailLinePaint);
 
             //canvas.drawText(Float.toString(Fluid.autoRound(1, ((float)xInterval * (float) i))), ((float)xPadding * (float)i) - outLineLength, (canvasHeight * 0.5f) - 25f, labelPaint);
-            String label = getContext().getString(R.string.with_sec, accGap);
-            canvas.drawText(label, (leftMargin + outLineLength + horizontalLabelMargin) + temp - 10f, (canvasHeight - bottomMargin - outLineLength - 5f), labelPaint);
+            String label = getContext().getString(R.string.float_two, accGap);
+            canvas.drawText(label, (leftMargin + outLineLength + horizontalLabelMargin) + temp - 3f, (canvasHeight - bottomMargin - outLineLength - 5f), labelPaint);
 
             accGap += xGap;
             temp += gapSize;
@@ -133,7 +138,7 @@ public class VolumeTimeGraphView extends View {
                     canvasHeight - horizontalLabelMargin - outLineLength - bottomMargin - temp,
                     detailLinePaint);
 
-            String label = getContext().getString(R.string.with_L, accGap);
+            String label = getContext().getString(R.string.float_two, accGap);
             canvas.drawText(label, leftMargin, canvasHeight - horizontalLabelMargin - outLineLength - bottomMargin - temp + 10f, labelPaint);
 
             accGap += yGap;
@@ -141,19 +146,45 @@ public class VolumeTimeGraphView extends View {
         }
 
         //경로 그리기
+        if (hasFinalPath) path.lineTo(canvasWidth - rightMargin, yToPosition(y));
         canvas.drawPath(path, pathPaint);
 
+    }
+
+    public void setFinalPath(boolean enable) {
+        hasFinalPath = enable;
     }
 
     //초기 설정이 끝나거나 setValue 후 값 조정이 끝났을 때 사용
     public void commit() {
 
-        if ((maxX / xGap) > 9) {
-            xGap = (maxX * 0.2f);
+        int count = 0;
+        float temp = 0.25f;
+
+        while (true) {
+
+            count = (int)(maxX / temp);
+            if (count > 9) {
+                temp += 0.25f;
+            } else {
+                xGap = temp;
+                break;
+            }
+
         }
 
-        if (((maxY / yGap) > 9)) {
-            yGap = maxY * 0.2f;
+        temp = 0.25f;
+
+        while (true) {
+
+            count = (int)((maxY - minY) / temp);
+            if (count > 10) {
+                temp += 0.25f;
+            } else {
+                yGap = temp;
+                break;
+            }
+
         }
 
         path.reset();
@@ -198,17 +229,17 @@ public class VolumeTimeGraphView extends View {
 
             isOver = true;
 
-            maxY *= this.x / maxX;
-            maxX *= this.x / maxX;
+            maxY *= (this.x + x) / maxX;
+            maxX *= (this.x + x) / maxX;
 
         }
 
-        if ((this.y + y) > maxY) {
+        if ((this.y + y) > (maxY * 0.95f)) {
 
             isOver = true;
 
-            maxX *= this.y / maxY;
-            maxY *= this.y / maxY;
+            maxX *= this.y / (maxY * 0.95f);
+            maxY *= this.y / (maxY * 0.95f);
 
         }
 
@@ -327,7 +358,7 @@ public class VolumeTimeGraphView extends View {
 
     private void setDetailLinePaint() {
 
-        detailLinePaint.setColor(getContext().getColor(R.color.gray));
+        detailLinePaint.setColor(getContext().getColor(R.color.secondary_color));
         detailLinePaint.setStrokeWidth(1f);
 
     }

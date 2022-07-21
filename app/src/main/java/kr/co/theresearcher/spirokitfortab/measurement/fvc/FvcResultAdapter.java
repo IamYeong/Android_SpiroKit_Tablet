@@ -128,7 +128,7 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
             holder.getOrderText().setText(context.getString(R.string.n_order_meas, holder.getAdapterPosition() + 1, context.getString(R.string.pre)));
         }
 
-        holder.getDateText().setText(context.getString(R.string.time_colon_what, simpleDateFormat.format(resultFVC.getTimestamp())));
+        holder.getDateText().setText(simpleDateFormat.format(resultFVC.getTimestamp()));
 
         holder.getFvcText().setText(context.getString(R.string.with_L, resultFVC.getFvc()));
         holder.getFvcPredText().setText(context.getString(R.string.with_L, resultFVC.getFvcPredict()));
