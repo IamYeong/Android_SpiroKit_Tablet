@@ -68,9 +68,10 @@
         app:layout_constraintBottom_toBottomOf="@id/view_line_center_setting"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="@id/view_line_center_setting"
-        android:layout_marginHorizontal="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="25dp"
         android:layout_marginVertical="50dp"
-        app:cardCornerRadius="10dp"
+        app:cardCornerRadius="15dp"
         app:cardElevation="6dp"
 
         >
@@ -88,7 +89,7 @@
                 android:orientation="horizontal"
 
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="40dp"
                 android:layout_marginBottom="10dp"
                 >
 
@@ -97,11 +98,10 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nanum_gothic_bold"
                     android:textColor="@color/black"
-                    android:textSize="12sp"
+                    android:textSize="15sp"
                     android:text="@string/device_info"
 
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/frame_btn_start_scan_setting"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_weight="1"
 
@@ -115,10 +115,9 @@
                     android:layout_height="wrap_content"
 
                     android:textColor="@color/black"
-                    android:textSize="12sp"
+                    android:textSize="15sp"
 
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/frame_btn_start_scan_setting"
                     app:layout_constraintEnd_toEndOf="parent"
 
                     android:text="@string/state_disconnect"
@@ -131,64 +130,32 @@
 
             </LinearLayout>
 
-            <FrameLayout
-                android:id="@+id/frame_btn_start_scan_setting"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/tv_device_name_modify_setting"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button_out_line_highlight"
-
-                app:layout_constraintTop_toBottomOf="@id/tv_spirokit_connect_state_setting"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-
-                android:layout_marginHorizontal="20dp"
                 android:textColor="@color/highlight_color"
+                android:text="@string/device_name_modify"
+                android:layout_gravity="end"
+                android:layout_marginEnd="40dp"
 
-                android:textSize="15sp"
-                android:text="@string/scan"
-                android:padding="5dp"
-                >
-
-                <TextView
-                    android:id="@+id/tv_start_scan"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:textAlignment="center"
-                    android:textColor="@color/highlight_color"
-
-                    android:text="@string/scan"
-                    />
-
-
-                <ProgressBar
-                    android:id="@+id/progress_scan_loading"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-
-                    android:layout_gravity="center"
-
-                    android:indeterminateDrawable="@drawable/item_loading_highlight"
-                    android:indeterminateDuration="500"
-
-                    android:visibility="invisible"
-                    />
-
-
-            </FrameLayout>
+                android:foreground="?attr/selectableItemBackground"
+                android:visibility="invisible"
+                />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
                 android:textColor="@color/gray_dark"
-                android:textSize="8sp"
+                android:textSize="10sp"
                 android:layout_marginHorizontal="20dp"
                 android:text="@string/scan_info"
                 android:paddingVertical="10dp"
                 android:layout_gravity="start"
                 android:paddingStart="20dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="30dp"
                 />
 
             <LinearLayout
@@ -264,10 +231,58 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_setting"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginVertical="10dp"
                 android:layout_marginHorizontal="40dp"
+
+                android:layout_weight="1"
                 />
+
+            <FrameLayout
+                android:id="@+id/frame_btn_start_scan_setting"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/button_out_line_highlight"
+
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginBottom="20dp"
+                android:textColor="@color/highlight_color"
+
+                android:textSize="15sp"
+                android:text="@string/scan"
+                android:padding="5dp"
+
+
+                >
+
+                <TextView
+                    android:id="@+id/tv_start_scan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textAlignment="center"
+                    android:textColor="@color/highlight_color"
+                    android:textSize="15sp"
+
+                    android:text="@string/scan"
+                    />
+
+
+                <ProgressBar
+                    android:id="@+id/progress_scan_loading"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+
+                    android:layout_gravity="center"
+
+                    android:indeterminateDrawable="@drawable/item_loading_highlight"
+                    android:indeterminateDuration="500"
+
+                    android:visibility="invisible"
+                    />
+
+
+            </FrameLayout>
 
         </LinearLayout>
 
@@ -281,8 +296,9 @@
         app:layout_constraintBottom_toBottomOf="@id/view_line_center_setting"
         app:layout_constraintStart_toEndOf="@id/view_line_center_setting"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginHorizontal="50dp"
-        android:layout_marginVertical="50dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginVertical="45dp"
 
         >
 

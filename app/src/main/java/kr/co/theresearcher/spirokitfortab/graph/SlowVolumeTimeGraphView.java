@@ -50,7 +50,7 @@ public class SlowVolumeTimeGraphView extends View {
 
         outLineLength = 20f;
         horizontalLabelMargin = 50f;
-        verticalLabelMargin = 80f;
+        verticalLabelMargin = 50f;
 
         setLabelPaint();
         setLinePaint();
@@ -68,13 +68,16 @@ public class SlowVolumeTimeGraphView extends View {
         //canvas.drawText("Volume|Flow Graph", canvasWidth / 2f, horizontalLabelMargin, labelPaint);
 
         //축 라벨
-        canvas.drawText("Volume(L)", (leftMargin + verticalLabelMargin + outLineLength), 30f, labelPaint);
+        canvas.drawText("Volume(L)", (leftMargin), topMargin * 0.8f, labelPaint);
         canvas.drawText("Time(s)", canvasWidth - 100f, canvasHeight - 30f, labelPaint);
 
         //Y축 선
         canvas.drawLine((leftMargin + outLineLength + verticalLabelMargin), topMargin, (leftMargin + outLineLength + verticalLabelMargin), (canvasHeight - bottomMargin - outLineLength - horizontalLabelMargin), linePaint);
+        canvas.drawLine((canvasWidth - rightMargin), topMargin, (canvasWidth - rightMargin), (canvasHeight - bottomMargin - outLineLength - horizontalLabelMargin), linePaint);
+
         //X축 선
         canvas.drawLine((leftMargin + outLineLength + verticalLabelMargin), (canvasHeight - bottomMargin - outLineLength - horizontalLabelMargin), (canvasWidth - rightMargin), (canvasHeight - bottomMargin - outLineLength - horizontalLabelMargin), linePaint);
+        canvas.drawLine((leftMargin + outLineLength + verticalLabelMargin), topMargin, (canvasWidth - rightMargin), topMargin, linePaint);
 
 
         float temp = 0f;
@@ -101,8 +104,8 @@ public class SlowVolumeTimeGraphView extends View {
                     detailLinePaint);
 
             //canvas.drawText(Float.toString(Fluid.autoRound(1, ((float)xInterval * (float) i))), ((float)xPadding * (float)i) - outLineLength, (canvasHeight * 0.5f) - 25f, labelPaint);
-            String label = getContext().getString(R.string.with_sec, accGap);
-            canvas.drawText(label, (leftMargin + outLineLength + horizontalLabelMargin) + temp - 10f, (canvasHeight - bottomMargin - outLineLength - 5f), labelPaint);
+            String label = getContext().getString(R.string.float_two, accGap);
+            canvas.drawText(label, (leftMargin + outLineLength + horizontalLabelMargin) + temp - 4f, (canvasHeight - bottomMargin - outLineLength - 5f), labelPaint);
 
             accGap += xGap;
             temp += gapSize;
@@ -138,7 +141,7 @@ public class SlowVolumeTimeGraphView extends View {
                     center - temp,
                     detailLinePaint);
 
-            String label = getContext().getString(R.string.with_L, accGap);
+            String label = getContext().getString(R.string.float_two, accGap);
             canvas.drawText(label, leftMargin, center - temp + 10f, labelPaint);
 
             temp += gapSize;
@@ -166,7 +169,7 @@ public class SlowVolumeTimeGraphView extends View {
                     center + temp,
                     detailLinePaint);
 
-            String label = getContext().getString(R.string.with_L, accGap);
+            String label = getContext().getString(R.string.float_two, accGap);
             canvas.drawText(label, leftMargin, center + temp + 10f, labelPaint);
 
             accGap -= yGap;
@@ -371,7 +374,7 @@ public class SlowVolumeTimeGraphView extends View {
 
     private void setDetailLinePaint() {
 
-        detailLinePaint.setColor(getContext().getColor(R.color.gray));
+        detailLinePaint.setColor(getContext().getColor(R.color.secondary_color));
         detailLinePaint.setStrokeWidth(1f);
 
     }

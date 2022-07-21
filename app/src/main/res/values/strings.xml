@@ -184,6 +184,11 @@
     <string name="state_disconnect">연결되지 않음</string>
     <string name="state_connect">연결됨</string>
 
+    <string name="device_name_modify">이름 변경</string>
+    <string name="current_name">현재 이름</string>
+    <string name="modify_name">변경 이름</string>
+    <string name="info_modify_name">변경한 이름은 SpiroKit 을 재시작해야 반영됩니다</string>
+
     <string name="connect_with_what">%1$s와(과) 연결되었습니다</string>
     <string name="question_connect">%1$s 와(과)\n연결하시겠습니까?</string>
     <string name="question_disconnect">연결을 끊으시겠습니까?</string>
@@ -209,7 +214,7 @@
     <string name="not_available_ble">블루투스를 이용할 수 없는 장치입니다. 기종을 확인해주세요</string>
 
     <string name="failed_server_connection">서버와 통신 중 오류가 발생했습니다\n(%1$s)</string>
-
+    <string name="modify_device_name">디바이스 이름 변경</string>
 
     <!-- Operator Activity -->
     <string name="management_medical_staff">의료진 관리</string>

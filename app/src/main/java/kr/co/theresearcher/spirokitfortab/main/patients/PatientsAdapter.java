@@ -163,34 +163,37 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsViewHolder> {
                 selectionDialog.setSelectedListener(new OnSelectedInDialogListener() {
                     @Override
                     public void onSelected(boolean select) {
-                        Thread thread = new Thread() {
-                            @Override
-                            public void run() {
-                                super.run();
-                                Looper.prepare();
 
-                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                                long time = Calendar.getInstance().getTime().getTime();
+                        if (select) {
+                            Thread thread = new Thread() {
+                                @Override
+                                public void run() {
+                                    super.run();
+                                    Looper.prepare();
 
-                                SpiroKitDatabase database = SpiroKitDatabase.getInstance(context);
-                                database.calHistoryDao().deleteReference(patient.getHashed());
-                                database.patientDao().deletePatient(patient.getHashed(), simpleDateFormat.format(time));
+                                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                                    long time = Calendar.getInstance().getTime().getTime();
 
-                                SpiroKitDatabase.removeInstance();
+                                    SpiroKitDatabase database = SpiroKitDatabase.getInstance(context);
+                                    database.calHistoryDao().deleteReference(patient.getHashed());
+                                    database.patientDao().deletePatient(patient.getHashed(), simpleDateFormat.format(time));
 
-                                handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
+                                    SpiroKitDatabase.removeInstance();
 
-                                        onItemChangedListener.onChanged();
+                                    handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
 
-                                    }
-                                });
+                                            onItemChangedListener.onChanged();
 
-                                Looper.loop();
-                            }
-                        };
-                        thread.start();
+                                        }
+                                    });
+
+                                    Looper.loop();
+                                }
+                            };
+                            thread.start();
+                        }
                     }
                 });
                 selectionDialog.show();

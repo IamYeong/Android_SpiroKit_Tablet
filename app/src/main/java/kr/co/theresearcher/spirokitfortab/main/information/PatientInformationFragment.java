@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -69,6 +70,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
     private FrameLayout volumeFlowLayout, volumeTimeLayout;
     private FrameLayout patientsEmptyView, calEmptyView;
     private CardView patientCard;
+    private ConstraintLayout patientAreaLayout;
 
     private PatientsAdapter patientsAdapter;
     private MeasurementAdapter measurementAdapter;
@@ -108,7 +110,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
                 patientsEmptyView.setVisibility(View.INVISIBLE);
                 patientsRV.setClickable(true);
                 patientSearchField.clearFocus();
-
+                patientAreaLayout.setClickable(true);
                 inputMethodManager.hideSoftInputFromWindow(patientSearchField.getWindowToken(), 0);
 
             }
@@ -131,6 +133,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
         inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
 
+        patientAreaLayout = view.findViewById(R.id.constraint_patient_info_area);
         startMeasButton = view.findViewById(R.id.btn_test_start_patient_info);
         patientSearchField = view.findViewById(R.id.et_search_patient_info_fragment);
         patientsRV = view.findViewById(R.id.rv_patients_info_fragment);
@@ -213,6 +216,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
                 if (isExpanded) updatePatientInformation();
                 else updatePatientSimpleInfo();
+                patientAreaLayout.setClickable(true);
 
                 selectMeasurements();
 
@@ -283,6 +287,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
                     Log.d(getClass().getSimpleName(), "Patient edit text click");
 
+                    patientAreaLayout.setClickable(false);
                     isFocused = true;
                     selectPatients();
 

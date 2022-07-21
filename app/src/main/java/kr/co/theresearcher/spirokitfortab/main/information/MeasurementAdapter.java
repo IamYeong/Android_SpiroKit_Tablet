@@ -213,32 +213,34 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
                     @Override
                     public void onSelected(boolean select) {
 
-                        Thread thread = new Thread() {
+                        if (select) {
+                            Thread thread = new Thread() {
 
-                            @Override
-                            public void run() {
-                                super.run();
-                                Looper.prepare();
+                                @Override
+                                public void run() {
+                                    super.run();
+                                    Looper.prepare();
 
-                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                                long time = Calendar.getInstance().getTime().getTime();
+                                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                                    long time = Calendar.getInstance().getTime().getTime();
 
-                                SpiroKitDatabase database = SpiroKitDatabase.getInstance(context);
-                                database.calHistoryRawDataDao().deleteReference(calHistory.getHashed());
-                                database.calHistoryDao().delete(calHistory.getHashed(), simpleDateFormat.format(time));
+                                    SpiroKitDatabase database = SpiroKitDatabase.getInstance(context);
+                                    database.calHistoryRawDataDao().deleteReference(calHistory.getHashed());
+                                    database.calHistoryDao().delete(calHistory.getHashed(), simpleDateFormat.format(time));
 
-                                handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        onItemChangedListener.onChanged();
-                                    }
-                                });
+                                    handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            onItemChangedListener.onChanged();
+                                        }
+                                    });
 
-                                Looper.loop();
-                            }
-                        };
+                                    Looper.loop();
+                                }
+                            };
 
-                        thread.start();
+                            thread.start();
+                        }
 
 
                     }

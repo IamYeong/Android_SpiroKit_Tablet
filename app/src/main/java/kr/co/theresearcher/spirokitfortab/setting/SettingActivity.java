@@ -63,8 +63,10 @@ import kr.co.theresearcher.spirokitfortab.db.office.Office;
 import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
 import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
 import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
+import kr.co.theresearcher.spirokitfortab.dialog.DeviceNameModifyDialog;
 import kr.co.theresearcher.spirokitfortab.dialog.LoadingDialog;
 import kr.co.theresearcher.spirokitfortab.dialog.OnSelectedInDialogListener;
+import kr.co.theresearcher.spirokitfortab.dialog.OnTextInputListener;
 import kr.co.theresearcher.spirokitfortab.dialog.SelectionDialog;
 import kr.co.theresearcher.spirokitfortab.setting.operator.OperatorActivity;
 import kr.co.theresearcher.spirokitfortab.volley.ErrorResponse;
@@ -81,7 +83,7 @@ public class SettingActivity extends AppCompatActivity {
     private CardView operatorCard;
     private RecyclerView rv;
     private BluetoothScanResultsAdapter adapter;
-    private TextView connectStateText, startScanText, userNickname;
+    private TextView connectStateText, startScanText, userNickname, nameModifyText;
     private ImageButton syncButton;
     private boolean enableAutoPairing, enableSleepMode;
 
@@ -166,6 +168,8 @@ public class SettingActivity extends AppCompatActivity {
                         public void run() {
                             connectStateText.setText(getString(R.string.connect_with_what, SharedPreferencesManager.getDeviceName(SettingActivity.this)));
                             startScanText.setText(getString(R.string.do_disconnect));
+                            nameModifyText.setVisibility(View.VISIBLE);
+
                         }
                     });
 
@@ -188,6 +192,8 @@ public class SettingActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 connectStateText.setText(getString(R.string.state_disconnect));
+                                startScanText.setText(getString(R.string.scan));
+                                nameModifyText.setVisibility(View.INVISIBLE);
                             }
                         });
 
@@ -245,18 +251,50 @@ public class SettingActivity extends AppCompatActivity {
         scanProgress = findViewById(R.id.progress_scan_loading);
         startScanText = findViewById(R.id.tv_start_scan);
         syncButton = findViewById(R.id.img_btn_sync_setting);
-
+        nameModifyText = findViewById(R.id.tv_device_name_modify_setting);
         logoutButton = findViewById(R.id.btn_logout_setting);
+        operatorCard = findViewById(R.id.card_operator_management);
 
         userNickname.setText(SharedPreferencesManager.getOfficeName(SettingActivity.this));
 
-        operatorCard = findViewById(R.id.card_operator_management);
+
         operatorCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Intent intent = new Intent(SettingActivity.this, OperatorActivity.class);
                 startActivity(intent);
+
+            }
+        });
+
+        nameModifyText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (mService.isConnect()) {
+
+                    DeviceNameModifyDialog modifyDialog = new DeviceNameModifyDialog(SettingActivity.this);
+                    modifyDialog.setCurrentDeviceName(SharedPreferencesManager.getDeviceName(SettingActivity.this));
+                    modifyDialog.setInputListener(new OnTextInputListener() {
+                        @Override
+                        public void onTextInput(String text) {
+
+                            mService.writeCharacteristic("name" + text);
+
+                            ConfirmDialog confirmDialog = new ConfirmDialog(SettingActivity.this);
+                            confirmDialog.setTitle(getString(R.string.info_modify_name));
+                            confirmDialog.show();
+
+                        }
+                    });
+                    modifyDialog.show();
+
+                    //이름변경 다이얼로그 띄우기
+                    //다이얼로그에서 숫자 입력받고 확인 누르면 그 값을 리스너로 받아서 서비스로 보내기
+                    //mService.writeCharacteristic("name00");
+
+                }
 
             }
         });
@@ -315,6 +353,7 @@ public class SettingActivity extends AppCompatActivity {
 
                 if (mService.isConnect()) {
                     mService.disconnect();
+
                 } else {
                     activityResultLauncher.launch(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE));
                 }
