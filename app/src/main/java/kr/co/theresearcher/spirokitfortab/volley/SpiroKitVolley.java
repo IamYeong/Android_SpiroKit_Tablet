@@ -15,7 +15,7 @@ import org.json.JSONObject;
 
 public class SpiroKitVolley {
 
-    private static final String USER_LOGIN_POST_URL = "http://43.200.35.255:4500/apis/spirokit/e/sync/01";
+    private static final String USER_LOGIN_POST_URL = "http://192.168.0.104:4600/apis/spirokit/e/sync/dev";
 
     private static RequestQueue requestQueue;
     private static VolleyResponseListener listener;
@@ -55,7 +55,7 @@ public class SpiroKitVolley {
         jsonObjectRequest.setRetryPolicy(new RetryPolicy() {
             @Override
             public int getCurrentTimeout() {
-                return 50000;
+                return 600000;
             }
 
             @Override

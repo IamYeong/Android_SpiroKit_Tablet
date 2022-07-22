@@ -194,7 +194,7 @@
 
             android:paddingHorizontal="70dp"
             android:paddingVertical="12dp"
-            android:elevation="10dp"
+            android:elevation="3dp"
 
             android:fontFamily="@font/nanum_barun_gothic_light"
             />

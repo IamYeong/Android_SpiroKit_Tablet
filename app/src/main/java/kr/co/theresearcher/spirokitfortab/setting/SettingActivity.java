@@ -280,7 +280,9 @@ public class SettingActivity extends AppCompatActivity {
                         @Override
                         public void onTextInput(String text) {
 
-                            mService.writeCharacteristic("name" + text);
+                            Log.e(getClass().getSimpleName(), "NAME CHANGE : " + text);
+
+                            mService.writeCharacteristic("blen" + text);
 
                             ConfirmDialog confirmDialog = new ConfirmDialog(SettingActivity.this);
                             confirmDialog.setTitle(getString(R.string.info_modify_name));
@@ -315,11 +317,13 @@ public class SettingActivity extends AppCompatActivity {
                         if (select) {
 
                             String macAddress = result.getDevice().getAddress();
+                            String name = result.getScanRecord().getDeviceName();
 
-                            SharedPreferencesManager.setDeviceMacAddress(getApplicationContext(), result.getDevice().getAddress());
-                            SharedPreferencesManager.setDeviceName(getApplicationContext(), result.getDevice().getName());
+                            SharedPreferencesManager.setDeviceMacAddress(getApplicationContext(), macAddress);
+                            SharedPreferencesManager.setDeviceName(getApplicationContext(), name);
 
-                            Log.d(getClass().getSimpleName(), macAddress + ", " + mService.getClass().getSimpleName());
+                            Log.e(getClass().getSimpleName(), "Device.name : " + result.getDevice().getName() + ", ScanRecord.name : " + name);
+                            Log.e(getClass().getSimpleName(), "MacAddress : " + macAddress);
 
                             if (mService != null) {
 
@@ -839,6 +843,7 @@ public class SettingActivity extends AppCompatActivity {
                     }
 
                     JSONArray rawData = items.getJSONArray(JsonKeys.JSON_KEY_RAW_DATA_LIST);
+                    Log.e(getClass().getSimpleName(), "RECEIVE RAW DATA SIZE : " + rawData.length());
 
                     for (int i = 0; i < rawData.length(); i++) {
 

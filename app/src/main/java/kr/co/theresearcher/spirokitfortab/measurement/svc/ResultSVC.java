@@ -11,9 +11,18 @@ public class ResultSVC {
     private long timestamp;
     private boolean isSelected;
     private boolean isPost;
+    private String order;
 
     public ResultSVC(String hash) {
         this.hashed = hash;
+    }
+
+    public String getOrder() {
+        return order;
+    }
+
+    public void setOrder(String order) {
+        this.order = order;
     }
 
     public boolean isPost() {

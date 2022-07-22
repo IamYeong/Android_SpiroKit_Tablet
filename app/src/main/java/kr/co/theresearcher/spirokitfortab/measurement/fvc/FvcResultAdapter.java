@@ -123,9 +123,9 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
         }
 
         if (resultFVC.isPost()) {
-            holder.getOrderText().setText(context.getString(R.string.n_order_meas, holder.getAdapterPosition() + 1, context.getString(R.string.post)));
+            holder.getOrderText().setText(context.getString(R.string.n_order_meas, resultFVC.getOrder(), context.getString(R.string.post)));
         } else {
-            holder.getOrderText().setText(context.getString(R.string.n_order_meas, holder.getAdapterPosition() + 1, context.getString(R.string.pre)));
+            holder.getOrderText().setText(context.getString(R.string.n_order_meas, resultFVC.getOrder(), context.getString(R.string.pre)));
         }
 
         holder.getDateText().setText(simpleDateFormat.format(resultFVC.getTimestamp()));

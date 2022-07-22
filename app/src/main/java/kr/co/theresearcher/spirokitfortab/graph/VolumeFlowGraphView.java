@@ -281,7 +281,7 @@ public class VolumeFlowGraphView extends View {
 
             if (Math.abs(xOffset) > maxX) {
 
-                Log.e(getClass().getSimpleName(), "OFFSET : " + xOffset + ", MAX X : " + maxX);
+                //Log.e(getClass().getSimpleName(), "OFFSET : " + xOffset + ", MAX X : " + maxX);
 
                 maxY *= (x + maxX) / maxX;
                 minY *= (x + maxX) / maxX;

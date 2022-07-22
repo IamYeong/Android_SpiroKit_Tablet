@@ -123,6 +123,8 @@ public class SvcResultFragment extends Fragment implements Observer {
         rv.setLayoutManager(linearLayoutManager);
         rv.setAdapter(svcResultAdapter);
 
+        rv.setVisibility(View.INVISIBLE);
+
         graphLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -236,9 +238,10 @@ public class SvcResultFragment extends Fragment implements Observer {
                     }
                     resultSVC.setVc(vc);
                     resultSVC.setPost(rawData.get(i).getIsPost());
+                    resultSVC.setOrder(rawData.get(i).getOrderNumber());
 
                     svcResultAdapter.addResult(resultSVC);
-
+                    Log.e(getClass().getSimpleName(), svcResultAdapter.getItemCount() + "개 째 처리 중");
 
                 }
 
@@ -251,6 +254,8 @@ public class SvcResultFragment extends Fragment implements Observer {
                         svcResultAdapter.notifyDataSetChanged();
                         graphLayout.removeAllViews();
                         graphLayout.addView(graphViews.get(0));
+
+                        rv.setVisibility(View.VISIBLE);
                     }
                 });
 

@@ -927,6 +927,8 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
         resultFVC.setPost(isPost);
 
+        resultFVC.setOrder(order + "");
+
         resultAdapter.addFvcResult(resultFVC);
 
     }

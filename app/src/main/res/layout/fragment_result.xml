@@ -20,7 +20,8 @@
         android:layout_marginHorizontal="20dp"
 
         app:cardCornerRadius="20dp"
-        app:cardElevation="6dp"
+        android:elevation="3dp"
+
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -134,9 +135,9 @@
         android:id="@+id/rv_result_fvc_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:background="@color/gray_background"
+        app:layout_constraintBottom_toBottomOf="parent"
 
-        />
+        tools:layout_editor_absoluteX="4dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -120,9 +120,9 @@ public class SvcResultAdapter extends RecyclerView.Adapter<SvcResultViewHolder> 
         holder.getDateText().setText(simpleDateFormat.format(resultSVC.getTimestamp()));
 
         if (resultSVC.isPost()) {
-            holder.getTitleText().setText(context.getString(R.string.n_order_meas, holder.getAdapterPosition() + 1, context.getString(R.string.post)));
+            holder.getTitleText().setText(context.getString(R.string.n_order_meas, resultSVC.getOrder(), context.getString(R.string.post)));
         } else {
-            holder.getTitleText().setText(context.getString(R.string.n_order_meas, holder.getAdapterPosition() + 1, context.getString(R.string.pre)));
+            holder.getTitleText().setText(context.getString(R.string.n_order_meas, resultSVC.getOrder(), context.getString(R.string.pre)));
         }
 
         if (resultSVC.isSelected()) {

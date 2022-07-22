@@ -131,11 +131,13 @@ public class FvcResultFragment extends Fragment implements Observer {
             }
         });
 
-        adapter.addFvcResult(new ResultFVC(""));
+        adapter.addEmptyObject(new ResultFVC(""));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rv.setLayoutManager(linearLayoutManager);
         rv.setAdapter(adapter);
+
+        rv.setVisibility(View.INVISIBLE);
 
         volumeFlowLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -363,8 +365,10 @@ public class FvcResultFragment extends Fragment implements Observer {
                     }
 
                     resultFVC.setPost(rawData.get(i).getIsPost());
+                    resultFVC.setOrder(rawData.get(i).getOrderNumber());
 
                     adapter.addFvcResult(resultFVC);
+                    Log.e(getClass().getSimpleName(), adapter.getItemCount() + "개 째 처리 중");
 
                 }
 
@@ -380,6 +384,8 @@ public class FvcResultFragment extends Fragment implements Observer {
 
                         volumeFlowLayout.addView(volumeFlowResultViews.get(0));
                         volumeTimeLayout.addView(volumeTimeResultViews.get(0));
+
+                        rv.setVisibility(View.VISIBLE);
                     }
                 });
 

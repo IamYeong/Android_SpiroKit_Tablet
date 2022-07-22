@@ -1,6 +1,7 @@
 package kr.co.theresearcher.spirokitfortab.setting;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -35,6 +36,7 @@ public class BluetoothScanResultsAdapter extends RecyclerView.Adapter<BluetoothS
         selects = new ArrayList<>();
     }
 
+    @SuppressLint("MissingPermission")
     public void addResult(ScanResult result) {
 
         //이름검사
@@ -86,7 +88,7 @@ public class BluetoothScanResultsAdapter extends RecyclerView.Adapter<BluetoothS
             //holder.getConstraintLayout().setBackgroundResource(0);
         }
 
-        String name = result.getDevice().getName();
+        String name = result.getScanRecord().getDeviceName();
         String macAddress = result.getDevice().getAddress();
         String decibel = Integer.toString(result.getTxPower());
 

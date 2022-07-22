@@ -717,6 +717,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
         resultSVC.setTimestamp(timestamp.toEpochMilli());
         resultSVC.setPost(isPost);
+        resultSVC.setOrder(order + "");
 
         adapter.addResult(resultSVC);
 
