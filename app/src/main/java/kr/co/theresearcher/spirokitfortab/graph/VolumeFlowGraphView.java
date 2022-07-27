@@ -302,13 +302,13 @@ public class VolumeFlowGraphView extends View {
 
         }
 
-        if (y < minY) {
+        if (y < minY * 0.95f) {
 
             isOver = true;
 
-            maxY *= Math.abs(y / minY);
-            maxX *= Math.abs(y / minY);
-            minY *= Math.abs(y / minY);
+            maxY *= Math.abs(y / (minY * 0.95f));
+            maxX *= Math.abs(y / (minY * 0.95f));
+            minY *= Math.abs(y / (minY * 0.95f));
 
         }
 

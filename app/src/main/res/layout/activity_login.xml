@@ -53,7 +53,7 @@
         android:layout_weight="1"
         android:textSize="12sp"
 
-        android:hint="@string/user_email"
+        android:hint="@string/user_identifier"
 
 
         android:inputType="textEmailAddress"

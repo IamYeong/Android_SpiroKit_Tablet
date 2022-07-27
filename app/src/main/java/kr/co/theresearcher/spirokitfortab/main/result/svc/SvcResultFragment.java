@@ -46,7 +46,7 @@ import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
 import kr.co.theresearcher.spirokitfortab.db.work.Work;
 import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
 import kr.co.theresearcher.spirokitfortab.graph.SlowVolumeTimeGraphView;
-import kr.co.theresearcher.spirokitfortab.graph.SlowVolumeTimeRunView;
+
 import kr.co.theresearcher.spirokitfortab.main.result.OnOrderSelectedListener;
 import kr.co.theresearcher.spirokitfortab.measurement.svc.MeasurementSvcActivity;
 import kr.co.theresearcher.spirokitfortab.measurement.svc.ResultSVC;
@@ -198,15 +198,8 @@ public class SvcResultFragment extends Fragment implements Observer {
                 for (int i = 0; i < rawData.size(); i++) {
 
                     CalHistoryRawData raw = rawData.get(i);
-                    Log.d(getClass().getSimpleName(), ""
-                                    + "HASH : " + raw.getHashed() + "\n"
-                                    + "HISTORY HASH : " + raw.getCalHistoryHashed() + "\n"
-                                    + "ORDER : " + raw.getOrderNumber() + "\n"
-                                    + "IS_DELETED : " + raw.getIsDeleted() + "\n"
-                                    + "IS_DELETED_REF : " + raw.getIsDeletedReference() + "\n"
-                            );
 
-                    String[] data = rawData.get(i).getData().split(" ");
+                    String[] data = raw.getData().split(" ");
                     List<Integer> pulseWidth = new ArrayList<>();
 
                     for (int j = 0; j < data.length; j++) {

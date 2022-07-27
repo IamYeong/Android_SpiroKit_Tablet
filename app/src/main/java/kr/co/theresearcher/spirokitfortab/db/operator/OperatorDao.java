@@ -2,6 +2,7 @@ package kr.co.theresearcher.spirokitfortab.db.operator;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -22,7 +23,7 @@ public interface OperatorDao {
     @Query("SELECT * FROM operator WHERE (hashed == :hash)")
     Operator selectOperatorByHash(String hash);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertOperator(Operator operator);
 
     @Update

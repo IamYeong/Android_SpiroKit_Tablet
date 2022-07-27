@@ -322,6 +322,7 @@
 
             <include
                 layout="@layout/item_setting_server_sync"
+                android:visibility="gone"
                 />
 
         </LinearLayout>

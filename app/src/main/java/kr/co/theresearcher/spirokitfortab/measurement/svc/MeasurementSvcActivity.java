@@ -67,7 +67,6 @@ import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
 import kr.co.theresearcher.spirokitfortab.dialog.LoadingDialog;
 import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
 import kr.co.theresearcher.spirokitfortab.graph.SlowVolumeTimeGraphView;
-import kr.co.theresearcher.spirokitfortab.graph.SlowVolumeTimeRunView;
 import kr.co.theresearcher.spirokitfortab.main.result.OnOrderSelectedListener;
 import kr.co.theresearcher.spirokitfortab.measurement.fvc.MeasurementFvcActivity;
 import kr.co.theresearcher.spirokitfortab.measurement.fvc.ResultFVC;
@@ -322,6 +321,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         resultRV.setLayoutManager(linearLayoutManager);
         resultRV.setAdapter(adapter);
+        resultRV.setVisibility(View.INVISIBLE);
 
         connectButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -672,6 +672,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
                         svcGraphView.postInvalidate();
 
                         adapter.notifyDataSetChanged();
+                        resultRV.setVisibility(View.VISIBLE);
 
                         resultGraphLayout.removeAllViews();
                         resultGraphLayout.addView(volumeTimeRunViews.get(volumeTimeRunViews.size() - 1));
@@ -858,12 +859,12 @@ public class MeasurementSvcActivity extends AppCompatActivity {
     }
 
     private void initializeResultGraph(int width, int height) {
-        SlowVolumeTimeRunView graphView = new SlowVolumeTimeRunView(MeasurementSvcActivity.this);
+        SlowVolumeTimeGraphView graphView = new SlowVolumeTimeGraphView(MeasurementSvcActivity.this);
         graphView.setId(View.generateViewId());
         graphView.setCanvasSize(width, height);
-        graphView.setMarkingCount(10, 8);
         graphView.setX(60f, 0f);
-        graphView.setY(0.1f, -0.1f);
+        graphView.setY(0.5f * ((float)height / (float)width), -0.5f * ((float)height / (float)width));
+        graphView.setMargin(30,30,60,30);
 
         graphView.commit();
 

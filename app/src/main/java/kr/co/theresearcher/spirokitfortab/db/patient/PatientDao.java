@@ -3,6 +3,7 @@ package kr.co.theresearcher.spirokitfortab.db.patient;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -23,7 +24,7 @@ public interface PatientDao {
     @Query("SELECT * FROM PATIENT WHERE hashed == :hash")
     Patient selectPatientByHash(String hash);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertPatient(Patient patient);
 
     @Update

@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Array;
 import java.text.DateFormat;
 import java.text.FieldPosition;
 import java.text.ParseException;
@@ -26,9 +27,11 @@ import java.time.format.FormatStyle;
 import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalField;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
@@ -44,18 +47,86 @@ public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
 
-        String dateString = null;
-        SimpleDateFormat resultFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        List<Integer> data = new ArrayList<>();
+        String stringData = "";
 
-        try {
-            long time = resultFormat.parse(dateString).getTime();
+        List<Integer> tempData = new ArrayList<>();
+        String tempString = "";
 
-            System.out.println(time);
-            System.out.println(resultFormat.format(time));
-        } catch (ParseException e) {
-            e.getMessage();
-            e.toString();
-            e.getCause();
+        for (int i = 0; i < 100000; i++) {
+            data.add(123456789);
+            stringData += 123456789 + " ";
+        }
+
+
+        long before = System.currentTimeMillis();
+        System.out.println("BEFORE INPUT STRING : " + before);
+
+        for (int i = 0; i < data.size(); i++) {
+            tempString += data.get(i) + " ";
+        }
+
+        long after = System.currentTimeMillis();
+        System.out.println("AFTER INPUT STRING : " + after);
+        System.out.println("DIFF : " + (((after - before))) + " 밀리초");
+
+
+        before = System.currentTimeMillis();
+        System.out.println("BEFORE PARSE STRING : " + before);
+
+        String[] strings = stringData.split(" ");
+
+        tempData.clear();
+        for (int i = 0; i < strings.length; i++) {
+
+            tempData.add(Integer.parseInt(strings[i]));
+
+        }
+
+        after = System.currentTimeMillis();
+        System.out.println("AFTER PARSE STRING : " + after);
+        System.out.println("DIFF : " + (((after - before))) + " 밀리초");
+
+        before = System.currentTimeMillis();
+        System.out.println("BEFORE INPUT CHARACTERS : " + before);
+
+        for (int i = 0; i < data.size(); i++) {
+
+            tempString += data.get(i) / Character.MAX_VALUE;
+            tempString += data.get(i) % Character.MAX_VALUE;
+
+        }
+
+        after = System.currentTimeMillis();
+        System.out.println("AFTER INPUT CHARACTERS : " + after);
+        System.out.println("DIFF : " + (((after - before))) + " 밀리초");
+
+
+        tempData.clear();
+
+        before = System.currentTimeMillis();
+        System.out.println("BEFORE PARSE CHARACTERS : " + before);
+
+        for (int i = 0; i < tempString.length(); i += 2) {
+
+            tempData.add((tempString.charAt(i) * Character.MAX_VALUE) + (tempString.charAt(i + 1)));
+
+        }
+
+        after = System.currentTimeMillis();
+        System.out.println("AFTER PARSE CHARACTERS : " + after);
+        System.out.println("DIFF : " + (((after - before))) + " 밀리초");
+
+
+        System.out.println("===========RESULT");
+        for (int i = 0; i < data.size(); i++) {
+            System.out.print(data.get(i) + ", ");
+        }
+
+        System.out.println();
+
+        for (int i = 0; i < tempData.size(); i++) {
+            System.out.print(tempData.get(i) + ", ");
         }
 
         /*

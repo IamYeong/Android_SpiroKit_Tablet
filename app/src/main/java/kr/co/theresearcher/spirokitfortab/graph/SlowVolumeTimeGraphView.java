@@ -238,19 +238,19 @@ public class SlowVolumeTimeGraphView extends View {
         boolean isOver = false;
         values.add(new Coordinate(x, y));
 
-        if (maxY < this.y + y) {
+        if ((maxY * 0.95f) < this.y + y) {
             isOver = true;
 
-            minY *= ((y + maxY) / maxY);
-            maxY *= ((y + maxY) / maxY);
+            minY *= ((y + maxY) / (maxY * 0.95f));
+            maxY *= ((y + maxY) / (maxY * 0.95f));
 
         }
 
-        if (minY > this.y + y) {
+        if ((minY * 0.95f) > this.y + y) {
             isOver = true;
 
-            maxY *= Math.abs(y + minY) / Math.abs(minY);
-            minY *= Math.abs(y + minY) / Math.abs(minY);
+            maxY *= Math.abs(y + minY) / Math.abs(minY * 0.95f);
+            minY *= Math.abs(y + minY) / Math.abs(minY * 0.95f);
 
         }
 

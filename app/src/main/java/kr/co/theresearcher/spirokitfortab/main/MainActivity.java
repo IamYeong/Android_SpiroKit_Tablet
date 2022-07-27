@@ -30,6 +30,7 @@ import android.widget.ImageView;
 
 import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
 import kr.co.theresearcher.spirokitfortab.R;
+import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.bluetooth.SpiroKitBluetoothLeService;
 import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
 import kr.co.theresearcher.spirokitfortab.main.information.OnCalHistorySelectedListener;
@@ -175,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
         setFragment(R.id.fragment_container_result_main, emptyResultFragment);
         setFragment(R.id.fragment_container_patient_info_main, informationFragment);
 
+        SharedPreferencesManager.setPatientHash(getApplicationContext(), null);
         startService(new Intent(getApplicationContext(), SpiroKitBluetoothLeService.class));
 
     }

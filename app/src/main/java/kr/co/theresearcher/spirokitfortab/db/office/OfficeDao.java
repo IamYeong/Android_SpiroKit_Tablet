@@ -2,6 +2,7 @@ package kr.co.theresearcher.spirokitfortab.db.office;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import java.util.List;
@@ -24,7 +25,8 @@ public interface OfficeDao {
     @Query("DELETE FROM OFFICE WHERE hashed == :officeHash")
     void removeOffice(String officeHash);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Office office);
+
 
 }

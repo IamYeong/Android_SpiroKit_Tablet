@@ -70,11 +70,9 @@ import kr.co.theresearcher.spirokitfortab.dialog.LoadingDialog;
 import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
 import kr.co.theresearcher.spirokitfortab.graph.TimerProgressView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowGraphView;
-import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowResultView;
-import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowRunView;
+
 import kr.co.theresearcher.spirokitfortab.graph.VolumeTimeGraphView;
-import kr.co.theresearcher.spirokitfortab.graph.VolumeTimeResultView;
-import kr.co.theresearcher.spirokitfortab.graph.VolumeTimeRunView;
+
 import kr.co.theresearcher.spirokitfortab.graph.WeakFlowProgressView;
 import kr.co.theresearcher.spirokitfortab.main.result.OnOrderSelectedListener;
 
@@ -420,7 +418,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                 volumeFlowGraphView = new VolumeFlowGraphView(MeasurementFvcActivity.this);
                 volumeFlowGraphView.setId(View.generateViewId());
                 volumeFlowGraphView.setCanvasSize(width, height);
-                volumeFlowGraphView.setX(1.2f * ((float)width / (float)height), 0f);
+                volumeFlowGraphView.setX(1.6f * ((float)width / (float)height), 0f);
                 volumeFlowGraphView.setY(1.4f, -0.8f);
                 volumeFlowGraphView.setMargin(30, 30, 60, 30);
 
@@ -443,7 +441,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                 volumeTimeGraphView.setId(View.generateViewId());
 
                 volumeTimeGraphView.setCanvasSize(width, height);
-                volumeTimeGraphView.setX(1.5f, 0f);
+                volumeTimeGraphView.setX(1.5f * ((float)width / (float)height), 0f);
                 volumeTimeGraphView.setY(1f, 0f);
                 volumeTimeGraphView.setMargin(30,30,60,30);
 

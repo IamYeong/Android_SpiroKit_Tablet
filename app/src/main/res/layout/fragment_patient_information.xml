@@ -78,19 +78,20 @@
 
                 <ImageButton
                     android:id="@+id/img_btn_edit_patient_info_fragment"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:src="@drawable/ic_baseline_edit_30_black"
                     android:background="@android:color/transparent"
 
-                    app:layout_constraintTop_toTopOf="@id/tv_name_patient_info_fragment"
+
                     app:layout_constraintBottom_toBottomOf="@id/tv_name_patient_info_fragment"
                     app:layout_constraintStart_toEndOf="@id/tv_name_patient_info_fragment"
-                    app:layout_constraintEnd_toStartOf="@id/img_expand_patient_info"
+
                     android:layout_marginStart="5dp"
+                    android:layout_marginBottom="5dp"
 
                     android:scaleType="fitStart"
-                    android:padding="10dp"
+
                     />
 
                 <TextView

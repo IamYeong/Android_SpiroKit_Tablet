@@ -710,7 +710,6 @@ public class SettingActivity extends AppCompatActivity {
 
                 SpiroKitDatabase database = SpiroKitDatabase.getInstance(SettingActivity.this);
                 //office 하나만 삭제하면 CASCADE 로 연쇄삭제됨.
-                database.officeDao().removeOffice(SharedPreferencesManager.getOfficeHash(SettingActivity.this));
 
                 try {
 

@@ -3,6 +3,7 @@ package kr.co.theresearcher.spirokitfortab.db.cal_history;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -23,7 +24,7 @@ public interface CalHistoryDao {
             "AND (is_deleted == 0)) != 0)")
     List<CalHistory> selectHistoryByPatient(String patientHashed);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertHistory(CalHistory history);
 
     @Delete

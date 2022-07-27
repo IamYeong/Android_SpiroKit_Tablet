@@ -52,9 +52,9 @@ import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
 import kr.co.theresearcher.spirokitfortab.db.work.Work;
 import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowGraphView;
-import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowResultView;
+
 import kr.co.theresearcher.spirokitfortab.graph.VolumeTimeGraphView;
-import kr.co.theresearcher.spirokitfortab.graph.VolumeTimeResultView;
+
 import kr.co.theresearcher.spirokitfortab.main.result.OnOrderSelectedListener;
 import kr.co.theresearcher.spirokitfortab.measurement.fvc.FvcResultAdapter;
 import kr.co.theresearcher.spirokitfortab.measurement.fvc.ResultFVC;
@@ -238,7 +238,7 @@ public class FvcResultFragment extends Fragment implements Observer {
         VolumeFlowGraphView volumeFlowResultView = new VolumeFlowGraphView(context);
         volumeFlowResultView.setId(View.generateViewId());
         volumeFlowResultView.setCanvasSize(width, height);
-        volumeFlowResultView.setX(1.2f * ((float)width / (float)height), 0f);
+        volumeFlowResultView.setX(1.6f * ((float)width / (float)height), 0f);
         volumeFlowResultView.setY(1.4f, -0.8f);
         volumeFlowResultView.setMargin(30,30,60,30);
 
@@ -301,9 +301,6 @@ public class FvcResultFragment extends Fragment implements Observer {
                         pulseWidth.add(Integer.parseInt(data[j]));
 
                     }
-
-                    for (int j = 0; j < 10; j++) Log.d(getClass().getSimpleName(), pulseWidth.get(j) + ", ");
-                    Log.d(getClass().getSimpleName(), "===================");
 
                     CalcSpiroKitE calc = new CalcSpiroKitE(pulseWidth);
                     calc.measure();
