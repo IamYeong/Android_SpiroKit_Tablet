@@ -1,5 +1,7 @@
 package kr.co.theresearcher.spirokitfortab.calc;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -34,6 +36,36 @@ public class CalcSpiroKitE {
     }
 
     public void measure() {
+
+        List<Integer> temp = new ArrayList<>(pulseWidth);
+
+        for (int i = 1; i < pulseWidth.size(); i++) {
+
+            int beforePW = temp.get(i - 1);
+            int afterPW = temp.get(i);
+
+            Log.e("CAL : ", pulseWidth.get(i - 1) + "");
+
+            if (((beforePW >= 100_000_000) && (afterPW >= 100_000_000))) {
+                //둘다 흡기
+                if ((afterPW > 105_000_000) || (beforePW > 105_000_000)) continue;
+
+                int diff = (int)(((float)beforePW - (float)afterPW) * 1.012f);
+                int pw = pulseWidth.get(i - 1) - diff;
+                pulseWidth.set(i, pw);
+
+            } else if ((beforePW < 100_000_000) && (afterPW < 100_000_000)) {
+                //둘다 호기
+                if ((afterPW > 5_000_000) || (beforePW > 5_000_000)) continue;
+
+                int diff = (int)(((float)beforePW - (float)afterPW) * 1.012f);
+
+                int pw = pulseWidth.get(i - 1) - diff;
+                pulseWidth.set(i, pw);
+
+            }
+
+        }
 
         float accRotate = 0f;
         float refRotate = 0f;
@@ -167,14 +199,16 @@ public class CalcSpiroKitE {
             if (measuredPulseWidth.get(i) < 100_000_000) {
 
                 int pw = measuredPulseWidth.get(i);
-                int prePW = measuredPulseWidth.get(i - 1);
+
 
                 double time = pw * HERTZ_80MHZ;
-                double volume = Fluid.calcVolume(
-                        Fluid.conversionLiterPerSecond(Fluid.calcRevolutionPerSecond(prePW * HERTZ_80MHZ)),
-                        Fluid.conversionLiterPerSecond(Fluid.calcRevolutionPerSecond(pw * HERTZ_80MHZ)),
-                        pw * HERTZ_80MHZ
-                );
+                double flow = Fluid.conversionLiterPerSecond(Fluid.calcRevolutionPerSecond(pw * HERTZ_80MHZ));
+                double volume = 0d;
+                if (Math.abs(flow) > 0.12f) {
+                    volume = flow * time;
+                } else {
+                    time = 0d;
+                }
 
                 volumeTimes.add(new ResultCoordinate(time, volume));
             }
@@ -193,7 +227,10 @@ public class CalcSpiroKitE {
         for (int i = 1; i < flowTimes.size(); i++) {
 
             ResultCoordinate flowTime = flowTimes.get(i);
-            double volume = Fluid.calcVolume(flowTimes.get(i - 1).getY(), flowTime.getY(), flowTime.getX());
+            double time = flowTime.getX();
+            double flow = flowTime.getY();
+            double volume = 0d;
+            if (Math.abs(flow) > 0.12f) volume = flow * time;
             ResultCoordinate volumeFlow = new ResultCoordinate(Math.abs(volume), flowTime.getY());
             volumeFlows.add(volumeFlow);
         }
@@ -205,17 +242,19 @@ public class CalcSpiroKitE {
 
         for (int i = 1; i < measuredPulseWidth.size(); i++) {
 
-            int prePW = measuredPulseWidth.get(i - 1);
             int pw = measuredPulseWidth.get(i);
 
             if (pw < 100_000_000) {
-                double volume = Fluid.calcVolume(
-                        Fluid.conversionLiterPerSecond(Fluid.calcRevolutionPerSecond(prePW * HERTZ_80MHZ)),
-                        Fluid.conversionLiterPerSecond(Fluid.calcRevolutionPerSecond(pw * HERTZ_80MHZ)),
-                        pw * HERTZ_80MHZ
+
+                double time = Fluid.getTimeFromPulseWidthForE(pw);
+                double flow = Fluid.conversionLiterPerSecond(
+                        Fluid.calcRevolutionPerSecond(time)
                 );
 
-                fvc += volume;
+                if (flow > 0.12d) {
+                    double volume = flow * time;
+                    fvc += volume;
+                }
             }
 
         }
@@ -230,20 +269,24 @@ public class CalcSpiroKitE {
 
         for (int i = 1; i < measuredPulseWidth.size(); i++) {
 
-            int prePW = measuredPulseWidth.get(i - 1);
             int pw = measuredPulseWidth.get(i);
 
             if (pw < 100_000_000) {
 
-                double volume = Fluid.calcVolume(
-                        Fluid.conversionLiterPerSecond(Fluid.calcRevolutionPerSecond(prePW * HERTZ_80MHZ)),
-                        Fluid.conversionLiterPerSecond(Fluid.calcRevolutionPerSecond(pw * HERTZ_80MHZ)),
-                        pw * HERTZ_80MHZ
-                );
+                double t = pw * HERTZ_80MHZ;
+                double flow = (Fluid.conversionLiterPerSecond(
+                        Fluid.calcRevolutionPerSecond(t)
+                ));
 
-                time += pw * HERTZ_80MHZ;
+                if (flow > 0.12d) {
+                    double volume = t * flow;
+                    fev1 += volume;
+                    time += t;
+                }
+
+
                 if (time > 1d) break;
-                fev1 += volume;
+
             }
 
         }

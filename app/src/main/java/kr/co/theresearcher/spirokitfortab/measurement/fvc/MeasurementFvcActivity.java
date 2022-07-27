@@ -93,7 +93,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
     private List<VolumeFlowGraphView> volumeFlowResultViewList = new ArrayList<>();
     private List<VolumeTimeGraphView> volumeTimeResultViewList = new ArrayList<>();
-    private List<String> pulseWidthList = new ArrayList<>();
+    private List<Integer> pulseWidthList = new ArrayList<>();
     private RecyclerView rv;
     private Button completeButton, preSaveButton, postSaveButton;
     private ConstraintLayout connectButton;
@@ -115,6 +115,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
     private Timer timer;
     private TimerTask timerTask;
     private int timerCount = 0;
+    private int calibrationPW = 0;
 
     private Handler handler = new Handler(Looper.getMainLooper());
 
@@ -156,10 +157,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
                         //dataReceivedCount++;
 
-                        String d = "";
-                        for (byte b : data) d += (char)b;
-
-                        pulseWidthList.add(d);
+                        pulseWidthList.add(value);
                         handleData(value);
 
                     } else {
@@ -644,6 +642,21 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
     }
 
+    private int calibratePW(int prePW, int pw1, int pw2) {
+
+        //부호 같은지 검사
+        if (((pw1 / 100_000_000) + (pw2 / 100_000_000)) == 1) return pw2;
+            //5,000,000 이상 검사
+        else if ((pw2 >= 105_000_000) || ((pw2 < 100_000_000) && (pw2 >= 5_000_000))) return pw2;
+        else if ((pw1 >= 105_000_000) || ((pw1 < 100_000_000) && (pw1 >= 5_000_000))) return pw2;
+        else {
+
+            //조건통과하면 실제 보정
+            return prePW - (int)(((float)pw1 - (float)pw2) * 1.012f);
+
+        }
+
+    }
 
     private void handleData(int value) {
 
@@ -652,6 +665,9 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         float lps = 0f;
         float volume = 0f;
 
+        if (pulseWidthList.size() >= 2) value = calibratePW(calibrationPW, pulseWidthList.get(pulseWidthList.size() - 2), value);
+        calibrationPW = value;
+
         if ((value > 100_000_000) && (value < 200_000_000)) {
             //흡기
             value -= 100_000_000;
@@ -659,7 +675,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
             time = (float) Fluid.getTimeFromPulseWidthForE(value);
             rps = (float)Fluid.calcRevolutionPerSecond(time);
             lps = (float)Fluid.conversionLiterPerSecond(rps);
-            volume = (float)Fluid.calcVolume(time, lps);
+            if (lps > 0.12f) volume = (float)Fluid.calcVolume(time, lps);
             lps *= -1f;
 
             if (flowToggle) {
@@ -735,7 +751,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
             time = (float)Fluid.getTimeFromPulseWidthForE(value);
             rps = (float)Fluid.calcRevolutionPerSecond(time);
             lps = (float)Fluid.conversionLiterPerSecond(rps);
-            volume = (float)Fluid.calcVolume(time, lps);
+            if (lps > 0.12f) volume = (float)Fluid.calcVolume(time, lps);
 
         } else {
 
@@ -798,7 +814,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
                 for (int i = 0; i < pulseWidthList.size(); i++) {
 
-                    String value = pulseWidthList.get(i);
+                    String value = pulseWidthList.get(i) + " ";
                     stringBuilder.append(value);
 
 
@@ -876,13 +892,8 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         //여기서는 어댑터에 추가랑 뷰배열에 추가만 해두고
         //핸들러에서 notify 수행, addVIew 하면 될 듯.
 
-        List<Integer> pulseWidths = new ArrayList<>();
 
-        for (int i = 0; i < pulseWidthList.size(); i++) {
-            pulseWidths.add(conversionIntegerFromByteArray(pulseWidthList.get(i).getBytes()));
-        }
-
-        CalcSpiroKitE calc = new CalcSpiroKitE(pulseWidths);
+        CalcSpiroKitE calc = new CalcSpiroKitE(pulseWidthList);
         calc.measure();
         pulseWidthList.clear();
 
@@ -996,6 +1007,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         volumeTimeResultView.setX(1.5f * ((float)width / (float)height), 0f);
         volumeTimeResultView.setY(1f, 0f);
         volumeTimeResultView.setMargin(30,30,60,30);
+        volumeTimeResultView.setFinalPath(true);
 
         volumeTimeResultView.commit();
 

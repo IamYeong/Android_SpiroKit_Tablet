@@ -153,7 +153,11 @@ public class CalcSvcSpiroKitE {
                 time = (float) Fluid.getTimeFromPulseWidthForE(value);
                 rps = (float)Fluid.calcRevolutionPerSecond(time);
                 lps = (float)Fluid.conversionLiterPerSecond(rps);
-                volume = (float)Fluid.calcVolume(time, lps);
+                if (lps > 0.12f) {
+                    volume = lps * time;
+                } else {
+                    time = 0f;
+                }
 
 
             } else if ((value > 0) && (value < 100_000_000)) {
@@ -163,6 +167,11 @@ public class CalcSvcSpiroKitE {
                 rps = (float)Fluid.calcRevolutionPerSecond(time);
                 lps = (float)Fluid.conversionLiterPerSecond(rps);
                 volume = (float)Fluid.calcVolume(time, lps);
+                if (lps > 0.12f) {
+                    volume = lps * time;
+                } else {
+                    time = 0f;
+                }
                 volume *= -1f;
 
             } else {

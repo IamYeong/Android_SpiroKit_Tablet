@@ -90,7 +90,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
     private long startTimestamp;
     private List<SlowVolumeTimeGraphView> volumeTimeRunViews = new ArrayList<>();
-    private List<String> pulseWidthList = new ArrayList<>();
+    private List<Integer> pulseWidthList = new ArrayList<>();
 
     //private SlowVolumeTimeRunView graphView;
     private SlowVolumeTimeGraphView svcGraphView;
@@ -100,6 +100,8 @@ public class MeasurementSvcActivity extends AppCompatActivity {
     private boolean isStart = false;
     private double timerCount = 0d;
     private int testOrder = 1;
+
+    private int calibrationPW = 0;
 
     private LoadingDialog loadingDialog;
 
@@ -168,10 +170,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
                 if (!isStart) return;
                 if (timerCount >= 60d) return;
 
-                String d = "";
-                for (byte b : data) d += (char)b;
-
-                pulseWidthList.add(d);
+                pulseWidthList.add(value);
                 handleData(value);
 
             } else {
@@ -562,12 +561,31 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
     }
 
+    private int calibratePW(int prePW, int pw1, int pw2) {
+
+        //부호 같은지 검사
+        if (((pw1 / 100_000_000) + (pw2 / 100_000_000)) == 1) return pw2;
+            //5,000,000 이상 검사
+        else if ((pw2 >= 105_000_000) || ((pw2 < 100_000_000) && (pw2 >= 5_000_000))) return pw2;
+        else if ((pw1 >= 105_000_000) || ((pw1 < 100_000_000) && (pw1 >= 5_000_000))) return pw2;
+        else {
+
+            //조건통과하면 실제 보정
+            return prePW - (int)(((float)pw1 - (float)pw2) * 1.012f);
+
+        }
+
+    }
+
     private void handleData(int value) {
 
         float time = 0f;
         float rps = 0f;
         float lps = 0f;
         float volume = 0f;
+
+        if (pulseWidthList.size() >= 2) value = calibratePW(calibrationPW, pulseWidthList.get(pulseWidthList.size() - 2), value);
+        calibrationPW = value;
 
         if ((value > 100_000_000) && (value < 200_000_000)) {
             //흡기
@@ -576,7 +594,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
             time = (float) Fluid.getTimeFromPulseWidthForE(value);
             rps = (float)Fluid.calcRevolutionPerSecond(time);
             lps = (float)Fluid.conversionLiterPerSecond(rps);
-            volume = (float)Fluid.calcVolume(time, lps);
+            if (lps > 0.12f) volume = (float)Fluid.calcVolume(time, lps);
 
 
         } else if ((value > 0) && (value < 100_000_000)) {
@@ -585,7 +603,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
             time = (float) Fluid.getTimeFromPulseWidthForE(value);
             rps = (float)Fluid.calcRevolutionPerSecond(time);
             lps = (float)Fluid.conversionLiterPerSecond(rps);
-            volume = (float)Fluid.calcVolume(time, lps);
+            if (lps > 0.12f) volume = (float)Fluid.calcVolume(time, lps);
             volume *= -1f;
 
         } else {
@@ -636,7 +654,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
                 for (int i = 0; i < pulseWidthList.size(); i++) {
 
-                    String value = pulseWidthList.get(i);
+                    String value = pulseWidthList.get(i) + " ";
                     stringBuilder.append(value);
 
                 }
@@ -697,13 +715,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         //여기서는 어댑터에 추가랑 뷰배열에 추가만 해두고
         //핸들러에서 notify 수행, addVIew 하면 될 듯.
 
-        List<Integer> pulseWidths = new ArrayList<>();
-
-        for (int i = 0; i < pulseWidthList.size(); i++) {
-            pulseWidths.add(conversionIntegerFromByteArray(pulseWidthList.get(i).getBytes()));
-        }
-
-        CalcSvcSpiroKitE calc = new CalcSvcSpiroKitE(pulseWidths);
+        CalcSvcSpiroKitE calc = new CalcSvcSpiroKitE(pulseWidthList);
         calc.measure();
         pulseWidthList.clear();
 
