@@ -676,6 +676,11 @@ public class MeasurementFvcActivity extends AppCompatActivity {
             rps = (float)Fluid.calcRevolutionPerSecond(time);
             lps = (float)Fluid.conversionLiterPerSecond(rps);
             if (lps > 0.12f) volume = (float)Fluid.calcVolume(time, lps);
+            else {
+                //lps = 0f;
+                time = 0f;
+            }
+
             lps *= -1f;
 
             if (flowToggle) {
@@ -752,6 +757,10 @@ public class MeasurementFvcActivity extends AppCompatActivity {
             rps = (float)Fluid.calcRevolutionPerSecond(time);
             lps = (float)Fluid.conversionLiterPerSecond(rps);
             if (lps > 0.12f) volume = (float)Fluid.calcVolume(time, lps);
+            else {
+                //lps = 0f;
+                time = 0f;
+            }
 
         } else {
 
@@ -828,6 +837,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                         dateTimeFormatter.format(instant),
                         isPost
                 );
+                rawData.setUpdatedDate(dateTimeFormatter.format(instant));
 
                 SpiroKitDatabase database = SpiroKitDatabase.getInstance(MeasurementFvcActivity.this);
                 database.calHistoryRawDataDao().insertRawData(rawData);
@@ -974,6 +984,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                         "e",
                         0);
 
+                calHistory.setUpdatedDate(dateTimeFormatter.format(instant));
                 calHistory.setFamilyDoctorHash(SharedPreferencesManager.getFamilyDoctorHash(MeasurementFvcActivity.this));
 
                 SpiroKitDatabase database = SpiroKitDatabase.getInstance(MeasurementFvcActivity.this);

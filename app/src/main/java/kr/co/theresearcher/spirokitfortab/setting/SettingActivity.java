@@ -665,6 +665,8 @@ public class SettingActivity extends AppCompatActivity {
                         rawJsonObject.put(JsonKeys.JSON_KEY_C_DATE, raw.getCreateDate());
                         rawJsonObject.put(JsonKeys.JSON_KEY_UPDATED_DATE, raw.getUpdatedDate());
 
+                        //Log.e(getClass().getSimpleName(), "RAW DATA UPDATED DATE : " + raw.getUpdatedDate());
+
                         rawDataArray.put(rawJsonObject);
 
                     }

@@ -156,7 +156,7 @@ public class CalcSvcSpiroKitE {
                 if (lps > 0.12f) {
                     volume = lps * time;
                 } else {
-                    time = 0f;
+                    continue;
                 }
 
 
@@ -170,7 +170,7 @@ public class CalcSvcSpiroKitE {
                 if (lps > 0.12f) {
                     volume = lps * time;
                 } else {
-                    time = 0f;
+                    continue;
                 }
                 volume *= -1f;
 

@@ -207,7 +207,7 @@ public class CalcSpiroKitE {
                 if (Math.abs(flow) > 0.12f) {
                     volume = flow * time;
                 } else {
-                    time = 0d;
+                    continue;
                 }
 
                 volumeTimes.add(new ResultCoordinate(time, volume));
