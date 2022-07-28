@@ -1,10 +1,19 @@
 package kr.co.theresearcher.spirokitfortab.db;
 
 import android.content.Context;
+import android.os.Looper;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Executors;
 
 import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
 import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistoryDao;
@@ -39,10 +48,48 @@ public abstract class SpiroKitDatabase extends RoomDatabase {
     public synchronized static SpiroKitDatabase getInstance(Context context) {
 
         if (instance == null) {
+
             instance = Room.databaseBuilder(context, SpiroKitDatabase.class, "theresearcher_spirokit.db")
-                    .createFromAsset("database/spirokit.db")
                     .allowMainThreadQueries()
+
+                    .addCallback(new Callback() {
+
+                        @Override
+                        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                            super.onCreate(db);
+
+                            Executors.newSingleThreadScheduledExecutor().execute(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    try {
+
+                                        db.execSQL("INSERT INTO office (hashed, name, code, tel, address, country_code, is_use, is_use_sync, office_id, office_pass, is_deleted, updated_date) VALUES('1f10668b5f1cb897d57faf08cfe58c668060f14ce32077c43011c862fea5f5c7', 'TR1', '0rri5IHz','12121212', '대한민국', 'KR', 1, 1, 'tr1', '1234', 0,'0000-00-00 00:00:00')");
+
+                                        db.execSQL("INSERT INTO work_group (work) VALUES('doctor')");
+                                        db.execSQL("INSERT INTO work_group (work) VALUES('nurse')");
+                                        db.execSQL("INSERT INTO work_group (work) VALUES('pathologist')");
+
+                                        db.execSQL("INSERT INTO human_race (race) VALUES('y')");
+                                        db.execSQL("INSERT INTO human_race (race) VALUES('w')");
+                                        db.execSQL("INSERT INTO human_race (race) VALUES('b')");
+
+                                        db.close();
+
+                                    } catch (IOException e) {
+                                        Log.e(getClass().getSimpleName(), e.toString());
+                                    }
+
+
+                                }
+                            });
+
+                        }
+                    })
+
+
                     .build();
+
         }
 
         return instance;
@@ -51,8 +98,7 @@ public abstract class SpiroKitDatabase extends RoomDatabase {
 
     public static void removeInstance() {
 
-        if (instance.isOpen()) instance.close();
-        if (instance != null) instance = null;
+        instance = null;
 
     }
 

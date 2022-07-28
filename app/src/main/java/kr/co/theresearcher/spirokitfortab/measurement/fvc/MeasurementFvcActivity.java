@@ -675,7 +675,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
             time = (float) Fluid.getTimeFromPulseWidthForE(value);
             rps = (float)Fluid.calcRevolutionPerSecond(time);
             lps = (float)Fluid.conversionLiterPerSecond(rps);
-            if (lps > 0.12f) volume = (float)Fluid.calcVolume(time, lps);
+            if (lps > 0.12f) volume = lps * time;
             else {
                 //lps = 0f;
                 time = 0f;
@@ -756,7 +756,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
             time = (float)Fluid.getTimeFromPulseWidthForE(value);
             rps = (float)Fluid.calcRevolutionPerSecond(time);
             lps = (float)Fluid.conversionLiterPerSecond(rps);
-            if (lps > 0.12f) volume = (float)Fluid.calcVolume(time, lps);
+            if (lps > 0.12f) volume = lps * time;
             else {
                 //lps = 0f;
                 time = 0f;

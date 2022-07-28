@@ -405,6 +405,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
                 SpiroKitDatabase database = SpiroKitDatabase.getInstance(context);
                 List<Patient> patientList = database.patientDao().selectPatientByOffice(SharedPreferencesManager.getOfficeHash(context));
+                SpiroKitDatabase.removeInstance();
 
                 patientsAdapter.setPatients(patientList);
 
@@ -445,6 +446,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
                 Looper.prepare();
 
                 List<CalHistory> histories = SpiroKitDatabase.getInstance(context).calHistoryDao().selectHistoryByPatient(SharedPreferencesManager.getPatientHashed(context));
+                SpiroKitDatabase.removeInstance();
 
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 
@@ -513,6 +515,8 @@ public class PatientInformationFragment extends Fragment implements Observer {
         SpiroKitDatabase database = SpiroKitDatabase.getInstance(context);
         Patient patient = database.patientDao()
                 .selectPatientByHash(SharedPreferencesManager.getPatientHashed(context));
+        //Log.e(getClass().getSimpleName(), patient.toString());
+        SpiroKitDatabase.removeInstance();
         List<HumanRace> humanRaces = database.humanRaceDao().selectAllHumanRace();
         SpiroKitDatabase.removeInstance();
 

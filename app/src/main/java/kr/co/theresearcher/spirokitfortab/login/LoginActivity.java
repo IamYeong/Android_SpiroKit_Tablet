@@ -103,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
                         SpiroKitDatabase database = SpiroKitDatabase.getInstance(getApplicationContext());
 
                         Office office = database.officeDao().selectOfficeByID(id);
-                        SpiroKitDatabase.removeInstance();
+                        //SpiroKitDatabase.removeInstance();
 
                         if (office == null) {
                             handler.post(new Runnable() {

@@ -388,7 +388,6 @@ public class PatientInsertActivity extends AppCompatActivity {
 
                                 return;
                             }
-
                             database.patientDao().insertPatient(patient);
                             setPatientInfoInPreferences(PatientInsertActivity.this, database.patientDao().selectPatientByHash(patientHashed));
 

@@ -2,9 +2,14 @@ package kr.co.theresearcher.spirokitfortab.db.work;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "work_group")
+@Entity(tableName = "work_group",
+        indices = {
+        @Index(value = {"work"}, unique = true)
+        }
+)
 public class Work {
 
     @PrimaryKey(autoGenerate = true)
@@ -14,6 +19,9 @@ public class Work {
     @ColumnInfo(name = "work")
     private String work;
 
+    public Work(String work) {
+        this.work = work;
+    }
 
     public int getId() {
         return id;
