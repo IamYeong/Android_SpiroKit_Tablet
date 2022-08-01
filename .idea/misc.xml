@@ -58,6 +58,7 @@
         <entry key="app/src/main/res/drawable/person_add.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/progressbar_secondary_color_style.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/rotate.xml" value="0.346" />
+        <entry key="app/src/main/res/drawable/selector_bg_sync_enable.xml" value="0.342" />
         <entry key="app/src/main/res/drawable/spinner_background_white.xml" value="0.328" />
         <entry key="app/src/main/res/drawable/table_cell_outline.xml" value="0.346" />
         <entry key="app/src/main/res/drawable/table_cell_side_line.xml" value="0.346" />
@@ -88,6 +89,7 @@
         <entry key="app/src/main/res/layout/dialog_loading.xml" value="0.16276041666666666" />
         <entry key="app/src/main/res/layout/dialog_meas_selection.xml" value="0.33" />
         <entry key="app/src/main/res/layout/dialog_selection.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/dialog_sync_loading.xml" value="0.20234375" />
         <entry key="app/src/main/res/layout/dialog_text_input.xml" value="0.16276041666666666" />
         <entry key="app/src/main/res/layout/fragment_empty_result.xml" value="0.20442708333333334" />
         <entry key="app/src/main/res/layout/fragment_fvc_value_list.xml" value="0.16276041666666666" />

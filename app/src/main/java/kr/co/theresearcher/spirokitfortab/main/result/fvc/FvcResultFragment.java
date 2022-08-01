@@ -328,9 +328,6 @@ public class FvcResultFragment extends Fragment implements Observer {
                     List<ResultCoordinate> volumeFlowGraph = calc.getVolumeFlowGraph();
                     List<ResultCoordinate> volumeTimeGraph = calc.getForcedVolumeTimeGraph();
 
-                    System.out.println(volumeFlowGraph.size());
-                    System.out.println(volumeTimeGraph.size());
-
                     volumeFlowResultViews.add(createVolumeFlowGraph(volumeFlowGraph, width, height));
                     volumeTimeResultViews.add(createVolumeTimeGraph(volumeTimeGraph, width, height));
 

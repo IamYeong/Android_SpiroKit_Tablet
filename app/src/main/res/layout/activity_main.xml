@@ -79,6 +79,21 @@
 
             />
 
+        <ImageButton
+            android:id="@+id/img_btn_sync_main"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/sync"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/img_btn_insert_patient_main"
+            android:background="@drawable/item_img_btn_bg_gray"
+            android:elevation="3dp"
+
+            android:padding="10dp"
+            android:layout_margin="20dp"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

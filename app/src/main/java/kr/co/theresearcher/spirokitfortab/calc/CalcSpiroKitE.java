@@ -44,7 +44,7 @@ public class CalcSpiroKitE {
             int beforePW = temp.get(i - 1);
             int afterPW = temp.get(i);
 
-            Log.e("CAL : ", pulseWidth.get(i - 1) + "");
+            //Log.e("CAL : ", pulseWidth.get(i - 1) + "");
 
             if (((beforePW >= 100_000_000) && (afterPW >= 100_000_000))) {
                 //둘다 흡기

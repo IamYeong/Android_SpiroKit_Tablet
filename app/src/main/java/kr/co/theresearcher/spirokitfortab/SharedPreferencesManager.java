@@ -45,6 +45,9 @@ public class SharedPreferencesManager {
     private static final String PATIENT_HASHED =
             "kr.co.theresearcher.patient.hashed";
 
+    private static final String USE_SYNC =
+            "kr.co.theresearcher.sync.use";
+
     public static SharedPreferences getPreferences(Context context) {
         return context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
     }
@@ -121,6 +124,14 @@ public class SharedPreferencesManager {
         return editor.commit();
     }
 
+    public static boolean setUseSync(Context context, boolean value) {
+        SharedPreferences sharedPreferences = getPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(USE_SYNC, value);
+        return editor.commit();
+    }
+
+    public static boolean getUseSync(Context context) { return getPreferences(context).getBoolean(USE_SYNC, false); }
     public static String getDeviceMacAddress(Context context) { return getPreferences(context).getString(CONNECTED_MAC_ADDRESS, null); }
     public static String getDeviceName(Context context) { return getPreferences(context).getString(CONNECTED_DEVICE_NAME, null); }
     public static String getOfficeID(Context context) { return getPreferences(context).getString(OFFICE_ID, null); }

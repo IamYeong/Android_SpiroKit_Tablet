@@ -98,6 +98,8 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
         if ((Integer) arg == 404) {
 
+            SharedPreferencesManager.setPatientHash(context, null);
+            updateUI();
             selectMeasurements();
 
         } else {
