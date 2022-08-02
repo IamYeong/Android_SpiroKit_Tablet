@@ -147,6 +147,8 @@
     <string name="not_sync_permission">기관 계정에 서버 권한이 없습니다</string>
     <string name="sync_disabled">현재 서버 동기화기능이 비활성화 상태입니다\n설정화면에서 활성화 후 사용가능합니다</string>
 
+    <string name="not_selected_checkup_doctor">검사자는 필수 선택 사항입니다\n현재 검사자가 없다면 설정 - 의료진 관리에서 등록해보세요</string>
+
     <!-- FVC Activity -->
     <string name="fvc_meas">FVC 검사</string>
 
@@ -262,8 +264,8 @@
     <string name="empty_patient_select">검색창을 터치하여 등록된 환자를 선택하고,\n새로운 검사를 하거나 결과를 확인해보세요</string>
     <string name="empty_cal">FVC, SVC 검사를 진행하고 결과 값과 그래프를 확인해보세요</string>
 
-    <string name="go_to_add_operator"></string>
-    <string name="go_to_add_patient"></string>
+    <string name="go_to_add_operator">검사자 등록하기</string>
+    <string name="go_to_add_patient">피검사자 등록하기</string>
 
     <!-- human races -->
     <string-array name="human_races">

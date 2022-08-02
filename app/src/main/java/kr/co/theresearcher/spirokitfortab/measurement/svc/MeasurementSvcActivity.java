@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -75,8 +76,11 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
     private RecyclerView resultRV;
     private FrameLayout volumeTimeGraphLayout, resultGraphLayout;
-    private Button completeButton, preSaveButton, postSaveButton;
-    private MaterialButton startButton, retestButton;
+    private Button completeButton;
+    private LinearLayout startButton, retestButton, preSaveButton, postSaveButton;
+    private ImageView startImage;
+    private TextView startText;
+
     private ImageButton backButton;
     private TextView titleText, emptyText;
 
@@ -97,7 +101,6 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd_HHmmssSS", Locale.getDefault());
 
-    private boolean isStart = false;
     private double timerCount = 0d;
     private int testOrder = 1;
 
@@ -167,7 +170,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
             int value = conversionIntegerFromByteArray(data);
             if (value > 10) {
 
-                if (!isStart) return;
+                if (!startImage.isSelected()) return;
                 if (timerCount >= 60d) return;
 
                 pulseWidthList.add(value);
@@ -276,13 +279,16 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         completeButton = findViewById(R.id.btn_complete_svc_meas);
         emptyText = findViewById(R.id.tv_empty_svc_meas);
 
+        startImage = findViewById(R.id.img_start_stop_meas_svc);
+        startText = findViewById(R.id.tv_start_stop_meas_svc);
+
         connectStateProgressBar = findViewById(R.id.progress_connecting_svc_meas);
         connectStateImage = findViewById(R.id.img_connect_state_svc_meas);
         connectStateText = findViewById(R.id.tv_connect_title_svc_meas);
         connectButton = findViewById(R.id.constraint_connect_button_svc_meas);
 
         backButton = findViewById(R.id.img_btn_back_svc_meas);
-        retestButton = findViewById(R.id.btn_retest_svc_meas);
+        retestButton = findViewById(R.id.btn_retest_meas_svc);
 
         adapter = new SvcResultAdapter(this);
         adapter.setOrderSelectedListener(new OnOrderSelectedListener() {
@@ -425,17 +431,16 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isStart = !isStart;
 
-                if (isStart) {
+                if (!startImage.isSelected()) {
 
-                    startButton.setText("일시정지");
-                    startButton.setIcon(AppCompatResources.getDrawable(MeasurementSvcActivity.this, R.drawable.ic_baseline_pause_30_white));
+                    startText.setText(getString(R.string.pause_meas));
+                    startImage.setSelected(true);
 
                 } else {
 
-                    startButton.setText("측정하기");
-                    startButton.setIcon(AppCompatResources.getDrawable(MeasurementSvcActivity.this, R.drawable.ic_baseline_play_arrow_30_white));
+                    startText.setText(getString(R.string.start_meas));
+                    startImage.setSelected(false);
 
                 }
             }
@@ -634,7 +639,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
     private void saveData(int isPost) {
 
-        isStart = false;
+        //isStart = false;
 
         Thread thread = new Thread() {
 
@@ -690,7 +695,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
                         confirmDialog.setTitle(getString(R.string.save_success));
                         confirmDialog.show();
 
-                        isStart = true;
+                        //isStart = true;
                         timerCount = 0d;
 
                         svcGraphView.clear();

@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -95,11 +96,15 @@ public class MeasurementFvcActivity extends AppCompatActivity {
     private List<VolumeTimeGraphView> volumeTimeResultViewList = new ArrayList<>();
     private List<Integer> pulseWidthList = new ArrayList<>();
     private RecyclerView rv;
-    private Button completeButton, preSaveButton, postSaveButton;
+    private Button completeButton;
+
+    private LinearLayout preSaveButton, postSaveButton, retestButton, startStopButton;
+    private ImageView startStopImage;
+    private TextView startStopText;
+
     private ConstraintLayout connectButton;
     private ImageView connectStateImage;
     private TextView connectStateText;
-    private MaterialButton retestButton, startStopButton;
     private ProgressBar timerProgressBar, weakFlowProgressBar, connectingProgressBar;
     private ImageButton backButton;
     private FvcResultAdapter resultAdapter;
@@ -107,7 +112,6 @@ public class MeasurementFvcActivity extends AppCompatActivity {
     private TextView emptyText;
     private LoadingDialog loadingDialog;
 
-    private boolean isStart = false;
     private boolean flowToggle = false;
 
     private int testOrder = 1;
@@ -152,7 +156,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
                     if (value > 10) {
 
-                        if (!isStart) return;
+                        if (!startStopImage.isSelected()) return;
                         if (pulseWidthList.size() > 1000) return;
 
                         //dataReceivedCount++;
@@ -295,6 +299,9 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         realTimeVolumeFlowGraphLayout = findViewById(R.id.frame_volume_flow_graph_meas);
         realTimeVolumeTimeGraphLayout = findViewById(R.id.frame_volume_time_graph_meas);
 
+        startStopImage = findViewById(R.id.img_start_stop_meas_fvc);
+        startStopText = findViewById(R.id.tv_start_stop_meas_fvc);
+
         resultVolumeFlowGraphLayout = findViewById(R.id.frame_volume_flow_graph_result_fvc);
         resultVolumeTimeGraphLayout = findViewById(R.id.frame_volume_time_graph_result_fvc);
 
@@ -307,8 +314,8 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         emptyText = findViewById(R.id.tv_empty_list_fvc_meas);
 
         rv = findViewById(R.id.rv_meas);
-        retestButton = findViewById(R.id.btn_retest_meas);
-        startStopButton = findViewById(R.id.btn_start_stop_meas);
+        retestButton = findViewById(R.id.btn_retest_meas_fvc);
+        startStopButton = findViewById(R.id.btn_start_stop_fvc_meas);
         completeButton = findViewById(R.id.btn_complete_fvc_meas);
 
         timerProgressBar = findViewById(R.id.progressbar_expiratory_timer);
@@ -579,17 +586,15 @@ public class MeasurementFvcActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                isStart = !isStart;
+                if (!startStopImage.isSelected()) {
 
-                if (isStart) {
-
-                    startStopButton.setText("일시정지");
-                    startStopButton.setIcon(AppCompatResources.getDrawable(MeasurementFvcActivity.this, R.drawable.ic_baseline_pause_30_white));
+                    startStopText.setText(getString(R.string.pause_meas));
+                    startStopImage.setSelected(true);
 
                 } else {
 
-                    startStopButton.setText("측정하기");
-                    startStopButton.setIcon(AppCompatResources.getDrawable(MeasurementFvcActivity.this, R.drawable.ic_baseline_play_arrow_30_white));
+                    startStopText.setText(getString(R.string.start_meas));
+                    startStopImage.setSelected(false);
 
                 }
 
@@ -797,7 +802,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
     private void saveData(int isPost) {
 
-        isStart = false;
+        //isStart = false;
 
         Thread thread = new Thread() {
 
@@ -854,7 +859,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                         confirmDialog.setTitle(getString(R.string.save_success));
                         confirmDialog.show();
 
-                        isStart = true;
+                        //isStart = true;
 
                         volumeFlowGraphView.clear();
                         volumeTimeGraphView.clear();

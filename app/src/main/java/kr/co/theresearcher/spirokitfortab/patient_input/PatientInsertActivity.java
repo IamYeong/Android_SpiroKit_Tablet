@@ -98,7 +98,7 @@ public class PatientInsertActivity extends AppCompatActivity {
         startSmokeDateSelectButton = findViewById(R.id.btn_start_smoke_date_insert_patient);
         stopSmokeDateSelectButton = findViewById(R.id.btn_stop_smoke_date_insert_patient);
 
-        smokeAmountField.setFocusableInTouchMode(true);
+        //smokeAmountField.setFocusableInTouchMode(true);
         smokeAmountField.setText("0");
 
         backButton.setOnClickListener(new View.OnClickListener() {

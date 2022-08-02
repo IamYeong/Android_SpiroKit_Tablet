@@ -83,6 +83,7 @@ public class EmptyResultFragment extends Fragment {
 
                             emptyImage.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.empty_operator));
                             emptyText.setText(getString(R.string.empty_operators));
+
                             emptyButton.setText(getString(R.string.go_to_add_operator));
                             emptyButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -91,6 +92,7 @@ public class EmptyResultFragment extends Fragment {
                                     startActivity(intent);
                                 }
                             });
+
 
                         }
                     });
@@ -107,6 +109,7 @@ public class EmptyResultFragment extends Fragment {
 
                             emptyImage.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.empty_patient));
                             emptyText.setText(getString(R.string.empty_patients));
+
                             emptyButton.setText(getString(R.string.go_to_add_patient));
                             emptyButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -130,6 +133,8 @@ public class EmptyResultFragment extends Fragment {
                             emptyImage.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.empty_selected));
                             emptyText.setText(getString(R.string.empty_patient_select));
                             emptyButton.setVisibility(View.GONE);
+
+
                         }
                     });
 

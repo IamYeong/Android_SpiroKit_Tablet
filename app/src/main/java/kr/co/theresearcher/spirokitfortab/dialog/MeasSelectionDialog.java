@@ -38,7 +38,6 @@ public class MeasSelectionDialog extends Dialog {
     private Button fvcButton, svcButton;
     private AppCompatSpinner workSpinnerCheckupDoctor,
     operatorSpinnerFamilyDoctor, operatorSpinnerCheckupDoctor;
-    private TextView matchDoctorText;
     private ImageButton closeButton;
 
     private ArrayAdapter<String> jobArrayAdapter;
@@ -64,6 +63,9 @@ public class MeasSelectionDialog extends Dialog {
         getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         setContentView(R.layout.dialog_meas_selection);
         setCancelable(false);
+
+        SharedPreferencesManager.setFamilyDoctorHash(getContext(), null);
+        SharedPreferencesManager.setOperatorHash(getContext(), null);
 
         workSpinnerCheckupDoctor = findViewById(R.id.spinner_work_group_checkup_doctor_dialog);
         operatorSpinnerFamilyDoctor = findViewById(R.id.spinner_operator_group_family_doctor_dialog);
@@ -110,7 +112,7 @@ public class MeasSelectionDialog extends Dialog {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                Log.d(getClass().getSimpleName(), familyDoctorOperators.get(position).getName() + " SELECTED");
+                Log.e(getClass().getSimpleName(), position + " SELECTED");
                 SharedPreferencesManager.setFamilyDoctorHash(getContext(), familyDoctorOperators.get(position).getHashed());
 
             }
@@ -125,7 +127,7 @@ public class MeasSelectionDialog extends Dialog {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                Log.d(getClass().getSimpleName(), checkupOperators.get(position).getName() + " SELECTED");
+                Log.e(getClass().getSimpleName(), position + " SELECTED");
                 SharedPreferencesManager.setOperatorHash(getContext(), checkupOperators.get(position).getHashed());
 
             }
@@ -162,6 +164,15 @@ public class MeasSelectionDialog extends Dialog {
             @Override
             public void onClick(View v) {
 
+                if (SharedPreferencesManager.getOperatorHash(getContext()) == null) {
+
+                    ConfirmDialog confirmDialog = new ConfirmDialog(getContext());
+                    confirmDialog.setTitle(getContext().getString(R.string.not_selected_checkup_doctor));
+                    confirmDialog.show();
+
+                    return;
+                }
+
                 Intent intent = new Intent(getContext(), MeasurementFvcActivity.class);
                 getContext().startActivity(intent);
                 dismiss();
@@ -172,6 +183,15 @@ public class MeasSelectionDialog extends Dialog {
         svcButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (SharedPreferencesManager.getOperatorHash(getContext()) == null) {
+
+                    ConfirmDialog confirmDialog = new ConfirmDialog(getContext());
+                    confirmDialog.setTitle(getContext().getString(R.string.not_selected_checkup_doctor));
+                    confirmDialog.show();
+
+                    return;
+                }
 
                 Intent intent = new Intent(getContext(), MeasurementSvcActivity.class);
                 getContext().startActivity(intent);
