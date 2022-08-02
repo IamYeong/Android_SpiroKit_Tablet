@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_gravity="center"
+    android:background="@drawable/background_dialog"
     >
 
     <TextView
@@ -30,7 +31,7 @@
         android:max="1000"
         android:progress="500"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:progressDrawable="@drawable/progressbar_secondary_color_style"
+        android:progressDrawable="@drawable/progressbar_primary_color_style"
         android:layout_marginHorizontal="20dp"
 
         app:layout_constraintTop_toBottomOf="@id/tv_sync_progress"
@@ -42,7 +43,7 @@
     <android.widget.Button
         android:id="@+id/btn_cancel_sync_progress"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -50,8 +51,10 @@
         app:layout_constraintTop_toBottomOf="@id/progressbar_sync_loading"
 
         android:background="@drawable/button_shape"
-        android:layout_margin="10dp"
-
+        android:layout_marginTop="50dp"
+        android:paddingHorizontal="70dp"
+        android:layout_marginBottom="10dp"
+        android:elevation="3dp"
         android:text="@string/cancel"
         android:fontFamily="@font/nanum_barun_gothic_light"
 

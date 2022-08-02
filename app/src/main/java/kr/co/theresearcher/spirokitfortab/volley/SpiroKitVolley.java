@@ -70,11 +70,24 @@ public class SpiroKitVolley {
             }
         });
 
+        jsonObjectRequest.setTag("POST");
+
         requestQueue.add(jsonObjectRequest);
 
     }
 
+    public static void cancelAllRequest() {
+        requestQueue.cancelAll(new RequestQueue.RequestFilter() {
+            @Override
+            public boolean apply(Request<?> request) {
 
+                //if(request.getTag().equal("POST)) return true;
+
+                return true;
+            }
+        });
+
+    }
 
 
 }

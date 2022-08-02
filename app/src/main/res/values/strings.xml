@@ -204,9 +204,23 @@
 
     <string name="app_version">앱 버전</string>
     <string name="server_sync">서버 동기화</string>
-
-    <string name="server_sync_waiting">서버와 데이터 동기화 중입니다</string>
+    
+    <string name="server_sync_preparing">서버에 전송할 데이터 구성 중</string>
+    <string name="server_sync_waiting">서버 응답 대기 중</string>
     <string name="server_sync_writing">서버에서 받은 데이터를 저장 중입니다</string>
+
+    <string name="sync_preparing_office">디바이스 기관 정보 구성 중</string>
+    <string name="sync_preparing_operators">디바이스 검사자 정보 구성 중</string>
+    <string name="sync_preparing_patients">디바이스 피검사자 정보 구성 중</string>
+    <string name="sync_preparing_histories">디바이스 검사 기록 구성 중</string>
+    <string name="sync_preparing_raw_data">디바이스 검사 데이터 구성 중</string>
+
+    <string name="sync_handling_office">최신 기관 정보 처리 중</string>
+    <string name="sync_handling_operators">최신 검사자 정보 처리 중</string>
+    <string name="sync_handling_patients">최신 환자 정보 처리 중</string>
+    <string name="sync_handling_histories">최신 검사 정보 처리 중</string>
+    <string name="sync_handling_raw_data">최신 검사 원본 데이터 처리 중</string>
+
     <string name="success_sync">서버와 동기화에 성공했습니다</string>
 
    <string name="disconnected_with_device">디바이스와 연결이 끊어졌습니다</string>

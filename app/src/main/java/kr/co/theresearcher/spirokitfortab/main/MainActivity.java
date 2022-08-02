@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.bluetooth.BluetoothProfile;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Point;
@@ -47,6 +48,7 @@ import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
 import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
 import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
 import kr.co.theresearcher.spirokitfortab.dialog.LoadingDialog;
+import kr.co.theresearcher.spirokitfortab.dialog.SyncLoadingDialog;
 import kr.co.theresearcher.spirokitfortab.main.information.OnCalHistorySelectedListener;
 import kr.co.theresearcher.spirokitfortab.main.information.PatientInformationFragment;
 import kr.co.theresearcher.spirokitfortab.main.result.empty.EmptyResultFragment;
@@ -69,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private PatientInformationFragment informationFragment;
 
     private LoadingDialog loadingDialog;
+    private SyncLoadingDialog syncLoadingDialog;
 
     private SpiroKitBluetoothLeService mService;
     private Handler handler = new Handler(Looper.getMainLooper());
@@ -78,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         public void onResponse(JSONObject jsonResponse) {
 
             Log.e(getClass().getSimpleName(),"=+++++++++wwwwwwwwww+++++++++++++++\n" + jsonResponse.toString());
-            loadingDialog.dismiss();
+            syncLoadingDialog.dismiss();
 
             handleResponse(jsonResponse);
         }
@@ -86,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onError(ErrorResponse errorResponse) {
             Log.e(getClass().getSimpleName(),"+++++++++++++ERROR RESPONSE+++++++++++\n" + errorResponse.getCode() + "\n" + errorResponse.getMessage());
-            loadingDialog.dismiss();
+            syncLoadingDialog.dismiss();
 
             ConfirmDialog confirmDialog = new ConfirmDialog(MainActivity.this);
             confirmDialog.setTitle(getString(R.string.failed_server_connection, errorResponse.getMessage()));
@@ -252,6 +255,7 @@ public class MainActivity extends AppCompatActivity {
         startService(new Intent(getApplicationContext(), SpiroKitBluetoothLeService.class));
 
         loadingDialog = new LoadingDialog(MainActivity.this);
+        syncLoadingDialog = new SyncLoadingDialog(MainActivity.this);
 
     }
 
@@ -379,7 +383,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(getClass().getSimpleName(), "DOWN EVENT!!!");
             }
 
-
         }
 
 
@@ -388,9 +391,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void sync() {
 
-        loadingDialog = new LoadingDialog(MainActivity.this);
-        loadingDialog.setTitle(getString(R.string.server_sync_waiting));
-        loadingDialog.show();
+        syncLoadingDialog = new SyncLoadingDialog(MainActivity.this);
+        syncLoadingDialog.setCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                SpiroKitVolley.cancelAllRequest();
+            }
+        });
+        syncLoadingDialog.show();
+        syncLoadingDialog.setProgress(0);
 
         Thread thread = new Thread() {
 
@@ -419,8 +428,17 @@ public class MainActivity extends AppCompatActivity {
                     List<Operator> operators = database.operatorDao().selectAll(office.getHashed());
 
                     Log.e(getClass().getSimpleName(), "OPERATOR SIZE : " + operators.size());
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            syncLoadingDialog.setTitle(getString(R.string.sync_preparing_office));
+                            syncLoadingDialog.setMaxProgress(operators.size());
+                        }
+                    });
 
                     for (Operator operator : operators) {
+
+
                         JSONObject operatorJsonObject = new JSONObject();
                         operatorJsonObject.put(JsonKeys.JSON_KEY_HASHED, operator.getHashed());
                         operatorJsonObject.put(JsonKeys.JSON_KEY_OFFICE_HASHED, office.getHashed());
@@ -431,12 +449,29 @@ public class MainActivity extends AppCompatActivity {
                         operatorJsonObject.put(JsonKeys.JSON_KEY_UPDATED_DATE, operator.getUpdatedDate());
 
                         operatorArray.put(operatorJsonObject);
+
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                syncLoadingDialog.incrementProgress();
+                            }
+                        });
+
                     }
                     operators.clear();
 
                     jsonObject.put(JsonKeys.JSON_KEY_OPERATOR, operatorArray);
 
                     List<Patient> patients = database.patientDao().selectAll(office.getHashed());
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            syncLoadingDialog.setTitle(getString(R.string.sync_preparing_patients));
+                            syncLoadingDialog.setMaxProgress(patients.size());
+
+                        }
+                    });
 
                     Log.e(getClass().getSimpleName(), "PATIENT SIZE : " + patients.size());
 
@@ -478,6 +513,13 @@ public class MainActivity extends AppCompatActivity {
 
                         patientJsonArray.put(patientJsonObject);
 
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                syncLoadingDialog.incrementProgress();
+                            }
+                        });
+
                     }
                     jsonObject.put(JsonKeys.JSON_KEY_PATIENT, patientJsonArray);
 
@@ -490,6 +532,14 @@ public class MainActivity extends AppCompatActivity {
 
                     JSONArray historyArray = new JSONArray();
                     JSONArray rawDataArray = new JSONArray();
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            syncLoadingDialog.setTitle(getString(R.string.sync_preparing_histories));
+                            syncLoadingDialog.setMaxProgress(calHistories.size());
+                        }
+                    });
 
                     for (CalHistory calHistory : calHistories) {
 
@@ -515,6 +565,13 @@ public class MainActivity extends AppCompatActivity {
 
                         rawDataList.addAll(rawData);
 
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                syncLoadingDialog.incrementProgress();
+                            }
+                        });
+
                     }
 
                     calHistories.clear();
@@ -522,6 +579,14 @@ public class MainActivity extends AppCompatActivity {
                     jsonObject.put(JsonKeys.JSON_KEY_CAL_HISTORY, historyArray);
 
                     Log.e(getClass().getSimpleName(), "RAW TOTAL SIZE : " + rawDataList.size());
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            syncLoadingDialog.setTitle(getString(R.string.sync_preparing_raw_data));
+                            syncLoadingDialog.setMaxProgress(rawDataList.size());
+                        }
+                    });
 
                     for (CalHistoryRawData raw : rawDataList) {
 
@@ -541,6 +606,13 @@ public class MainActivity extends AppCompatActivity {
 
                         rawDataArray.put(rawJsonObject);
 
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                syncLoadingDialog.incrementProgress();
+                            }
+                        });
+
                     }
 
                     SpiroKitDatabase.removeInstance();
@@ -555,9 +627,28 @@ public class MainActivity extends AppCompatActivity {
                     SpiroKitVolley.setVolleyListener(volleyResponseListener);
                     SpiroKitVolley.postJson(jsonObject);
 
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            syncLoadingDialog.setTitle(getString(R.string.server_sync_waiting));
+                            syncLoadingDialog.setProgress(0);
+                            syncLoadingDialog.setCancelableUseButton(true);
+                        }
+                    });
+
                 } catch (JSONException e) {
 
                     Log.e(getClass().getSimpleName(), "++++++++++++++++++++++++++=\n" + e.toString());
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            syncLoadingDialog.dismiss();
+
+                            ConfirmDialog confirmDialog = new ConfirmDialog(MainActivity.this);
+                            confirmDialog.setTitle(getString(R.string.failed_server_connection, e.toString()));
+                            confirmDialog.show();
+                        }
+                    });
 
                 }
 
@@ -571,9 +662,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleResponse(JSONObject jsonObject) {
 
-        loadingDialog = new LoadingDialog(MainActivity.this);
-        loadingDialog.setTitle(getString(R.string.server_sync_writing));
-        loadingDialog.show();
+        syncLoadingDialog = new SyncLoadingDialog(MainActivity.this);
+        syncLoadingDialog.show();
 
         Thread thread = new Thread() {
 
@@ -596,6 +686,16 @@ public class MainActivity extends AppCompatActivity {
                     Log.e(getClass().getSimpleName(), "RESPONSE JSON SIZE : " + items.length());
 
                     JSONObject office = items.getJSONObject(JsonKeys.JSON_KEY_OFFICE);
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            syncLoadingDialog.setTitle(getString(R.string.sync_handling_office));
+                            syncLoadingDialog.setMaxProgress(100);
+                            syncLoadingDialog.setProgress(0);
+                        }
+                    });
+
                     Office o = new Office();
                     o.setHashed(office.getString(JsonKeys.JSON_KEY_HASHED));
                     o.setName(office.getString(JsonKeys.JSON_KEY_NAME));
@@ -612,8 +712,25 @@ public class MainActivity extends AppCompatActivity {
 
                     database.officeDao().insert(o);
 
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            syncLoadingDialog.setProgress(100);
+                        }
+                    });
+
                     JSONArray operators = items.getJSONArray(JsonKeys.JSON_KEY_OPERATORS);
                     //for (JSONObject operatorObject : operators.)
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            syncLoadingDialog.setTitle(getString(R.string.sync_handling_operators));
+                            syncLoadingDialog.setMaxProgress(operators.length());
+
+                        }
+                    });
 
                     for (int i = 0; i < operators.length(); i++) {
 
@@ -629,9 +746,26 @@ public class MainActivity extends AppCompatActivity {
                         //c_time 패스
 
                         database.operatorDao().insertOperator(op);
+
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                syncLoadingDialog.incrementProgress();
+                            }
+                        });
                     }
 
                     JSONArray patients = items.getJSONArray(JsonKeys.JSON_KEY_PATIENTS);
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            syncLoadingDialog.setTitle(getString(R.string.sync_handling_patients));
+                            syncLoadingDialog.setMaxProgress(patients.length());
+
+                        }
+                    });
 
                     for (int i = 0; i < patients.length(); i++) {
 
@@ -687,9 +821,27 @@ public class MainActivity extends AppCompatActivity {
                         p.setIsDeleted(patient.getInt(JsonKeys.JSON_KEY_IS_DELETED));
 
                         database.patientDao().insertPatient(p);
+
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                syncLoadingDialog.incrementProgress();
+                            }
+                        });
+
                     }
 
                     JSONArray histories = items.getJSONArray(JsonKeys.JSON_KEY_HISTORIES);
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            syncLoadingDialog.setTitle(getString(R.string.sync_handling_histories));
+                            syncLoadingDialog.setMaxProgress(histories.length());
+
+                        }
+                    });
 
                     for (int i = 0; i < histories.length(); i++) {
 
@@ -713,10 +865,27 @@ public class MainActivity extends AppCompatActivity {
 
                         database.calHistoryDao().insertHistory(h);
 
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                syncLoadingDialog.incrementProgress();
+                            }
+                        });
+
                     }
 
                     JSONArray rawData = items.getJSONArray(JsonKeys.JSON_KEY_RAW_DATA_LIST);
                     Log.e(getClass().getSimpleName(), "RECEIVE RAW DATA SIZE : " + rawData.length());
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            syncLoadingDialog.setTitle(getString(R.string.sync_handling_raw_data));
+                            syncLoadingDialog.setMaxProgress(rawData.length());
+
+                        }
+                    });
 
                     for (int i = 0; i < rawData.length(); i++) {
 
@@ -738,6 +907,13 @@ public class MainActivity extends AppCompatActivity {
 
                         database.calHistoryRawDataDao().insertRawData(d);
 
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                syncLoadingDialog.incrementProgress();
+                            }
+                        });
+
                     }
 
                     SpiroKitDatabase.removeInstance();
@@ -746,7 +922,7 @@ public class MainActivity extends AppCompatActivity {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            loadingDialog.dismiss();
+                            syncLoadingDialog.dismiss();
 
                             ConfirmDialog confirmDialog = new ConfirmDialog(MainActivity.this);
                             confirmDialog.setTitle(getString(R.string.success_sync));
