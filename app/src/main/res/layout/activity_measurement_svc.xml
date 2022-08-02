@@ -143,7 +143,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/rv_svc_meas"
 
-        android:background="@color/gray_background"
+        android:background="@drawable/layout_inner_shadow_square_gray"
         >
 
         <LinearLayout
@@ -291,7 +291,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
 
-                    android:text="@string/start_meas"
+                    android:text="@string/pre_save"
                     />
 
 
@@ -323,7 +323,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
 
-                    android:text="@string/start_meas"
+                    android:text="@string/post_save"
                     />
 
 
@@ -332,7 +332,6 @@
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     <FrameLayout
         android:id="@+id/frame_volume_time_graph_result_svc"

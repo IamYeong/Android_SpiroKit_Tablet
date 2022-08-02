@@ -288,6 +288,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SpiroKitVolley.cancelAllRequest();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 

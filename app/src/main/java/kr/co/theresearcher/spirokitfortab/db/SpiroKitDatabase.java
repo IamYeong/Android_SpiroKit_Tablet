@@ -62,7 +62,7 @@ public abstract class SpiroKitDatabase extends RoomDatabase {
                                 @Override
                                 public void run() {
 
-                                    try {
+                                    //try {
 
                                         db.execSQL("INSERT INTO office (hashed, name, code, tel, address, country_code, is_use, is_use_sync, office_id, office_pass, is_deleted, updated_date) VALUES('1f10668b5f1cb897d57faf08cfe58c668060f14ce32077c43011c862fea5f5c7', 'TR1', '0rri5IHz','12121212', '대한민국', 'KR', 1, 1, 'tr1', '1234', 0,'0000-00-00 00:00:00')");
 
@@ -74,11 +74,9 @@ public abstract class SpiroKitDatabase extends RoomDatabase {
                                         db.execSQL("INSERT INTO human_race (race) VALUES('w')");
                                         db.execSQL("INSERT INTO human_race (race) VALUES('b')");
 
-                                        db.close();
+                                        //db.close();
 
-                                    } catch (IOException e) {
-                                        Log.e(getClass().getSimpleName(), e.toString());
-                                    }
+                                    //}
 
 
                                 }

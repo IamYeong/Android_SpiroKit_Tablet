@@ -81,7 +81,7 @@
         <entry key="app/src/main/res/layout/activity_join_user.xml" value="0.18" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.43640350877192985" />
-        <entry key="app/src/main/res/layout/activity_measurement_fvc.xml" value="0.18" />
+        <entry key="app/src/main/res/layout/activity_measurement_fvc.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_measurement_mvv.xml" value="0.20442708333333334" />
         <entry key="app/src/main/res/layout/activity_measurement_svc.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_operator.xml" value="0.18" />

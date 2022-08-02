@@ -179,7 +179,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/linear_graph_box_meas"
 
-        android:background="@color/gray_background"
+        android:background="@drawable/layout_inner_shadow_square_gray"
         >
 
 
@@ -387,7 +387,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
 
-                    android:text="@string/start_meas"
+                    android:text="@string/pre_save"
                     />
 
 
@@ -419,7 +419,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
 
-                    android:text="@string/start_meas"
+                    android:text="@string/post_save"
                     />
 
 
