@@ -2,6 +2,7 @@ package kr.co.theresearcher.spirokitfortab.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,7 +23,7 @@ public class SyncLoadingDialog extends Dialog {
     private ProgressBar loadingProgressBar;
     private TextView titleText;
     private Button cancelButton;
-    private OnCancelListener cancelListener;
+    private DialogInterface.OnCancelListener cancelListener;
     private Handler handler = new Handler(Looper.getMainLooper());
 
     public SyncLoadingDialog(@NonNull Context context) {
@@ -83,6 +84,7 @@ public class SyncLoadingDialog extends Dialog {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                cancelListener.onCancel(null);
                 dismiss();
             }
         });
