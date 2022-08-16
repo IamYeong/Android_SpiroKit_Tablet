@@ -228,6 +228,8 @@
 
     <string name="scan_info">디바이스의 전원을 켜신 후 스캔버튼을 눌러 주시기 바랍니다.\n연결이 원활하지 않을 경우 디바이스를 종료 후 다시 켜주시고 연결을 시도해주세요</string>
     <string name="must_be_enable_ble">블루투스는 필수기능이므로 활성화 후 이용가능합니다</string>
+    <string name="agree_enable_sync">동기화를 켜시겠습니까?</string>
+    <string name="agree_disable_sync">동기화를 끄시겠습니까?</string>
 
     <string name="already_scanning">기존 진행중인 주변기기 탐색이 있습니다</string>
     <string name="not_available_ble">블루투스를 이용할 수 없는 장치입니다. 기종을 확인해주세요</string>

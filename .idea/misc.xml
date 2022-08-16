@@ -60,6 +60,7 @@
         <entry key="app/src/main/res/drawable/progressbar_primary_color_style.xml" value="0.342" />
         <entry key="app/src/main/res/drawable/progressbar_secondary_color_style.xml" value="0.2615" />
         <entry key="app/src/main/res/drawable/rotate.xml" value="0.346" />
+        <entry key="app/src/main/res/drawable/selector_bg_gray_round.xml" value="0.342" />
         <entry key="app/src/main/res/drawable/selector_bg_meas_button.xml" value="0.342" />
         <entry key="app/src/main/res/drawable/selector_bg_sync_enable.xml" value="0.342" />
         <entry key="app/src/main/res/drawable/selector_common_button.xml" value="0.342" />
@@ -80,7 +81,7 @@
         <entry key="app/src/main/res/layout/activity_exception.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_join_user.xml" value="0.18" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.43640350877192985" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.18" />
         <entry key="app/src/main/res/layout/activity_measurement_fvc.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_measurement_mvv.xml" value="0.20442708333333334" />
         <entry key="app/src/main/res/layout/activity_measurement_svc.xml" value="0.22" />

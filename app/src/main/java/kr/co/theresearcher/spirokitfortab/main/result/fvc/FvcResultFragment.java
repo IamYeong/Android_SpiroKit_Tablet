@@ -274,7 +274,7 @@ public class FvcResultFragment extends Fragment implements Observer {
                 SpiroKitDatabase database = SpiroKitDatabase.getInstance(context);
 
                 List<CalHistoryRawData> rawData = database.calHistoryRawDataDao().selectRawDataByHistory(
-                        history.getHashed()
+                        SharedPreferencesManager.getCalHistoryHash(context)
                 );
 
                 SpiroKitDatabase.removeInstance();

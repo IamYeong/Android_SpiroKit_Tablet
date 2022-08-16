@@ -184,7 +184,6 @@ public class MainActivity extends AppCompatActivity {
         layoutParams.width = (int)((float)point.y / (float)3f);
         patientInfoContainer.setLayoutParams(layoutParams);
 
-
         settingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -205,25 +204,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Office office = SpiroKitDatabase.getInstance(MainActivity.this).officeDao().selectOfficeByHash(SharedPreferencesManager.getOfficeHash(MainActivity.this));
-
-                if (office.getIsUseSync() == 0) {
-
-                    ConfirmDialog confirmDialog = new ConfirmDialog(MainActivity.this);
-                    confirmDialog.setTitle(getString(R.string.not_sync_permission));
-                    confirmDialog.show();
-
-                    return;
-                }
-
-                if (!SharedPreferencesManager.getUseSync(MainActivity.this)) {
-
-                    ConfirmDialog confirmDialog = new ConfirmDialog(MainActivity.this);
-                    confirmDialog.setTitle(getString(R.string.sync_disabled));
-                    confirmDialog.show();
-
-                    return;
-                }
 
                 SharedPreferencesManager.setPatientHash(MainActivity.this, null);
                 observer.notificationObservers(404);
@@ -301,6 +281,29 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        Office office = SpiroKitDatabase.getInstance(MainActivity.this).officeDao().selectOfficeByHash(SharedPreferencesManager.getOfficeHash(MainActivity.this));
+
+        if ((office.getIsUseSync() == 0) || (!SharedPreferencesManager.getUseSync(MainActivity.this))) {
+
+            syncButton.setEnabled(false);
+            syncButton.setElevation(0f);
+            syncButton.setBackgroundTintList(AppCompatResources.getColorStateList(MainActivity.this, R.color.gray_dark));
+
+            /*
+            ConfirmDialog confirmDialog = new ConfirmDialog(MainActivity.this);
+            confirmDialog.setTitle(getString(R.string.not_sync_permission));
+            confirmDialog.show();
+
+             */
+
+        } else {
+
+            syncButton.setEnabled(true);
+            syncButton.setElevation(3f);
+            syncButton.setBackgroundTintList(AppCompatResources.getColorStateList(MainActivity.this, R.color.gray_background));
+
+        }
 
         bindService(new Intent(getApplicationContext(), SpiroKitBluetoothLeService.class), serviceConnection ,Context.BIND_AUTO_CREATE);
 

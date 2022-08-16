@@ -257,8 +257,29 @@ public class SettingActivity extends AppCompatActivity {
 
                 boolean enabled = SharedPreferencesManager.getUseSync(SettingActivity.this);
                 Log.e(getClass().getSimpleName(), enabled + "");
-                SharedPreferencesManager.setUseSync(SettingActivity.this, !enabled);
-                syncEnableButton.setSelected(!enabled);
+
+                SelectionDialog selectionDialog = new SelectionDialog(SettingActivity.this);
+
+                if (enabled) {
+
+                    selectionDialog.setTitle(getString(R.string.agree_disable_sync));
+
+                } else {
+
+                    selectionDialog.setTitle(getString(R.string.agree_enable_sync));
+
+                }
+
+                selectionDialog.setSelectedListener(new OnSelectedInDialogListener() {
+                    @Override
+                    public void onSelected(boolean select) {
+                        SharedPreferencesManager.setUseSync(SettingActivity.this, !enabled);
+                        syncEnableButton.setSelected(!enabled);
+                    }
+                });
+
+                selectionDialog.show();
+
 
 
             }

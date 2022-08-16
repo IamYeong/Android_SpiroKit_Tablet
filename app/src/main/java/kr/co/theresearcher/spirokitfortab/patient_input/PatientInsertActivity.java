@@ -441,10 +441,13 @@ public class PatientInsertActivity extends AppCompatActivity {
 
         try {
 
+            /*
             if (chartNumberField.getText().toString().length() == 0) {
                 Log.d(getClass().getSimpleName(), "CHART");
                 return false;
             }
+
+             */
             if (nameField.getText().toString().length() == 0) {
                 Log.d(getClass().getSimpleName(), "NAME");
                 return false;
