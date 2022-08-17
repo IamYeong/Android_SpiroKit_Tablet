@@ -68,7 +68,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
     private ImageButton dateRangeButton, modifyButton;
     private TextView patientNameText, patientInfoText, dateRangeText;
     private FrameLayout volumeFlowLayout, volumeTimeLayout;
-    private FrameLayout patientsEmptyView, calEmptyView;
+    private FrameLayout patientsEmptyView;
     private CardView patientCard;
     private ConstraintLayout patientAreaLayout;
 
@@ -98,8 +98,6 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
         if ((Integer) arg == 404) {
 
-            SharedPreferencesManager.setPatientHash(context, null);
-            updateUI();
             selectMeasurements();
 
         } else {
@@ -147,7 +145,6 @@ public class PatientInformationFragment extends Fragment implements Observer {
         dateRangeText = view.findViewById(R.id.tv_date_range_patient_info_fragment);
         informationExpandImage = view.findViewById(R.id.img_expand_patient_info);
         patientsEmptyView = view.findViewById(R.id.frame_empty_patients_notification);
-        calEmptyView = view.findViewById(R.id.frame_empty_measurements_notification);
         patientCard = view.findViewById(R.id.card_patient_info);
 
         volumeFlowLayout = view.findViewById(R.id.frame_volume_flow_graph_result_fragment);
@@ -390,6 +387,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
     public void onResume() {
         super.onResume();
 
+        Log.e(getClass().getSimpleName(), "PatientFragment Resume");
         //selectPatients();
         selectMeasurements();
         updateUI();
@@ -440,6 +438,9 @@ public class PatientInformationFragment extends Fragment implements Observer {
     }
 
     private void selectMeasurements() {
+
+        Log.e(getClass().getSimpleName(), "SELECT MEASUREMENTS");
+
         Thread thread = new Thread() {
 
             @Override
@@ -477,13 +478,6 @@ public class PatientInformationFragment extends Fragment implements Observer {
                     @Override
                     public void run() {
 
-                        if (histories.size() > 0) {
-                            calEmptyView.setVisibility(View.INVISIBLE);
-                            //historySelectedListener.onHistorySelected(histories.get(0));
-                        } else {
-                            calEmptyView.setVisibility(View.VISIBLE);
-                            //historySelectedListener.onHistorySelected(null);
-                        }
                         measurementAdapter.notifyDataSetChanged();
                         dateRangeText.setText(getString(R.string.date_to_date, resultDateFormat.format(minDate), resultDateFormat.format(maxDate)));
                     }

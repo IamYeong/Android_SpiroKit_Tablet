@@ -146,9 +146,8 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsViewHolder> {
             @Override
             public void onClick(View v) {
 
-                Log.d(getClass().getSimpleName(), patient.getName());
+                Log.e(getClass().getSimpleName(), patient.getName());
                 SharedPreferencesManager.setPatientHash(context, patient.getHashed());
-
                 simpleSelectedListener.onSimpleSelected();
 
             }

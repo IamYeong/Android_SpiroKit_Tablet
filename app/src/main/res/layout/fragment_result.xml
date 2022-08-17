@@ -71,6 +71,21 @@
                 />
 
             <TextView
+                android:id="@+id/tv_export_fvc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/tv_doctor_main_result"
+                app:layout_constraintEnd_toEndOf="@id/tv_doctor_main_result"
+                android:text="EXPORT CSV"
+                android:textColor="#007fff"
+                android:textSize="15sp"
+                android:fontFamily="@font/nanum_gothic_extra_bold"
+
+                android:layout_marginTop="10dp"
+                android:foreground="?attr/selectableItemBackground"
+                />
+
+            <TextView
                 android:id="@+id/tv_volume_flow_title_result"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

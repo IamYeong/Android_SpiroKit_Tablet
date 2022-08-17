@@ -45,6 +45,7 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
 
     private boolean nothing = true;
     private Handler handler = new Handler(Looper.getMainLooper());
+    private int selectedOrdinal = 0;
 
     public FvcResultAdapter(Context context) {
         this.fvcResults = new ArrayList<>();
@@ -99,6 +100,10 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
 
     }
 
+    public int getSelectedOrdinal() {
+        return selectedOrdinal;
+    }
+
     @NonNull
     @Override
     public FvcResultViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -150,13 +155,15 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
             @Override
             public void onClick(View v) {
 
-                if (holder.getAdapterPosition() == -1) return;
+                int position = holder.getAdapterPosition();
+                if (position == -1) return;
 
                 for (ResultFVC result : fvcResults) result.setSelected(false);
-                fvcResults.get(holder.getAdapterPosition()).setSelected(true);
-                orderSelectedListener.onOrderSelected(holder.getAdapterPosition());
+                fvcResults.get(position).setSelected(true);
+                orderSelectedListener.onOrderSelected(position);
                 notifyDataSetChanged();
 
+                selectedOrdinal = position;
             }
         });
 
@@ -193,6 +200,7 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
                                         @Override
                                         public void run() {
 
+                                            notifyDataSetChanged();
                                             deletedListener.onDeleted(deleteIndex);
                                         }
                                     });

@@ -18,6 +18,9 @@ public interface CalHistoryRawDataDao {
     @Query("SELECT * FROM CAL_HISTORY_RAW_DATA WHERE (cal_history_hashed == :historyHashed)")
     List<CalHistoryRawData> selectAll(String historyHashed);
 
+    @Query("SELECT * FROM CAL_HISTORY_RAW_DATA")
+    List<CalHistoryRawData> select();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertRawData(CalHistoryRawData rawData);
 

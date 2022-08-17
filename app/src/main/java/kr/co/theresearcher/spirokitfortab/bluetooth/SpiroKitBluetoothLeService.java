@@ -146,7 +146,7 @@ public class SpiroKitBluetoothLeService extends Service {
 
     public interface BluetoothLeCallback {
 
-        void onReadCharacteristic(byte[] data);
+        void onReadCharacteristic(String data);
         void onWriteCharacteristic();
         void onDescriptorWrite();
         void onDiscoverServices();
@@ -305,7 +305,7 @@ public class SpiroKitBluetoothLeService extends Service {
         if (characteristic.getValue() != null) {
 
             if (bluetoothLeCallback != null) {
-                bluetoothLeCallback.onReadCharacteristic(characteristic.getValue());
+                bluetoothLeCallback.onReadCharacteristic(characteristic.getStringValue(0));
             }
 
         }

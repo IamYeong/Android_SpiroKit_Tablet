@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
             mService.setBluetoothLeCallback(new SpiroKitBluetoothLeService.BluetoothLeCallback() {
                 @Override
-                public void onReadCharacteristic(byte[] data) {
+                public void onReadCharacteristic(String data) {
                     //testTitleText.setText("READ CHARACTERISTIC");
                 }
 
@@ -231,6 +231,7 @@ public class MainActivity extends AppCompatActivity {
         setFragment(R.id.fragment_container_patient_info_main, informationFragment);
 
         SharedPreferencesManager.setPatientHash(getApplicationContext(), null);
+        //observer.notificationObservers(404);
         setFragmentByMeasGroup(null);
         startService(new Intent(getApplicationContext(), SpiroKitBluetoothLeService.class));
 
@@ -340,6 +341,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void setFragmentByMeasGroup(CalHistory history) {
 
+
+
         if (history == null) {
 
             EmptyResultFragment emptyResultFragment = new EmptyResultFragment();
@@ -347,6 +350,7 @@ public class MainActivity extends AppCompatActivity {
 
             return;
         }
+
 
         if (history.getMeasDiv().equals("f")) {
             FvcResultFragment fvcResultFragment = new FvcResultFragment(history);

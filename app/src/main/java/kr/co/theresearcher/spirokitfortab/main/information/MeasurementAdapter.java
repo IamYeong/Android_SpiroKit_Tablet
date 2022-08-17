@@ -126,7 +126,11 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
 
         if (searchResults.size() > 0) {
             searchResults.get(0).setSelected(true);
+
+            SharedPreferencesManager.setHistoryHash(context, searchResults.get(0).getHashed());
             selectedListener.onHistorySelected(searchResults.get(0));
+
+
         } else {
             selectedListener.onHistorySelected(null);
         }
@@ -156,6 +160,7 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
             holder.getMeasTitle().setTextColor(context.getColor(R.color.white));
             holder.getGroupText().setTextColor(context.getColor(R.color.white));
             holder.getRemoveButton().setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.ic_baseline_close_30_white));
+
 
         } else {
 

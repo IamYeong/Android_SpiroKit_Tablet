@@ -128,7 +128,7 @@ public class SettingActivity extends AppCompatActivity {
 
             mService.setBluetoothLeCallback(new SpiroKitBluetoothLeService.BluetoothLeCallback() {
                 @Override
-                public void onReadCharacteristic(byte[] data) {
+                public void onReadCharacteristic(String data) {
                     //testTitleText.setText("READ CHARACTERISTIC");
                 }
 

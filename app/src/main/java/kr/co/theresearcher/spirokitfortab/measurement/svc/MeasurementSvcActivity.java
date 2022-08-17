@@ -94,7 +94,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
     private long startTimestamp;
     private List<SlowVolumeTimeGraphView> volumeTimeRunViews = new ArrayList<>();
-    private List<Integer> pulseWidthList = new ArrayList<>();
+    private List<String> pulseWidthList = new ArrayList<>();
 
     //private SlowVolumeTimeRunView graphView;
     private SlowVolumeTimeGraphView svcGraphView;
@@ -165,18 +165,20 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
     private SpiroKitBluetoothLeService.BluetoothLeCallback bluetoothLeCallback = new SpiroKitBluetoothLeService.BluetoothLeCallback() {
         @Override
-        public void onReadCharacteristic(byte[] data) {
+        public void onReadCharacteristic(String data) {
 
-            int value = conversionIntegerFromByteArray(data);
-            if (value > 10) {
+
+            if (data.length() == 10) {
+
+                pulseWidthList.add(data);
 
                 if (!startImage.isSelected()) return;
                 if (timerCount >= 60d) return;
-
-                pulseWidthList.add(value);
-                handleData(value);
+                handleData(dataToInteger(data));
 
             } else {
+
+                int value = Integer.parseInt(data.charAt(0) + "");
 
                 if (value == 2) {
 
@@ -582,6 +584,20 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
     }
 
+    private int dataToInteger(String data) {
+        int value = 0;
+
+        for (int i = 0; i < data.length() - 1; i++) {
+
+            char c = data.charAt(i);
+            value *= 10;
+            value += Integer.parseInt(c + "");
+
+        }
+
+        return value;
+    }
+
     private void handleData(int value) {
 
         float time = 0f;
@@ -589,7 +605,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         float lps = 0f;
         float volume = 0f;
 
-        if (pulseWidthList.size() >= 2) value = calibratePW(calibrationPW, pulseWidthList.get(pulseWidthList.size() - 2), value);
+        if (pulseWidthList.size() >= 2) value = calibratePW(calibrationPW, dataToInteger(pulseWidthList.get(pulseWidthList.size() - 2)), value);
         calibrationPW = value;
 
         if ((value > 100_000_000) && (value < 200_000_000)) {
@@ -665,8 +681,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
                 for (int i = 0; i < pulseWidthList.size(); i++) {
 
-                    String value = pulseWidthList.get(i) + " ";
-                    stringBuilder.append(value);
+                    stringBuilder.append(pulseWidthList.get(i));
 
                 }
 
@@ -727,7 +742,13 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         //여기서는 어댑터에 추가랑 뷰배열에 추가만 해두고
         //핸들러에서 notify 수행, addVIew 하면 될 듯.
 
-        CalcSvcSpiroKitE calc = new CalcSvcSpiroKitE(pulseWidthList);
+        List<Integer> dataList = new ArrayList<>();
+
+        for (int i = 0; i < pulseWidthList.size(); i++) {
+            dataList.add(dataToInteger(pulseWidthList.get(i)));
+        }
+
+        CalcSvcSpiroKitE calc = new CalcSvcSpiroKitE(dataList);
         calc.measure();
         pulseWidthList.clear();
 
@@ -795,6 +816,15 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         resultGraphLayout.removeAllViews();
         resultGraphLayout.addView(volumeTimeRunViews.get(order));
 
+    }
+
+    private String byteToString(byte[] data) {
+        String value = "";
+        for (int i = 0; i < data.length; i++) {
+            value += (char)data[i];
+        }
+
+        return value;
     }
 
     private void complete() {

@@ -103,8 +103,9 @@ public class SvcResultFragment extends Fragment implements Observer {
         svcResultAdapter.setDeletedListener(new OnItemDeletedListener() {
             @Override
             public void onDeleted(int index) {
-                svcResultAdapter.clear();
-                startDrawing(graphLayout.getWidth(), graphLayout.getHeight());
+
+                graphViews.remove(index);
+                selectResult(svcResultAdapter.getItemCount() - 1);
             }
         });
 
@@ -112,8 +113,7 @@ public class SvcResultFragment extends Fragment implements Observer {
             @Override
             public void onChanged() {
 
-                svcResultAdapter.clear();
-                startDrawing(graphLayout.getWidth(), graphLayout.getHeight());
+
 
             }
         });
@@ -179,21 +179,6 @@ public class SvcResultFragment extends Fragment implements Observer {
                         history.getHashed()
                 );
 
-                SpiroKitDatabase.removeInstance();
-
-                Log.d(getClass().getSimpleName(), "RAW DATA SIZE : " + rawData.size());
-
-                if (rawData.size() == 0) {
-
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            changedListener.onChanged();
-                        }
-                    });
-
-                    return;
-                }
 
                 for (int i = 0; i < rawData.size(); i++) {
 
@@ -341,6 +326,19 @@ public class SvcResultFragment extends Fragment implements Observer {
     }
 
     private void selectResult(int order) {
+
+        if (svcResultAdapter.getItemCount() == 0) {
+
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    changedListener.onChanged();
+                }
+            });
+
+            return;
+        }
+
         graphLayout.removeAllViews();
         graphLayout.addView(graphViews.get(order));
     }

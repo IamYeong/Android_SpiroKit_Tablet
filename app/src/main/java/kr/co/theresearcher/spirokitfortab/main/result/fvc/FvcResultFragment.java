@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -24,8 +25,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -50,6 +53,7 @@ import kr.co.theresearcher.spirokitfortab.db.cal_history_raw_data.CalHistoryRawD
 import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
 import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
 import kr.co.theresearcher.spirokitfortab.db.work.Work;
+import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
 import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowGraphView;
 
@@ -67,7 +71,7 @@ public class FvcResultFragment extends Fragment implements Observer {
     private FvcResultAdapter adapter;
     private FrameLayout volumeFlowLayout, volumeTimeLayout;
 
-    private TextView doctorText;
+    private TextView doctorText, export;
 
     private List<VolumeFlowGraphView> volumeFlowResultViews = new ArrayList<>();
     private List<VolumeTimeGraphView> volumeTimeResultViews = new ArrayList<>();
@@ -102,6 +106,8 @@ public class FvcResultFragment extends Fragment implements Observer {
 
         doctorText = view.findViewById(R.id.tv_doctor_main_result);
 
+        export = view.findViewById(R.id.tv_export_fvc);
+
         adapter = new FvcResultAdapter(context);
         //adapter.setRootTimestamp(measurement.getMeasDate());
         adapter.setOnOrderSelectedListener(new OnOrderSelectedListener() {
@@ -116,8 +122,12 @@ public class FvcResultFragment extends Fragment implements Observer {
         adapter.setDeletedListener(new OnItemDeletedListener() {
             @Override
             public void onDeleted(int index) {
-                adapter.clear();
-                startDrawing(volumeFlowLayout.getWidth(), volumeFlowLayout.getHeight());
+                //adapter.clear();
+                //startDrawing(volumeFlowLayout.getWidth(), volumeFlowLayout.getHeight());
+
+                volumeFlowResultViews.remove(index);
+                volumeTimeResultViews.remove(index);
+                selectData(adapter.getItemCount() - 1);
             }
         });
 
@@ -125,8 +135,8 @@ public class FvcResultFragment extends Fragment implements Observer {
             @Override
             public void onChanged() {
 
-                adapter.clear();
-                startDrawing(volumeFlowLayout.getWidth(), volumeFlowLayout.getHeight());
+                //adapter.clear();
+                //startDrawing(volumeFlowLayout.getWidth(), volumeFlowLayout.getHeight());
 
             }
         });
@@ -166,6 +176,71 @@ public class FvcResultFragment extends Fragment implements Observer {
             }
         });
 
+        export.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Thread thread = new Thread() {
+                    @Override
+                    public void run() {
+                        super.run();
+                        Looper.prepare();
+
+                        SpiroKitDatabase database = SpiroKitDatabase.getInstance(context);
+
+                        List<CalHistoryRawData> rawData = database.calHistoryRawDataDao().selectRawDataByHistory(
+                                SharedPreferencesManager.getCalHistoryHash(context)
+                        );
+
+                        CalHistoryRawData calHistoryRawData = rawData.get(adapter.getSelectedOrdinal());
+                        String[] data = calHistoryRawData.getData().split(" ");
+
+
+
+                        try {
+
+                            File exportFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), calHistoryRawData.getCalDate() + "_" + adapter.getSelectedOrdinal());
+                            if (!exportFile.createNewFile()) {
+
+                                Log.e(getClass().getSimpleName(), "FAIL CREATE FILE");
+
+                                return;
+                            }
+                            FileWriter fileWriter = new FileWriter(exportFile.getAbsoluteFile());
+                            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+                            for (int j = 0; j < data.length; j++) {
+
+                                bufferedWriter.write(data[j]);
+
+                            }
+
+                            bufferedWriter.close();
+
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    ConfirmDialog confirmDialog = new ConfirmDialog(context);
+                                    confirmDialog.setTitle("EXPORT SUCCESS");
+                                    confirmDialog.show();
+
+                                }
+                            });
+
+                        } catch (IOException e) {
+                            Log.e(getClass().getSimpleName(), e.toString());
+                        }
+
+
+                        Looper.loop();
+                    }
+                };
+                thread.start();
+
+            }
+        });
+
         setDoctors();
 
         return view;
@@ -198,14 +273,29 @@ public class FvcResultFragment extends Fragment implements Observer {
     //어댑터에서 index 정보 받아와서 아래 함수 호출하면 됨
     private void selectData(int order) {
 
+        if (adapter.getItemCount() == 0) {
+
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+
+                    changedListener.onChanged();
+
+                }
+            });
+
+            return;
+        }
+
         volumeFlowLayout.removeAllViews();
         volumeTimeLayout.removeAllViews();
 
         volumeFlowLayout.addView(volumeFlowResultViews.get(order));
         volumeTimeLayout.addView(volumeTimeResultViews.get(order));
 
-    }
 
+
+    }
 
     private VolumeTimeGraphView createVolumeTimeGraph(List<ResultCoordinate> coordinates, int width, int height) {
 
@@ -268,28 +358,14 @@ public class FvcResultFragment extends Fragment implements Observer {
                 super.run();
                 Looper.prepare();
 
-                Patient patient = SpiroKitDatabase.getInstance(context).patientDao()
-                        .selectPatientByHash(SharedPreferencesManager.getPatientHashed(context));
-
                 SpiroKitDatabase database = SpiroKitDatabase.getInstance(context);
+
+                Patient patient = database.patientDao()
+                        .selectPatientByHash(SharedPreferencesManager.getPatientHashed(context));
 
                 List<CalHistoryRawData> rawData = database.calHistoryRawDataDao().selectRawDataByHistory(
                         SharedPreferencesManager.getCalHistoryHash(context)
                 );
-
-                SpiroKitDatabase.removeInstance();
-
-                if (rawData.size() == 0) {
-
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            changedListener.onChanged();
-                        }
-                    });
-
-                    return;
-                }
 
                 for (int i = 0; i < rawData.size(); i++) {
 

@@ -181,6 +181,7 @@ public class SvcResultAdapter extends RecyclerView.Adapter<SvcResultViewHolder> 
                                         @Override
                                         public void run() {
 
+                                            notifyDataSetChanged();
                                             deletedListener.onDeleted(deleteIndex);
                                         }
                                     });
