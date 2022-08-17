@@ -195,23 +195,19 @@ public class FvcResultFragment extends Fragment implements Observer {
                         CalHistoryRawData calHistoryRawData = rawData.get(adapter.getSelectedOrdinal());
                         String[] data = calHistoryRawData.getData().split(" ");
 
-
-
                         try {
 
-                            File exportFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), calHistoryRawData.getCalDate() + "_" + adapter.getSelectedOrdinal());
-                            if (!exportFile.createNewFile()) {
+                            File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                            File exportFile = new File(path, calHistoryRawData.getHashed().substring(0, 10) + "_" + calHistoryRawData.getOrderNumber() + ".csv");
+                            //exportFile.createNewFile();
 
-                                Log.e(getClass().getSimpleName(), "FAIL CREATE FILE");
-
-                                return;
-                            }
-                            FileWriter fileWriter = new FileWriter(exportFile.getAbsoluteFile());
+                            FileWriter fileWriter = new FileWriter(exportFile);
                             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
                             for (int j = 0; j < data.length; j++) {
 
                                 bufferedWriter.write(data[j]);
+                                bufferedWriter.write("\n");
 
                             }
 

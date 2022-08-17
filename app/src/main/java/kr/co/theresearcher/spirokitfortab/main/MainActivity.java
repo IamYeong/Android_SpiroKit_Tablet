@@ -445,7 +445,7 @@ public class MainActivity extends AppCompatActivity {
                     JSONArray operatorArray = new JSONArray();
                     List<Operator> operators = database.operatorDao().selectAll(office.getHashed());
 
-                    Log.e(getClass().getSimpleName(), "OPERATOR SIZE : " + operators.size());
+
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -730,6 +730,22 @@ public class MainActivity extends AppCompatActivity {
 
                     database.officeDao().insert(o);
 
+                    Log.e(getClass().getSimpleName(),
+                            "\nOffice\n"
+                            + "\nhashed : " + o.getHashed()
+                            + "\nname : " + o.getName()
+                            + "\ncode : " + o.getCode()
+                            + "\ntel : " + o.getTel()
+                            + "\naddress : " + o.getAddress()
+                            + "\ncountry code : " + o.getCountryCode()
+                            + "\nis use : " + o.getIsUse()
+                            + "\nis use sync : " + o.getIsUseSync()
+                            + "\noffice id : " + o.getOfficeID()
+                            + "\npassword : " + o.getOfficePassword()
+                            + "\nupdate date : " + o.getUpdateDate()
+                            + "\nis deleted : " + o.getIsDeleted()
+                            );
+
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -764,6 +780,18 @@ public class MainActivity extends AppCompatActivity {
                         //c_time 패스
 
                         database.operatorDao().insertOperator(op);
+
+                        Log.e(getClass().getSimpleName(),
+                                "\nOperator\n"
+                                        + "\nhashed : " + op.getHashed()
+                                        + "\noffice hashed : " + op.getOfficeHashed()
+                                        + "\nname : " + op.getName()
+                                        + "\nwork : " + op.getWork()
+                                        + "\nis deleted : " + op.getIsDeleted()
+                                        + "\ncreate date : " + op.getCreateTimestamp()
+                                        + "\nupdate date : " + op.getUpdatedDate()
+
+                        );
 
                         handler.post(new Runnable() {
                             @Override
@@ -840,6 +868,18 @@ public class MainActivity extends AppCompatActivity {
 
                         database.patientDao().insertPatient(p);
 
+                        Log.e(getClass().getSimpleName(),
+                                "\nPatient\n"
+                                        + "\nhashed : " + p.getHashed()
+                                        + "\noffice hashed : " + p.getOfficeHashed()
+                                        + "\nname : " + p.getName()
+                                        + "\ngender : " + p.getGender()
+                                        + "\nrace : " + p.getHumanRace()
+                                        + "\ncreate date : " + p.getCreateDate()
+                                        + "\nupdate date : " + p.getUpdatedDate()
+
+                        );
+
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -883,6 +923,18 @@ public class MainActivity extends AppCompatActivity {
 
                         database.calHistoryDao().insertHistory(h);
 
+                        Log.e(getClass().getSimpleName(),
+                                "\nHistory\n"
+                                        + "\nhashed : " + h.getHashed()
+                                        + "\noffice hashed : " + h.getOfficeHashed()
+                                        + "\npatient hashed : " + h.getPatientHashed()
+                                        + "\noperator hashed : " + h.getOperatorHashed()
+                                        + "\nfinish date : " + h.getFinishDate()
+                                        + "\ncreate date : " + h.getCreateDate()
+                                        + "\nupdate date : " + h.getUpdatedDate()
+
+                        );
+
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -924,6 +976,18 @@ public class MainActivity extends AppCompatActivity {
                         d.setIsDeletedReference(data.getInt(JsonKeys.JSON_KEY_IS_DELETED_REF));
 
                         database.calHistoryRawDataDao().insertRawData(d);
+
+                        Log.e(getClass().getSimpleName(),
+                                "\nData\n"
+                                        + "\nhashed : " + d.getHashed()
+                                        + "\nhistory hashed : " + d.getCalHistoryHashed()
+                                        + "\nordinal : " + d.getOrderNumber()
+                                        + "\nis deleted : " + d.getIsDeleted()
+                                        + "\ncreate date : " + d.getCreateDate()
+                                        + "\nupdate date : " + d.getUpdatedDate()
+                                        + "\ndata : " + d.getData()
+
+                        );
 
                         handler.post(new Runnable() {
                             @Override

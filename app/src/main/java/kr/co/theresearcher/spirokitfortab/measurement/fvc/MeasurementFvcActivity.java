@@ -855,6 +855,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                         dateTimeFormatter.format(instant),
                         isPost
                 );
+                rawData.setCreateDate(dateTimeFormatter.format(instant));
                 rawData.setUpdatedDate(dateTimeFormatter.format(instant));
 
                 SpiroKitDatabase database = SpiroKitDatabase.getInstance(MeasurementFvcActivity.this);

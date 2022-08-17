@@ -310,7 +310,6 @@ public class PatientInsertActivity extends AppCompatActivity {
                     return;
                 }
 
-
                 Thread thread = new Thread() {
 
                     @Override

@@ -693,6 +693,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
                         dateTimeFormatter.format(instant),
                         isPost
                 );
+                rawData.setCalDate(dateTimeFormatter.format(instant));
                 rawData.setUpdatedDate(dateTimeFormatter.format(instant));
 
                 SpiroKitDatabase database = SpiroKitDatabase.getInstance(MeasurementSvcActivity.this);
