@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -236,6 +237,9 @@ public class SlowVolumeTimeGraphView extends View {
     public void setValue(float x, float y) {
 
         boolean isOver = false;
+
+        if (this.x + x > 60f) return;
+
         values.add(new Coordinate(x, y));
 
         if ((maxY * 0.95f) < this.y + y) {
@@ -280,6 +284,8 @@ public class SlowVolumeTimeGraphView extends View {
             path.lineTo(xToPosition(this.x), yToPosition(this.y));
 
         }
+
+        //Log.e(getClass().getSimpleName(), "X : " + this.x + ", Y : " + this.y);
 
 
 

@@ -388,9 +388,12 @@ public class PatientInsertActivity extends AppCompatActivity {
                                 return;
                             }
                             database.patientDao().insertPatient(patient);
-                            setPatientInfoInPreferences(PatientInsertActivity.this, database.patientDao().selectPatientByHash(patientHashed));
+                            Log.e(getClass().getSimpleName(),
+                                    "START : " + patient.getStartSmokingDay()
+                                    + "\nSTOP : " + patient.getStopSmokingDay()
+                            );
 
-                            SpiroKitDatabase.removeInstance();
+                            setPatientInfoInPreferences(PatientInsertActivity.this, database.patientDao().selectPatientByHash(patientHashed));
 
                         } catch (NoSuchAlgorithmException e) {
 

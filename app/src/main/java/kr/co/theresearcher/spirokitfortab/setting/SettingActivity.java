@@ -326,7 +326,7 @@ public class SettingActivity extends AppCompatActivity {
             public void onDeviceLookup(ScanResult result) {
 
                 SelectionDialog selectionDialog = new SelectionDialog(SettingActivity.this);
-                selectionDialog.setTitle(getString(R.string.question_connect, result.getDevice().getName()));
+                selectionDialog.setTitle(getString(R.string.question_connect, result.getScanRecord().getDeviceName()));
                 selectionDialog.setSelectedListener(new OnSelectedInDialogListener() {
                     @Override
                     public void onSelected(boolean select) {

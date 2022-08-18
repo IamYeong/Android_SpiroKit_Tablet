@@ -491,9 +491,9 @@ public class FvcResultFragment extends Fragment implements Observer {
         return null;
     }
 
-    private List<Integer> readCsvFile(File file) {
+    private List<String> readCsvFile(File file) {
 
-        List<Integer> list = new ArrayList<>();
+        List<String> list = new ArrayList<>();
 
         try {
 
@@ -501,11 +501,10 @@ public class FvcResultFragment extends Fragment implements Observer {
                     new FileReader(file)
             );
 
-            StringBuilder stringBuilder = new StringBuilder();
             String line = "";
             while ((line = bufferedReader.readLine()) != null) {
 
-                list.add(Integer.parseInt(line));
+                list.add(line);
 
             }
 

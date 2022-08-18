@@ -525,6 +525,10 @@ public class MainActivity extends AppCompatActivity {
 
                         patientJsonObject.put(JsonKeys.JSON_KEY_STOP_SMOKING_WHEN, patient.getStopSmokingDay());
                         patientJsonObject.put(JsonKeys.JSON_KEY_START_SMOKING_WHEN, patient.getStartSmokingDay());
+
+                        Log.e(getClass().getSimpleName(), "START : " + patient.getStartSmokingDay());
+                        Log.e(getClass().getSimpleName(), "STOP : " + patient.getStopSmokingDay());
+
                         patientJsonObject.put(JsonKeys.JSON_KEY_FROM_OS, patient.getOs());
                         patientJsonObject.put(JsonKeys.JSON_KEY_LATEST_DAY, null);
                         patientJsonObject.put(JsonKeys.JSON_KEY_IS_DELETED, patient.getIsDeleted());
@@ -840,7 +844,7 @@ public class MainActivity extends AppCompatActivity {
 
                         //Log.e(getClass().getSimpleName(), "start : " + start + ", stop : " + stop + ", " + "now : " + amount);
 
-                        if (start.contains("0000-00-00")) {
+                        if (start.contains("0000-00-00") || (start == null)) {
                             p.setStartSmokingDay(null);
                             p.setSmokingAmountPerDay("0");
                             p.setStopSmokingDay(null);
@@ -851,7 +855,7 @@ public class MainActivity extends AppCompatActivity {
                             p.setStartSmokingDay(start);
                             p.setSmokingAmountPerDay(amount);
 
-                            if (stop.contains("0000-00-00")) {
+                            if (stop.contains("0000-00-00") || (stop == null)) {
                                 p.setStopSmokingDay(null);
                                 p.setNowSmoking(1);
                                 p.setSmokingPeriod(0);

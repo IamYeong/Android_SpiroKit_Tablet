@@ -38,10 +38,11 @@
     <string name="nickname">닉네임</string>
     <string name="confirm_password">비밀번호 확인</string>
     <string name="request_rule_password">영문 2자와 숫자로 이루어진 비밀번호로 설정해주세요(총 6~8자)</string>
-    <string name="request_empty_info">누락된 항목이 있습니다. 모두 입력해주세요.</string>
+
 
     <string name="request_confirm_password">비밀번호를 확인해주세요</string>
     <string name="complete_user_join">가입이 완료되었습니다</string>
+    <string name="request_empty_info">누락된 항목이 있습니다. 모두 입력해주세요.</string>
 
     <!-- 이용약관 -->
     <string name="terms_and_conditions">이용약관</string>
@@ -57,7 +58,7 @@
     <string name="search">검색</string>
     <string name="patient_name_search">환자 이름 검색</string>
     
-    <string name="not_applicable">N/A</string>
+    <string name="not_applicable" translatable="false">N/A</string>
     <string name="confirm_patient_delete">해당 환자를 삭제하시겠습니까?</string>
 
 
@@ -123,7 +124,7 @@
     <string name="question_delete_patient">해당 환자를 삭제하시겠습니까?</string>
 
     <string name="select_history_range">조회할 기록 기간 선택</string>
-    <string name="date_to_date">%1$s ~ %2$s</string>
+    <string name="date_to_date" translatable="false">%1$s ~ %2$s</string>
 
     <string name="checkup_doctor_is">검사자 : %1$s (%2$s)</string>
     <string name="family_doctor_is">주치의 : %1$s</string>
@@ -184,7 +185,7 @@
     <string name="do_disconnect">연결끊기</string>
     <string name="do_connect">연결하기</string>
     <string name="mac_address">맥 주소</string>
-    <string name="decibel">dB</string>
+    <string name="decibel" translatable="false">dB</string>
 
     <string name="state_disconnect">연결되지 않음</string>
     <string name="state_connect">연결됨</string>
@@ -250,29 +251,29 @@
 
     <string name="n_order_meas">%1$s차 검사(%2$s)</string>
     <string name="date_colon_what">날짜 : %1$s</string>
-    <string name="time_colon_what">( %1$s )</string>
+    <string name="time_colon_what" translatable="false">( %1$s )</string>
 
-    <string name="meas">meas</string>
-    <string name="pred">pred</string>
-    <string name="percent">percent</string>
+    <string name="meas" translatable="false">meas</string>
+    <string name="pred" translatable="false">pred</string>
+    <string name="percent" translatable="false">percent</string>
 
-    <string name="fvc">FVC</string>
-    <string name="fev1">FEV1</string>
-    <string name="fev1per">FEV1%</string>
-    <string name="pef">PEF</string>
+    <string name="fvc" translatable="false">FVC</string>
+    <string name="fev1" translatable="false">FEV1</string>
+    <string name="fev1per" translatable="false">FEV1%</string>
+    <string name="pef" translatable="false">PEF</string>
 
-    <string name="svc">SVC</string>
-    <string name="vc">VC</string>
+    <string name="svc" translatable="false">SVC</string>
+    <string name="vc" translatable="false">VC</string>
 
-    <string name="with_L">%1$.2f L</string>
-    <string name="with_lps">%1$.2f l/s</string>
-    <string name="with_per">%1$.2f %2$s</string>
-    <string name="with_sec">%1$.2f s</string>
+    <string name="with_L" translatable="false">%1$.2f L</string>
+    <string name="with_lps" translatable="false">%1$.2f l/s</string>
+    <string name="with_per" translatable="false">%1$.2f %2$s</string>
+    <string name="with_sec" translatable="false">%1$.2f s</string>
 
-    <string name="float_two">%1$.2f</string>
+    <string name="float_two" translatable="false">%1$.2f</string>
 
-    <string name="post">POST</string>
-    <string name="pre">PRE</string>
+    <string name="post" translatable="false">POST</string>
+    <string name="pre" translatable="false">PRE</string>
 
     <!-- Empty fragment -->
     <string name="empty_operators">검사자를 등록 후 이용가능합니다\n검사 전, 담당의와 실검사자를 선택하여 추후 정보에서 확인해보세요</string>
@@ -304,5 +305,6 @@
     </string-array>
 
     <string name="doctor">의사</string>
+
 
 </resources>

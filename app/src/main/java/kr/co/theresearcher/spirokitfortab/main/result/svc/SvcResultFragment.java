@@ -190,8 +190,11 @@ public class SvcResultFragment extends Fragment implements Observer {
                     for (int j = 0; j < data.length; j++) {
 
                         pulseWidth.add(Integer.parseInt(data[j]));
+                        Log.e("", data[j]);
 
                     }
+
+                    Log.e("", "=================");
 
                     CalcSvcSpiroKitE calc = new CalcSvcSpiroKitE(pulseWidth);
                     calc.measure();

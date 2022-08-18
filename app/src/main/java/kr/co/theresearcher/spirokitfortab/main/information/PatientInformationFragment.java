@@ -98,6 +98,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
         if ((Integer) arg == 404) {
 
+            updateUI();
             selectMeasurements();
 
         } else {
@@ -565,6 +566,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
         }
 
         String startSmokingDateString = patient.getStartSmokingDay();
+        Log.e(getClass().getSimpleName(), "START : " + startSmokingDateString);
         if ((startSmokingDateString == null) || (startSmokingDateString.equals("null")) || (startSmokingDateString.isEmpty())) {
             info.append(getString(R.string.smoke_start_date_is, getString(R.string.not_applicable))).append("\n");
         } else {
@@ -585,6 +587,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
         }
 
         String stopSmokingDateString = patient.getStopSmokingDay();
+        Log.e(getClass().getSimpleName(), "STOP : " + stopSmokingDateString);
         if ((stopSmokingDateString == null) || (stopSmokingDateString.equals("null")) || (stopSmokingDateString.isEmpty())) {
             info.append(getString(R.string.smoke_stop_date_is, getString(R.string.not_applicable))).append("\n");
         } else {

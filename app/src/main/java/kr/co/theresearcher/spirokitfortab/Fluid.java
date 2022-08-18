@@ -53,6 +53,7 @@ public class Fluid {
     public static double calcRevolutionPerSecond(double time) {
 
         //pw * clock 이 time 이 되는데, pw 가 0이라면 해당 연산에서 NaN 혹은 Infinity 가 나올 수 있음.
+        if (time == 0d) return 0d;
         double rps = (1f / time);
         if (Double.isInfinite(rps) || Double.isNaN(rps)) return 0d;
         return rps;

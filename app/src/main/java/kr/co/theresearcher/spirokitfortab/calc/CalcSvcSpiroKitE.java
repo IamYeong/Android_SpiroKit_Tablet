@@ -43,7 +43,7 @@ public class CalcSvcSpiroKitE {
 
             int pw = pulseWidth.get(i);
 
-            if ((pw >= 100_000_000) || (i == pulseWidth.size() - 1)) {
+            if ((pw > 100_000_000) || (i == pulseWidth.size() - 1)) {
 
                 //비교 후 정산 작업
                 if (refRotate > accRotate) {
@@ -58,11 +58,12 @@ public class CalcSvcSpiroKitE {
                 refRotate = 0f;
                 isStarted = false;
 
-            } else if (pw > 0) {
+            } else {
 
                 double time = Fluid.getTimeFromPulseWidthForE(pw);
                 double rps = Fluid.calcRevolutionPerSecond(time);
-                refRotate += rps;
+                double lps = Fluid.conversionLiterPerSecond(rps);
+                refRotate += (float)(lps * time);
 
                 if (!isStarted) {
 
@@ -153,11 +154,11 @@ public class CalcSvcSpiroKitE {
                 time = (float) Fluid.getTimeFromPulseWidthForE(value);
                 rps = (float)Fluid.calcRevolutionPerSecond(time);
                 lps = (float)Fluid.conversionLiterPerSecond(rps);
-                if (lps > 0.12f) {
+                //if (lps > 0.12f) {
                     volume = lps * time;
-                } else {
-                    continue;
-                }
+                //} else {
+                //    continue;
+                //}
 
 
             } else if ((value > 0) && (value < 100_000_000)) {
@@ -167,11 +168,11 @@ public class CalcSvcSpiroKitE {
                 rps = (float)Fluid.calcRevolutionPerSecond(time);
                 lps = (float)Fluid.conversionLiterPerSecond(rps);
                 volume = (float)Fluid.calcVolume(time, lps);
-                if (lps > 0.12f) {
+                //if (lps > 0.12f) {
                     volume = lps * time;
-                } else {
-                    continue;
-                }
+                //} else {
+                //    continue;
+                //}
                 volume *= -1f;
 
             } else {
@@ -241,10 +242,10 @@ public class CalcSvcSpiroKitE {
                         Fluid.calcRevolutionPerSecond(time)
                 );
 
-                if (flow > 0.12d) {
+                //if (flow > 0.12d) {
                     double volume = flow * time;
                     svc += volume;
-                }
+                //}
             }
 
         }

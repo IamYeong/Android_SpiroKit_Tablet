@@ -46,7 +46,7 @@ public class DeviceNameModifyDialog extends Dialog {
         rejectButton = findViewById(R.id.btn_reject_name_modify_dialog);
 
         currentFullNameText.setText(currentName);
-        currentFixNameText.setText(currentName.substring(0, currentName.length() - 2));
+        currentFixNameText.setText(currentName.substring(0, 10));
         modifyNumberField.setHint(currentName.substring(currentName.length() - 2));
 
         rejectButton.setOnClickListener(new View.OnClickListener() {
