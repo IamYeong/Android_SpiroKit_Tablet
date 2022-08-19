@@ -11,7 +11,7 @@
     <string name="cancel">취소</string>
     <string name="delete">삭제</string>
     <string name="save">저장</string>
-    <string name="fail_server_response">서버응답 실패</string>
+    <string name="fail_server_response">서버응답 실패\n(%1$s)</string>
     
     <string name="checkup">검사</string>
     <string name="state_null" translatable="false">NULL</string>
@@ -63,6 +63,10 @@
 
 
     <!-- Add patient -->
+    <string name="pack">갑</string>
+    <string name="require_info">필수입력</string>
+    <string name="optional_info">선택입력</string>
+
     <string name="chart_number">차트넘버</string>
     <string name="name">이름</string>
     <string name="gender">성별</string>

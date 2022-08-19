@@ -29,7 +29,7 @@
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="15sp"
-        android:text="사용자 로그인"
+        android:text="@string/user_login"
 
 
         app:layout_constraintBottom_toTopOf="@id/et_id_login"
@@ -95,7 +95,7 @@
         app:layout_constraintTop_toBottomOf="@id/et_password_login"
 
         android:textColor="@color/white"
-        android:text="로그인"
+        android:text="@string/login"
 
         android:background="@drawable/text_field_background_round_white"
         android:backgroundTint="@color/primary_color"
@@ -104,26 +104,5 @@
         android:elevation="10dp"
 
         />
-
-
-    <android.widget.Button
-        android:id="@+id/btn_to_register_from_login"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        app:layout_constraintStart_toStartOf="@id/tv_logo_login"
-        app:layout_constraintEnd_toEndOf="@id/tv_logo_login"
-
-        app:layout_constraintTop_toBottomOf="@id/btn_user_login"
-        android:layout_marginVertical="10dp"
-
-        android:textColor="@color/gray_text"
-        android:text="등록"
-
-        android:background="@drawable/text_field_background_round_white"
-        android:backgroundTint="@color/white"
-
-        android:elevation="10dp"
-        />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

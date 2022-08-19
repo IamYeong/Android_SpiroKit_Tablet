@@ -50,7 +50,7 @@
             android:background="@drawable/button_shape"
             android:backgroundTint="@color/white"
             android:textColor="@color/black"
-            android:text="최종완료"
+            android:text="@string/complete"
             android:paddingVertical="10dp"
             android:paddingHorizontal="30dp"
 
@@ -122,7 +122,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
 
-                android:text="연결하기"
+                android:text="@string/do_connect"
 
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"

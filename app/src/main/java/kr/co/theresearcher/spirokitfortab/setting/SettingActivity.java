@@ -394,9 +394,8 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                SharedPreferencesManager.setOfficeHashed(SettingActivity.this, null);
                 finish();
-                //프리퍼런스 데이터를 user id 를 -1 처럼 만들고
-                //설정화면을 닫은 뒤 메인화면이 onResume 되는데, ID 가 -1이면 닫고 로그인화면으로 이동해도 좋음.
 
             }
         });
@@ -405,8 +404,6 @@ public class SettingActivity extends AppCompatActivity {
         userNickname.setText(SharedPreferencesManager.getOfficeName(SettingActivity.this));
 
         scanStandBy();
-
-
 
     }
 
@@ -425,6 +422,13 @@ public class SettingActivity extends AppCompatActivity {
 
         SpiroKitDatabase db = SpiroKitDatabase.getInstance(SettingActivity.this);
         Office office = db.officeDao().selectOfficeByHash(SharedPreferencesManager.getOfficeHash(SettingActivity.this));
+
+        if (office == null) {
+            finish();
+
+            return;
+        }
+
         if (office.getIsUseSync() == 0) {
             syncEnableButton.setEnabled(false);
         } else {

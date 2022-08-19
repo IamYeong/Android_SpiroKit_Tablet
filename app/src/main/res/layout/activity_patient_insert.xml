@@ -159,7 +159,7 @@
                 android:layout_marginStart="40dp"
                 android:layout_marginBottom="10dp"
                 android:fontFamily="@font/nanum_gothic_bold"
-                android:text="기본정보"
+                android:text="@string/require_info"
                 android:textColor="@color/black"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toTopOf="@id/card_require_input_insert_patient"
@@ -173,7 +173,7 @@
                 android:layout_marginStart="40dp"
                 android:layout_marginBottom="10dp"
                 android:fontFamily="@font/nanum_gothic_bold"
-                android:text="추가정보"
+                android:text="@string/optional_info"
                 android:textColor="@color/black"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toTopOf="@id/card_optional_input_insert_patient"
@@ -473,7 +473,7 @@
                             android:elevation="10dp"
 
                             android:fontFamily="@font/nanum_barun_gothic_light"
-                            android:text="있음" />
+                            android:text="@string/yes" />
 
                         <android.widget.Button
                             android:id="@+id/btn_have_not_smoking_insert_patient"
@@ -486,7 +486,7 @@
                             android:elevation="10dp"
 
                             android:fontFamily="@font/nanum_barun_gothic_light"
-                            android:text="없음" />
+                            android:text="@string/no" />
 
                     </LinearLayout>
 
@@ -611,7 +611,7 @@
                             app:layout_constraintBottom_toBottomOf="@id/et_smoke_amount_insert_patient"
                             app:layout_constraintEnd_toEndOf="@id/et_smoke_amount_insert_patient"
                             android:layout_margin="20dp"
-                            android:text="갑"
+                            android:text="@string/pack"
 
                             android:textColor="@color/gray"
                             />
@@ -644,7 +644,7 @@
                         android:backgroundTint="@color/white"
                         android:drawableEnd="@drawable/calendar"
                         android:paddingHorizontal="20dp"
-                        android:text="yyyy.MM.dd"
+                        android:text="@string/date_format_ymd"
                         android:fontFamily="@font/nanum_barun_gothic_light"
                         />
 

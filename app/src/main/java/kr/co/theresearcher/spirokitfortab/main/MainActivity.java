@@ -49,6 +49,7 @@ import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
 import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
 import kr.co.theresearcher.spirokitfortab.dialog.LoadingDialog;
 import kr.co.theresearcher.spirokitfortab.dialog.SyncLoadingDialog;
+import kr.co.theresearcher.spirokitfortab.login.LoginActivity;
 import kr.co.theresearcher.spirokitfortab.main.information.OnCalHistorySelectedListener;
 import kr.co.theresearcher.spirokitfortab.main.information.PatientInformationFragment;
 import kr.co.theresearcher.spirokitfortab.main.result.empty.EmptyResultFragment;
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
             syncLoadingDialog.dismiss();
 
             ConfirmDialog confirmDialog = new ConfirmDialog(MainActivity.this);
-            confirmDialog.setTitle(getString(R.string.failed_server_connection, errorResponse.getMessage()));
+            confirmDialog.setTitle(getString(R.string.fail_server_response, errorResponse.getMessage()));
             confirmDialog.show();
         }
     };
@@ -283,6 +284,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+
+        bindService(new Intent(getApplicationContext(), SpiroKitBluetoothLeService.class), serviceConnection ,Context.BIND_AUTO_CREATE);
+
+        if (SharedPreferencesManager.getOfficeHash(MainActivity.this) == null) {
+
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+
+            return;
+        }
+
         Office office = SpiroKitDatabase.getInstance(MainActivity.this).officeDao().selectOfficeByHash(SharedPreferencesManager.getOfficeHash(MainActivity.this));
 
         if ((office.getIsUseSync() == 0) || (!SharedPreferencesManager.getUseSync(MainActivity.this))) {
@@ -306,7 +319,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        bindService(new Intent(getApplicationContext(), SpiroKitBluetoothLeService.class), serviceConnection ,Context.BIND_AUTO_CREATE);
+
 
         /*
         Thread thread = new Thread() {

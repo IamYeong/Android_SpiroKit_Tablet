@@ -5,7 +5,7 @@
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
     <string name="save">Save</string>
-    <string name="fail_server_response">Failed response</string>
+    <string name="fail_server_response">Failed response\n(%1$s)</string>
     <string name="checkup">Exam</string>
     <string name="user_login">Login</string>
     <string name="user_email">E-mail</string>
@@ -16,7 +16,7 @@
     <string name="user_join">Sign up</string>
     <string name="nickname">Nickname</string>
     <string name="confirm_password">Confirm password</string>
-    <string name="request_rule_password">Password must consist 2 letters and numbers(total 6-8 characters)</string>
+    <string name="request_rule_password">Password must consist 2 letters and numbers(total 6~8 characters)</string>
     <string name="terms_and_conditions">Terms and conditions for use</string>
     <string name="next">Next</string>
     <string name="agree_all_condition">Agree terms and conditions for use</string>
@@ -77,12 +77,12 @@
     <string name="select_history_range">Select period</string>
     <string name="checkup_doctor_is">Staff : %1$s (%2$s)</string>
     <string name="family_doctor_is">Family doctor : %1$s (%2$s)</string>
-    <string name="doctor_is">Staff : %1$s (%2$s)\\nFamily doctor : %3$s (%4$s)</string>
+    <string name="doctor_is">Staff : %1$s (%2$s)\nFamily doctor : %3$s (%4$s)</string>
     <string name="chart_number_is">• Chart No : %1$s</string>
     <string name="_chart_number_is">Chart No : %1$s</string>
     <string name="gender_is">• Gender : %1$s</string>
     <string name="height_is">• Height : %1$d cm</string>
-    <string name="weight_is">• Weight : $1$d kg</string>
+    <string name="weight_is">• Weight : %1$d kg</string>
     <string name="birth_is">• Birth : %1$s</string>
     <string name="human_race_is">• Race : %1$s</string>
     <string name="smoke_start_date_is">• Take up smoking date : %1$s</string>
@@ -148,10 +148,10 @@
     <string name="management_medical_staff">Staff management</string>
     <string name="question_delete_staff">Delete it?</string>
     <string name="additional">Add</string>
-    <string name="failed_server_connection">Server connection failed</string>
+    <string name="failed_server_connection">Server connection failed\n(%1$s)</string>
     <string name="already_scanning">Already scanning</string>
     <string name="info_modify_name">Reboot to device for new name</string>
-    <string name="connect_with_what">Connect to %1$$s</string>
+    <string name="connect_with_what">Connect to %1$s</string>
     <string name="question_disconnect">Disconnect?</string>
     <string name="logout">Logout</string>
     <string name="sync_preparing_office">Preparing office</string>
@@ -174,6 +174,27 @@
     <string name="sync_preparing_raw_data">Preparing data</string>
     <string name="server_sync_writing">Saving server data</string>
     <string name="device_connect">Connect</string>
+    <string name="require_info">Require</string>
+    <string name="optional_info">Optional</string>갑
+    <string name="pack">pack</string>
 
+    <string-array name="human_races">
+
+        <item>Yellow</item>
+        <item>White</item>
+        <item>Black</item>
+
+
+    </string-array>
+
+
+    <!-- works -->
+    <string-array name="works">
+
+        <item>Doctor</item>
+        <item>Nurse</item>
+        <item>Pathologist</item>
+
+    </string-array>
 
 </resources>

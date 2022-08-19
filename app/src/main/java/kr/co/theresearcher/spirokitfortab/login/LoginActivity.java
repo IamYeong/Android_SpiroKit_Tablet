@@ -66,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
         identifierField = findViewById(R.id.et_id_login);
         passwordField = findViewById(R.id.et_password_login);
         loginButton = findViewById(R.id.btn_user_login);
-        moveToJoinButton = findViewById(R.id.btn_to_register_from_login);
+        //moveToJoinButton = findViewById(R.id.btn_to_register_from_login);
 
         String savedID = SharedPreferencesManager.getOfficeID(LoginActivity.this);
         String savedPass = SharedPreferencesManager.getOfficePass(LoginActivity.this);
@@ -74,15 +74,7 @@ public class LoginActivity extends AppCompatActivity {
         identifierField.setText(savedID);
         passwordField.setText(savedPass);
 
-        moveToJoinButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                Intent intent = new Intent(LoginActivity.this, ConditionAgreeActivity.class);
-                startActivity(intent);
-
-            }
-        });
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,6 +139,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     startActivity(intent);
+                                    finish();
                                 }
                             });
                         }
@@ -162,4 +155,61 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (autoSignIn()) {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
+    }
+
+    private boolean autoSignIn() {
+
+        //1. 박힌 ID 있는지 확인
+        //2. 박힌 PW 있는지 확인
+        //3. ID DB에 존재하는지 확인
+        //4. ID 사용가능한지 확인
+        //5. 비밀번호 맞는지 확인
+
+        String id = null;
+        String password = null;
+
+        id = SharedPreferencesManager.getOfficeID(LoginActivity.this);
+        password = SharedPreferencesManager.getOfficePass(LoginActivity.this);
+
+        if (SharedPreferencesManager.getOfficeHash(LoginActivity.this) == null) return false;
+        if (id == null) return false;
+        if (password == null) return false;
+
+        SpiroKitDatabase database = SpiroKitDatabase.getInstance(getApplicationContext());
+        Office office = database.officeDao().selectOfficeByID(id);
+
+        if (office == null) return false;
+        if (office.getIsUse() == 0) return false;
+        if (!office.getOfficePassword().equals(password)) return false;
+
+        return true;
+    }
+
 }
