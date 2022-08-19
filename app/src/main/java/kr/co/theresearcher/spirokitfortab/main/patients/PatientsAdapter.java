@@ -114,6 +114,8 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull PatientsViewHolder holder, int position) {
 
+        if (holder.getAdapterPosition() == -1) return;
+
         Patient patient = searchResults.get(holder.getAdapterPosition());
 
         /*

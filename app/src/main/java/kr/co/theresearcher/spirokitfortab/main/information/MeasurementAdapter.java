@@ -152,6 +152,7 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementViewHold
     @Override
     public void onBindViewHolder(@NonNull MeasurementViewHolder holder, int position) {
 
+        if (holder.getAdapterPosition() == -1) return;
         CalHistory calHistory = searchResults.get(holder.getAdapterPosition());
 
         if (calHistory.isSelected()) {

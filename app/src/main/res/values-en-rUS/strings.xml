@@ -156,7 +156,7 @@
     <string name="logout">Logout</string>
     <string name="sync_preparing_office">Preparing office</string>
     <string name="sync_preparing_operators">Preparing staff info</string>
-    <string name="sync_preparing_patients">prepating patients info</string>
+    <string name="sync_preparing_patients">preparing patients info</string>
     <string name="disconnected_with_device">Disconnected to device</string>
     <string name="success_sync">Sync success</string>
     <string name="connected_with_device">Connected to device</string>
@@ -177,6 +177,7 @@
     <string name="require_info">Require</string>
     <string name="optional_info">Optional</string>갑
     <string name="pack">pack</string>
+    <string name="search_patient">Search patient</string>
 
     <string-array name="human_races">
 

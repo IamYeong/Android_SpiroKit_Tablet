@@ -60,6 +60,7 @@
     
     <string name="not_applicable" translatable="false">N/A</string>
     <string name="confirm_patient_delete">해당 환자를 삭제하시겠습니까?</string>
+    <string name="search_patient">환자를 선택해주세요</string>
 
 
     <!-- Add patient -->

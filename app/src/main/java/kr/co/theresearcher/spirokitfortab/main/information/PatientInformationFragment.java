@@ -68,7 +68,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
     private ImageButton dateRangeButton, modifyButton;
     private TextView patientNameText, patientInfoText, dateRangeText;
     private FrameLayout volumeFlowLayout, volumeTimeLayout;
-    private FrameLayout patientsEmptyView;
+    private FrameLayout patientsEmptyView, searchPatientView;
     private CardView patientCard;
     private ConstraintLayout patientAreaLayout;
 
@@ -107,11 +107,12 @@ public class PatientInformationFragment extends Fragment implements Observer {
             if (isFocused) {
 
                 isFocused = false;
+                updateUI();
                 patientsRV.setVisibility(View.INVISIBLE);
                 patientsEmptyView.setVisibility(View.INVISIBLE);
                 patientsRV.setClickable(true);
                 patientSearchField.clearFocus();
-                patientAreaLayout.setClickable(true);
+                patientAreaLayout.setVisibility(View.VISIBLE);
                 inputMethodManager.hideSoftInputFromWindow(patientSearchField.getWindowToken(), 0);
 
             }
@@ -147,6 +148,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
         informationExpandImage = view.findViewById(R.id.img_expand_patient_info);
         patientsEmptyView = view.findViewById(R.id.frame_empty_patients_notification);
         patientCard = view.findViewById(R.id.card_patient_info);
+        searchPatientView = view.findViewById(R.id.frame_empty_patient);
 
         volumeFlowLayout = view.findViewById(R.id.frame_volume_flow_graph_result_fragment);
         volumeTimeLayout = view.findViewById(R.id.frame_volume_time_graph_result_fragment);
@@ -216,7 +218,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
                 if (isExpanded) updatePatientInformation();
                 else updatePatientSimpleInfo();
-                patientAreaLayout.setClickable(true);
+                patientAreaLayout.setVisibility(View.VISIBLE);
 
                 selectMeasurements();
 
@@ -287,7 +289,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
                     Log.d(getClass().getSimpleName(), "Patient edit text click");
 
-                    patientAreaLayout.setClickable(false);
+                    patientAreaLayout.setVisibility(View.GONE);
                     isFocused = true;
                     selectPatients();
 
@@ -417,11 +419,15 @@ public class PatientInformationFragment extends Fragment implements Observer {
                             patientsEmptyView.setVisibility(View.INVISIBLE);
                             patientsRV.setVisibility(View.VISIBLE);
                             patientsRV.setClickable(true);
-                            updateUI();
+
+                            searchPatientView.setVisibility(View.GONE);
+                            //updateUI();
                         } else {
                             patientsEmptyView.setVisibility(View.VISIBLE);
                             patientInfoText.setText("");
                             patientNameText.setText("N/A");
+
+                            searchPatientView.setVisibility(View.GONE);
 
                         }
                         patientsAdapter.notifyDataSetChanged();
@@ -520,6 +526,9 @@ public class PatientInformationFragment extends Fragment implements Observer {
         if (patient == null) {
             patientNameText.setText(getString(R.string.not_applicable));
             patientInfoText.setText(getString(R.string.please_select_patient));
+
+            searchPatientView.setVisibility(View.VISIBLE);
+            patientAreaLayout.setVisibility(View.GONE);
             return;
         }
 
@@ -527,8 +536,14 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
             patientNameText.setText(getString(R.string.not_applicable));
             patientInfoText.setText(getString(R.string.please_select_patient));
+
+            searchPatientView.setVisibility(View.VISIBLE);
+            patientAreaLayout.setVisibility(View.GONE);
             return;
         }
+
+        searchPatientView.setVisibility(View.GONE);
+        patientAreaLayout.setVisibility(View.VISIBLE);
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         SimpleDateFormat birthDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -613,6 +628,8 @@ public class PatientInformationFragment extends Fragment implements Observer {
         if (patient == null) {
             patientNameText.setText(getString(R.string.not_applicable));
             patientInfoText.setText(getString(R.string.please_select_patient));
+
+
             return;
         }
 
