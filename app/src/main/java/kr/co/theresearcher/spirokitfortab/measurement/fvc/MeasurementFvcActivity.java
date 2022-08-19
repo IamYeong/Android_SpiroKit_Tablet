@@ -76,6 +76,7 @@ import kr.co.theresearcher.spirokitfortab.graph.VolumeTimeGraphView;
 
 import kr.co.theresearcher.spirokitfortab.graph.WeakFlowProgressView;
 import kr.co.theresearcher.spirokitfortab.main.result.OnOrderSelectedListener;
+import kr.co.theresearcher.spirokitfortab.measurement.svc.MeasurementSvcActivity;
 
 public class MeasurementFvcActivity extends AppCompatActivity {
 
@@ -150,11 +151,11 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                 public void onReadCharacteristic(String data) {
                     //testTitleText.setText("READ CHARACTERISTIC");
 
-                    int value = dataToInteger(data);
+
 
                     //Log.d(getClass().getSimpleName(), "***********VALUE : " + value);
 
-                    if (value > 10) {
+                    if (data.length() == 10) {
 
                         if (!startStopImage.isSelected()) return;
                         if (pulseWidthList.size() > 1000) return;
@@ -162,9 +163,11 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                         //dataReceivedCount++;
 
                         pulseWidthList.add(data);
-                        handleData(value);
+                        handleData(dataToInteger(data));
 
                     } else {
+
+                        int value = Integer.parseInt(data.charAt(0) + "");
 
                         if (value == 2) {
 
