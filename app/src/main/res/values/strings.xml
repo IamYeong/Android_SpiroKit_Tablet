@@ -1,262 +1,13 @@
 <resources>
     <string name="app_name">SpiroKitForTab</string>
-    <!-- TODO: Remove or change this placeholder text -->
 
-    <!-- Application -->
-
+    <string name="time_colon_what" translatable="false">( %1$s )</string>
+    <string name="date_to_date" translatable="false">%1$s ~ %2$s</string>
+    <string name="state_null" translatable="false">NULL</string>
+    <string name="not_applicable" translatable="false">N/A</string>
     <string name="spirokit_title" translatable="false">The SpiroKit</string>
     <string name="app_v" translatable="false">V 1.0</string>
-
-    <string name="confirm">확인</string>
-    <string name="cancel">취소</string>
-    <string name="delete">삭제</string>
-    <string name="save">저장</string>
-    <string name="fail_server_response">서버응답 실패\n(%1$s)</string>
-    
-    <string name="checkup">검사</string>
-    <string name="state_null" translatable="false">NULL</string>
-
-    <!-- Splash activity -->
-
-
-    <!-- Login Activity -->
-    <string name="user_login">사용자 로그인</string>
-    <string name="user_email">이메일</string>
-    <string name="user_identifier">아이디</string>
-    <string name="user_password">패스워드</string>
-    <string name="login">로그인</string>
-    <string name="join">가입</string>
-
-    <string name="request_input_email_or_password">이메일 또는 패스워드를 입력해주세요</string>
-    <string name="request_input_id_or_password">아이디 또는 패스워드를 입력해주세요</string>
-
-    <string name="request_confirm_email_or_password">이메일 또는 패스워드를 확인해주세요</string>
-    <string name="request_confirm_id_or_password">아이디 또는 패스워드를 확인해주세요</string>
-
-    <!-- Join Activity -->
-    <string name="user_join">사용자 가입</string>
-    <string name="nickname">닉네임</string>
-    <string name="confirm_password">비밀번호 확인</string>
-    <string name="request_rule_password">영문 2자와 숫자로 이루어진 비밀번호로 설정해주세요(총 6~8자)</string>
-
-
-    <string name="request_confirm_password">비밀번호를 확인해주세요</string>
-    <string name="complete_user_join">가입이 완료되었습니다</string>
-    <string name="request_empty_info">누락된 항목이 있습니다. 모두 입력해주세요.</string>
-
-    <!-- 이용약관 -->
-    <string name="terms_and_conditions">이용약관</string>
-    <string name="next">다음</string>
-    <string name="agree_all_condition">이용약관에 동의합니다</string>
-    
-    <!-- 환자 목록 -->
-    <string name="patient_list">환자목록</string>
-    <string name="latest_meas_date">최근 검사일</string>
-    <string name="male">남</string>
-    <string name="female">여</string>
-    
-    <string name="search">검색</string>
-    <string name="patient_name_search">환자 이름 검색</string>
-    
-    <string name="not_applicable" translatable="false">N/A</string>
-    <string name="confirm_patient_delete">해당 환자를 삭제하시겠습니까?</string>
-    <string name="search_patient">환자를 선택해주세요</string>
-
-
-    <!-- Add patient -->
-    <string name="pack">갑</string>
-    <string name="require_info">필수입력</string>
-    <string name="optional_info">선택입력</string>
-
-    <string name="chart_number">차트넘버</string>
-    <string name="name">이름</string>
-    <string name="gender">성별</string>
-    <string name="height">신장(cm)</string>
-    <string name="weight">체중(kg)</string>
-
-    <string name="birth">생년월일</string>
-    <string name="human_race">인종</string>
-
-    <string name="start_smoke_date">흡연시기</string>
-    <string name="stop_smoke_date">금연시기</string>
-    <string name="smoke_amount_day">하루 흡연량</string>
-
-    <string name="is_smoking">현재 흡연 여부</string>
-    <string name="smoking">흡연</string>
-    <string name="not_smoking">금연</string>
-
-    <string name="have_smoked">흡연 경험</string>
-    <string name="have">있음</string>
-    <string name="have_not">없음</string>
-
-    <string name="add_patient">환자 등록</string>
-    <string name="modify_patient">환자 수정</string>
-    <string name="close">닫기</string>
-    <string name="add">등록</string>
-    
-    <string name="yes">예</string>
-    <string name="no">아니오</string>
-    
-    <string name="request_input_require_patient_info">이름, 성별, 키, 체중, 생년월일, 인종은\n반드시 기입해주시기 바랍니다</string>
-    <string name="request_input_require_patient_info2">필수정보는 반드시 기입해주시기 바랍니다</string>
-    
-    <string name="request_input_what">%1$s를(을) 입력해주세요</string>
-    <string name="request_selection_what">%1$s를(을) 선택해주세요</string>
-    
-    <string name="family_doctor">담당의</string>
-    <string name="selection_family_doctor">담당의 선택</string>
-    <string name="checkup_doctor">검사자</string>
-
-    <string name="request_have_not_doctors">의료진 정보를 등록해주세요</string>
-    <string name="have_not_what">등록된 %1$s가(이) 없습니다</string>
-
-    <string name="date_format_ymd">yyyy.MM.dd</string>
-
-    <string name="select_birth_date">생년월일 선택</string>
-    <string name="select_start_smoke_date">흡연시작시기 선택</string>
-    <string name="select_stop_smoke_date">금연시기 선택</string>
-
-    <string name="duplicate_hash">중복데이터를 발견했습니다.\n차트넘버, 이름, 생년월일 구분으로 중복을 피할 수 있습니다</string>
-
-    <!-- Main Activity -->
-    <string name="empty_result">측정한 이력이 있다면 수치가 이 곳에 표기됩니다</string>
-    <string name="empty_chart">측정한 이력이 있다면 그래프가 이 곳에 표기됩니다</string>
-    <string name="empty_history">측정한 이력이 표기됩니다</string>
-    <string name="empty_patient">환자를 추가해주세요</string>
-
-    <string name="history">검사기록</string>
-    <string name="question_delete_history">해당 검사결과를 삭제하시겠습니까?</string>
-    <string name="question_delete_patient">해당 환자를 삭제하시겠습니까?</string>
-
-    <string name="select_history_range">조회할 기록 기간 선택</string>
-    <string name="date_to_date" translatable="false">%1$s ~ %2$s</string>
-
-    <string name="checkup_doctor_is">검사자 : %1$s (%2$s)</string>
-    <string name="family_doctor_is">주치의 : %1$s</string>
-    <string name="doctor_is">주치의 : %1$s (%2$s)\n검사자 : %3$s (%4$s)</string>
-    <string name="chart_number_is">• 차트넘버 : %1$s</string>
-    <string name="_chart_number_is">차트넘버 : %1$s</string>
-    <string name="gender_is">• 성별 : %1$s</string>
-    <string name="height_is">• 신장 : %1$d cm</string>
-    <string name="weight_is">• 체중 : %1$d kg</string>
-    <string name="birth_is">• 생년월일 : %1$s</string>
-    <string name="human_race_is">• 인종 : %1$s</string>
-    <string name="smoke_start_date_is">• 흡연시작일 : %1$s</string>
-    <string name="smoke_stop_date_is">• 금연일 : %1$s</string>
-    <string name="smoking_per_day_is">• 하루 흡연량 : %1$s 갑</string>
-    <string name="smoking_per_day_is_na">• 하루 흡연량 : %1$s</string>
-    <string name="smoking_now_is">• 현재 흡연 여부 : %1$s</string>
-
-    <string name="please_select_patient">환자를 선택해주세요\n</string>
-    <string name="please_add_operator">작업자를 먼저 추가해주세요</string>
-
-    <string name="not_sync_permission">기관 계정에 서버 권한이 없습니다</string>
-    <string name="sync_disabled">현재 서버 동기화기능이 비활성화 상태입니다\n설정화면에서 활성화 후 사용가능합니다</string>
-
-    <string name="not_selected_checkup_doctor">검사자는 필수 선택 사항입니다\n현재 검사자가 없다면 설정 - 의료진 관리에서 등록해보세요</string>
-
-    <!-- FVC Activity -->
-    <string name="fvc_meas">FVC 검사</string>
-
-    <string name="pre_save">Pre 저장</string>
-    <string name="post_save">Post 저장</string>
-
-    <string name="retest">재측정</string>
-    <string name="complete">최종완료</string>
-
-    <string name="start_meas">측정하기</string>
-    <string name="pause_meas">일시정지</string>
-    
-    <string name="save_success">저장되었습니다</string>
-    <string name="can_not_save_non_data">측정된 데이터가 없으면 저장할 수 없습니다</string>
-    <string name="fvc_nothing_result">측정 후 결과들이 이 곳에 표기됩니다</string>
-
-    <string name="connecting">연결 중</string>
-
-    <string name="spirokit_initializing">측정 준비 중입니다</string>
-    <string name="spirokit_terminating">정상 종료 중입니다.\n재측정을 원하시면 다시 전원을 켜주세요</string>
-    <string name="already_connect">이미 연결상태입니다</string>
-    <string name="not_found_saved_device">연동했던 기기정보가 없습니다\n설정화면에서 먼저 연결해주세요</string>
-
-    <!-- SVC Activity -->
-    <string name="svc_meas">SVC 검사</string>
-    <string name="svc_nothing_result">측정 후 결과들이 이 곳에 표기됩니다</string>
-
-    <!-- Setting Activity -->
-    <string name="device">디바이스</string>
-    <string name="device_info">디바이스 정보</string>
-
-    <string name="scan">스캔</string>
-    <string name="do_disconnect">연결끊기</string>
-    <string name="do_connect">연결하기</string>
-    <string name="mac_address">맥 주소</string>
     <string name="decibel" translatable="false">dB</string>
-
-    <string name="state_disconnect">연결되지 않음</string>
-    <string name="state_connect">연결됨</string>
-
-    <string name="device_name_modify">이름 변경</string>
-    <string name="current_name">현재 이름</string>
-    <string name="modify_name">변경 이름</string>
-    <string name="info_modify_name">변경한 이름은 SpiroKit 을 재시작해야 반영됩니다</string>
-
-    <string name="connect_with_what">%1$s와(과) 연결되었습니다</string>
-    <string name="question_connect">%1$s 와(과)\n연결하시겠습니까?</string>
-    <string name="question_disconnect">연결을 끊으시겠습니까?</string>
-    <string name="device_connect">디바이스 연결</string>
-
-    <string name="logout">로그아웃</string>
-    <string name="setting">설정</string>
-
-    <string name="app_version">앱 버전</string>
-    <string name="server_sync">서버 동기화</string>
-    
-    <string name="server_sync_preparing">서버에 전송할 데이터 구성 중</string>
-    <string name="server_sync_waiting">서버 응답 대기 중</string>
-    <string name="server_sync_writing">서버에서 받은 데이터를 저장 중입니다</string>
-
-    <string name="sync_preparing_office">디바이스 기관 정보 구성 중</string>
-    <string name="sync_preparing_operators">디바이스 검사자 정보 구성 중</string>
-    <string name="sync_preparing_patients">디바이스 피검사자 정보 구성 중</string>
-    <string name="sync_preparing_histories">디바이스 검사 기록 구성 중</string>
-    <string name="sync_preparing_raw_data">디바이스 검사 데이터 구성 중</string>
-
-    <string name="sync_handling_office">최신 기관 정보 처리 중</string>
-    <string name="sync_handling_operators">최신 검사자 정보 처리 중</string>
-    <string name="sync_handling_patients">최신 환자 정보 처리 중</string>
-    <string name="sync_handling_histories">최신 검사 정보 처리 중</string>
-    <string name="sync_handling_raw_data">최신 검사 원본 데이터 처리 중</string>
-
-    <string name="success_sync">서버와 동기화에 성공했습니다</string>
-
-   <string name="disconnected_with_device">디바이스와 연결이 끊어졌습니다</string>
-    <string name="connected_with_device">디바이스와 연결되었습니다</string>
-
-    <string name="scan_info">디바이스의 전원을 켜신 후 스캔버튼을 눌러 주시기 바랍니다.\n연결이 원활하지 않을 경우 디바이스를 종료 후 다시 켜주시고 연결을 시도해주세요</string>
-    <string name="must_be_enable_ble">블루투스는 필수기능이므로 활성화 후 이용가능합니다</string>
-    <string name="agree_enable_sync">동기화를 켜시겠습니까?</string>
-    <string name="agree_disable_sync">동기화를 끄시겠습니까?</string>
-
-    <string name="already_scanning">기존 진행중인 주변기기 탐색이 있습니다</string>
-    <string name="not_available_ble">블루투스를 이용할 수 없는 장치입니다. 기종을 확인해주세요</string>
-
-    <string name="failed_server_connection">서버와 통신 중 오류가 발생했습니다\n(%1$s)</string>
-    <string name="modify_device_name">디바이스 이름 변경</string>
-
-    <!-- Operator Activity -->
-    <string name="management_medical_staff">의료진 관리</string>
-    <string name="question_delete_staff">해당 의료진을 삭제하시겠습니까?</string>
-    <string name="additional">추가</string>
-    <string name="can_not_insert_same_name_in_work">같은 직군 내에서 이름의 구별이 필요합니다</string>
-    
-    
-    <!-- Result Activity -->
-    <string name="volume_flow_graph">볼룸(Volume) | 플로우(Flow) 그래프</string>
-    <string name="volume_time_graph">볼륨(Volume) | 타임(Time) 그래프</string>
-
-    <string name="n_order_meas">%1$s차 검사(%2$s)</string>
-    <string name="date_colon_what">날짜 : %1$s</string>
-    <string name="time_colon_what" translatable="false">( %1$s )</string>
 
     <string name="meas" translatable="false">meas</string>
     <string name="pred" translatable="false">pred</string>
@@ -280,21 +31,192 @@
     <string name="post" translatable="false">POST</string>
     <string name="pre" translatable="false">PRE</string>
 
-    <!-- Empty fragment -->
-    <string name="empty_operators">검사자를 등록 후 이용가능합니다\n검사 전, 담당의와 실검사자를 선택하여 추후 정보에서 확인해보세요</string>
-    <string name="empty_patients">피검사자 등록 후 이용가능합니다\n환자정보를 기반으로 검사를 진행하고 결과를 확인해보세요</string>
-    <string name="empty_patient_select">검색창을 터치하여 등록된 환자를 선택하고,\n새로운 검사를 하거나 결과를 확인해보세요</string>
-    <string name="empty_cal">FVC, SVC 검사를 진행하고 결과 값과 그래프를 확인해보세요</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="save">Save</string>
+    <string name="fail_server_response">Failed response\n(%1$s)</string>
+    <string name="checkup">Exam</string>
+    <string name="user_login">Login</string>
+    <string name="user_email">E-mail</string>
+    <string name="user_identifier">ID</string>
+    <string name="user_password">Password</string>
+    <string name="login">Login</string>
+    <string name="join">Sign up</string>
+    <string name="user_join">Sign up</string>
+    <string name="nickname">Nickname</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="request_rule_password">Password must consist 2 letters and numbers(total 6~8 characters)</string>
+    <string name="terms_and_conditions">Terms and conditions for use</string>
+    <string name="next">Next</string>
+    <string name="agree_all_condition">Agree terms and conditions for use</string>
+    <string name="patient_list">Patient list</string>
+    <string name="latest_meas_date">Latest examed date</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="search">Search</string>
+    <string name="patient_name_search">Search for patient\'s name</string>
+    <string name="confirm_patient_delete">Delete it?</string>
+    <string name="chart_number">Chart No</string>
+    <string name="name">Name</string>
+    <string name="gender">Gender</string>
+    <string name="height">Height</string>
+    <string name="weight">Weight</string>
+    <string name="birth">Birthday</string>
+    <string name="human_race">Race</string>
+    <string name="start_smoke_date">Take up Smoking date</string>
+    <string name="stop_smoke_date">Quit smoking date</string>
+    <string name="smoke_amount_day">Daily smoking amount</string>
+    <string name="is_smoking">Current smoking</string>
+    <string name="smoking">Smoking</string>
+    <string name="not_smoking">Not smoking</string>
+    <string name="have_smoked">Smoking experience</string>
+    <string name="have">Yes</string>
+    <string name="have_not">No</string>
+    <string name="add_patient">Add patient</string>
+    <string name="modify_patient">Modify patient</string>
+    <string name="close">Close</string>
+    <string name="add">Registration</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="request_input_require_patient_info2">Please enter required information</string>
+    <string name="request_input_what">Please input %1$s</string>
+    <string name="request_selection_what">Please select %1$s</string>
+    <string name="family_doctor">Family doctor</string>
+    <string name="selection_family_doctor">Select family doctor</string>
+    <string name="checkup_doctor">Staff</string>
+    <string name="request_have_not_doctors">Input operator info</string>
+    <string name="have_not_what">Not found %1$s</string>
+    <string name="date_format_ymd">yyyy-MM-dd</string>
+    <string name="select_birth_date">Select birthday</string>
+    <string name="select_start_smoke_date">Select take up smoking date</string>
+    <string name="select_stop_smoke_date">Select quit smoking date</string>
+    <string name="duplicate_hash">Already exist patient</string>
+    <string name="request_input_email_or_password">Please input E-mail or password</string>
+    <string name="request_input_id_or_password">Please input ID or password</string>
+    <string name="request_confirm_email_or_password">Please confirm E-mail or password</string>
+    <string name="request_confirm_id_or_password">Please confirm ID or password</string>
+    <string name="request_confirm_password">Please confirm password</string>
+    <string name="empty_result">Result data will displayed here</string>
+    <string name="empty_chart">Result graph will displayed here</string>
+    <string name="empty_history">Will be display exam histories here</string>
+    <string name="empty_patient">Add patient</string>
+    <string name="history">Exam histories</string>
+    <string name="question_delete_history">Delete it?</string>
+    <string name="question_delete_patient">Delete it?</string>
+    <string name="select_history_range">Select period</string>
+    <string name="checkup_doctor_is">Staff : %1$s (%2$s)</string>
+    <string name="family_doctor_is">Family doctor : %1$s (%2$s)</string>
+    <string name="doctor_is">Staff : %1$s (%2$s)\nFamily doctor : %3$s (%4$s)</string>
+    <string name="chart_number_is">• Chart No : %1$s</string>
+    <string name="_chart_number_is">Chart No : %1$s</string>
+    <string name="gender_is">• Gender : %1$s</string>
+    <string name="height_is">• Height : %1$d cm</string>
+    <string name="weight_is">• Weight : %1$d kg</string>
+    <string name="birth_is">• Birth : %1$s</string>
+    <string name="human_race_is">• Race : %1$s</string>
+    <string name="smoke_start_date_is">• Take up smoking date : %1$s</string>
+    <string name="smoke_stop_date_is">• Quit smoking date : %1$s</string>
+    <string name="smoking_per_day_is">• Daily smoking amount : %1$s pack</string>
+    <string name="smoking_per_day_is_na">• Daily smoking amount : %1$s</string>
+    <string name="smoking_now_is">• Current smoking : %1$s</string>
+    <string name="please_select_patient">Please select patient</string>
+    <string name="please_add_operator">Please add staff first</string>
+    <string name="not_sync_permission">Must require permission</string>
+    <string name="sync_disabled">Disabled sync</string>
+    <string name="not_selected_checkup_doctor">Please check require information</string>
+    <string name="fvc_meas">FVC exam</string>
+    <string name="pre_save">Save(PRE)</string>
+    <string name="post_save">Save(POST)</string>
+    <string name="retest">Clear</string>
+    <string name="complete">Complete</string>
+    <string name="start_meas">Start</string>
+    <string name="pause_meas">Pause</string>
+    <string name="save_success">Saved it</string>
+    <string name="can_not_save_non_data">No data</string>
+    <string name="fvc_nothing_result">Will displayed results here</string>
+    <string name="connecting">Connecting</string>
+    <string name="spirokit_initializing">Preparing</string>
+    <string name="spirokit_terminating">Terminating</string>
+    <string name="already_connect">Already connecting</string>
+    <string name="not_found_saved_device">Can not connect</string>
+    <string name="svc_meas">SVC exam</string>
+    <string name="svc_nothing_result">Will displayed result here</string>
+    <string name="device">Device</string>
+    <string name="device_info">Device info</string>
+    <string name="scan">Scan</string>
+    <string name="do_disconnect">Disconnect</string>
+    <string name="do_connect">Connect</string>
+    <string name="mac_address">MAC address</string>
+    <string name="volume_flow_graph">Volume | Flow graph</string>
+    <string name="volume_time_graph">Volume | Time graph</string>
+    <string name="n_order_meas">%1$s th exam(%2$s)</string>
+    <string name="date_colon_what">Date : %1$s</string>
+    <string name="empty_patient_select">Please select patient</string>
+    <string name="empty_operators">Please add staff before use</string>
+    <string name="empty_patients">Please add patient for exam</string>
+    <string name="empty_cal">No data, Do exam</string>
+    <string name="go_to_add_operator">Add operator</string>
+    <string name="go_to_add_patient">Add patient</string>
+    <string name="doctor">Doctor</string>
+    <string name="request_empty_info">Please input all information</string>
+    <string name="complete_user_join">Sign up complete</string>
+    <string name="request_input_require_patient_info">Please input require data</string>
+    <string name="state_disconnect">Not connected</string>
+    <string name="state_connect">Connected</string>
+    <string name="device_name_modify">Modify device name</string>
+    <string name="current_name">Current name</string>
+    <string name="modify_name">New name</string>
+    <string name="setting">Setting</string>
+    <string name="app_version">App version</string>
+    <string name="server_sync">Sync</string>
+    <string name="server_sync_waiting">Waiting response</string>
+    <string name="agree_enable_sync">Turn on sync?</string>
+    <string name="agree_disable_sync">Turn off sync?</string>
+    <string name="not_available_ble">Not available Bluetooth service this device</string>
+    <string name="modify_device_name">Modify device name</string>
+    <string name="management_medical_staff">Staff management</string>
+    <string name="question_delete_staff">Delete it?</string>
+    <string name="additional">Add</string>
+    <string name="failed_server_connection">Server connection failed\n(%1$s)</string>
+    <string name="already_scanning">Already scanning</string>
+    <string name="info_modify_name">Reboot to device for new name</string>
+    <string name="connect_with_what">Connect to %1$s</string>
+    <string name="question_disconnect">Disconnect?</string>
+    <string name="logout">Logout</string>
+    <string name="sync_preparing_office">Preparing office</string>
+    <string name="sync_preparing_operators">Preparing staff info</string>
+    <string name="sync_preparing_patients">preparing patients info</string>
+    <string name="disconnected_with_device">Disconnected to device</string>
+    <string name="success_sync">Sync success</string>
+    <string name="connected_with_device">Connected to device</string>
+    <string name="must_be_enable_ble">Blueooth is required</string>
+    <string name="scan_info">Please info scan</string>
+    <string name="can_not_insert_same_name_in_work">Already exist</string>
+    <string name="question_connect">Connected to %1$s ?</string>
+    <string name="server_sync_preparing">Prepating data</string>
+    <string name="sync_handling_office">Office info handling</string>
+    <string name="sync_handling_operators">Operators hadling</string>
+    <string name="sync_handling_patients">Patients info handling</string>
+    <string name="sync_handling_histories">Exam info handling</string>
+    <string name="sync_handling_raw_data">Data info handling</string>
+    <string name="sync_preparing_histories">Preparing histories</string>
+    <string name="sync_preparing_raw_data">Preparing data</string>
+    <string name="server_sync_writing">Saving server data</string>
+    <string name="device_connect">Connect</string>
+    <string name="require_info">Require</string>
+    <string name="optional_info">Optional</string>갑
+    <string name="pack">pack</string>
+    <string name="search_patient">Search patient</string>
 
-    <string name="go_to_add_operator">검사자 등록하기</string>
-    <string name="go_to_add_patient">피검사자 등록하기</string>
+    <string name="location_service_info">Turn on location service?</string>
+    <string name="must_turn_on_location_service">Location service is required</string>
 
-    <!-- human races -->
     <string-array name="human_races">
 
-        <item>황인종</item>
-        <item>백인종</item>
-        <item>흑인종</item>
+        <item>Yellow</item>
+        <item>White</item>
+        <item>Black</item>
 
 
     </string-array>
@@ -303,13 +225,10 @@
     <!-- works -->
     <string-array name="works">
 
-        <item>의사</item>
-        <item>간호사</item>
-        <item>임상병리사</item>
+        <item>Doctor</item>
+        <item>Nurse</item>
+        <item>Pathologist</item>
 
     </string-array>
-
-    <string name="doctor">의사</string>
-
 
 </resources>

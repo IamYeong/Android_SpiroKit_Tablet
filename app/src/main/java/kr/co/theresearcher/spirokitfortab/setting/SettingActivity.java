@@ -25,11 +25,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.ParcelUuid;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -222,6 +225,26 @@ public class SettingActivity extends AppCompatActivity {
                     }
             );
 
+    private ActivityResultLauncher<Intent> locationResultLauncher =
+            registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    new ActivityResultCallback<ActivityResult>() {
+                        @SuppressLint("MissingPermission")
+                        @Override
+                        public void onActivityResult(ActivityResult result) {
+
+                            if (isLocationEnabled(SettingActivity.this)) {
+                                activityResultLauncher.launch(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE));
+                            } else {
+                                ConfirmDialog confirmDialog = new ConfirmDialog(SettingActivity.this);
+                                confirmDialog.setTitle(getString(R.string.must_turn_on_location_service));
+                                confirmDialog.show();
+                            }
+
+                        }
+                    }
+            );
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -376,7 +399,27 @@ public class SettingActivity extends AppCompatActivity {
                     mService.disconnect();
 
                 } else {
-                    activityResultLauncher.launch(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE));
+                    if (!isLocationEnabled(SettingActivity.this)) {
+
+                        SelectionDialog selectionDialog = new SelectionDialog(SettingActivity.this);
+                        selectionDialog.setTitle(getString(R.string.location_service_info));
+                        selectionDialog.setSelectedListener(new OnSelectedInDialogListener() {
+                            @Override
+                            public void onSelected(boolean select) {
+
+                                if (select) {
+                                    locationResultLauncher.launch(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                                }
+
+                            }
+                        });
+
+                        selectionDialog.show();
+
+                    } else {
+                        activityResultLauncher.launch(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE));
+                    }
+
                 }
 
 
@@ -536,6 +579,18 @@ public class SettingActivity extends AppCompatActivity {
 
     }
 
+    private boolean isLocationEnabled(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            // This is a new method provided in API 28
+            LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+            return lm.isLocationEnabled();
+        } else {
+            // This was deprecated in API 28
+            int mode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE,
+                    Settings.Secure.LOCATION_MODE_OFF);
+            return (mode != Settings.Secure.LOCATION_MODE_OFF);
+        }
+    }
 
 
 }

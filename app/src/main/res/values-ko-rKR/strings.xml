@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SpiroKitForTab</string>
+    <!-- TODO: Remove or change this placeholder text -->
+
+    <!-- Application -->
+
+    <string name="confirm">확인</string>
+    <string name="cancel">취소</string>
+    <string name="delete">삭제</string>
+    <string name="save">저장</string>
+    <string name="fail_server_response">서버응답 실패\n(%1$s)</string>
+
+    <string name="checkup">검사</string>
+
+
+    <!-- Splash activity -->
+
+
+    <!-- Login Activity -->
+    <string name="user_login">사용자 로그인</string>
+    <string name="user_email">이메일</string>
+    <string name="user_identifier">아이디</string>
+    <string name="user_password">패스워드</string>
+    <string name="login">로그인</string>
+    <string name="join">가입</string>
+
+    <string name="request_input_email_or_password">이메일 또는 패스워드를 입력해주세요</string>
+    <string name="request_input_id_or_password">아이디 또는 패스워드를 입력해주세요</string>
+
+    <string name="request_confirm_email_or_password">이메일 또는 패스워드를 확인해주세요</string>
+    <string name="request_confirm_id_or_password">아이디 또는 패스워드를 확인해주세요</string>
+
+    <!-- Join Activity -->
+    <string name="user_join">사용자 가입</string>
+    <string name="nickname">닉네임</string>
+    <string name="confirm_password">비밀번호 확인</string>
+    <string name="request_rule_password">영문 2자와 숫자로 이루어진 비밀번호로 설정해주세요(총 6~8자)</string>
+
+
+    <string name="request_confirm_password">비밀번호를 확인해주세요</string>
+    <string name="complete_user_join">가입이 완료되었습니다</string>
+    <string name="request_empty_info">누락된 항목이 있습니다. 모두 입력해주세요.</string>
+
+    <!-- 이용약관 -->
+    <string name="terms_and_conditions">이용약관</string>
+    <string name="next">다음</string>
+    <string name="agree_all_condition">이용약관에 동의합니다</string>
+
+    <!-- 환자 목록 -->
+    <string name="patient_list">환자목록</string>
+    <string name="latest_meas_date">최근 검사일</string>
+    <string name="male">남</string>
+    <string name="female">여</string>
+
+    <string name="search">검색</string>
+    <string name="patient_name_search">환자 이름 검색</string>
+
+
+    <string name="confirm_patient_delete">해당 환자를 삭제하시겠습니까?</string>
+    <string name="search_patient">환자를 선택해주세요</string>
+
+
+    <!-- Add patient -->
+    <string name="pack">갑</string>
+    <string name="require_info">필수입력</string>
+    <string name="optional_info">선택입력</string>
+
+    <string name="chart_number">차트넘버</string>
+    <string name="name">이름</string>
+    <string name="gender">성별</string>
+    <string name="height">신장(cm)</string>
+    <string name="weight">체중(kg)</string>
+
+    <string name="birth">생년월일</string>
+    <string name="human_race">인종</string>
+
+    <string name="start_smoke_date">흡연시기</string>
+    <string name="stop_smoke_date">금연시기</string>
+    <string name="smoke_amount_day">하루 흡연량</string>
+
+    <string name="is_smoking">현재 흡연 여부</string>
+    <string name="smoking">흡연</string>
+    <string name="not_smoking">금연</string>
+
+    <string name="have_smoked">흡연 경험</string>
+    <string name="have">있음</string>
+    <string name="have_not">없음</string>
+
+    <string name="add_patient">환자 등록</string>
+    <string name="modify_patient">환자 수정</string>
+    <string name="close">닫기</string>
+    <string name="add">등록</string>
+
+    <string name="yes">예</string>
+    <string name="no">아니오</string>
+
+    <string name="request_input_require_patient_info">이름, 성별, 키, 체중, 생년월일, 인종은\n반드시 기입해주시기 바랍니다</string>
+    <string name="request_input_require_patient_info2">필수정보는 반드시 기입해주시기 바랍니다</string>
+
+    <string name="request_input_what">%1$s를(을) 입력해주세요</string>
+    <string name="request_selection_what">%1$s를(을) 선택해주세요</string>
+
+    <string name="family_doctor">담당의</string>
+    <string name="selection_family_doctor">담당의 선택</string>
+    <string name="checkup_doctor">검사자</string>
+
+    <string name="request_have_not_doctors">의료진 정보를 등록해주세요</string>
+    <string name="have_not_what">등록된 %1$s가(이) 없습니다</string>
+
+    <string name="date_format_ymd">yyyy.MM.dd</string>
+
+    <string name="select_birth_date">생년월일 선택</string>
+    <string name="select_start_smoke_date">흡연시작시기 선택</string>
+    <string name="select_stop_smoke_date">금연시기 선택</string>
+
+    <string name="duplicate_hash">중복데이터를 발견했습니다.\n차트넘버, 이름, 생년월일 구분으로 중복을 피할 수 있습니다</string>
+
+    <!-- Main Activity -->
+    <string name="empty_result">측정한 이력이 있다면 수치가 이 곳에 표기됩니다</string>
+    <string name="empty_chart">측정한 이력이 있다면 그래프가 이 곳에 표기됩니다</string>
+    <string name="empty_history">측정한 이력이 표기됩니다</string>
+    <string name="empty_patient">환자를 추가해주세요</string>
+
+    <string name="history">검사기록</string>
+    <string name="question_delete_history">해당 검사결과를 삭제하시겠습니까?</string>
+    <string name="question_delete_patient">해당 환자를 삭제하시겠습니까?</string>
+
+    <string name="select_history_range">조회할 기록 기간 선택</string>
+
+
+    <string name="checkup_doctor_is">검사자 : %1$s (%2$s)</string>
+    <string name="family_doctor_is">주치의 : %1$s</string>
+    <string name="doctor_is">주치의 : %1$s (%2$s)\n검사자 : %3$s (%4$s)</string>
+    <string name="chart_number_is">• 차트넘버 : %1$s</string>
+    <string name="_chart_number_is">차트넘버 : %1$s</string>
+    <string name="gender_is">• 성별 : %1$s</string>
+    <string name="height_is">• 신장 : %1$d cm</string>
+    <string name="weight_is">• 체중 : %1$d kg</string>
+    <string name="birth_is">• 생년월일 : %1$s</string>
+    <string name="human_race_is">• 인종 : %1$s</string>
+    <string name="smoke_start_date_is">• 흡연시작일 : %1$s</string>
+    <string name="smoke_stop_date_is">• 금연일 : %1$s</string>
+    <string name="smoking_per_day_is">• 하루 흡연량 : %1$s 갑</string>
+    <string name="smoking_per_day_is_na">• 하루 흡연량 : %1$s</string>
+    <string name="smoking_now_is">• 현재 흡연 여부 : %1$s</string>
+
+    <string name="please_select_patient">환자를 선택해주세요\n</string>
+    <string name="please_add_operator">작업자를 먼저 추가해주세요</string>
+
+    <string name="not_sync_permission">기관 계정에 서버 권한이 없습니다</string>
+    <string name="sync_disabled">현재 서버 동기화기능이 비활성화 상태입니다\n설정화면에서 활성화 후 사용가능합니다</string>
+
+    <string name="not_selected_checkup_doctor">검사자는 필수 선택 사항입니다\n현재 검사자가 없다면 설정 - 의료진 관리에서 등록해보세요</string>
+
+    <!-- FVC Activity -->
+    <string name="fvc_meas">FVC 검사</string>
+
+    <string name="pre_save">Pre 저장</string>
+    <string name="post_save">Post 저장</string>
+
+    <string name="retest">재측정</string>
+    <string name="complete">최종완료</string>
+
+    <string name="start_meas">측정하기</string>
+    <string name="pause_meas">일시정지</string>
+
+    <string name="save_success">저장되었습니다</string>
+    <string name="can_not_save_non_data">측정된 데이터가 없으면 저장할 수 없습니다</string>
+    <string name="fvc_nothing_result">측정 후 결과들이 이 곳에 표기됩니다</string>
+
+    <string name="connecting">연결 중</string>
+
+    <string name="spirokit_initializing">측정 준비 중입니다</string>
+    <string name="spirokit_terminating">정상 종료 중입니다.\n재측정을 원하시면 다시 전원을 켜주세요</string>
+    <string name="already_connect">이미 연결상태입니다</string>
+    <string name="not_found_saved_device">연동했던 기기정보가 없습니다\n설정화면에서 먼저 연결해주세요</string>
+
+    <!-- SVC Activity -->
+    <string name="svc_meas">SVC 검사</string>
+    <string name="svc_nothing_result">측정 후 결과들이 이 곳에 표기됩니다</string>
+
+    <!-- Setting Activity -->
+    <string name="device">디바이스</string>
+    <string name="device_info">디바이스 정보</string>
+
+    <string name="scan">스캔</string>
+    <string name="do_disconnect">연결끊기</string>
+    <string name="do_connect">연결하기</string>
+    <string name="mac_address">맥 주소</string>
+
+
+    <string name="state_disconnect">연결되지 않음</string>
+    <string name="state_connect">연결됨</string>
+
+    <string name="device_name_modify">이름 변경</string>
+    <string name="current_name">현재 이름</string>
+    <string name="modify_name">변경 이름</string>
+    <string name="info_modify_name">변경한 이름은 SpiroKit 을 재시작해야 반영됩니다</string>
+
+    <string name="location_service_info">주변기기 탐색을 위해 위치정보를 켜야합니다\n켜시겠습니까?</string>
+    <string name="must_turn_on_location_service">위치정보는 필수기능이므로 활성화 후 이용가능합니다</string>
+
+    <string name="connect_with_what">%1$s와(과) 연결되었습니다</string>
+    <string name="question_connect">%1$s 와(과)\n연결하시겠습니까?</string>
+    <string name="question_disconnect">연결을 끊으시겠습니까?</string>
+    <string name="device_connect">디바이스 연결</string>
+
+    <string name="logout">로그아웃</string>
+    <string name="setting">설정</string>
+
+    <string name="app_version">앱 버전</string>
+    <string name="server_sync">서버 동기화</string>
+
+    <string name="server_sync_preparing">서버에 전송할 데이터 구성 중</string>
+    <string name="server_sync_waiting">서버 응답 대기 중</string>
+    <string name="server_sync_writing">서버에서 받은 데이터를 저장 중입니다</string>
+
+    <string name="sync_preparing_office">디바이스 기관 정보 구성 중</string>
+    <string name="sync_preparing_operators">디바이스 검사자 정보 구성 중</string>
+    <string name="sync_preparing_patients">디바이스 피검사자 정보 구성 중</string>
+    <string name="sync_preparing_histories">디바이스 검사 기록 구성 중</string>
+    <string name="sync_preparing_raw_data">디바이스 검사 데이터 구성 중</string>
+
+    <string name="sync_handling_office">최신 기관 정보 처리 중</string>
+    <string name="sync_handling_operators">최신 검사자 정보 처리 중</string>
+    <string name="sync_handling_patients">최신 환자 정보 처리 중</string>
+    <string name="sync_handling_histories">최신 검사 정보 처리 중</string>
+    <string name="sync_handling_raw_data">최신 검사 원본 데이터 처리 중</string>
+
+    <string name="success_sync">서버와 동기화에 성공했습니다</string>
+
+    <string name="disconnected_with_device">디바이스와 연결이 끊어졌습니다</string>
+    <string name="connected_with_device">디바이스와 연결되었습니다</string>
+
+    <string name="scan_info">디바이스의 전원을 켜신 후 스캔버튼을 눌러 주시기 바랍니다.\n연결이 원활하지 않을 경우 디바이스를 종료 후 다시 켜주시고 연결을 시도해주세요</string>
+    <string name="must_be_enable_ble">블루투스는 필수기능이므로 활성화 후 이용가능합니다</string>
+    <string name="agree_enable_sync">동기화를 켜시겠습니까?</string>
+    <string name="agree_disable_sync">동기화를 끄시겠습니까?</string>
+
+    <string name="already_scanning">기존 진행중인 주변기기 탐색이 있습니다</string>
+    <string name="not_available_ble">블루투스를 이용할 수 없는 장치입니다. 기종을 확인해주세요</string>
+
+    <string name="failed_server_connection">서버와 통신 중 오류가 발생했습니다\n(%1$s)</string>
+    <string name="modify_device_name">디바이스 이름 변경</string>
+
+    <!-- Operator Activity -->
+    <string name="management_medical_staff">의료진 관리</string>
+    <string name="question_delete_staff">해당 의료진을 삭제하시겠습니까?</string>
+    <string name="additional">추가</string>
+    <string name="can_not_insert_same_name_in_work">같은 직군 내에서 이름의 구별이 필요합니다</string>
+
+
+    <!-- Result Activity -->
+    <string name="volume_flow_graph">볼룸(Volume) | 플로우(Flow) 그래프</string>
+    <string name="volume_time_graph">볼륨(Volume) | 타임(Time) 그래프</string>
+
+    <string name="n_order_meas">%1$s차 검사(%2$s)</string>
+    <string name="date_colon_what">날짜 : %1$s</string>
+
+
+    <!-- Empty fragment -->
+    <string name="empty_operators">검사자를 등록 후 이용가능합니다\n검사 전, 담당의와 실검사자를 선택하여 추후 정보에서 확인해보세요</string>
+    <string name="empty_patients">피검사자 등록 후 이용가능합니다\n환자정보를 기반으로 검사를 진행하고 결과를 확인해보세요</string>
+    <string name="empty_patient_select">검색창을 터치하여 등록된 환자를 선택하고,\n새로운 검사를 하거나 결과를 확인해보세요</string>
+    <string name="empty_cal">FVC, SVC 검사를 진행하고 결과 값과 그래프를 확인해보세요</string>
+
+    <string name="go_to_add_operator">검사자 등록하기</string>
+    <string name="go_to_add_patient">피검사자 등록하기</string>
+
+    <!-- human races -->
+    <string-array name="human_races">
+
+        <item>황인종</item>
+        <item>백인종</item>
+        <item>흑인종</item>
+
+
+    </string-array>
+
+
+    <!-- works -->
+    <string-array name="works">
+
+        <item>의사</item>
+        <item>간호사</item>
+        <item>임상병리사</item>
+
+    </string-array>
+
+    <string name="doctor">의사</string>
+
+</resources>
