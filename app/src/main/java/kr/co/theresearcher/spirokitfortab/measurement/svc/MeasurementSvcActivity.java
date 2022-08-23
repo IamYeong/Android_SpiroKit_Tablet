@@ -855,12 +855,13 @@ public class MeasurementSvcActivity extends AppCompatActivity {
                         SharedPreferencesManager.getOfficeHash(MeasurementSvcActivity.this),
                         SharedPreferencesManager.getOperatorHash(MeasurementSvcActivity.this),
                         SharedPreferencesManager.getPatientHashed(MeasurementSvcActivity.this),
-                        dateTimeFormatter.format(instant),
+                        dateTimeFormatter.format(instant), // finish date
                         "s",
                         "e",
                         0);
 
                 calHistory.setUpdatedDate(dateTimeFormatter.format(instant));
+                calHistory.setCreateDate(dateTimeFormatter.format(instant));
                 calHistory.setFamilyDoctorHash(SharedPreferencesManager.getFamilyDoctorHash(MeasurementSvcActivity.this));
 
                 SpiroKitDatabase database = SpiroKitDatabase.getInstance(MeasurementSvcActivity.this);

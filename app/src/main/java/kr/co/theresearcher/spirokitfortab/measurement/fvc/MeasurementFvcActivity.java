@@ -860,6 +860,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                 );
                 rawData.setCreateDate(dateTimeFormatter.format(instant));
                 rawData.setUpdatedDate(dateTimeFormatter.format(instant));
+                rawData.setCalDate(dateTimeFormatter.format(instant));
 
                 SpiroKitDatabase database = SpiroKitDatabase.getInstance(MeasurementFvcActivity.this);
                 database.calHistoryRawDataDao().insertRawData(rawData);
@@ -1012,6 +1013,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                         0);
 
                 calHistory.setUpdatedDate(dateTimeFormatter.format(instant));
+                calHistory.setCreateDate(dateTimeFormatter.format(instant));
                 calHistory.setFamilyDoctorHash(SharedPreferencesManager.getFamilyDoctorHash(MeasurementFvcActivity.this));
 
                 SpiroKitDatabase database = SpiroKitDatabase.getInstance(MeasurementFvcActivity.this);

@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
     private SpiroKitBluetoothLeService mService;
     private Handler handler = new Handler(Looper.getMainLooper());
 
-    VolleyResponseListener volleyResponseListener = new VolleyResponseListener() {
+    private VolleyResponseListener volleyResponseListener = new VolleyResponseListener() {
         @Override
         public void onResponse(JSONObject jsonResponse) {
 

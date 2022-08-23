@@ -20,6 +20,7 @@ public class VolumeFlowGraphView extends View {
     private float maxX, minX;
     private float maxY, minY;
     private float xOffset;
+    private float xHigh;
 
     private float verticalLabelMargin;
     private float horizontalLabelMargin;
@@ -263,6 +264,8 @@ public class VolumeFlowGraphView extends View {
         else this.x -= x;
         values.add(new Coordinate(x, y));
 
+        if (this.x > xHigh) xHigh = this.x;
+
         if (this.x > maxX) {
 
             isOver = true;
@@ -278,8 +281,9 @@ public class VolumeFlowGraphView extends View {
             isOver = true;
 
             xOffset -= x;
+            xHigh += x;
 
-            if (Math.abs(xOffset) > maxX) {
+            if (xHigh > maxX) {
 
                 //Log.e(getClass().getSimpleName(), "OFFSET : " + xOffset + ", MAX X : " + maxX);
 
