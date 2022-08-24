@@ -118,8 +118,8 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsViewHolder> {
 
         Patient patient = searchResults.get(holder.getAdapterPosition());
 
-        /*
-        Log.d(getClass().getSimpleName(), "==============================\n" +
+
+        Log.e(getClass().getSimpleName(), "==============================\n" +
                 patient.getChartNumber() + "\n"
                 + patient.getHashed() + "\n"
                 + patient.getGender() + "\n"
@@ -135,10 +135,11 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsViewHolder> {
                 + patient.getOs() + "\n"
                 + patient.getSmokingPeriod() + "\n"
                 + patient.getOfficeHashed() + "\n"
-                + patient.getIsDeleted() +
+                + patient.getIsDeleted() + "\n"
+                + patient.getUpdatedDate() +
                 "\n======================");
 
-         */
+
 
         holder.getNameText().setText(patient.getName());
         holder.getChartNumberText().setText(context.getString(R.string._chart_number_is, patient.getChartNumber()));
@@ -178,8 +179,6 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsViewHolder> {
                                     SpiroKitDatabase database = SpiroKitDatabase.getInstance(context);
                                     database.calHistoryDao().deleteReference(patient.getHashed());
                                     database.patientDao().deletePatient(patient.getHashed(), simpleDateFormat.format(time));
-
-                                    SpiroKitDatabase.removeInstance();
 
                                     handler.post(new Runnable() {
                                         @Override

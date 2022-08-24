@@ -228,6 +228,7 @@
     <string name="sync_handling_histories">최신 검사 정보 처리 중</string>
     <string name="sync_handling_raw_data">최신 검사 원본 데이터 처리 중</string>
 
+    <string name="question_logout">로그아웃 하시겠습니까??</string>
     <string name="success_sync">서버와 동기화에 성공했습니다</string>
 
     <string name="disconnected_with_device">디바이스와 연결이 끊어졌습니다</string>

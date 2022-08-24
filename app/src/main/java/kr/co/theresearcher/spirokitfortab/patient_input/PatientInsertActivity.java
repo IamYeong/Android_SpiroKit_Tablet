@@ -178,6 +178,7 @@ public class PatientInsertActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 isSmoking = true;
+                stopSmokeDate = Long.MAX_VALUE;
 
                 enableButton(smokeButton, true);
                 enableButton(nonSmokeButton, false);

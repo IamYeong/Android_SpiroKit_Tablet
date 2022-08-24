@@ -71,10 +71,11 @@ public class LoginActivity extends AppCompatActivity {
         String savedID = SharedPreferencesManager.getOfficeID(LoginActivity.this);
         String savedPass = SharedPreferencesManager.getOfficePass(LoginActivity.this);
 
-        identifierField.setText(savedID);
-        passwordField.setText(savedPass);
+        if (savedID == null) identifierField.setText("");
+        else identifierField.setText("");
 
-
+        if (savedPass == null) passwordField.setText("");
+        else passwordField.setText("");
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +94,11 @@ public class LoginActivity extends AppCompatActivity {
 
                         //Instant instant = Instant.now().truncatedTo(ChronoUnit.MICROS);
                         SpiroKitDatabase database = SpiroKitDatabase.getInstance(getApplicationContext());
+
+                        List<Office> offices = database.officeDao().selectAllOffices();
+                        for (Office o : offices) {
+                            Log.e(getClass().getSimpleName(), o.getName() + ", " + o.getOfficeID() + ", " + o.getOfficePassword() + ", " + o.getHashed() + "\n");
+                        }
 
                         Office office = database.officeDao().selectOfficeByID(id);
                         //SpiroKitDatabase.removeInstance();

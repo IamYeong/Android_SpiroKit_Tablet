@@ -504,11 +504,27 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-                    Log.e(getClass().getSimpleName(), "PATIENT SIZE : " + patients.size());
-
                     JSONArray patientJsonArray = new JSONArray();
 
                     for (Patient patient : patients) {
+
+                        Log.e(getClass().getSimpleName(),
+                                "\nPatient\n"
+                                        + "\nhashed : " + patient.getHashed()
+                                        + "\noffice hashed : " + patient.getOfficeHashed()
+                                        + "\nname : " + patient.getName()
+                                        + "\ngender : " + patient.getGender()
+                                        + "\nrace : " + patient.getHumanRace()
+                                        + "\ncreate date : " + patient.getCreateDate()
+                                        + "\nupdate date : " + patient.getUpdatedDate()
+                                        + "\nis deleted : " + patient.getIsDeleted()
+                                        + "\nstart smoke : " + patient.getStartSmokingDay()
+                                        + "\nno when : " + patient.getStopSmokingDay()
+                                        + "\namount : " + patient.getSmokingAmountPerDay()
+                                        + "\nperiod : " + patient.getSmokingPeriod()
+
+                        );
+
 
                         String start = patient.getStartSmokingDay();
 
@@ -527,25 +543,37 @@ public class MainActivity extends AppCompatActivity {
 
                         if (start == null) {
 
-                            patientJsonObject.put(JsonKeys.JSON_KEY_SMOKING_AMOUNT, null);
-                            patientJsonObject.put(JsonKeys.JSON_KEY_SMOKING_PERIOD, null);
-                            patientJsonObject.put(JsonKeys.JSON_KEY_SMOKING_IS_NOW, null);
+                            patientJsonObject.put(JsonKeys.JSON_KEY_SMOKING_AMOUNT, "");
+                            patientJsonObject.put(JsonKeys.JSON_KEY_SMOKING_PERIOD, "");
+                            patientJsonObject.put(JsonKeys.JSON_KEY_SMOKING_IS_NOW, "");
+                            patientJsonObject.put(JsonKeys.JSON_KEY_STOP_SMOKING_WHEN, "");
+                            patientJsonObject.put(JsonKeys.JSON_KEY_START_SMOKING_WHEN, "");
                         } else {
-                            patientJsonObject.put(JsonKeys.JSON_KEY_SMOKING_AMOUNT, patient.getSmokingAmountPerDay());
-                            patientJsonObject.put(JsonKeys.JSON_KEY_SMOKING_PERIOD, patient.getSmokingPeriod());
-                            patientJsonObject.put(JsonKeys.JSON_KEY_SMOKING_IS_NOW, patient.getNowSmoking());
+
+                            String stop = patient.getStopSmokingDay();
+
+                            if (stop == null) {
+                                patientJsonObject.put(JsonKeys.JSON_KEY_SMOKING_AMOUNT, patient.getSmokingAmountPerDay());
+                                patientJsonObject.put(JsonKeys.JSON_KEY_SMOKING_PERIOD, patient.getSmokingPeriod());
+                                patientJsonObject.put(JsonKeys.JSON_KEY_SMOKING_IS_NOW, patient.getNowSmoking());
+                                patientJsonObject.put(JsonKeys.JSON_KEY_STOP_SMOKING_WHEN, "");
+                                patientJsonObject.put(JsonKeys.JSON_KEY_START_SMOKING_WHEN, patient.getStartSmokingDay());
+                            } else {
+                                patientJsonObject.put(JsonKeys.JSON_KEY_SMOKING_AMOUNT, patient.getSmokingAmountPerDay());
+                                patientJsonObject.put(JsonKeys.JSON_KEY_SMOKING_PERIOD, patient.getSmokingPeriod());
+                                patientJsonObject.put(JsonKeys.JSON_KEY_SMOKING_IS_NOW, patient.getNowSmoking());
+                                patientJsonObject.put(JsonKeys.JSON_KEY_STOP_SMOKING_WHEN, patient.getStopSmokingDay());
+                                patientJsonObject.put(JsonKeys.JSON_KEY_START_SMOKING_WHEN, patient.getStartSmokingDay());
+                            }
+
+
                         }
 
-                        patientJsonObject.put(JsonKeys.JSON_KEY_STOP_SMOKING_WHEN, patient.getStopSmokingDay());
-                        patientJsonObject.put(JsonKeys.JSON_KEY_START_SMOKING_WHEN, patient.getStartSmokingDay());
-
-                        Log.e(getClass().getSimpleName(), "START : " + patient.getStartSmokingDay());
-                        Log.e(getClass().getSimpleName(), "STOP : " + patient.getStopSmokingDay());
-
                         patientJsonObject.put(JsonKeys.JSON_KEY_FROM_OS, patient.getOs());
-                        patientJsonObject.put(JsonKeys.JSON_KEY_LATEST_DAY, null);
+                        patientJsonObject.put(JsonKeys.JSON_KEY_LATEST_DAY, "");
                         patientJsonObject.put(JsonKeys.JSON_KEY_IS_DELETED, patient.getIsDeleted());
 
+                        Log.e(getClass().getSimpleName(), patientJsonObject.toString());
                         patientJsonArray.put(patientJsonObject);
 
                         handler.post(new Runnable() {
@@ -562,8 +590,6 @@ public class MainActivity extends AppCompatActivity {
 
                     List<CalHistory> calHistories = database.calHistoryDao().selectAll(office.getHashed());
                     List<CalHistoryRawData> rawDataList = new ArrayList<>();
-
-                    Log.e(getClass().getSimpleName(), "HISTORY SIZE : " + calHistories.size());
 
                     JSONArray historyArray = new JSONArray();
                     JSONArray rawDataArray = new JSONArray();
@@ -596,8 +622,6 @@ public class MainActivity extends AppCompatActivity {
 
                         List<CalHistoryRawData> rawData = database.calHistoryRawDataDao().selectAll(calHistory.getHashed());
 
-                        Log.e(getClass().getSimpleName(), "RAW SIZE : " + rawData.size());
-
                         rawDataList.addAll(rawData);
 
                         handler.post(new Runnable() {
@@ -612,8 +636,6 @@ public class MainActivity extends AppCompatActivity {
                     calHistories.clear();
 
                     jsonObject.put(JsonKeys.JSON_KEY_CAL_HISTORY, historyArray);
-
-                    Log.e(getClass().getSimpleName(), "RAW TOTAL SIZE : " + rawDataList.size());
 
                     handler.post(new Runnable() {
                         @Override
@@ -718,7 +740,6 @@ public class MainActivity extends AppCompatActivity {
                     Log.e(getClass().getSimpleName(), "RESULT : " + resultCode);
 
                     JSONObject items = jsonObject.getJSONObject(JsonKeys.JSON_KEY_ITEMS);
-                    Log.e(getClass().getSimpleName(), "RESPONSE JSON SIZE : " + items.length());
 
                     JSONObject office = items.getJSONObject(JsonKeys.JSON_KEY_OFFICE);
 
@@ -849,10 +870,10 @@ public class MainActivity extends AppCompatActivity {
                                 .build();
 
 
-
                         String start = patient.getString(JsonKeys.JSON_KEY_START_SMOKING_WHEN);
                         String stop = patient.getString(JsonKeys.JSON_KEY_STOP_SMOKING_WHEN);
                         String amount = patient.getString(JsonKeys.JSON_KEY_SMOKING_AMOUNT);
+
 
 
                         //Log.e(getClass().getSimpleName(), "start : " + start + ", stop : " + stop + ", " + "now : " + amount);
@@ -881,6 +902,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
 
+                        Log.e(getClass().getSimpleName(), "DELETED? " + patient.getInt(JsonKeys.JSON_KEY_IS_DELETED));
                         p.setIsDeleted(patient.getInt(JsonKeys.JSON_KEY_IS_DELETED));
 
                         database.patientDao().insertPatient(p);
@@ -894,6 +916,7 @@ public class MainActivity extends AppCompatActivity {
                                         + "\nrace : " + p.getHumanRace()
                                         + "\ncreate date : " + p.getCreateDate()
                                         + "\nupdate date : " + p.getUpdatedDate()
+                                        + "\nis deleted : " + p.getIsDeleted()
 
                         );
 

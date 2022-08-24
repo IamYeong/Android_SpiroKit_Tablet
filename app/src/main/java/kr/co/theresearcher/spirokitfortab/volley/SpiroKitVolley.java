@@ -15,8 +15,17 @@ import org.json.JSONObject;
 
 public class SpiroKitVolley {
 
+    //LOCAL
     //private static final String USER_LOGIN_POST_URL = "http://192.168.0.104:4500/apis/spirokit/e/sync/01";
+
+    //TEST
+    //private static final String USER_LOGIN_POST_URL = "http://43.200.35.255:4510/apis/spirokit/e/sync/01";
+
+    //vietnam
     private static final String USER_LOGIN_POST_URL = "http://43.200.35.255:4500/apis/spirokit/e/sync/01";
+
+    //PROJECT
+    //private static final String USER_LOGIN_POST_URL = "http://43.200.35.255:4500/apis/spirokit/e/sync/01";
     private static final String TAG_POST = "volley_post";
 
     private static RequestQueue requestQueue;

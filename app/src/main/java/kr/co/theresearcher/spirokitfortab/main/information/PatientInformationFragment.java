@@ -408,7 +408,6 @@ public class PatientInformationFragment extends Fragment implements Observer {
 
                 SpiroKitDatabase database = SpiroKitDatabase.getInstance(context);
                 List<Patient> patientList = database.patientDao().selectPatientByOffice(SharedPreferencesManager.getOfficeHash(context));
-                SpiroKitDatabase.removeInstance();
 
                 patientsAdapter.setPatients(patientList);
 

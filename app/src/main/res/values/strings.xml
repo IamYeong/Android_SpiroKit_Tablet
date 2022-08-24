@@ -208,6 +208,7 @@
     <string name="optional_info">Optional</string>갑
     <string name="pack">pack</string>
     <string name="search_patient">Search patient</string>
+    <string name="question_logout">Logged out from this account?</string>
 
     <string name="location_service_info">Turn on location service?</string>
     <string name="must_turn_on_location_service">Location service is required</string>

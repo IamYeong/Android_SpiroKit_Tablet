@@ -261,8 +261,6 @@ public class SettingActivity extends AppCompatActivity {
         logoutButton = findViewById(R.id.btn_logout_setting);
         operatorCard = findViewById(R.id.card_operator_management);
 
-        userNickname.setText(SharedPreferencesManager.getOfficeName(SettingActivity.this));
-
 
         operatorCard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -437,8 +435,22 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                SharedPreferencesManager.setOfficeHashed(SettingActivity.this, null);
-                finish();
+                SelectionDialog dialog = new SelectionDialog(SettingActivity.this);
+                dialog.setTitle(getString(R.string.question_logout));
+                dialog.setSelectedListener(new OnSelectedInDialogListener() {
+                    @Override
+                    public void onSelected(boolean select) {
+
+                        if (select) {
+                            SharedPreferencesManager.setOfficeHashed(SettingActivity.this, null);
+                            finish();
+                        }
+
+                    }
+                });
+                dialog.show();
+
+
 
             }
         });
@@ -471,6 +483,8 @@ public class SettingActivity extends AppCompatActivity {
 
             return;
         }
+
+        userNickname.setText(office.getName());
 
         if (office.getIsUseSync() == 0) {
             syncEnableButton.setEnabled(false);
