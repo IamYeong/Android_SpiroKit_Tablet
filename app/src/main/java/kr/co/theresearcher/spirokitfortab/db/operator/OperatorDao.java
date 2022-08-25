@@ -14,10 +14,10 @@ public interface OperatorDao {
     @Query("SELECT * FROM OPERATOR WHERE (office_hashed == :officeHashed)")
     List<Operator> selectAll(String officeHashed);
 
-    @Query("SELECT * FROM OPERATOR WHERE (office_hashed == :officeHashed) AND (is_deleted == 0)")
+    @Query("SELECT * FROM OPERATOR WHERE (office_hashed == :officeHashed)")
     List<Operator> selectAllOperator(String officeHashed);
 
-    @Query("SELECT * FROM OPERATOR WHERE (work == :work) AND (office_hashed == :officeHashed)")
+    @Query("SELECT * FROM OPERATOR WHERE (work == :work) AND (office_hashed == :officeHashed) AND (is_deleted == 0)")
     List<Operator> selectOperatorByWork(String officeHashed, String work);
 
     @Query("SELECT * FROM operator WHERE (hashed == :hash)")
@@ -28,9 +28,6 @@ public interface OperatorDao {
 
     @Update
     void updateOperator(Operator operator);
-
-    @Query("SELECT COUNT(id) FROM OPERATOR WHERE is_deleted == 0")
-    int getItemCount();
 
     @Query("UPDATE operator SET is_deleted = 1, updated_date = :updateDate WHERE hashed == :hash")
     void delete(String hash, String updateDate);

@@ -306,7 +306,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
                 SpiroKitDatabase database = SpiroKitDatabase.getInstance(context);
 
                 Patient patient = database.patientDao().selectPatientByHash(SharedPreferencesManager.getPatientHashed(context));
-                int operatorCount = database.operatorDao().getItemCount();
+                int operatorCount = database.operatorDao().selectAllOperator(SharedPreferencesManager.getOfficeHash(context)).size();
 
                 SpiroKitDatabase.removeInstance();
 

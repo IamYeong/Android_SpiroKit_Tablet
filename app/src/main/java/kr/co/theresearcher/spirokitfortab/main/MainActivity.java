@@ -541,18 +541,19 @@ public class MainActivity extends AppCompatActivity {
                         patientJsonObject.put(JsonKeys.JSON_KEY_C_DATE, patient.getCreateDate());
                         patientJsonObject.put(JsonKeys.JSON_KEY_UPDATED_DATE, patient.getUpdatedDate());
 
-                        if (start == null) {
+                        if ((start == null) || (start.equals("null") || (start.equals("")))) {
 
                             patientJsonObject.put(JsonKeys.JSON_KEY_SMOKING_AMOUNT, "");
                             patientJsonObject.put(JsonKeys.JSON_KEY_SMOKING_PERIOD, "");
                             patientJsonObject.put(JsonKeys.JSON_KEY_SMOKING_IS_NOW, "");
                             patientJsonObject.put(JsonKeys.JSON_KEY_STOP_SMOKING_WHEN, "");
                             patientJsonObject.put(JsonKeys.JSON_KEY_START_SMOKING_WHEN, "");
+
                         } else {
 
                             String stop = patient.getStopSmokingDay();
 
-                            if (stop == null) {
+                            if ((stop == null) || (stop.equals("null")) || (stop.equals("")) ) {
                                 patientJsonObject.put(JsonKeys.JSON_KEY_SMOKING_AMOUNT, patient.getSmokingAmountPerDay());
                                 patientJsonObject.put(JsonKeys.JSON_KEY_SMOKING_PERIOD, patient.getSmokingPeriod());
                                 patientJsonObject.put(JsonKeys.JSON_KEY_SMOKING_IS_NOW, patient.getNowSmoking());
@@ -878,9 +879,9 @@ public class MainActivity extends AppCompatActivity {
 
                         //Log.e(getClass().getSimpleName(), "start : " + start + ", stop : " + stop + ", " + "now : " + amount);
 
-                        if (start.contains("0000-00-00") || (start == null)) {
+                        if (start.contains("0000-00-00") || (start == null) || (start.equals("null") || (start.equals("")))) {
                             p.setStartSmokingDay(null);
-                            p.setSmokingAmountPerDay("0");
+                            p.setSmokingAmountPerDay(null);
                             p.setStopSmokingDay(null);
                             p.setNowSmoking(0);
                             p.setSmokingPeriod(0);
@@ -889,7 +890,7 @@ public class MainActivity extends AppCompatActivity {
                             p.setStartSmokingDay(start);
                             p.setSmokingAmountPerDay(amount);
 
-                            if (stop.contains("0000-00-00") || (stop == null)) {
+                            if (stop.contains("0000-00-00") || (stop == null) || (stop.equals("null") || (stop.equals("")))) {
                                 p.setStopSmokingDay(null);
                                 p.setNowSmoking(1);
                                 p.setSmokingPeriod(0);
