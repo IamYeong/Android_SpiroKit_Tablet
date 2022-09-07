@@ -37,14 +37,15 @@ import java.util.Observer;
 import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
 import kr.co.theresearcher.spirokitfortab.OnItemDeletedListener;
 import kr.co.theresearcher.spirokitfortab.R;
-import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
-import kr.co.theresearcher.spirokitfortab.calc.CalcSvcSpiroKitE;
+
+import kr.co.theresearcher.spirokitfortab.calc.SpiroKitDataHandler;
 import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
 import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
 import kr.co.theresearcher.spirokitfortab.db.cal_history_raw_data.CalHistoryRawData;
 import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
 import kr.co.theresearcher.spirokitfortab.db.work.Work;
-import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
+
+import kr.co.theresearcher.spirokitfortab.graph.Coordinate;
 import kr.co.theresearcher.spirokitfortab.graph.SlowVolumeTimeGraphView;
 
 import kr.co.theresearcher.spirokitfortab.main.result.OnOrderSelectedListener;
@@ -185,23 +186,11 @@ public class SvcResultFragment extends Fragment implements Observer {
                     CalHistoryRawData raw = rawData.get(i);
 
                     String[] data = raw.getData().split(" ");
-                    List<Integer> pulseWidth = new ArrayList<>();
+                    List<Integer> dataList = SpiroKitDataHandler.convertAll(data);
 
-                    for (int j = 0; j < data.length; j++) {
+                    double vc = SpiroKitDataHandler.getVC(dataList);
 
-                        pulseWidth.add(Integer.parseInt(data[j]));
-                        Log.e("", data[j]);
-
-                    }
-
-                    Log.e("", "=================");
-
-                    CalcSvcSpiroKitE calc = new CalcSvcSpiroKitE(pulseWidth);
-                    calc.measure();
-
-                    double vc = calc.getVC();
-
-                    graphViews.add(createVolumeTimeGraph(calc.getVolumeTimeGraph(), width, height));
+                    graphViews.add(createVolumeTimeGraph(SpiroKitDataHandler.getValues(dataList), width, height));
 
                     ResultSVC resultSVC = new ResultSVC(rawData.get(i).getHashed());
 
@@ -222,7 +211,7 @@ public class SvcResultFragment extends Fragment implements Observer {
                     resultSVC.setOrder(rawData.get(i).getOrderNumber());
 
                     svcResultAdapter.addResult(resultSVC);
-                    Log.e(getClass().getSimpleName(), svcResultAdapter.getItemCount() + "개 째 처리 중");
+
 
                 }
 
@@ -304,7 +293,7 @@ public class SvcResultFragment extends Fragment implements Observer {
 
     }
 
-    private SlowVolumeTimeGraphView createVolumeTimeGraph(List<ResultCoordinate> coordinates, int width, int height) {
+    private SlowVolumeTimeGraphView createVolumeTimeGraph(List<Coordinate> coordinates, int width, int height) {
 
         SlowVolumeTimeGraphView graphView = new SlowVolumeTimeGraphView(context);
         graphView.setId(View.generateViewId());
@@ -317,16 +306,16 @@ public class SvcResultFragment extends Fragment implements Observer {
 
         for (int i = 0; i < coordinates.size(); i++) {
 
-            double x = coordinates.get(i).getX();
-            double y = coordinates.get(i).getY();
+            Coordinate coordinate = coordinates.get(i);
 
-            graphView.setValue((float)x, (float)y);
+            graphView.setValue((float)coordinate.getTime(), (float)coordinate.getLps(), (float)coordinate.getVolume());
 
         }
 
         return graphView;
 
     }
+
 
     private void selectResult(int order) {
 

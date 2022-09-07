@@ -1,20 +1,38 @@
 package kr.co.theresearcher.spirokitfortab.graph;
 
 public class Coordinate {
-    private float x;
-    private float y;
 
-    public Coordinate(float x, float y) {
-        this.x = x;
-        this.y = y;
+    private double time;
+    private double lps;
+    private double volume;
+
+    public Coordinate(double t, double lps, double v) {
+        this.time = t;
+        this.lps = lps;
+        this.volume = v;
     }
 
-    public float getX() {
-        return x;
+    public double getTime() {
+        return time;
     }
 
-    public float getY() {
-        return y;
+    public void setTime(double time) {
+        this.time = time;
     }
 
+    public double getLps() {
+        return lps;
+    }
+
+    public void setLps(double lps) {
+        this.lps = lps;
+    }
+
+    public double getVolume() {
+        return volume;
+    }
+
+    public void setVolume(double volume) {
+        this.volume = volume;
+    }
 }

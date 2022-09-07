@@ -354,8 +354,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void setFragmentByMeasGroup(CalHistory history) {
 
-
-
         if (history == null) {
 
             EmptyResultFragment emptyResultFragment = new EmptyResultFragment();

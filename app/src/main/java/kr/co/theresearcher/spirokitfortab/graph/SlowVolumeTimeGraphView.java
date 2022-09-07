@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -234,27 +233,31 @@ public class SlowVolumeTimeGraphView extends View {
 
     }
 
-    public void setValue(float x, float y) {
+    public void setValue(float x, float flow, float y) {
 
         boolean isOver = false;
 
-        if (this.x + x > 60f) return;
+        if (this.x + x >= 60f) return;
 
-        values.add(new Coordinate(x, y));
+        values.add(new Coordinate(x, flow, y));
 
-        if ((maxY * 0.95f) < this.y + y) {
+        if (flow >= 0f) y *= -1d;
+        this.x += x;
+        this.y += y;
+
+        if ((maxY * 0.95f) < this.y) {
             isOver = true;
 
-            minY *= ((y + maxY) / (maxY * 0.95f));
-            maxY *= ((y + maxY) / (maxY * 0.95f));
+            minY *= ((this.y) / (maxY * 0.95f));
+            maxY *= ((this.y) / (maxY * 0.95f));
 
         }
 
-        if ((minY * 0.95f) > this.y + y) {
+        if ((minY * 0.95f) > this.y) {
             isOver = true;
 
-            maxY *= Math.abs(y + minY) / Math.abs(minY * 0.95f);
-            minY *= Math.abs(y + minY) / Math.abs(minY * 0.95f);
+            maxY *= Math.abs(this.y) / Math.abs(minY * 0.95f);
+            minY *= Math.abs(this.y) / Math.abs(minY * 0.95f);
 
         }
 
@@ -268,8 +271,12 @@ public class SlowVolumeTimeGraphView extends View {
 
             for (int i = 0; i < values.size(); i++) {
 
-                this.x += values.get(i).getX();
-                this.y += values.get(i).getY();
+                this.x += values.get(i).getTime();
+                if (values.get(i).getLps() >= 0f) {
+                    this.y += (values.get(i).getVolume() * -1f);
+                } else {
+                    this.y += values.get(i).getVolume();
+                }
 
                 path.lineTo(xToPosition(this.x), yToPosition(this.y));
 
@@ -278,14 +285,9 @@ public class SlowVolumeTimeGraphView extends View {
 
         } else {
 
-            this.x += x;
-            this.y += y;
-
             path.lineTo(xToPosition(this.x), yToPosition(this.y));
 
         }
-
-        //Log.e(getClass().getSimpleName(), "X : " + this.x + ", Y : " + this.y);
 
 
 
@@ -313,12 +315,12 @@ public class SlowVolumeTimeGraphView extends View {
 
         for (int i = 0; i < values.size(); i++) {
 
-            if (values.get(i).getY() >= 0d) {
+            if (values.get(i).getLps() >= 0d) {
 
-                acc -= values.get(i).getX();
+                acc -= values.get(i).getVolume();
 
             } else {
-                acc += values.get(i).getX();
+                acc += values.get(i).getVolume();
             }
 
 

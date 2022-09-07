@@ -60,15 +60,15 @@ import kr.co.theresearcher.spirokitfortab.OnItemDeletedListener;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.bluetooth.SpiroKitBluetoothLeService;
-import kr.co.theresearcher.spirokitfortab.calc.CalcSpiroKitE;
 
+import kr.co.theresearcher.spirokitfortab.calc.SpiroKitDataHandler;
 import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
 import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
 import kr.co.theresearcher.spirokitfortab.db.cal_history_raw_data.CalHistoryRawData;
 import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
 import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
 import kr.co.theresearcher.spirokitfortab.dialog.LoadingDialog;
-import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
+import kr.co.theresearcher.spirokitfortab.graph.Coordinate;
 import kr.co.theresearcher.spirokitfortab.graph.TimerProgressView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowGraphView;
 
@@ -120,9 +120,9 @@ public class MeasurementFvcActivity extends AppCompatActivity {
     private Timer timer;
     private TimerTask timerTask;
     private int timerCount = 0;
-    private int calibrationPW = 0;
 
     private Handler handler = new Handler(Looper.getMainLooper());
+    private SpiroKitDataHandler spiroKitDataHandler = new SpiroKitDataHandler();
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd_HHmmssSS", Locale.getDefault());
 
@@ -149,21 +149,14 @@ public class MeasurementFvcActivity extends AppCompatActivity {
             mService.setBluetoothLeCallback(new SpiroKitBluetoothLeService.BluetoothLeCallback() {
                 @Override
                 public void onReadCharacteristic(String data) {
-                    //testTitleText.setText("READ CHARACTERISTIC");
-
-
-
-                    //Log.d(getClass().getSimpleName(), "***********VALUE : " + value);
-
                     if (data.length() == 10) {
 
                         if (!startStopImage.isSelected()) return;
-                        if (pulseWidthList.size() > 1000) return;
-
-                        //dataReceivedCount++;
 
                         pulseWidthList.add(data);
-                        handleData(dataToInteger(data));
+                        int n = pulseWidthList.size();
+                        if (n <= 1) handleData(null, data);
+                        else handleData(pulseWidthList.get(n - 2), data);
 
                     } else {
 
@@ -176,7 +169,10 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (!loadingDialog.isShowing()) {
+
+                                    if (loadingDialog.isShowing()) loadingDialog.dismiss();
+
+                                    if (!loadingDialog.isShowing() && !isFinishing()) {
                                         loadingDialog = new LoadingDialog(MeasurementFvcActivity.this);
                                         loadingDialog.setTitle(getString(R.string.spirokit_initializing));
                                         loadingDialog.show();
@@ -192,7 +188,10 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (!loadingDialog.isShowing()) {
+
+                                    if (loadingDialog.isShowing()) loadingDialog.dismiss();
+
+                                    if (!loadingDialog.isShowing() && !isFinishing()) {
                                         loadingDialog = new LoadingDialog(MeasurementFvcActivity.this);
                                         loadingDialog.setTitle(getString(R.string.spirokit_terminating));
                                         loadingDialog.show();
@@ -205,6 +204,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                         }
 
                     }
+
 
                 }
 
@@ -624,18 +624,24 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
     }
 
-    private int dataToInteger(String data) {
-        int value = 0;
 
-        for (int i = 0; i < data.length() - 1; i++) {
 
-            char c = data.charAt(i);
-            value *= 10;
-            value += Integer.parseInt(c + "");
+    private void cleanUpData() {
 
-        }
+        Thread thread = new Thread() {
 
-        return value;
+            @Override
+            public void run() {
+                super.run();
+                Looper.prepare();
+
+                SpiroKitDatabase db = SpiroKitDatabase.getInstance(MeasurementFvcActivity.this);
+                db.calHistoryRawDataDao().deleteNotCompleteData();
+
+                Looper.loop();
+            }
+        };
+        thread.start();
     }
 
     @Override
@@ -647,63 +653,25 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         if (loadingDialog.isShowing()) loadingDialog.dismiss();
     }
 
-    private int conversionIntegerFromByteArray(byte[] data) {
+    private void handleData(String pre, String data) {
 
-        int value = 0;
+        Coordinate coordinate = spiroKitDataHandler.getValue(pre, data);
 
-        for (byte b : data) {
+        weakFlowProgressBar.setProgress((int)((float)coordinate.getLps() * 1000f));
+        volumeFlowGraphView.setValue((float)coordinate.getTime(), (float)coordinate.getLps(), (float)coordinate.getVolume());
+        volumeTimeGraphView.setValue((float)coordinate.getTime(), (float)coordinate.getLps(), (float)coordinate.getVolume());
 
-            if ((b >= 0x30) && (b <= 0x39)) {
-                value *= 10;
-                value += b - 0x30;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                volumeFlowGraphView.postInvalidate();
+                volumeTimeGraphView.postInvalidate();
             }
+        });
 
-        }
-
-        return value;
-
-    }
-
-    private int calibratePW(int prePW, int pw1, int pw2) {
-
-        //부호 같은지 검사
-        if (((pw1 / 100_000_000) + (pw2 / 100_000_000)) == 1) return pw2;
-            //5,000,000 이상 검사
-        else if ((pw2 >= 105_000_000) || ((pw2 < 100_000_000) && (pw2 >= 5_000_000))) return pw2;
-        else if ((pw1 >= 105_000_000) || ((pw1 < 100_000_000) && (pw1 >= 5_000_000))) return pw2;
-        else {
-
-            //조건통과하면 실제 보정
-            return prePW - (int)(((float)pw1 - (float)pw2) * 1.012f);
-
-        }
-
-    }
-
-    private void handleData(int value) {
-
-        float time = 0f;
-        float rps = 0f;
-        float lps = 0f;
-        float volume = 0f;
-
-        if (pulseWidthList.size() >= 2) value = calibratePW(calibrationPW, dataToInteger(pulseWidthList.get(pulseWidthList.size() - 2)), value);
-        calibrationPW = value;
-
-        if ((value > 100_000_000) && (value < 200_000_000)) {
+        if (coordinate.getLps() < 0d) {
             //흡기
-            value -= 100_000_000;
 
-            time = (float) Fluid.getTimeFromPulseWidthForE(value);
-            rps = (float)Fluid.calcRevolutionPerSecond(time);
-            lps = (float)Fluid.conversionLiterPerSecond(rps);
-            if (lps > 0.12f) volume = lps * time;
-            else {
-                //lps = 0f;
-                time = 0f;
-            }
-
-            lps *= -1f;
 
             if (flowToggle) {
                 flowToggle = false;
@@ -722,7 +690,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
             }
 
-        } else if ((value > 0) && (value < 100_000_000)) {
+        } else {
             //호기
 
             if (!flowToggle) {
@@ -736,12 +704,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                     @Override
                     public void run() {
 
-                        if (timerCount > 160) {
-
-                            //timerCount = 0;
-                            //timer.cancel();
-
-                        } else if (timerCount >= 60) {
+                        if (timerCount >= 60) {
 
 
                             runOnUiThread(new Runnable() {
@@ -751,9 +714,6 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                                     timerProgressBar.setProgress(timerCount++);
                                 }
                             });
-
-
-
 
                         } else {
 
@@ -775,45 +735,9 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
             }
 
-            time = (float)Fluid.getTimeFromPulseWidthForE(value);
-            rps = (float)Fluid.calcRevolutionPerSecond(time);
-            lps = (float)Fluid.conversionLiterPerSecond(rps);
-            if (lps > 0.12f) volume = lps * time;
-            else {
-                //lps = 0f;
-                time = 0f;
-            }
 
-        } else {
-
-            //100,000,000 or 0
-
-            /*
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    initializingTimeProgressBar();
-                    initializingFlowProgressBar();
-                }
-            });
-
-             */
 
         }
-
-        weakFlowProgressBar.setProgress((int)(lps * 1000f));
-        volumeFlowGraphView.setValue(volume, lps);
-        volumeTimeGraphView.setValue(time, volume, lps);
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                volumeFlowGraphView.postInvalidate();
-                volumeTimeGraphView.postInvalidate();
-            }
-        });
-
-        //updateFlowProgressBar((float)lps);
 
     }
 
@@ -869,6 +793,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                 //CalHistoryRawDataDatabase.removeInstance();
 
                 addResult(hashed, testOrder, instant, isPost);
+                pulseWidthList.clear();
 
                 handler.post(new Runnable() {
                     @Override
@@ -925,39 +850,31 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         //여기서는 어댑터에 추가랑 뷰배열에 추가만 해두고
         //핸들러에서 notify 수행, addVIew 하면 될 듯.
 
-        List<Integer> dataList = new ArrayList<>();
+        List<Integer> dataList = SpiroKitDataHandler.convertAll(pulseWidthList);
 
-        for (int i = 0; i < pulseWidthList.size(); i++) {
-            dataList.add(dataToInteger(pulseWidthList.get(i)));
-        }
 
-        CalcSpiroKitE calc = new CalcSpiroKitE(dataList);
-        calc.measure();
-        pulseWidthList.clear();
+        double fvc = SpiroKitDataHandler.getVC(dataList);
+        double fev1 = SpiroKitDataHandler.getEV1(dataList);
+        double pef = SpiroKitDataHandler.getPEF(dataList);
 
-        double fvc = calc.getFVC();
-        double fev1 = calc.getFev1();
-        double pef = calc.getPef();
-
-        double fvcP = calc.getFVCp(
+        double fvcP = SpiroKitDataHandler.getPredictFVC(
                 0,
                 patient.getHeight(),
                 patient.getWeight(),
                 patient.getGender()
         );
 
-        double fev1P = calc.getFEV1p(
+        double fev1P = SpiroKitDataHandler.getPredictFEV1(
                 0,
                 patient.getHeight(),
                 patient.getWeight(),
                 patient.getGender()
         );
 
-        volumeFlowResultViewList.add(createVolumeFlowGraph(calc.getVolumeFlowGraph(), resultVolumeFlowGraphLayout.getWidth(), resultVolumeFlowGraphLayout.getHeight()));
-        volumeTimeResultViewList.add(createVolumeTimeGraph(calc.getForcedVolumeTimeGraph(), resultVolumeTimeGraphLayout.getWidth(), resultVolumeTimeGraphLayout.getHeight()));
+        volumeFlowResultViewList.add(createVolumeFlowGraph(SpiroKitDataHandler.getValues(dataList), resultVolumeFlowGraphLayout.getWidth(), resultVolumeFlowGraphLayout.getHeight()));
+        volumeTimeResultViewList.add(createVolumeTimeGraph(SpiroKitDataHandler.getForcedValues(dataList), resultVolumeTimeGraphLayout.getWidth(), resultVolumeTimeGraphLayout.getHeight()));
 
         ResultFVC resultFVC = new ResultFVC(hash);
-        resultFVC.setFvc(calc.getFVC());
 
         resultFVC.setFvc(fvc);
         resultFVC.setFvcPredict(fvcP);
@@ -1039,7 +956,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         thread.start();
     }
 
-    private VolumeTimeGraphView createVolumeTimeGraph(List<ResultCoordinate> coordinates, int width, int height) {
+    private VolumeTimeGraphView createVolumeTimeGraph(List<Coordinate> coordinates, int width, int height) {
 
         VolumeTimeGraphView volumeTimeResultView = new VolumeTimeGraphView(this);
         volumeTimeResultView.setId(View.generateViewId());
@@ -1053,19 +970,15 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
         for (int i = 0; i < coordinates.size(); i++) {
 
-            double x = coordinates.get(i).getX();
-            double y = coordinates.get(i).getY();
-
-            //여기서 flow 는 호기일 때만 그려지기 때문에 판단용이라서 없애도 되지만
-            //다른 그래프에 쓰일 가능성도 있기 때문에 메서드를 수정하진 않았음.
-            volumeTimeResultView.setValue((float)x, (float)y, 1f);
+            Coordinate coordinate = coordinates.get(i);
+            volumeTimeResultView.setValue((float)coordinate.getTime(), (float)coordinate.getLps(), (float)coordinate.getVolume());
 
         }
 
         return volumeTimeResultView;
     }
 
-    private VolumeFlowGraphView createVolumeFlowGraph(List<ResultCoordinate> coordinates, int width, int height) {
+    private VolumeFlowGraphView createVolumeFlowGraph(List<Coordinate> coordinates, int width, int height) {
 
         VolumeFlowGraphView volumeFlowResultView = new VolumeFlowGraphView(this);
         volumeFlowResultView.setId(View.generateViewId());
@@ -1078,10 +991,8 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
         for (int i = 0; i < coordinates.size(); i++) {
 
-            double x = coordinates.get(i).getX();
-            double y = coordinates.get(i).getY();
-
-            volumeFlowResultView.setValue((float)x, (float)y);
+            Coordinate coordinate = coordinates.get(i);
+            volumeFlowResultView.setValue((float)coordinate.getTime(), (float)coordinate.getLps(), (float)coordinate.getVolume());
 
         }
 
@@ -1104,25 +1015,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        if (resultAdapter.getItemCount() > 0) {
-            //removeThisData();
-
-            Thread thread = new Thread() {
-                @Override
-                public void run() {
-                    super.run();
-                    Looper.prepare();
-
-                    SpiroKitDatabase database = SpiroKitDatabase.getInstance(MeasurementFvcActivity.this);
-                    database.calHistoryRawDataDao().deleteNotCompleteData();
-                    SpiroKitDatabase.removeInstance();
-
-                    Looper.loop();
-                }
-            };
-            thread.start();
-
-        }
+        cleanUpData();
 
     }
 

@@ -4,13 +4,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import kr.co.theresearcher.spirokitfortab.Fluid;
 import kr.co.theresearcher.spirokitfortab.R;
 
 public class VolumeFlowGraphView extends View {
@@ -238,6 +236,7 @@ public class VolumeFlowGraphView extends View {
         values.clear();
         this.x = 0f;
         xOffset = 0f;
+        xHigh = 0f;
         commit();
 
 
@@ -257,14 +256,14 @@ public class VolumeFlowGraphView extends View {
 
     }
 
-    public void setValue(float x, float y) {
+    public void setValue(float time, float y, float x) {
 
         boolean isOver = false;
         if (y >= 0d) this.x += x;
         else this.x -= x;
-        values.add(new Coordinate(x, y));
+        values.add(new Coordinate(0f, y, x));
 
-        if (this.x > xHigh) xHigh = this.x;
+        if (xHigh < this.x) xHigh = this.x;
 
         if (this.x > maxX) {
 
@@ -280,7 +279,9 @@ public class VolumeFlowGraphView extends View {
 
             isOver = true;
 
+            //처음 좌표를 찾을 때 필요
             xOffset -= x;
+            //더 밀려도 되는지 찾을 때 필요
             xHigh += x;
 
             if (xHigh > maxX) {
@@ -326,13 +327,13 @@ public class VolumeFlowGraphView extends View {
 
             for (int i = 0; i < values.size(); i++) {
 
-                this.y = values.get(i).getY();
+                this.y = (float)values.get(i).getLps();
 
                 if (this.y >= 0d) {
-                    this.x += values.get(i).getX();
+                    this.x += values.get(i).getVolume();
 
                 } else {
-                    this.x -= values.get(i).getX();
+                    this.x -= values.get(i).getVolume();
 
                 }
                 path.lineTo(xToPosition(this.x), yToPosition(this.y));
@@ -368,12 +369,12 @@ public class VolumeFlowGraphView extends View {
 
         for (int i = 0; i < values.size(); i++) {
 
-            if (values.get(i).getY() >= 0d) {
+            if (values.get(i).getLps() >= 0d) {
 
-                acc -= values.get(i).getX();
+                acc -= values.get(i).getVolume();
 
             } else {
-                acc += values.get(i).getX();
+                acc += values.get(i).getVolume();
             }
 
 

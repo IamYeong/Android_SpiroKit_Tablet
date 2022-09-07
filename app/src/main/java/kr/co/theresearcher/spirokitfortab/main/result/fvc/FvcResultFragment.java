@@ -46,7 +46,7 @@ import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
 import kr.co.theresearcher.spirokitfortab.OnItemDeletedListener;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
-import kr.co.theresearcher.spirokitfortab.calc.CalcSpiroKitE;
+import kr.co.theresearcher.spirokitfortab.calc.SpiroKitDataHandler;
 import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
 import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
 import kr.co.theresearcher.spirokitfortab.db.cal_history_raw_data.CalHistoryRawData;
@@ -54,7 +54,7 @@ import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
 import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
 import kr.co.theresearcher.spirokitfortab.db.work.Work;
 import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
-import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
+import kr.co.theresearcher.spirokitfortab.graph.Coordinate;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowGraphView;
 
 import kr.co.theresearcher.spirokitfortab.graph.VolumeTimeGraphView;
@@ -293,12 +293,12 @@ public class FvcResultFragment extends Fragment implements Observer {
 
     }
 
-    private VolumeTimeGraphView createVolumeTimeGraph(List<ResultCoordinate> coordinates, int width, int height) {
+    private VolumeTimeGraphView createVolumeTimeGraph(List<Coordinate> coordinates, int width, int height) {
 
         VolumeTimeGraphView volumeTimeResultView = new VolumeTimeGraphView(context);
         volumeTimeResultView.setId(View.generateViewId());
         volumeTimeResultView.setCanvasSize(width, height);
-        volumeTimeResultView.setX(1.5f *  ((float)width / (float)height), 0f);
+        volumeTimeResultView.setX(1.5f * ((float)width / (float)height), 0f);
         volumeTimeResultView.setY(1f, 0f);
         volumeTimeResultView.setMargin(30,30,60,30);
         volumeTimeResultView.setFinalPath(true);
@@ -307,24 +307,20 @@ public class FvcResultFragment extends Fragment implements Observer {
 
         for (int i = 0; i < coordinates.size(); i++) {
 
-            double x = coordinates.get(i).getX();
-            double y = coordinates.get(i).getY();
-
-            //여기서 flow 는 호기일 때만 그려지기 때문에 판단용이라서 없애도 되지만
-            //다른 그래프에 쓰일 가능성도 있기 때문에 메서드를 수정하진 않았음.
-            volumeTimeResultView.setValue((float)x, (float)y, 1f);
+            Coordinate coordinate = coordinates.get(i);
+            volumeTimeResultView.setValue((float)coordinate.getTime(), (float)coordinate.getLps(), (float)coordinate.getVolume());
 
         }
 
         return volumeTimeResultView;
     }
 
-    private VolumeFlowGraphView createVolumeFlowGraph(List<ResultCoordinate> coordinates, int width, int height) {
+    private VolumeFlowGraphView createVolumeFlowGraph(List<Coordinate> coordinates, int width, int height) {
 
         VolumeFlowGraphView volumeFlowResultView = new VolumeFlowGraphView(context);
         volumeFlowResultView.setId(View.generateViewId());
         volumeFlowResultView.setCanvasSize(width, height);
-        volumeFlowResultView.setX(1.6f * ((float)width / (float)height), 0f);
+        volumeFlowResultView.setX(1.2f * (((float)width / (float)height)), 0f);
         volumeFlowResultView.setY(1.4f, -0.8f);
         volumeFlowResultView.setMargin(30,30,60,30);
 
@@ -332,10 +328,8 @@ public class FvcResultFragment extends Fragment implements Observer {
 
         for (int i = 0; i < coordinates.size(); i++) {
 
-            double x = coordinates.get(i).getX();
-            double y = coordinates.get(i).getY();
-
-            volumeFlowResultView.setValue((float)x, (float)y);
+            Coordinate coordinate = coordinates.get(i);
+            volumeFlowResultView.setValue((float)coordinate.getTime(), (float)coordinate.getLps(), (float)coordinate.getVolume());
 
         }
 
@@ -366,42 +360,30 @@ public class FvcResultFragment extends Fragment implements Observer {
                 for (int i = 0; i < rawData.size(); i++) {
 
                     String[] data = rawData.get(i).getData().split(" ");
-                    List<Integer> pulseWidth = new ArrayList<>();
+                    List<Integer> dataList = SpiroKitDataHandler.convertAll(data);
 
-                    for (int j = 0; j < data.length; j++) {
 
-                        pulseWidth.add(Integer.parseInt(data[j]));
+                    double fvc = SpiroKitDataHandler.getVC(dataList);
+                    double fev1 = SpiroKitDataHandler.getEV1(dataList);
+                    double pef = SpiroKitDataHandler.getPEF(dataList);
 
-                    }
-
-                    CalcSpiroKitE calc = new CalcSpiroKitE(pulseWidth);
-                    calc.measure();
-
-                    double fvc = calc.getFVC();
-                    double fev1 = calc.getFev1();
-                    double pef = calc.getPef();
-
-                    double fvcP = calc.getFVCp(
+                    double fvcP = SpiroKitDataHandler.getPredictFVC(
                             0,
                             patient.getHeight(),
                             patient.getWeight(),
                             patient.getGender()
                     );
 
-                    double fev1P = calc.getFEV1p(
+                    double fev1P = SpiroKitDataHandler.getPredictFEV1(
                             0,
                             patient.getHeight(),
                             patient.getWeight(),
                             patient.getGender()
                     );
 
-                    //System.out.println(fvc + ", " + fev1 + ", " + pef);
 
-                    List<ResultCoordinate> volumeFlowGraph = calc.getVolumeFlowGraph();
-                    List<ResultCoordinate> volumeTimeGraph = calc.getForcedVolumeTimeGraph();
-
-                    volumeFlowResultViews.add(createVolumeFlowGraph(volumeFlowGraph, width, height));
-                    volumeTimeResultViews.add(createVolumeTimeGraph(volumeTimeGraph, width, height));
+                    volumeFlowResultViews.add(createVolumeFlowGraph(SpiroKitDataHandler.getValues(dataList), width, height));
+                    volumeTimeResultViews.add(createVolumeTimeGraph(SpiroKitDataHandler.getForcedValues(dataList), width, height));
 
                     Log.d(getClass().getSimpleName(), volumeFlowResultViews.size() + ", " + volumeTimeResultViews.size());
 

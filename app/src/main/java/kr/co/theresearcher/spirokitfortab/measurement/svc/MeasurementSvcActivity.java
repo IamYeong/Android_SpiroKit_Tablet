@@ -57,16 +57,17 @@ import kr.co.theresearcher.spirokitfortab.OnItemDeletedListener;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.bluetooth.SpiroKitBluetoothLeService;
-import kr.co.theresearcher.spirokitfortab.calc.CalcSpiroKitE;
-import kr.co.theresearcher.spirokitfortab.calc.CalcSvcSpiroKitE;
 
+
+import kr.co.theresearcher.spirokitfortab.calc.SpiroKitDataHandler;
 import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
 import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
 import kr.co.theresearcher.spirokitfortab.db.cal_history_raw_data.CalHistoryRawData;
 import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
 import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
 import kr.co.theresearcher.spirokitfortab.dialog.LoadingDialog;
-import kr.co.theresearcher.spirokitfortab.graph.ResultCoordinate;
+
+import kr.co.theresearcher.spirokitfortab.graph.Coordinate;
 import kr.co.theresearcher.spirokitfortab.graph.SlowVolumeTimeGraphView;
 import kr.co.theresearcher.spirokitfortab.main.result.OnOrderSelectedListener;
 import kr.co.theresearcher.spirokitfortab.measurement.fvc.MeasurementFvcActivity;
@@ -109,6 +110,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
     private LoadingDialog loadingDialog;
 
     private Handler handler = new Handler(Looper.getMainLooper());
+    private SpiroKitDataHandler spiroKitDataHandler = new SpiroKitDataHandler();
 
     private Runnable initializeEndRunnable = new Runnable() {
         @Override
@@ -170,11 +172,11 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
             if (data.length() == 10) {
 
-                pulseWidthList.add(data);
-
                 if (!startImage.isSelected()) return;
-                if (timerCount >= 60d) return;
-                handleData(dataToInteger(data));
+                pulseWidthList.add(data);
+                int n = pulseWidthList.size();
+                if (n <= 1) handleData(null, data);
+                else handleData(pulseWidthList.get(n - 2), data);
 
             } else {
 
@@ -514,58 +516,26 @@ public class MeasurementSvcActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
+        cleanUpData();
+
+    }
+
+    private void cleanUpData() {
+
         Thread thread = new Thread() {
+
             @Override
             public void run() {
                 super.run();
                 Looper.prepare();
 
-                SpiroKitDatabase database = SpiroKitDatabase.getInstance(MeasurementSvcActivity.this);
-                database.calHistoryRawDataDao().deleteNotCompleteData();
-                SpiroKitDatabase.removeInstance();
+                SpiroKitDatabase db = SpiroKitDatabase.getInstance(MeasurementSvcActivity.this);
+                db.calHistoryRawDataDao().deleteNotCompleteData();
 
-                Looper.loop();Thread thread = new Thread() {
-                    @Override
-                    public void run() {
-                        super.run();
-                        Looper.prepare();
-
-                        SpiroKitDatabase database = SpiroKitDatabase.getInstance(MeasurementSvcActivity.this);
-                        database.calHistoryRawDataDao().deleteNotCompleteData();
-                        SpiroKitDatabase.removeInstance();
-
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                finish();
-                            }
-                        });
-
-                        Looper.loop();
-                    }
-                };
-                thread.start();
+                Looper.loop();
             }
         };
         thread.start();
-    }
-
-    private int conversionIntegerFromByteArray(byte[] data) {
-
-        int value = 0;
-
-        for (byte b : data) {
-
-            if ((b >= 0x30) && (b <= 0x39)) {
-                value *= 10;
-                value += b - 0x30;
-            }
-
-        }
-
-        return value;
-
     }
 
     private int calibratePW(int prePW, int pw1, int pw2) {
@@ -598,49 +568,12 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         return value;
     }
 
-    private void handleData(int value) {
+    private void handleData(String pre, String data) {
 
-        float time = 0f;
-        float rps = 0f;
-        float lps = 0f;
-        float volume = 0f;
+        Coordinate coordinate = spiroKitDataHandler.getValue(pre, data);
 
-        if (pulseWidthList.size() >= 2) value = calibratePW(calibrationPW, dataToInteger(pulseWidthList.get(pulseWidthList.size() - 2)), value);
-        calibrationPW = value;
-
-        if ((value > 100_000_000) && (value < 200_000_000)) {
-            //흡기
-            value -= 100_000_000;
-
-            time = (float) Fluid.getTimeFromPulseWidthForE(value);
-            rps = (float)Fluid.calcRevolutionPerSecond(time);
-            lps = (float)Fluid.conversionLiterPerSecond(rps);
-            if (lps > 0.12f) volume = (float)Fluid.calcVolume(time, lps);
-            else {
-                time = 0f;
-            }
-
-
-        } else if ((value > 0) && (value < 100_000_000)) {
-            //호기
-
-            time = (float) Fluid.getTimeFromPulseWidthForE(value);
-            rps = (float)Fluid.calcRevolutionPerSecond(time);
-            lps = (float)Fluid.conversionLiterPerSecond(rps);
-            if (lps > 0.12f) volume = (float)Fluid.calcVolume(time, lps);
-            else {
-                time = 0f;
-            }
-            volume *= -1f;
-
-        } else {
-
-
-
-        }
-
-        timerCount += time;
-        svcGraphView.setValue(time, volume);
+        timerCount += coordinate.getTime();
+        svcGraphView.setValue((float)coordinate.getTime(), (float)coordinate.getLps(), (float)coordinate.getVolume());
 
         runOnUiThread(new Runnable() {
             @Override
@@ -703,6 +636,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
                 //CalHistoryRawDataDatabase.removeInstance();
 
                 addResult(hashed, testOrder, instant, isPost);
+                pulseWidthList.clear();
 
                 handler.post(new Runnable() {
                     @Override
@@ -743,19 +677,11 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         //여기서는 어댑터에 추가랑 뷰배열에 추가만 해두고
         //핸들러에서 notify 수행, addVIew 하면 될 듯.
 
-        List<Integer> dataList = new ArrayList<>();
+        List<Integer> dataList = SpiroKitDataHandler.convertAll(pulseWidthList);
 
-        for (int i = 0; i < pulseWidthList.size(); i++) {
-            dataList.add(dataToInteger(pulseWidthList.get(i)));
-        }
+        double vc = SpiroKitDataHandler.getVC(dataList);
 
-        CalcSvcSpiroKitE calc = new CalcSvcSpiroKitE(dataList);
-        calc.measure();
-        pulseWidthList.clear();
-
-        double vc = calc.getVC();
-
-        volumeTimeRunViews.add(createVolumeTimeGraph(calc.getVolumeTimeGraph(), resultGraphLayout.getWidth(), resultGraphLayout.getHeight()));
+        volumeTimeRunViews.add(createVolumeTimeGraph(SpiroKitDataHandler.getValues(dataList), resultGraphLayout.getWidth(), resultGraphLayout.getHeight()));
 
 
         ResultSVC resultSVC = new ResultSVC(hash);
@@ -783,7 +709,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
     }
 
-    private SlowVolumeTimeGraphView createVolumeTimeGraph(List<ResultCoordinate> coordinates, int width, int height) {
+    private SlowVolumeTimeGraphView createVolumeTimeGraph(List<Coordinate> coordinates, int width, int height) {
 
         SlowVolumeTimeGraphView graphView = new SlowVolumeTimeGraphView(MeasurementSvcActivity.this);
         graphView.setId(View.generateViewId());
@@ -796,10 +722,9 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
         for (int i = 0; i < coordinates.size(); i++) {
 
-            double x = coordinates.get(i).getX();
-            double y = coordinates.get(i).getY();
+            Coordinate coordinate = coordinates.get(i);
 
-            graphView.setValue((float)x, (float)y);
+            graphView.setValue((float)coordinate.getTime(), (float)coordinate.getLps(), (float)coordinate.getVolume());
 
         }
 
@@ -807,10 +732,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
     }
 
-    private void deleteDirs() {
 
-
-    }
 
     private void selectData(int order) {
 

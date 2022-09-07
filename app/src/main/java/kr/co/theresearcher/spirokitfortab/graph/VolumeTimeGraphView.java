@@ -160,8 +160,12 @@ public class VolumeTimeGraphView extends View {
 
         int count = 0;
         float temp = 0.25f;
+        xGap = 1f;
 
+        /*
         while (true) {
+
+            if ((int)xGap == 1) break;
 
             count = (int)(maxX / temp);
             if (count > 9) {
@@ -174,6 +178,8 @@ public class VolumeTimeGraphView extends View {
         }
 
         temp = 0.25f;
+
+         */
 
         while (true) {
 
@@ -188,7 +194,7 @@ public class VolumeTimeGraphView extends View {
         }
 
         path.reset();
-        path.moveTo(xToPosition(this.x), yToPosition(0d));
+        path.moveTo(xToPosition(this.x), yToPosition(this.y));
 
 
     }
@@ -217,24 +223,38 @@ public class VolumeTimeGraphView extends View {
 
     }
 
-    public void setValue(float x, float y, float flow) {
+    public void setValue(float x, float flow, float y) {
 
-        if (flow <= 0f) return;
+        if (flow < 0f) {
+            this.x = 0f;
+            this.y = 0f;
+
+            values.clear();
+            path.reset();
+            path.moveTo(xToPosition(this.x), yToPosition(this.y));
+
+            return;
+        }
 
         boolean isOver = false;
 
-        values.add(new Coordinate(x, y));
+        values.add(new Coordinate(x, flow, y));
 
-        if ((this.x + x) > maxX) {
+        this.x += x;
+        this.y += y;
+
+        //Log.e(getClass().getSimpleName(), "RECEIVE : this.Y : " + this.y + ", Y : " + y + ", LPS : " + flow);
+
+        if ((this.x) > maxX) {
 
             isOver = true;
 
-            maxY *= (this.x + x) / maxX;
-            maxX *= (this.x + x) / maxX;
+            maxY *= (this.x) / maxX;
+            maxX *= (this.x) / maxX;
 
         }
 
-        if ((this.y + y) > (maxY * 0.95f)) {
+        if ((this.y) > (maxY * 0.95f)) {
 
             isOver = true;
 
@@ -253,18 +273,21 @@ public class VolumeTimeGraphView extends View {
 
             for (int i = 0; i < values.size(); i++) {
 
-                this.x += values.get(i).getX();
-                this.y += values.get(i).getY();
+                this.x += values.get(i).getTime();
+                this.y += values.get(i).getVolume();
 
                 path.lineTo(xToPosition(this.x), yToPosition(this.y));
 
             }
 
+            //Log.e(getClass().getSimpleName(), "OVER : this.Y : " + this.y + ", Y : " + y + ", LPS : " + flow);
+
         } else {
-            this.x += x;
-            this.y += y;
+
             path.lineTo(xToPosition(this.x), yToPosition(this.y));
         }
+
+
 
 
     }
@@ -291,12 +314,12 @@ public class VolumeTimeGraphView extends View {
 
         for (int i = 0; i < values.size(); i++) {
 
-            if (values.get(i).getY() >= 0d) {
+            if (values.get(i).getLps() >= 0d) {
 
-                acc -= values.get(i).getX();
+                acc -= values.get(i).getVolume();
 
             } else {
-                acc += values.get(i).getX();
+                acc += values.get(i).getVolume();
             }
 
 
