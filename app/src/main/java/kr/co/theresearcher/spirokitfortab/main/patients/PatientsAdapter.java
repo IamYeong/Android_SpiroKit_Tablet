@@ -82,26 +82,55 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsViewHolder> {
 
     }
 
-    public void sortById() {
+    public void sortById(boolean ascending) {
 
-        for (int i = searchResults.size() - 1; i >= 0; i--) {
+        if (ascending) {
 
-            for (int j = 1; j <= i; j++) {
+            for (int i = searchResults.size() - 1; i >= 0; i--) {
 
-                Patient patient = searchResults.get(j);
-                if (searchResults.get(j - 1).getId() < patient.getId()) {
+                for (int j = 1; j <= i; j++) {
 
-                    searchResults.set(j, searchResults.get(j - 1));
-                    searchResults.set(j - 1, patient);
+                    Patient patient = searchResults.get(j);
+                    if (searchResults.get(j - 1).getId() > patient.getId()) {
+
+                        searchResults.set(j, searchResults.get(j - 1));
+                        searchResults.set(j - 1, patient);
+
+                    }
 
                 }
 
+            }
+        } else {
+
+            for (int i = searchResults.size() - 1; i >= 0; i--) {
+
+                for (int j = 1; j <= i; j++) {
+
+                    Patient patient = searchResults.get(j);
+                    if (searchResults.get(j - 1).getId() < patient.getId()) {
+
+                        searchResults.set(j, searchResults.get(j - 1));
+                        searchResults.set(j - 1, patient);
+
+                    }
+
+                }
 
             }
-
         }
 
+
+        /*
+        for (Patient p : searchResults) {
+            Log.e(getClass().getSimpleName(), "\nID : " + p.getId() + ", NAME : " + p.getName());
+        }
+
+         */
+
+
     }
+
 
 
     @NonNull

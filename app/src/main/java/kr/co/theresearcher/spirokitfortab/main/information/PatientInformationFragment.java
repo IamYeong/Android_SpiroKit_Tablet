@@ -410,6 +410,7 @@ public class PatientInformationFragment extends Fragment implements Observer {
                 List<Patient> patientList = database.patientDao().selectPatientByOffice(SharedPreferencesManager.getOfficeHash(context));
 
                 patientsAdapter.setPatients(patientList);
+                patientsAdapter.sortById(false);
 
                 handler.post(new Runnable() {
                     @Override
