@@ -67,6 +67,8 @@ import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
 import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
 import kr.co.theresearcher.spirokitfortab.dialog.LoadingDialog;
 
+import kr.co.theresearcher.spirokitfortab.dialog.OnSelectedInDialogListener;
+import kr.co.theresearcher.spirokitfortab.dialog.SelectionDialog;
 import kr.co.theresearcher.spirokitfortab.graph.Coordinate;
 import kr.co.theresearcher.spirokitfortab.graph.SlowVolumeTimeGraphView;
 import kr.co.theresearcher.spirokitfortab.main.result.OnOrderSelectedListener;
@@ -408,7 +410,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                finish();
+                terminateActivity();
             }
         });
 
@@ -519,6 +521,27 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         cleanUpData();
 
     }
+
+    @Override
+    public void onBackPressed() {
+        terminateActivity();
+    }
+
+    private void terminateActivity() {
+
+        SelectionDialog selectionDialog = new SelectionDialog(MeasurementSvcActivity.this);
+        selectionDialog.setTitle(getString(R.string.question_terminate_exam));
+        selectionDialog.setSelectedListener(new OnSelectedInDialogListener() {
+            @Override
+            public void onSelected(boolean select) {
+                if (select) finish();
+            }
+        });
+
+        selectionDialog.show();
+
+    }
+
 
     private void cleanUpData() {
 

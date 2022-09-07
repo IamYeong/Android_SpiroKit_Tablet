@@ -205,6 +205,8 @@ public class SettingActivity extends AppCompatActivity {
                         @Override
                         public void onActivityResult(ActivityResult result) {
 
+                            adapter.clear();
+
                             if (result.getResultCode() == RESULT_OK) {
                                 handler.postDelayed(stopScanRunnable, 5000);
 
@@ -354,6 +356,10 @@ public class SettingActivity extends AppCompatActivity {
 
                         if (select) {
 
+                            handler.removeCallbacks(stopScanRunnable);
+                            handler.post(stopScanRunnable);
+                            adapter.clear();
+
                             String macAddress = result.getDevice().getAddress();
                             String name = result.getScanRecord().getDeviceName();
 
@@ -459,6 +465,16 @@ public class SettingActivity extends AppCompatActivity {
         userNickname.setText(SharedPreferencesManager.getOfficeName(SettingActivity.this));
 
         scanStandBy();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        handler.removeCallbacks(stopScanRunnable);
+        handler.post(stopScanRunnable);
+
+        super.onDestroy();
 
     }
 

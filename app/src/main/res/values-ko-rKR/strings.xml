@@ -175,6 +175,7 @@
     <string name="spirokit_terminating">정상 종료 중입니다.\n재측정을 원하시면 다시 전원을 켜주세요</string>
     <string name="already_connect">이미 연결상태입니다</string>
     <string name="not_found_saved_device">연동했던 기기정보가 없습니다\n설정화면에서 먼저 연결해주세요</string>
+    <string name="question_terminate_exam">결과를 저장하지 않고 종료하시겠습니까?</string>
 
     <!-- SVC Activity -->
     <string name="svc_meas">SVC 검사</string>

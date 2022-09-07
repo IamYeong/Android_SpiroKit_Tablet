@@ -68,6 +68,8 @@ import kr.co.theresearcher.spirokitfortab.db.cal_history_raw_data.CalHistoryRawD
 import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
 import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
 import kr.co.theresearcher.spirokitfortab.dialog.LoadingDialog;
+import kr.co.theresearcher.spirokitfortab.dialog.OnSelectedInDialogListener;
+import kr.co.theresearcher.spirokitfortab.dialog.SelectionDialog;
 import kr.co.theresearcher.spirokitfortab.graph.Coordinate;
 import kr.co.theresearcher.spirokitfortab.graph.TimerProgressView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowGraphView;
@@ -410,7 +412,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                finish();
+                terminateActivity();
 
             }
         });
@@ -624,6 +626,25 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        terminateActivity();
+    }
+
+    private void terminateActivity() {
+
+        SelectionDialog selectionDialog = new SelectionDialog(MeasurementFvcActivity.this);
+        selectionDialog.setTitle(getString(R.string.question_terminate_exam));
+        selectionDialog.setSelectedListener(new OnSelectedInDialogListener() {
+            @Override
+            public void onSelected(boolean select) {
+                if (select) finish();
+            }
+        });
+
+        selectionDialog.show();
+
+    }
 
 
     private void cleanUpData() {
