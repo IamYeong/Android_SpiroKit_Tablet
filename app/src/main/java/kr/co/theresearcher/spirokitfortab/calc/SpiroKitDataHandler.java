@@ -36,25 +36,14 @@ public class SpiroKitDataHandler {
     /**
      * 데이터를 정수로 변환하는 메서드입니다
      * @param data BLE 에서 들어온 데이터 1개를 의미합니다
-     * @return 숫자 외의 문자를 제외하여 변환한 정수입니다
+     * @return 변환한 정수입니다
      */
     public static int convert(String data) {
 
-        int result = 0;
-
-        for (int i = 0; i < data.length(); i++ ) {
-
-            char c = data.charAt(i);
-
-            if (c < 0x30) continue;
-            if (c > 0x39) continue;
-
-            result *= 10; //10진수 자릿수 올리기
-            result += (c - 0x30); //비어있는 1의 자리 채워주기(아스키 기준이라서 0x30 뺌)
-
-        }
-
-        return result;
+        //"123456789 " -> 123456789
+        //정해진 포맷으로 입력되므로 마지막 문자만 자르고 숫자만 파싱
+        if (data.length() == 10) return Integer.parseInt(data.substring(0, 9));
+        else return Integer.parseInt(data);
 
     }
 

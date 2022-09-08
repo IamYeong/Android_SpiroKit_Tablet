@@ -81,7 +81,7 @@
                 android:fontFamily="@font/nanum_gothic_extra_bold"
 
                 android:layout_marginTop="10dp"
-                android:foreground="?attr/selectableItemBackground"
+
                 />
 
             <TextView
