@@ -12,6 +12,9 @@ import java.util.List;
 @Dao
 public interface CalHistoryDao {
 
+    @Query("SELECT * FROM CAL_HISTORY WHERE (hashed == :hashed)")
+    CalHistory select(String hashed);
+
     @Query("SELECT * FROM CAL_HISTORY WHERE (office_hashed == :officeHashed)")
     List<CalHistory> selectAll(String officeHashed);
 

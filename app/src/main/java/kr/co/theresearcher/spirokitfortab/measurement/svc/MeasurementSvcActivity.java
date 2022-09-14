@@ -58,8 +58,9 @@ import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.bluetooth.SpiroKitBluetoothLeService;
 
-
-import kr.co.theresearcher.spirokitfortab.calc.SpiroKitDataHandler;
+import kr.co.theresearcher.spirokitfortab.calc.DataHandlerE;
+import kr.co.theresearcher.spirokitfortab.calc.DataHandlerU;
+import kr.co.theresearcher.spirokitfortab.calc.SpiroKitHandler;
 import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
 import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
 import kr.co.theresearcher.spirokitfortab.db.cal_history_raw_data.CalHistoryRawData;
@@ -112,7 +113,8 @@ public class MeasurementSvcActivity extends AppCompatActivity {
     private LoadingDialog loadingDialog;
 
     private Handler handler = new Handler(Looper.getMainLooper());
-    private SpiroKitDataHandler spiroKitDataHandler = new SpiroKitDataHandler();
+    private SpiroKitHandler spiroKitHandler;
+    private String version = "";
 
     private Runnable initializeEndRunnable = new Runnable() {
         @Override
@@ -509,6 +511,17 @@ public class MeasurementSvcActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        String deviceName = SharedPreferencesManager.getDeviceName(MeasurementSvcActivity.this);
+        if (deviceName.contains("E")) {
+            spiroKitHandler = new DataHandlerE();
+            version = "e";
+        } else if (deviceName.contains("U")) {
+            spiroKitHandler = new DataHandlerU();
+            version = "u";
+        } else {
+
+        }
+
         bindService(new Intent(MeasurementSvcActivity.this, SpiroKitBluetoothLeService.class), serviceConnection, Context.BIND_AUTO_CREATE);
 
         if (loadingDialog.isShowing()) loadingDialog.dismiss();
@@ -561,39 +574,9 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         thread.start();
     }
 
-    private int calibratePW(int prePW, int pw1, int pw2) {
-
-        //부호 같은지 검사
-        if (((pw1 / 100_000_000) + (pw2 / 100_000_000)) == 1) return pw2;
-            //5,000,000 이상 검사
-        else if ((pw2 >= 105_000_000) || ((pw2 < 100_000_000) && (pw2 >= 5_000_000))) return pw2;
-        else if ((pw1 >= 105_000_000) || ((pw1 < 100_000_000) && (pw1 >= 5_000_000))) return pw2;
-        else {
-
-            //조건통과하면 실제 보정
-            return prePW - (int)(((float)pw1 - (float)pw2) * 1.012f);
-
-        }
-
-    }
-
-    private int dataToInteger(String data) {
-        int value = 0;
-
-        for (int i = 0; i < data.length() - 1; i++) {
-
-            char c = data.charAt(i);
-            value *= 10;
-            value += Integer.parseInt(c + "");
-
-        }
-
-        return value;
-    }
-
     private void handleData(String pre, String data) {
 
-        Coordinate coordinate = spiroKitDataHandler.getValue(pre, data);
+        Coordinate coordinate = spiroKitHandler.getValue(pre, data);
 
         timerCount += coordinate.getTime();
         svcGraphView.setValue((float)coordinate.getTime(), (float)coordinate.getLps(), (float)coordinate.getVolume());
@@ -700,11 +683,11 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         //여기서는 어댑터에 추가랑 뷰배열에 추가만 해두고
         //핸들러에서 notify 수행, addVIew 하면 될 듯.
 
-        List<Integer> dataList = SpiroKitDataHandler.convertAll(pulseWidthList);
+        List<Integer> dataList = spiroKitHandler.convertAll(pulseWidthList);
 
-        double vc = SpiroKitDataHandler.getVC(dataList);
+        double vc = spiroKitHandler.getVC(dataList);
 
-        volumeTimeRunViews.add(createVolumeTimeGraph(SpiroKitDataHandler.getValues(dataList), resultGraphLayout.getWidth(), resultGraphLayout.getHeight()));
+        volumeTimeRunViews.add(createVolumeTimeGraph(spiroKitHandler.getValues(dataList), resultGraphLayout.getWidth(), resultGraphLayout.getHeight()));
 
 
         ResultSVC resultSVC = new ResultSVC(hash);
@@ -802,7 +785,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
                         SharedPreferencesManager.getPatientHashed(MeasurementSvcActivity.this),
                         dateTimeFormatter.format(instant), // finish date
                         "s",
-                        "e",
+                        version,
                         0);
 
                 calHistory.setUpdatedDate(dateTimeFormatter.format(instant));

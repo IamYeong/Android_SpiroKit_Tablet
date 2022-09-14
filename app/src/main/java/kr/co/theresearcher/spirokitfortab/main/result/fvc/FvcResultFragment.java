@@ -46,7 +46,9 @@ import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
 import kr.co.theresearcher.spirokitfortab.OnItemDeletedListener;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
-import kr.co.theresearcher.spirokitfortab.calc.SpiroKitDataHandler;
+import kr.co.theresearcher.spirokitfortab.calc.DataHandlerE;
+import kr.co.theresearcher.spirokitfortab.calc.DataHandlerU;
+import kr.co.theresearcher.spirokitfortab.calc.SpiroKitHandler;
 import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
 import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
 import kr.co.theresearcher.spirokitfortab.db.cal_history_raw_data.CalHistoryRawData;
@@ -357,24 +359,38 @@ public class FvcResultFragment extends Fragment implements Observer {
                         SharedPreferencesManager.getCalHistoryHash(context)
                 );
 
+                CalHistory calHistory = database.calHistoryDao().select(SharedPreferencesManager.getCalHistoryHash(context));
+                String version = calHistory.getDeviceDiv();
+
                 for (int i = 0; i < rawData.size(); i++) {
 
                     String[] data = rawData.get(i).getData().split(" ");
-                    List<Integer> dataList = SpiroKitDataHandler.convertAll(data);
+
+                    SpiroKitHandler spiroKitHandler = null;
+
+                    if (version.equals("e")) {
+                        spiroKitHandler = new DataHandlerE();
+                    } else if (version.equals("u")) {
+                        spiroKitHandler = new DataHandlerU();
+                    } else {
+
+                    }
+
+                    List<Integer> dataList = spiroKitHandler.convertAll(data);
 
 
-                    double fvc = SpiroKitDataHandler.getVC(dataList);
-                    double fev1 = SpiroKitDataHandler.getEV1(dataList);
-                    double pef = SpiroKitDataHandler.getPEF(dataList);
+                    double fvc = spiroKitHandler.getVC(dataList);
+                    double fev1 = spiroKitHandler.getEV1(dataList);
+                    double pef = spiroKitHandler.getPEF(dataList);
 
-                    double fvcP = SpiroKitDataHandler.getPredictFVC(
+                    double fvcP = spiroKitHandler.getPredictFVC(
                             0,
                             patient.getHeight(),
                             patient.getWeight(),
                             patient.getGender()
                     );
 
-                    double fev1P = SpiroKitDataHandler.getPredictFEV1(
+                    double fev1P = spiroKitHandler.getPredictFEV1(
                             0,
                             patient.getHeight(),
                             patient.getWeight(),
@@ -382,8 +398,8 @@ public class FvcResultFragment extends Fragment implements Observer {
                     );
 
 
-                    volumeFlowResultViews.add(createVolumeFlowGraph(SpiroKitDataHandler.getValues(dataList), width, height));
-                    volumeTimeResultViews.add(createVolumeTimeGraph(SpiroKitDataHandler.getForcedValues(dataList), width, height));
+                    volumeFlowResultViews.add(createVolumeFlowGraph(spiroKitHandler.getValues(dataList), width, height));
+                    volumeTimeResultViews.add(createVolumeTimeGraph(spiroKitHandler.getForcedValues(dataList), width, height));
 
                     Log.d(getClass().getSimpleName(), volumeFlowResultViews.size() + ", " + volumeTimeResultViews.size());
 

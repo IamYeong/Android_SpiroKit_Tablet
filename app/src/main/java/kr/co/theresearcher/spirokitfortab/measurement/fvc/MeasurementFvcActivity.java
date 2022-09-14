@@ -61,7 +61,9 @@ import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.bluetooth.SpiroKitBluetoothLeService;
 
-import kr.co.theresearcher.spirokitfortab.calc.SpiroKitDataHandler;
+import kr.co.theresearcher.spirokitfortab.calc.DataHandlerE;
+import kr.co.theresearcher.spirokitfortab.calc.DataHandlerU;
+import kr.co.theresearcher.spirokitfortab.calc.SpiroKitHandler;
 import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
 import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
 import kr.co.theresearcher.spirokitfortab.db.cal_history_raw_data.CalHistoryRawData;
@@ -124,7 +126,8 @@ public class MeasurementFvcActivity extends AppCompatActivity {
     private int timerCount = 0;
 
     private Handler handler = new Handler(Looper.getMainLooper());
-    private SpiroKitDataHandler spiroKitDataHandler = new SpiroKitDataHandler();
+    private SpiroKitHandler spiroKitHandler;
+    private String version = "";
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd_HHmmssSS", Locale.getDefault());
 
@@ -669,6 +672,17 @@ public class MeasurementFvcActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        String deviceName = SharedPreferencesManager.getDeviceName(MeasurementFvcActivity.this);
+        if (deviceName.contains("E")) {
+            spiroKitHandler = new DataHandlerE();
+            version = "e";
+        } else if (deviceName.contains("U")) {
+            spiroKitHandler = new DataHandlerU();
+            version = "u";
+        } else {
+
+        }
+
         bindService(new Intent(getApplicationContext(), SpiroKitBluetoothLeService.class), serviceConnection, Context.BIND_AUTO_CREATE);
 
         if (loadingDialog.isShowing()) loadingDialog.dismiss();
@@ -676,7 +690,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
     private void handleData(String pre, String data) {
 
-        Coordinate coordinate = spiroKitDataHandler.getValue(pre, data);
+        Coordinate coordinate = spiroKitHandler.getValue(pre, data);
 
         weakFlowProgressBar.setProgress((int)((float)coordinate.getLps() * 1000f));
         volumeFlowGraphView.setValue((float)coordinate.getTime(), (float)coordinate.getLps(), (float)coordinate.getVolume());
@@ -871,29 +885,29 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         //여기서는 어댑터에 추가랑 뷰배열에 추가만 해두고
         //핸들러에서 notify 수행, addVIew 하면 될 듯.
 
-        List<Integer> dataList = SpiroKitDataHandler.convertAll(pulseWidthList);
+        List<Integer> dataList = spiroKitHandler.convertAll(pulseWidthList);
 
 
-        double fvc = SpiroKitDataHandler.getVC(dataList);
-        double fev1 = SpiroKitDataHandler.getEV1(dataList);
-        double pef = SpiroKitDataHandler.getPEF(dataList);
+        double fvc = spiroKitHandler.getVC(dataList);
+        double fev1 = spiroKitHandler.getEV1(dataList);
+        double pef = spiroKitHandler.getPEF(dataList);
 
-        double fvcP = SpiroKitDataHandler.getPredictFVC(
+        double fvcP = spiroKitHandler.getPredictFVC(
                 0,
                 patient.getHeight(),
                 patient.getWeight(),
                 patient.getGender()
         );
 
-        double fev1P = SpiroKitDataHandler.getPredictFEV1(
+        double fev1P = spiroKitHandler.getPredictFEV1(
                 0,
                 patient.getHeight(),
                 patient.getWeight(),
                 patient.getGender()
         );
 
-        volumeFlowResultViewList.add(createVolumeFlowGraph(SpiroKitDataHandler.getValues(dataList), resultVolumeFlowGraphLayout.getWidth(), resultVolumeFlowGraphLayout.getHeight()));
-        volumeTimeResultViewList.add(createVolumeTimeGraph(SpiroKitDataHandler.getForcedValues(dataList), resultVolumeTimeGraphLayout.getWidth(), resultVolumeTimeGraphLayout.getHeight()));
+        volumeFlowResultViewList.add(createVolumeFlowGraph(spiroKitHandler.getValues(dataList), resultVolumeFlowGraphLayout.getWidth(), resultVolumeFlowGraphLayout.getHeight()));
+        volumeTimeResultViewList.add(createVolumeTimeGraph(spiroKitHandler.getForcedValues(dataList), resultVolumeTimeGraphLayout.getWidth(), resultVolumeTimeGraphLayout.getHeight()));
 
         ResultFVC resultFVC = new ResultFVC(hash);
 
@@ -947,7 +961,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
                         SharedPreferencesManager.getPatientHashed(MeasurementFvcActivity.this),
                         dateTimeFormatter.format(instant),
                         "f",
-                        "e",
+                        version,
                         0);
 
                 calHistory.setUpdatedDate(dateTimeFormatter.format(instant));

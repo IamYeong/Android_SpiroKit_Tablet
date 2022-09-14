@@ -37,8 +37,10 @@ import java.util.Observer;
 import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
 import kr.co.theresearcher.spirokitfortab.OnItemDeletedListener;
 import kr.co.theresearcher.spirokitfortab.R;
-
-import kr.co.theresearcher.spirokitfortab.calc.SpiroKitDataHandler;
+import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
+import kr.co.theresearcher.spirokitfortab.calc.DataHandlerE;
+import kr.co.theresearcher.spirokitfortab.calc.DataHandlerU;
+import kr.co.theresearcher.spirokitfortab.calc.SpiroKitHandler;
 import kr.co.theresearcher.spirokitfortab.db.SpiroKitDatabase;
 import kr.co.theresearcher.spirokitfortab.db.cal_history.CalHistory;
 import kr.co.theresearcher.spirokitfortab.db.cal_history_raw_data.CalHistoryRawData;
@@ -180,17 +182,31 @@ public class SvcResultFragment extends Fragment implements Observer {
                         history.getHashed()
                 );
 
+                CalHistory calHistory = database.calHistoryDao().select(SharedPreferencesManager.getCalHistoryHash(context));
+                String version = calHistory.getDeviceDiv();
+
 
                 for (int i = 0; i < rawData.size(); i++) {
 
                     CalHistoryRawData raw = rawData.get(i);
 
                     String[] data = raw.getData().split(" ");
-                    List<Integer> dataList = SpiroKitDataHandler.convertAll(data);
 
-                    double vc = SpiroKitDataHandler.getVC(dataList);
+                    SpiroKitHandler spiroKitHandler = null;
 
-                    graphViews.add(createVolumeTimeGraph(SpiroKitDataHandler.getValues(dataList), width, height));
+                    if (version.equals("e")) {
+                        spiroKitHandler = new DataHandlerE();
+                    } else if (version.equals("u")) {
+                        spiroKitHandler = new DataHandlerU();
+                    } else {
+
+                    }
+
+                    List<Integer> dataList = spiroKitHandler.convertAll(data);
+
+                    double vc = spiroKitHandler.getVC(dataList);
+
+                    graphViews.add(createVolumeTimeGraph(spiroKitHandler.getValues(dataList), width, height));
 
                     ResultSVC resultSVC = new ResultSVC(rawData.get(i).getHashed());
 
