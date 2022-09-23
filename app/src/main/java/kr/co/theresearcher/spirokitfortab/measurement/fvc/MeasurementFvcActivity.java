@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
@@ -427,6 +428,8 @@ public class MeasurementFvcActivity extends AppCompatActivity {
 
                 int width = realTimeVolumeFlowGraphLayout.getWidth();
                 int height = realTimeVolumeFlowGraphLayout.getHeight();
+
+                Log.e(getClass().getSimpleName(), "WIDTH : " + width + ", HEIGHT : " + height + ", RATIO : " + (float)((float)width / (float)height));
 
                 volumeFlowGraphView = new VolumeFlowGraphView(MeasurementFvcActivity.this);
                 volumeFlowGraphView.setId(View.generateViewId());

@@ -90,7 +90,9 @@ public class BluetoothScanResultsAdapter extends RecyclerView.Adapter<BluetoothS
 
         String name = result.getScanRecord().getDeviceName();
         String macAddress = result.getDevice().getAddress();
-        String decibel = Integer.toString(result.getTxPower());
+
+        //RSSI : Receive Signal Strength Indicator (dB)
+        String decibel = Integer.toString(result.getRssi());
 
         if (name != null) {
             holder.getNameText().setText(name);

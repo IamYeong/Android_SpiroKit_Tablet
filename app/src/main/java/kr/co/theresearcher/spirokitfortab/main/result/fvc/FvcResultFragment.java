@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -37,6 +38,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalField;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Observable;
@@ -160,6 +162,8 @@ public class FvcResultFragment extends Fragment implements Observer {
 
                 int width = volumeFlowLayout.getWidth();
                 int height = volumeFlowLayout.getHeight();
+
+                Log.e(getClass().getSimpleName(), "WIDTH : " + width + ", HEIGHT : " + height + ", RATIO : " + (float)((float)width / (float)height));
 
                 startDrawing(width, height);
 
@@ -322,7 +326,7 @@ public class FvcResultFragment extends Fragment implements Observer {
         VolumeFlowGraphView volumeFlowResultView = new VolumeFlowGraphView(context);
         volumeFlowResultView.setId(View.generateViewId());
         volumeFlowResultView.setCanvasSize(width, height);
-        volumeFlowResultView.setX(1.2f * (((float)width / (float)height)), 0f);
+        volumeFlowResultView.setX(1.6f * (((float)width / (float)height)), 0f);
         volumeFlowResultView.setY(1.4f, -0.8f);
         volumeFlowResultView.setMargin(30,30,60,30);
 
@@ -378,20 +382,19 @@ public class FvcResultFragment extends Fragment implements Observer {
 
                     List<Integer> dataList = spiroKitHandler.convertAll(data);
 
-
                     double fvc = spiroKitHandler.getVC(dataList);
                     double fev1 = spiroKitHandler.getEV1(dataList);
                     double pef = spiroKitHandler.getPEF(dataList);
 
                     double fvcP = spiroKitHandler.getPredictFVC(
-                            0,
+                            patient.getAge(patient.getBirthDay()),
                             patient.getHeight(),
                             patient.getWeight(),
                             patient.getGender()
                     );
 
                     double fev1P = spiroKitHandler.getPredictFEV1(
-                            0,
+                            patient.getAge(patient.getBirthDay()),
                             patient.getHeight(),
                             patient.getWeight(),
                             patient.getGender()

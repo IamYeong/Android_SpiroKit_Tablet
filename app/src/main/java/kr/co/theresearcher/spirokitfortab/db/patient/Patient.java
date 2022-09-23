@@ -6,6 +6,11 @@ import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 import kr.co.theresearcher.spirokitfortab.db.office.Office;
 import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
 
@@ -286,6 +291,27 @@ public class Patient {
 
     public void setIsDeleted(int isDeleted) {
         this.isDeleted = isDeleted;
+    }
+
+    public int getAge(String birth) {
+
+        try {
+
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+            long time = simpleDateFormat.parse(birth).getTime();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(time);
+
+            //생년
+            int year = calendar.get(Calendar.YEAR);
+            int curYear = Calendar.getInstance().get(Calendar.YEAR);
+
+            return curYear - year;
+
+        } catch (ParseException e) {
+            return 0;
+        }
+
     }
 
     public static class Builder {
