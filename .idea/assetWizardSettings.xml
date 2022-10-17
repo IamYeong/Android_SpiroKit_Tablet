@@ -37,8 +37,8 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="$PROJECT_DIR$/app/src/main/res/drawable/device_connected.png" />
-                                                <entry key="opacityPercent" value="60" />
+                                                <entry key="imagePath" value="$USER_HOME$/Documents/TR_DOCUMENTS/logo.png" />
+                                                <entry key="opacityPercent" value="80" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -71,8 +71,10 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="$PROJECT_DIR$/app/src/main/res/drawable/device_connected.png" />
-                                      <entry key="outputName" value="ic_connected_device" />
+                                      <entry key="imageAsset" value="$USER_HOME$/Documents/TR_DOCUMENTS/logo.png" />
+                                      <entry key="outputName" value="tr_logo" />
+                                      <entry key="theme" value="CUSTOM" />
+                                      <entry key="themeColor" value="000000" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -310,6 +312,11 @@
                             </entry>
                           </map>
                         </option>
+                        <option name="values">
+                          <map>
+                            <entry key="outputIconType" value="ACTIONBAR" />
+                          </map>
+                        </option>
                       </PersistentState>
                     </value>
                   </entry>
@@ -333,7 +340,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:$USER_HOME$/Library/Android/sdk/icons/material/materialicons/insert_chart_outlined/baseline_insert_chart_outlined_24.xml" />
+                                      <entry key="url" value="file:$USER_HOME$/Library/Android/sdk/icons/material/materialicons/picture_as_pdf/baseline_picture_as_pdf_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -343,7 +350,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_baseline_insert_chart_outlined_30" />
+                            <entry key="outputName" value="ic_baseline_picture_as_pdf_24" />
                             <entry key="sourceFile" value="$USER_HOME$/Downloads/검사/play.svg" />
                           </map>
                         </option>

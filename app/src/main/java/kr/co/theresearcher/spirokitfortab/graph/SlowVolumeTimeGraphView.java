@@ -52,7 +52,7 @@ public class SlowVolumeTimeGraphView extends View {
         horizontalLabelMargin = 50f;
         verticalLabelMargin = 50f;
 
-        setLabelPaint();
+        setLabelPaint(1000f, 1000f);
         setLinePaint();
         setPathPaint();
         setDetailLinePaint();
@@ -69,7 +69,7 @@ public class SlowVolumeTimeGraphView extends View {
 
         //축 라벨
         canvas.drawText("Volume(L)", (leftMargin), topMargin * 0.8f, labelPaint);
-        canvas.drawText("Time(s)", canvasWidth - 100f, canvasHeight - 30f, labelPaint);
+        canvas.drawText("Time(s)", canvasHeight - (canvasWidth * 0.1f), canvasHeight, labelPaint);
 
         //Y축 선
         canvas.drawLine((leftMargin + outLineLength + verticalLabelMargin), topMargin, (leftMargin + outLineLength + verticalLabelMargin), (canvasHeight - bottomMargin - outLineLength - horizontalLabelMargin), linePaint);
@@ -83,6 +83,8 @@ public class SlowVolumeTimeGraphView extends View {
         float temp = 0f;
         float accGap = 0f;
         float gapSize = gapToSizeX(xGap);
+
+        labelPaint.setTextAlign(Paint.Align.CENTER);
 
         for (accGap = 0f; accGap <= maxX;) {
 
@@ -105,7 +107,8 @@ public class SlowVolumeTimeGraphView extends View {
 
             //canvas.drawText(Float.toString(Fluid.autoRound(1, ((float)xInterval * (float) i))), ((float)xPadding * (float)i) - outLineLength, (canvasHeight * 0.5f) - 25f, labelPaint);
             String label = getContext().getString(R.string.float_two, accGap);
-            canvas.drawText(label, (leftMargin + outLineLength + horizontalLabelMargin) + temp - 4f, (canvasHeight - bottomMargin - outLineLength - 5f), labelPaint);
+
+            canvas.drawText(label, (leftMargin + outLineLength + verticalLabelMargin) + temp, (canvasHeight - bottomMargin - outLineLength), labelPaint);
 
             accGap += xGap;
             temp += gapSize;
@@ -118,8 +121,8 @@ public class SlowVolumeTimeGraphView extends View {
         float center = (((canvasHeight - topMargin - bottomMargin - outLineLength - horizontalLabelMargin) * (maxY / (maxY - minY))) + topMargin);
 
         canvas.drawLine((leftMargin + verticalLabelMargin), center, (canvasWidth - rightMargin), center, linePaint);
-        String centerLabel = getContext().getString(R.string.with_L, 0f);
-        canvas.drawText(centerLabel, (leftMargin), center + 10f, labelPaint);
+        String centerLabel = getContext().getString(R.string.float_two, 0f);
+        canvas.drawText(centerLabel, (leftMargin), center, labelPaint);
 
         for (accGap += yGap; accGap <= maxY; accGap += yGap) {
 
@@ -142,7 +145,7 @@ public class SlowVolumeTimeGraphView extends View {
                     detailLinePaint);
 
             String label = getContext().getString(R.string.float_two, accGap);
-            canvas.drawText(label, leftMargin, center - temp + 10f, labelPaint);
+            canvas.drawText(label, leftMargin, center - temp, labelPaint);
 
             temp += gapSize;
         }
@@ -170,7 +173,7 @@ public class SlowVolumeTimeGraphView extends View {
                     detailLinePaint);
 
             String label = getContext().getString(R.string.float_two, accGap);
-            canvas.drawText(label, leftMargin, center + temp + 10f, labelPaint);
+            canvas.drawText(label, leftMargin, center + temp, labelPaint);
 
             accGap -= yGap;
             temp += gapSize;
@@ -298,6 +301,16 @@ public class SlowVolumeTimeGraphView extends View {
         this.canvasWidth = width;
         this.canvasHeight = height;
 
+        setLabelPaint(width, height);
+        outLineLength = width * 0.02f;
+        verticalLabelMargin = height * 0.05f;
+        horizontalLabelMargin = width * 0.05f;
+
+        leftMargin = (int)(width * 0.03f);
+        topMargin  = (int)(width * 0.03f);
+        rightMargin  = (int)(width * 0.03f);
+        bottomMargin  = (int)(width * 0.03f);
+
     }
 
     public void setMargin(int left, int top, int right, int bottom) {
@@ -356,11 +369,11 @@ public class SlowVolumeTimeGraphView extends View {
 
     }
 
-    private void setLabelPaint() {
+    private void setLabelPaint(float width, float height) {
 
         labelPaint.setColor(getContext().getColor(R.color.secondary_color));
-        labelPaint.setTextSize(20f);
-       // labelPaint.setTextAlign(Paint.Align.RIGHT);
+        labelPaint.setTextSize(height * 0.02f);
+        //labelPaint.setTextAlign(Paint.Align.RIGHT);
 
     }
 
@@ -385,5 +398,34 @@ public class SlowVolumeTimeGraphView extends View {
         detailLinePaint.setColor(getContext().getColor(R.color.secondary_color));
         detailLinePaint.setStrokeWidth(1f);
 
+    }
+
+    public float getCanvasWidth() {
+        return canvasWidth;
+    }
+
+    public float getCanvasHeight() {
+        return canvasHeight;
+    }
+
+    public void setGraphColor(int color) {
+        pathPaint.setColor(color);
+    }
+
+    public void setLinesColor(int color) {
+        linePaint.setColor(color);
+        detailLinePaint.setColor(color);
+    }
+
+    public void setLabelColor(int color) {
+        labelPaint.setColor(color);
+    }
+
+    public void setGraphWidth(float width) {
+        pathPaint.setStrokeWidth(width);
+    }
+
+    public void setLineWidth(float width) {
+        linePaint.setStrokeWidth(width);
     }
 }

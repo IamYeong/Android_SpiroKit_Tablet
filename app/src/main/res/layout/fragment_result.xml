@@ -53,6 +53,18 @@
                 android:text="@string/fvc_meas"
                 />
 
+            <ImageButton
+                android:id="@+id/img_btn_export_pdf_fvc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_picture_as_pdf_24"
+                app:layout_constraintEnd_toStartOf="@id/tv_doctor_main_result"
+                app:layout_constraintTop_toTopOf="@id/tv_doctor_main_result"
+                app:layout_constraintBottom_toBottomOf="@id/tv_doctor_main_result"
+                android:layout_marginEnd="5dp"
+                android:background="?attr/selectableItemBackground"
+                />
+
             <TextView
                 android:id="@+id/tv_doctor_main_result"
                 android:layout_width="wrap_content"

@@ -41,6 +41,7 @@ public class SvcResultAdapter extends RecyclerView.Adapter<SvcResultViewHolder> 
     private OnOrderSelectedListener orderSelectedListener;
     private OnItemChangedListener onItemChangedListener;
     private OnItemDeletedListener deletedListener;
+    private int selectedOrdinal = 0;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd (HH:mm)", Locale.getDefault());
 
     private long rootTimestamp;
@@ -103,6 +104,10 @@ public class SvcResultAdapter extends RecyclerView.Adapter<SvcResultViewHolder> 
 
     }
 
+    public int getSelectedOrdinal() {
+        return selectedOrdinal;
+    }
+
 
     @NonNull
     @Override
@@ -137,11 +142,13 @@ public class SvcResultAdapter extends RecyclerView.Adapter<SvcResultViewHolder> 
             @Override
             public void onClick(View v) {
 
-                if (holder.getAdapterPosition() == -1) return;
+                int selected = holder.getAdapterPosition();
+                if (selected == -1) return;
 
+                selectedOrdinal = selected;
                 for (ResultSVC result : results) result.setSelected(false);
-                results.get(holder.getAdapterPosition()).setSelected(true);
-                orderSelectedListener.onOrderSelected(holder.getAdapterPosition());
+                results.get(selected).setSelected(true);
+                orderSelectedListener.onOrderSelected(selected);
                 notifyDataSetChanged();
             }
         });

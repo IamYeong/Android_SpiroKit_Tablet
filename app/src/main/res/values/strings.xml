@@ -21,6 +21,7 @@
     <string name="svc" translatable="false">SVC</string>
     <string name="vc" translatable="false">VC</string>
 
+    <string name="round_2" translatable="false">%1$.2f</string>
     <string name="with_L" translatable="false">%1$.2f L</string>
     <string name="with_lps" translatable="false">%1$.2f l/s</string>
     <string name="with_per" translatable="false">%1$.2f %2$s</string>
