@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.graphics.fonts.FontFamily;
 import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
@@ -58,7 +59,6 @@ import java.util.Observer;
 
 import kr.co.theresearcher.spirokitfortab.OnItemChangedListener;
 import kr.co.theresearcher.spirokitfortab.OnItemDeletedListener;
-import kr.co.theresearcher.spirokitfortab.PdfCreator;
 import kr.co.theresearcher.spirokitfortab.R;
 import kr.co.theresearcher.spirokitfortab.SharedPreferencesManager;
 import kr.co.theresearcher.spirokitfortab.calc.DataHandlerE;
@@ -78,6 +78,7 @@ import kr.co.theresearcher.spirokitfortab.graph.VolumeFlowGraphView;
 import kr.co.theresearcher.spirokitfortab.graph.VolumeTimeGraphView;
 
 import kr.co.theresearcher.spirokitfortab.main.result.OnOrderSelectedListener;
+import kr.co.theresearcher.spirokitfortab.main.result.pdf.FvcPdfCreator;
 import kr.co.theresearcher.spirokitfortab.measurement.fvc.FvcResultAdapter;
 import kr.co.theresearcher.spirokitfortab.measurement.fvc.ResultFVC;
 
@@ -215,222 +216,19 @@ public class FvcResultFragment extends Fragment implements Observer {
                     ).get(adapter.getSelectedOrdinal());
 
                     PdfDocument pdfDocument = new PdfDocument();
-                    Paint paint = new Paint();
 
                     //Size : pt 단위(== 1/72 inch == 1/72 * 2.54 mm)
-                    float pageWidth = PdfCreator.getA4Width();
-                    float pageHeight = PdfCreator.getA4Height();
-
-                    float accWidth = 0f;
-                    float accHeight = 0f;
-
-                    PdfDocument.PageInfo info1 = new PdfDocument.PageInfo.Builder((int)pageWidth, (int)pageHeight, 1).create();
+                    PdfDocument.PageInfo info1 = new PdfDocument.PageInfo.Builder(545, 841, 1).create();
                     PdfDocument.Page page = pdfDocument.startPage(info1);
 
                     Canvas pageCanvas = page.getCanvas();
 
                     //그리기 영역
-
-                    Bitmap logoImage = BitmapFactory.decodeResource(getResources(), R.drawable.tr_logo); // 이미지 비트맵화
-                    Bitmap fitImage = Bitmap.createScaledBitmap(logoImage, 50, 40, false); // 사이즈 조정
-
-                    float leftMargin = 20f;
-                    float topMargin = 20f;
-                    float rightMargin = 20f;
-                    float bottomMargin = 20f;
-
-                    accWidth += leftMargin;
-                    accHeight += topMargin;
-
-                    paint.setAntiAlias(true);
-
-                    pageCanvas.drawBitmap(fitImage, leftMargin, topMargin, paint); // 이미지 그리기
-                    accWidth += 40f;
-                    accHeight += 30f;
-
-                    paint.setColor(Color.BLACK); // line color
-                    paint.setTextSize(10f);
-                    paint.setTypeface(Typeface.DEFAULT);
-
-
-                    //pageCanvas.drawLine(20f,20f, 20f, pageHeight - 20f, paint);
-                    //pageCanvas.drawLine(20f, 20f, pageWidth - 20f, 20f, paint);
-                    //pageCanvas.drawLine(pageWidth - 20f, 20f, pageWidth - 20f, pageHeight - 20f, paint);
-                    //pageCanvas.drawLine(20f, pageHeight - 20f, pageWidth - 20f, pageHeight - 20f, paint);
-
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                    long printDate = Calendar.getInstance().getTime().getTime();
-                    pageCanvas.drawText(rawData.getCalDate().substring(0, 19), pageWidth - rightMargin - 100f, topMargin + 10f, paint);
-                    pageCanvas.drawText(simpleDateFormat.format(printDate), pageWidth - rightMargin - 100f, topMargin + 22f, paint);
-
-                    accHeight += 10f;
-                    //가로줄
-                    pageCanvas.drawLine(leftMargin, accHeight, pageWidth - rightMargin, accHeight, paint);
-                    pageCanvas.drawLine(leftMargin, accHeight + 20f, pageWidth - rightMargin, accHeight + 20f, paint);
-                    pageCanvas.drawLine(leftMargin, accHeight + 40f, pageWidth - rightMargin, accHeight + 40f, paint);
-                    pageCanvas.drawLine(leftMargin, accHeight + 60f, pageWidth - rightMargin, accHeight + 60f, paint);
-                    pageCanvas.drawLine(leftMargin, accHeight + 80f, pageWidth - rightMargin, accHeight + 80f, paint);
-                    pageCanvas.drawLine(leftMargin, accHeight + 100f, pageWidth - rightMargin, accHeight + 100f, paint);
-
-                    //세로줄
-                    float horizontalGap = (pageWidth - leftMargin - rightMargin) / 4f;
-
-                    pageCanvas.drawLine(leftMargin, accHeight, leftMargin, accHeight + 100f, paint);
-                    pageCanvas.drawLine(leftMargin + (horizontalGap), accHeight, leftMargin + (horizontalGap), accHeight + 100f, paint);
-                    pageCanvas.drawLine(leftMargin + (horizontalGap * 2f), accHeight, leftMargin + (horizontalGap * 2f), accHeight + 100f, paint);
-                    pageCanvas.drawLine(leftMargin + (horizontalGap * 3f), accHeight, leftMargin + (horizontalGap * 3f), accHeight + 100f, paint);
-                    pageCanvas.drawLine(leftMargin + (horizontalGap * 4f), accHeight, leftMargin + (horizontalGap * 4f), accHeight + 100f, paint);
-
-                    //표 안의 내용
-                    pageCanvas.drawText("Name", leftMargin + 5f, accHeight + 20f - 5f, paint);
-                    pageCanvas.drawText("Age", leftMargin + 5f, accHeight + 40f - 5f, paint);
-                    pageCanvas.drawText("Gender", leftMargin + 5f, accHeight + 60f - 5f, paint);
-                    pageCanvas.drawText("Height", leftMargin + 5f, accHeight + 80f - 5f, paint);
-                    pageCanvas.drawText("Weight", leftMargin + 5f, accHeight + 100f - 5f, paint);
-
-                    pageCanvas.drawText(patient.getName(), leftMargin + (horizontalGap) + 5f, accHeight + 20f - 5f, paint);
-                    pageCanvas.drawText("Age", leftMargin + (horizontalGap) + 5f, accHeight + 40f - 5f, paint);
-                    pageCanvas.drawText("Gender", leftMargin + (horizontalGap) + 5f, accHeight + 60f - 5f, paint);
-                    pageCanvas.drawText(patient.getHeight() + " cm", leftMargin + (horizontalGap) + 5f, accHeight + 80f - 5f, paint);
-                    pageCanvas.drawText(patient.getWeight() + " kg", leftMargin + (horizontalGap) + 5f, accHeight + 100f - 5f, paint);
-
-                    pageCanvas.drawText("Smoking", leftMargin + (horizontalGap * 2f) + 5f, accHeight + 20f - 5f, paint);
-                    pageCanvas.drawText("Not smoking", leftMargin + (horizontalGap * 2f) + 5f, accHeight + 40f - 5f, paint);
-                    pageCanvas.drawText("Smoke date", leftMargin + (horizontalGap * 2f) + 5f, accHeight + 60f - 5f, paint);
-                    pageCanvas.drawText("Not smoke date", leftMargin + (horizontalGap * 2f) + 5f, accHeight + 80f - 5f, paint);
-                    pageCanvas.drawText("Smoke period", leftMargin + (horizontalGap * 2f) + 5f, accHeight + 100f - 5f, paint);
-
-                    pageCanvas.drawText("Name", leftMargin + (horizontalGap * 3f) + 5f, accHeight + 20f - 5f, paint);
-                    pageCanvas.drawText("Age", leftMargin + (horizontalGap * 3f) + 5f, accHeight + 40f - 5f, paint);
-                    pageCanvas.drawText("Gender", leftMargin + (horizontalGap * 3f) + 5f, accHeight + 60f - 5f, paint);
-                    pageCanvas.drawText("Height", leftMargin + (horizontalGap * 3f) + 5f, accHeight + 80f - 5f, paint);
-                    pageCanvas.drawText("Weight", leftMargin + (horizontalGap * 3f) + 5f, accHeight + 100f - 5f, paint);
-
-                    accHeight += 100f;
-
-                    //타이틀박스
-                    paint.setColor(0xFFECECEC);
-                    pageCanvas.drawRect(leftMargin, accHeight + 20f, pageWidth - rightMargin, accHeight + 40f, paint);
-
-                    paint.setColor(Color.BLACK);
-                    paint.setTextAlign(Paint.Align.CENTER);
-                    pageCanvas.drawText("Forced Vital Capacity(FVC)", pageWidth / 2f, accHeight + 40f - 5f, paint);
-
-                    if (rawData.getIsPost() == 1) {
-                        pageCanvas.drawText("POST", pageWidth - rightMargin - 50f, accHeight + 40f - 5f, paint);
-                    } else {
-                        pageCanvas.drawText("PRE", pageWidth - rightMargin - 50f, accHeight + 40f - 5f, paint);
-                    }
-
-                    accHeight += 40f;
-
-
-                    //그래프 영역
-                    paint.setColor(Color.WHITE);
-                    pageCanvas.drawRect(pageWidth / 2f, accHeight + 40f, pageWidth - rightMargin, accHeight + 20f + 200f, paint);
-                    pageCanvas.drawRect(leftMargin, accHeight + 20f + 200f + 20f, pageWidth - rightMargin, accHeight + 20f + 200f + 20f + 200f, paint);
+                    FvcPdfCreator creator = new FvcPdfCreator(context, patient, rawData);
+                    creator.drawPDF(context, pageCanvas);
 
                     //그래프 넣기
-                    SpiroKitHandler spiroKitHandler = new DataHandlerE();
-                    List<Integer> data = spiroKitHandler.convertAll(rawData.getData());
-                    List<Coordinate> values = spiroKitHandler.getValues(spiroKitHandler.convertAll(rawData.getData()));
-                    VolumeFlowGraphView volumeFlowGraphView = createVolumeFlowGraphPrint(values, (int)((pageWidth / 2f) - leftMargin - rightMargin), 200);
-                    SlowVolumeTimeGraphView volumeTimeGraphView = createSlowVolumeTimeGraphPrint(values, (int)(pageWidth - leftMargin - rightMargin), 200);
-                    //VolumeFlowGraphView volumeFlowGraphView = volumeFlowResultViews.get(adapter.getSelectedOrdinal());
-                    //SlowVolumeTimeGraphView volumeTimeGraphView = slowVolumeTimeGraphViews.get(adapter.getSelectedOrdinal());
 
-                    //비트맵 영역 잡아주기
-                    Bitmap vf = Bitmap.createBitmap((int)volumeFlowGraphView.getCanvasWidth(), (int)volumeFlowGraphView.getCanvasHeight(), Bitmap.Config.ARGB_8888);
-                    Bitmap vt = Bitmap.createBitmap((int)volumeTimeGraphView.getCanvasWidth(), (int)volumeTimeGraphView.getCanvasHeight(), Bitmap.Config.ARGB_8888);
-
-                    Canvas viewCanvas = new Canvas(vf);
-                    volumeFlowGraphView.draw(viewCanvas);
-
-                    viewCanvas = new Canvas(vt);
-                    volumeTimeGraphView.draw(viewCanvas);
-
-                    //Bitmap scaledVF = Bitmap.createScaledBitmap(vf, (int)((pageWidth / 2f) - leftMargin - rightMargin), 200, false);
-                    //Bitmap scaledVT = Bitmap.createScaledBitmap(vt, (int)(pageWidth - leftMargin - rightMargin), 200, false);
-
-                    pageCanvas.drawBitmap(vf, (pageWidth / 2f) + 20f, accHeight + 40f, paint);
-                    pageCanvas.drawBitmap(vt, leftMargin, accHeight + 20f + 200f + 20f, paint);
-
-                    //결과값 넣기
-                    double fvc = spiroKitHandler.getVC(data);
-                    double fev1 = spiroKitHandler.getEV1(data);
-                    double fev1per = (fev1 / fvc) * 100d;
-                    double pef = spiroKitHandler.getPEF(data);
-                    double fef = spiroKitHandler.getFEF_25to75(data);
-                    double mef25 = spiroKitHandler.getMEF25(data);
-                    double mef50 = spiroKitHandler.getMEF50(data);
-                    double mef75 = spiroKitHandler.getMEF75(data);
-
-                    double fvcPred = spiroKitHandler.getPredictFVC(20, patient.getHeight(), patient.getWeight(), patient.getGender());
-                    double fev1Pred = spiroKitHandler.getPredictFEV1(20, patient.getHeight(), patient.getWeight(), patient.getGender());
-                    double pefPred = 10d;
-
-                    //DIV Column
-                    paint.setTextAlign(Paint.Align.LEFT);
-                    paint.setColor(Color.BLACK);
-                    pageCanvas.drawText("DIV", leftMargin, accHeight + 40f,paint);
-                    pageCanvas.drawLine(leftMargin, accHeight + 45f, pageWidth / 2f, accHeight + 45f, paint);
-                    pageCanvas.drawText("FVC", leftMargin, accHeight + 70f, paint);
-                    pageCanvas.drawText("FEV1", leftMargin, accHeight + 90f, paint);
-                    pageCanvas.drawText("FEV1%", leftMargin, accHeight + 110f, paint);
-                    pageCanvas.drawText("PEF", leftMargin, accHeight + 130f, paint);
-                    pageCanvas.drawText("FEF25-75%", leftMargin, accHeight + 150f, paint);
-                    pageCanvas.drawText("MEF25%", leftMargin, accHeight + 170f, paint);
-                    pageCanvas.drawText("MEF50%", leftMargin, accHeight + 190f, paint);
-                    pageCanvas.drawText("MEF75%", leftMargin, accHeight + 210f, paint);
-
-                    //UNIT Column
-                    paint.setTextAlign(Paint.Align.CENTER);
-                    pageCanvas.drawText("UNIT", leftMargin + 80f, accHeight + 40f,paint);
-                    //pageCanvas.drawLine(leftMargin, accHeight + 45f, pageWidth - rightMargin, accHeight + 45f, paint);
-                    pageCanvas.drawText("L", leftMargin + 80f, accHeight + 70f, paint);
-                    pageCanvas.drawText("L", leftMargin + 80f, accHeight + 90f, paint);
-                    pageCanvas.drawText("%", leftMargin + 80f, accHeight + 110f, paint);
-                    pageCanvas.drawText("L/s", leftMargin + 80f, accHeight + 130f, paint);
-                    pageCanvas.drawText("L/s", leftMargin + 80f, accHeight + 150f, paint);
-                    pageCanvas.drawText("L/s", leftMargin + 80f, accHeight + 170f, paint);
-                    pageCanvas.drawText("L/s", leftMargin + 80f, accHeight + 190f, paint);
-                    pageCanvas.drawText("L/s", leftMargin + 80f, accHeight + 210f, paint);
-
-                    //MEAS Column
-                    pageCanvas.drawText("MEAS", leftMargin + 130f, accHeight + 40f,paint);
-                    //pageCanvas.drawLine(leftMargin, accHeight + 45f, pageWidth - rightMargin, accHeight + 45f, paint);
-                    pageCanvas.drawText(getString(R.string.round_2, fvc), leftMargin + 130f, accHeight + 70f, paint);
-                    pageCanvas.drawText(getString(R.string.round_2, fev1), leftMargin + 130f, accHeight + 90f, paint);
-                    pageCanvas.drawText(getString(R.string.round_2, fev1per), leftMargin + 130f, accHeight + 110f, paint);
-                    pageCanvas.drawText(getString(R.string.round_2, pef), leftMargin + 130f, accHeight + 130f, paint);
-                    pageCanvas.drawText(getString(R.string.round_2, fef), leftMargin + 130f, accHeight + 150f, paint);
-                    pageCanvas.drawText(getString(R.string.round_2, mef25), leftMargin + 130f, accHeight + 170f, paint);
-                    pageCanvas.drawText(getString(R.string.round_2, mef50), leftMargin + 130f, accHeight + 190f, paint);
-                    pageCanvas.drawText(getString(R.string.round_2, mef75), leftMargin + 130f, accHeight + 210f, paint);
-
-                    //PRED Column
-                    pageCanvas.drawText("PRED", leftMargin + 180f, accHeight + 40f,paint);
-                    //pageCanvas.drawLine(leftMargin, accHeight + 45f, pageWidth - rightMargin, accHeight + 45f, paint);
-                    pageCanvas.drawText(getString(R.string.round_2, fvcPred), leftMargin + 180f, accHeight + 70f, paint);
-                    pageCanvas.drawText(getString(R.string.round_2, fev1Pred), leftMargin + 180f, accHeight + 90f, paint);
-                    pageCanvas.drawText("-", leftMargin + 180f, accHeight + 110f, paint);
-                    pageCanvas.drawText("-", leftMargin + 180f, accHeight + 130f, paint);
-                    pageCanvas.drawText("-", leftMargin + 180f, accHeight + 150f, paint);
-                    pageCanvas.drawText("-", leftMargin + 180f, accHeight + 170f, paint);
-                    pageCanvas.drawText("-", leftMargin + 180f, accHeight + 190f, paint);
-                    pageCanvas.drawText("-", leftMargin + 180f, accHeight + 210f, paint);
-
-                    //Percentage Column
-                    pageCanvas.drawText("PERCENT", leftMargin + 230f, accHeight + 40f,paint);
-                    //pageCanvas.drawLine(leftMargin, accHeight + 45f, pageWidth - rightMargin, accHeight + 45f, paint);
-                    pageCanvas.drawText(getString(R.string.round_2, fvc / fvcPred), leftMargin + 230f, accHeight + 70f, paint);
-                    pageCanvas.drawText(getString(R.string.round_2, fev1 / fev1Pred), leftMargin + 230f, accHeight + 90f, paint);
-                    pageCanvas.drawText("-", leftMargin + 230f, accHeight + 110f, paint);
-                    pageCanvas.drawText("-", leftMargin + 230f, accHeight + 130f, paint);
-                    pageCanvas.drawText("-", leftMargin + 230f, accHeight + 150f, paint);
-                    pageCanvas.drawText("-", leftMargin + 230f, accHeight + 170f, paint);
-                    pageCanvas.drawText("-", leftMargin + 230f, accHeight + 190f, paint);
-                    pageCanvas.drawText("-", leftMargin + 230f, accHeight + 210f, paint);
 
                     //그리기 영역
 
@@ -583,7 +381,7 @@ public class FvcResultFragment extends Fragment implements Observer {
         for (int i = 0; i < coordinates.size(); i++) {
 
             Coordinate coordinate = coordinates.get(i);
-            volumeTimeResultView.setValue((float)coordinate.getTime(), (float)coordinate.getLps(), (float)coordinate.getVolume());
+            volumeTimeResultView.setValue((float)coordinate.getTime(), (float)coordinate.getVolume(), (float)coordinate.getLps());
 
         }
 
@@ -598,13 +396,14 @@ public class FvcResultFragment extends Fragment implements Observer {
         volumeFlowResultView.setCanvasSize(width, height);
         volumeFlowResultView.setX(1.6f * (((float)width / (float)height)), 0f);
         volumeFlowResultView.setY(1.4f, -0.8f);
+        volumeFlowResultView.setMargin(30,30,60,30);
 
         volumeFlowResultView.commit();
 
         for (int i = 0; i < coordinates.size(); i++) {
 
             Coordinate coordinate = coordinates.get(i);
-            volumeFlowResultView.setValue((float)coordinate.getTime(), (float)coordinate.getLps(), (float)coordinate.getVolume());
+            volumeFlowResultView.setValue((float)coordinate.getVolume(), (float)coordinate.getLps(), (float)coordinate.getTime());
 
         }
 
@@ -621,7 +420,7 @@ public class FvcResultFragment extends Fragment implements Observer {
         graphView.setCanvasSize(width, height);
         graphView.setX(60f, 0f);
         graphView.setY(0.5f * ((float)height / (float)width), -0.5f * ((float)height / (float)width));
-        graphView.setMargin(30,30,60,30);
+        graphView.setMargin(30,30,60,60);
 
         graphView.commit();
 
@@ -629,63 +428,7 @@ public class FvcResultFragment extends Fragment implements Observer {
 
             Coordinate coordinate = coordinates.get(i);
 
-            graphView.setValue((float)coordinate.getTime(), (float)coordinate.getLps(), (float)coordinate.getVolume());
-
-        }
-
-        return graphView;
-
-    }
-
-    private VolumeFlowGraphView createVolumeFlowGraphPrint(List<Coordinate> coordinates, int width, int height) {
-        //Log.e(getClass().getSimpleName(), "WIDTH / HEIGHT : " + width + ", " + height);
-
-        VolumeFlowGraphView volumeFlowResultView = new VolumeFlowGraphView(context);
-        volumeFlowResultView.setId(View.generateViewId());
-        volumeFlowResultView.setCanvasSize(width, height);
-        volumeFlowResultView.setX(1.6f * (((float)width / (float)height)), 0f);
-        volumeFlowResultView.setY(1.4f, -0.8f);
-        volumeFlowResultView.setGraphWidth(1f);
-        volumeFlowResultView.setLineWidth(0.5f);
-        volumeFlowResultView.setLinesColor(0xFF383838);
-        volumeFlowResultView.setGraphColor(0xFFFF3333);
-        volumeFlowResultView.setLabelColor(0xFF383838);
-
-        volumeFlowResultView.commit();
-
-        for (int i = 0; i < coordinates.size(); i++) {
-
-            Coordinate coordinate = coordinates.get(i);
-            volumeFlowResultView.setValue((float)coordinate.getTime(), (float)coordinate.getLps(), (float)coordinate.getVolume());
-
-        }
-
-        return volumeFlowResultView;
-
-    }
-
-    private SlowVolumeTimeGraphView createSlowVolumeTimeGraphPrint(List<Coordinate> coordinates, int width, int height) {
-
-        //Log.e(getClass().getSimpleName(), "WIDTH / HEIGHT : " + width + ", " + height);
-
-        SlowVolumeTimeGraphView graphView = new SlowVolumeTimeGraphView(context);
-        graphView.setId(View.generateViewId());
-        graphView.setCanvasSize(width, height);
-        graphView.setX(60f, 0f);
-        graphView.setY(0.5f * ((float)height / (float)width), -0.5f * ((float)height / (float)width));
-        graphView.setGraphWidth(1f);
-        graphView.setLineWidth(0.5f);
-        graphView.setLinesColor(0xFF383838);
-        graphView.setGraphColor(0xFFFF3333);
-        graphView.setLabelColor(0xFF383838);
-
-        graphView.commit();
-
-        for (int i = 0; i < coordinates.size(); i++) {
-
-            Coordinate coordinate = coordinates.get(i);
-
-            graphView.setValue((float)coordinate.getTime(), (float)coordinate.getLps(), (float)coordinate.getVolume());
+            graphView.setValue((float)coordinate.getTime(), (float)coordinate.getVolume(), (float)coordinate.getLps());
 
         }
 
