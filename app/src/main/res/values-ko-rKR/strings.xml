@@ -259,7 +259,40 @@
 
     <string name="n_order_meas">%1$s차 검사(%2$s)</string>
     <string name="date_colon_what">날짜 : %1$s</string>
+    
+    
+    <!-- PDF -->
+    <string name="pdf_name">Name</string>
+    <string name="pdf_age">Age</string>
+    <string name="pdf_gender">Gender</string>
+    <string name="pdf_height">Height</string>
+    <string name="pdf_weight">Weight</string>
+    <string name="pdf_smoking">Smoking</string>
+    <string name="pdf_no_smoking">No smoking</string>
+    <string name="pdf_smoking_at">Smoking at</string>
+    <string name="pdf_no_smoking_at">No smoking at</string>
+    <string name="pdf_smoking_period">Smoking period</string>
 
+    <string name="pdf_fvc_title">Forced Vital Capacity(FVC)</string>
+    <string name="pdf_svc_title">Slow Vital Capacity(SVC)</string>
+    <string name="pdf_div">DIV</string>
+    <string name="pdf_unit">UNIT</string>
+    <string name="pdf_meas">MEAS</string>
+    <string name="pdf_pred">PRED</string>
+    <string name="pdf_percentage">PERCENT</string>
+    <string name="pdf_male">Male</string>
+    <string name="pdf_female">Female</string>
+    <string name="pdf_pre">PRE</string>
+    <string name="pdf_post">POST</string>
+    <string name="pdf_yes">Y</string>
+    <string name="pdf_no">N</string>
+
+    <string name="pdf_volume_flow_graph">Volume(L) - Flow(L/s) graph</string>
+    <string name="pdf_time_volume_graph">Time(s) - Volume(L) graph</string>
+
+    <string name="pdf_meas_at">Measured at</string>
+    <string name="pdf_print_at">Printed at</string>
+    <string name="pdf_months">Months</string>
 
     <!-- Empty fragment -->
     <string name="empty_operators">검사자를 등록 후 이용가능합니다\n검사 전, 담당의와 실검사자를 선택하여 추후 정보에서 확인해보세요</string>

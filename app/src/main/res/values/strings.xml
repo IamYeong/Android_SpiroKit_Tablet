@@ -17,9 +17,16 @@
     <string name="fev1" translatable="false">FEV1</string>
     <string name="fev1per" translatable="false">FEV1%</string>
     <string name="pef" translatable="false">PEF</string>
+    <string name="fef2575" translatable="false">FEF25-75%</string>
+    <string name="mef25" translatable="false">MEF25%</string>
+    <string name="mef50" translatable="false">MEF50%</string>
+    <string name="mef75" translatable="false">MEF75%</string>
 
     <string name="svc" translatable="false">SVC</string>
     <string name="vc" translatable="false">VC</string>
+    <string name="ic" translatable="false">IC</string>
+    <string name="erv" translatable="false">ERV</string>
+    <string name="irv" translatable="false">IRV</string>
 
     <string name="round_2" translatable="false">%1$.2f</string>
     <string name="with_L" translatable="false">%1$.2f L</string>
@@ -31,6 +38,10 @@
 
     <string name="post" translatable="false">POST</string>
     <string name="pre" translatable="false">PRE</string>
+
+    <string name="liter" translatable="false">L</string>
+    <string name="liter_per_sec" translatable="false">L/s</string>
+    <string name="percentage" translatable="false">%</string>
 
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
@@ -214,6 +225,39 @@
     <string name="location_service_info">Turn on location service?</string>
     <string name="must_turn_on_location_service">Location service is required</string>
     <string name="question_terminate_exam">Terminate exam?</string>
+
+    <!-- PDF -->
+    <string name="pdf_name">Name</string>
+    <string name="pdf_age">Age</string>
+    <string name="pdf_gender">Gender</string>
+    <string name="pdf_height">Height</string>
+    <string name="pdf_weight">Weight</string>
+    <string name="pdf_smoking">Smoking</string>
+    <string name="pdf_no_smoking">No smoking</string>
+    <string name="pdf_smoking_at">Smoking at</string>
+    <string name="pdf_no_smoking_at">No smoking at</string>
+    <string name="pdf_smoking_period">Smoking period</string>
+    <string name="pdf_male">Male</string>
+    <string name="pdf_female">Female</string>
+    <string name="pdf_pre">PRE</string>
+    <string name="pdf_post">POST</string>
+    <string name="pdf_yes">Y</string>
+    <string name="pdf_no">N</string>
+
+    <string name="pdf_fvc_title">Forced Vital Capacity(FVC)</string>
+    <string name="pdf_svc_title">Slow Vital Capacity(SVC)</string>
+    <string name="pdf_div">DIV</string>
+    <string name="pdf_unit">UNIT</string>
+    <string name="pdf_meas">MEAS</string>
+    <string name="pdf_pred">PRED</string>
+    <string name="pdf_percentage">PERCENT</string>
+
+    <string name="pdf_volume_flow_graph">Volume(L) - Flow(L/s) graph</string>
+    <string name="pdf_time_volume_graph">Time(s) - Volume(L) graph</string>
+
+    <string name="pdf_meas_at">Measured at</string>
+    <string name="pdf_print_at">Printed at</string>
+    <string name="pdf_months">Months</string>
 
     <string-array name="human_races">
 

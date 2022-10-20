@@ -217,4 +217,16 @@ public interface SpiroKitHandler {
      */
     double getPredictFEV1(int age, int height, int weight, String gender);
 
+    /**
+     * 환자 정보를 이용한 PEF 예측값(단위 : L/s)
+     * PEF : Peak Expiratory Flow
+     * @param age 만 나이(세)
+     * @param height 신장(cm)
+     * @param weight 체중(kg)
+     * @param gender 성별(m, f)
+     * @param race 인종()
+     * @return PEF 예측값
+     */
+    double getPredictPEF(int age, int height, int weight, String gender, String race);
+
 }

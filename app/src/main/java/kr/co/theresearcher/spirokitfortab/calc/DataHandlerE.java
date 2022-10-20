@@ -644,6 +644,43 @@ public class DataHandlerE implements SpiroKitHandler {
     }
 
     /**
+     * 환자 정보를 이용한 PEF 예측값(단위 : L/s)
+     * PEF : Peak Expiratory Flow
+     * @param age 만 나이(세)
+     * @param height 신장(cm)
+     * @param weight 체중(kg)
+     * @param gender 성별(m, f)
+     * @param race 인종()
+     * @return PEF 예측값
+     */
+    @Override
+    public double getPredictPEF(int age, int height, int weight, String gender, String race) {
+        //Morris 기준
+        //cm to inch
+        height = (int)((double)height / 2.54d);
+
+        if (gender.equals("m")) {
+
+            if (age >= 25) {
+                return (0.2387d * height) - (0.035d * age) - 5.993d;
+            } else {
+                return (0.198d * height) - (0.116d * age) - 8.06d;
+            }
+
+        } else if (gender.equals("f")) {
+
+            if (age >= 20) {
+                return (0.1244d * height) - (0.025d * age) - 0.735d;
+            } else {
+                return (0.1244d * height) - (0.157d * age) - 3.916d;
+            }
+
+        } else {
+            return 0d;
+        }
+    }
+
+    /**
      * DB 에서 꺼낸 문자열 한 개 묶음을 전체 호흡 데이터로 변환하여 반환
      * @param allData DB 에서 꺼낸 데이터 묶음
      * @return 전체 호흡 데이터 배열

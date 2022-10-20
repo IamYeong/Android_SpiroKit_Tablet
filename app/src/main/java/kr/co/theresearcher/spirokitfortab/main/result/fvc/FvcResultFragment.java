@@ -469,6 +469,12 @@ public class FvcResultFragment extends Fragment implements Observer {
                         spiroKitHandler = new DataHandlerE();
                     } else if (version.equals("u")) {
                         spiroKitHandler = new DataHandlerU();
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                exportPdfButton.setVisibility(View.INVISIBLE);
+                            }
+                        });
                     } else {
 
                     }

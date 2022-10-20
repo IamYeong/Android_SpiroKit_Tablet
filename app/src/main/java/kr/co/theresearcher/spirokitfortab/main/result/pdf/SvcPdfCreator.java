@@ -13,6 +13,7 @@ import android.util.Log;
 
 import androidx.appcompat.content.res.AppCompatResources;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -111,8 +112,8 @@ public class SvcPdfCreator implements PdfCreator {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         long printDate = Calendar.getInstance().getTime().getTime();
-        canvas.drawText(rawData.getCalDate().substring(0, 19), pageWidth - rightMargin - 100f, topMargin + 10f, paint);
-        canvas.drawText(simpleDateFormat.format(printDate), pageWidth - rightMargin - 100f, topMargin + 22f, paint);
+        canvas.drawText(context.getString(R.string.pdf_meas_at) + " " + rawData.getCalDate().substring(0, 19), pageWidth - rightMargin - 150f, topMargin + 10f, paint);
+        canvas.drawText(context.getString(R.string.pdf_print_at) + " " + simpleDateFormat.format(printDate), pageWidth - rightMargin - 150f, topMargin + 22f, paint);
 
         accHeight += 10f;
         //가로줄
@@ -133,29 +134,65 @@ public class SvcPdfCreator implements PdfCreator {
         canvas.drawLine(leftMargin + (horizontalGap * 4f), accHeight, leftMargin + (horizontalGap * 4f), accHeight + 100f, paint);
 
         //표 안의 내용
-        canvas.drawText("Name", leftMargin + 5f, accHeight + 20f - 5f, paint);
-        canvas.drawText("Age", leftMargin + 5f, accHeight + 40f - 5f, paint);
-        canvas.drawText("Gender", leftMargin + 5f, accHeight + 60f - 5f, paint);
-        canvas.drawText("Height", leftMargin + 5f, accHeight + 80f - 5f, paint);
-        canvas.drawText("Weight", leftMargin + 5f, accHeight + 100f - 5f, paint);
+        canvas.drawText(context.getString(R.string.pdf_name), leftMargin + 5f, accHeight + 20f - 5f, paint);
+        canvas.drawText(context.getString(R.string.pdf_age), leftMargin + 5f, accHeight + 40f - 5f, paint);
+        canvas.drawText(context.getString(R.string.pdf_gender), leftMargin + 5f, accHeight + 60f - 5f, paint);
+        canvas.drawText(context.getString(R.string.pdf_height), leftMargin + 5f, accHeight + 80f - 5f, paint);
+        canvas.drawText(context.getString(R.string.pdf_weight), leftMargin + 5f, accHeight + 100f - 5f, paint);
 
         canvas.drawText(patient.getName(), leftMargin + (horizontalGap) + 5f, accHeight + 20f - 5f, paint);
-        canvas.drawText("Age", leftMargin + (horizontalGap) + 5f, accHeight + 40f - 5f, paint);
-        canvas.drawText("Gender", leftMargin + (horizontalGap) + 5f, accHeight + 60f - 5f, paint);
+        canvas.drawText(patient.getAge(patient.getBirthDay()) + "", leftMargin + (horizontalGap) + 5f, accHeight + 40f - 5f, paint);
+        if (patient.getGender().equals("m")) canvas.drawText(context.getString(R.string.pdf_male), leftMargin + (horizontalGap) + 5f, accHeight + 60f - 5f, paint);
+        else if (patient.getGender().equals("f")) canvas.drawText(context.getString(R.string.pdf_female), leftMargin + (horizontalGap) + 5f, accHeight + 60f - 5f, paint);
+        else canvas.drawText(context.getString(R.string.not_applicable), leftMargin + (horizontalGap) + 5f, accHeight + 60f - 5f, paint);
         canvas.drawText(patient.getHeight() + " cm", leftMargin + (horizontalGap) + 5f, accHeight + 80f - 5f, paint);
         canvas.drawText(patient.getWeight() + " kg", leftMargin + (horizontalGap) + 5f, accHeight + 100f - 5f, paint);
 
-        canvas.drawText("Smoking", leftMargin + (horizontalGap * 2f) + 5f, accHeight + 20f - 5f, paint);
-        canvas.drawText("Not smoking", leftMargin + (horizontalGap * 2f) + 5f, accHeight + 40f - 5f, paint);
-        canvas.drawText("Smoke date", leftMargin + (horizontalGap * 2f) + 5f, accHeight + 60f - 5f, paint);
-        canvas.drawText("Not smoke date", leftMargin + (horizontalGap * 2f) + 5f, accHeight + 80f - 5f, paint);
-        canvas.drawText("Smoke period", leftMargin + (horizontalGap * 2f) + 5f, accHeight + 100f - 5f, paint);
+        canvas.drawText(context.getString(R.string.pdf_smoking), leftMargin + (horizontalGap * 2f) + 5f, accHeight + 20f - 5f, paint);
+        canvas.drawText(context.getString(R.string.pdf_no_smoking), leftMargin + (horizontalGap * 2f) + 5f, accHeight + 40f - 5f, paint);
+        canvas.drawText(context.getString(R.string.pdf_smoking_at), leftMargin + (horizontalGap * 2f) + 5f, accHeight + 60f - 5f, paint);
+        canvas.drawText(context.getString(R.string.pdf_no_smoking_at), leftMargin + (horizontalGap * 2f) + 5f, accHeight + 80f - 5f, paint);
+        canvas.drawText(context.getString(R.string.pdf_smoking_period), leftMargin + (horizontalGap * 2f) + 5f, accHeight + 100f - 5f, paint);
 
-        canvas.drawText("Name", leftMargin + (horizontalGap * 3f) + 5f, accHeight + 20f - 5f, paint);
-        canvas.drawText("Age", leftMargin + (horizontalGap * 3f) + 5f, accHeight + 40f - 5f, paint);
-        canvas.drawText("Gender", leftMargin + (horizontalGap * 3f) + 5f, accHeight + 60f - 5f, paint);
-        canvas.drawText("Height", leftMargin + (horizontalGap * 3f) + 5f, accHeight + 80f - 5f, paint);
-        canvas.drawText("Weight", leftMargin + (horizontalGap * 3f) + 5f, accHeight + 100f - 5f, paint);
+        //피운적 없으니 끊은적도 없음
+        if (patient.getStartSmokingDay() == null) {
+            canvas.drawText(context.getString(R.string.not_applicable), leftMargin + (horizontalGap * 3f) + 5f, accHeight + 20f - 5f, paint);
+            canvas.drawText(context.getString(R.string.not_applicable), leftMargin + (horizontalGap * 3f) + 5f, accHeight + 40f - 5f, paint);
+            canvas.drawText(context.getString(R.string.not_applicable), leftMargin + (horizontalGap * 3f) + 5f, accHeight + 60f - 5f, paint);
+            canvas.drawText(context.getString(R.string.not_applicable), leftMargin + (horizontalGap * 3f) + 5f, accHeight + 80f - 5f, paint);
+            canvas.drawText(context.getString(R.string.not_applicable), leftMargin + (horizontalGap * 3f) + 5f, accHeight + 100f - 5f, paint);
+        } else {
+            //피운적있으니 금연여부만 보면 됨
+
+            if (patient.getStopSmokingDay() == null) {
+                canvas.drawText(context.getString(R.string.pdf_yes), leftMargin + (horizontalGap * 3f) + 5f, accHeight + 20f - 5f, paint);
+                canvas.drawText(context.getString(R.string.pdf_no), leftMargin + (horizontalGap * 3f) + 5f, accHeight + 40f - 5f, paint);
+                canvas.drawText(patient.getStartSmokingDay(), leftMargin + (horizontalGap * 3f) + 5f, accHeight + 60f - 5f, paint);
+                canvas.drawText(context.getString(R.string.not_applicable), leftMargin + (horizontalGap * 3f) + 5f, accHeight + 80f - 5f, paint);
+                canvas.drawText(context.getString(R.string.not_applicable), leftMargin + (horizontalGap * 3f) + 5f, accHeight + 100f - 5f, paint);
+            } else {
+
+                try {
+
+                    long from = Calendar.getInstance().getTime().getTime();
+                    long to = simpleDateFormat.parse(patient.getStopSmokingDay()).getTime();
+
+                    canvas.drawText(context.getString(R.string.pdf_no), leftMargin + (horizontalGap * 3f) + 5f, accHeight + 20f - 5f, paint);
+                    canvas.drawText(context.getString(R.string.pdf_yes), leftMargin + (horizontalGap * 3f) + 5f, accHeight + 40f - 5f, paint);
+                    canvas.drawText(patient.getStartSmokingDay(), leftMargin + (horizontalGap * 3f) + 5f, accHeight + 60f - 5f, paint);
+                    canvas.drawText(patient.getStopSmokingDay(), leftMargin + (horizontalGap * 3f) + 5f, accHeight + 80f - 5f, paint);
+                    canvas.drawText( dateDiff(from, to) + " " + context.getString(R.string.pdf_months), leftMargin + (horizontalGap * 3f) + 5f, accHeight + 100f - 5f, paint);
+
+                } catch (ParseException e) {
+                    Log.e(getClass().getSimpleName(), "PARSE EXCEPTION");
+                }
+
+
+            }
+
+        }
+
+
 
         accHeight += 100f;
 
@@ -165,12 +202,12 @@ public class SvcPdfCreator implements PdfCreator {
 
         paint.setColor(Color.BLACK);
         paint.setTextAlign(Paint.Align.CENTER);
-        canvas.drawText("Slow Vital Capacity(SVC)", pageWidth / 2f, accHeight + 40f - 5f, paint);
+        canvas.drawText(context.getString(R.string.pdf_svc_title), pageWidth / 2f, accHeight + 40f - 5f, paint);
 
         if (rawData.getIsPost() == 1) {
-            canvas.drawText("POST", pageWidth - rightMargin - 50f, accHeight + 40f - 5f, paint);
+            canvas.drawText(context.getString(R.string.pdf_post), pageWidth - rightMargin - 50f, accHeight + 40f - 5f, paint);
         } else {
-            canvas.drawText("PRE", pageWidth - rightMargin - 50f, accHeight + 40f - 5f, paint);
+            canvas.drawText(context.getString(R.string.pdf_pre), pageWidth - rightMargin - 50f, accHeight + 40f - 5f, paint);
         }
 
         accHeight += 40f;
@@ -186,24 +223,24 @@ public class SvcPdfCreator implements PdfCreator {
         //DIV Column
         paint.setTextAlign(Paint.Align.LEFT);
         paint.setColor(Color.BLACK);
-        canvas.drawText("DIV", leftMargin, accHeight + 40f,paint);
+        canvas.drawText(context.getString(R.string.pdf_div), leftMargin, accHeight + 40f,paint);
         canvas.drawLine(leftMargin, accHeight + 45f, pageWidth / 2f, accHeight + 45f, paint);
-        canvas.drawText("VC", leftMargin, accHeight + 70f, paint);
-        canvas.drawText("IC", leftMargin, accHeight + 90f, paint);
-        canvas.drawText("ERV", leftMargin, accHeight + 110f, paint);
-        canvas.drawText("IRV", leftMargin, accHeight + 130f, paint);
+        canvas.drawText(context.getString(R.string.vc), leftMargin, accHeight + 70f, paint);
+        canvas.drawText(context.getString(R.string.ic), leftMargin, accHeight + 90f, paint);
+        canvas.drawText(context.getString(R.string.erv), leftMargin, accHeight + 110f, paint);
+        canvas.drawText(context.getString(R.string.irv), leftMargin, accHeight + 130f, paint);
 
         //UNIT Column
         paint.setTextAlign(Paint.Align.CENTER);
-        canvas.drawText("UNIT", leftMargin + 80f, accHeight + 40f,paint);
+        canvas.drawText(context.getString(R.string.pdf_unit), leftMargin + 80f, accHeight + 40f,paint);
         //canvas.drawLine(leftMargin, accHeight + 45f, pageWidth - rightMargin, accHeight + 45f, paint);
-        canvas.drawText("L", leftMargin + 80f, accHeight + 70f, paint);
-        canvas.drawText("L", leftMargin + 80f, accHeight + 90f, paint);
-        canvas.drawText("L", leftMargin + 80f, accHeight + 110f, paint);
-        canvas.drawText("L", leftMargin + 80f, accHeight + 130f, paint);
+        canvas.drawText(context.getString(R.string.liter), leftMargin + 80f, accHeight + 70f, paint);
+        canvas.drawText(context.getString(R.string.liter), leftMargin + 80f, accHeight + 90f, paint);
+        canvas.drawText(context.getString(R.string.liter), leftMargin + 80f, accHeight + 110f, paint);
+        canvas.drawText(context.getString(R.string.liter), leftMargin + 80f, accHeight + 130f, paint);
 
         //MEAS Column
-        canvas.drawText("MEAS", leftMargin + 130f, accHeight + 40f,paint);
+        canvas.drawText(context.getString(R.string.pdf_meas), leftMargin + 130f, accHeight + 40f,paint);
         //canvas.drawLine(leftMargin, accHeight + 45f, pageWidth - rightMargin, accHeight + 45f, paint);
         canvas.drawText(context.getString(R.string.round_2, vc), leftMargin + 130f, accHeight + 70f, paint);
         canvas.drawText(context.getString(R.string.round_2, ic), leftMargin + 130f, accHeight + 90f, paint);
@@ -211,7 +248,7 @@ public class SvcPdfCreator implements PdfCreator {
         canvas.drawText(context.getString(R.string.round_2, irv), leftMargin + 130f, accHeight + 130f, paint);
 
         //PRED Column
-        canvas.drawText("PRED", leftMargin + 180f, accHeight + 40f,paint);
+        canvas.drawText(context.getString(R.string.pdf_pred), leftMargin + 180f, accHeight + 40f,paint);
         //canvas.drawLine(leftMargin, accHeight + 45f, pageWidth - rightMargin, accHeight + 45f, paint);
         canvas.drawText(context.getString(R.string.round_2, vcPred), leftMargin + 180f, accHeight + 70f, paint);
         canvas.drawText("-", leftMargin + 180f, accHeight + 90f, paint);
@@ -220,9 +257,9 @@ public class SvcPdfCreator implements PdfCreator {
 
 
         //Percentage Column
-        canvas.drawText("PERCENT", leftMargin + 230f, accHeight + 40f,paint);
+        canvas.drawText(context.getString(R.string.pdf_percentage), leftMargin + 230f, accHeight + 40f,paint);
         //canvas.drawLine(leftMargin, accHeight + 45f, pageWidth - rightMargin, accHeight + 45f, paint);
-        canvas.drawText(context.getString(R.string.round_2, vc / vcPred), leftMargin + 230f, accHeight + 70f, paint);
+        canvas.drawText(context.getString(R.string.round_2, (vc / vcPred) * 100d), leftMargin + 230f, accHeight + 70f, paint);
         canvas.drawText("-", leftMargin + 230f, accHeight + 90f, paint);
         canvas.drawText("-", leftMargin + 230f, accHeight + 110f, paint);
         canvas.drawText("-", leftMargin + 230f, accHeight + 130f, paint);
@@ -346,7 +383,7 @@ public class SvcPdfCreator implements PdfCreator {
 
 
         setLabelPaint(paint, 10f);
-        canvas.drawText("Volume-Time Graph", left + ((right - left) / 2f), top - 5f, paint);
+        canvas.drawText(context.getString(R.string.pdf_time_volume_graph), left + ((right - left) / 2f), top - 5f, paint);
         drawGraphSVC(values, canvas, left, top, right, bottom);
     }
 
@@ -521,7 +558,7 @@ public class SvcPdfCreator implements PdfCreator {
 
 
         setLabelPaint(paint, 10f);
-        canvas.drawText("Volume-Flow Graph", left + ((right - left) / 2f), top - 5f, paint);
+        canvas.drawText(context.getString(R.string.pdf_volume_flow_graph), left + ((right - left) / 2f), top - 5f, paint);
         drawGraph(values, canvas, left, top, right, bottom);
 
     }
@@ -708,4 +745,20 @@ public class SvcPdfCreator implements PdfCreator {
         Log.e(getClass().getSimpleName(), maxX + ", " + minX + ", " + maxY + ", " + minY + ", " + xOffset);
 
     }
+
+    private int dateDiff(long from, long to) {
+
+        Calendar fromCalendar = Calendar.getInstance();
+        fromCalendar.setTimeInMillis(from);
+
+        Calendar toCalendar = Calendar.getInstance();
+        toCalendar.setTimeInMillis(to);
+
+        int yearDiff = toCalendar.get(Calendar.YEAR) - fromCalendar.get(Calendar.YEAR);
+        int monthDiff = toCalendar.get(Calendar.MONTH) - fromCalendar.get(Calendar.MONTH);
+
+        return (yearDiff * 12) + monthDiff;
+
+    }
+
 }
