@@ -259,6 +259,8 @@
 
     <string name="n_order_meas">%1$s차 검사(%2$s)</string>
     <string name="date_colon_what">날짜 : %1$s</string>
+
+    <string name="success_pdf_export">PDF 파일 생성에 성공했습니다.\n(Download 경로)</string>
     
     
     <!-- PDF -->
@@ -279,7 +281,7 @@
     <string name="pdf_unit">UNIT</string>
     <string name="pdf_meas">MEAS</string>
     <string name="pdf_pred">PRED</string>
-    <string name="pdf_percentage">PERCENT</string>
+    <string name="pdf_percentage">%PRED</string>
     <string name="pdf_male">Male</string>
     <string name="pdf_female">Female</string>
     <string name="pdf_pre">PRE</string>

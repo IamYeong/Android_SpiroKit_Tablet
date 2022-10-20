@@ -1,15 +1,20 @@
 package kr.co.theresearcher.spirokitfortab.main.result.pdf;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
@@ -79,12 +84,27 @@ public class FvcPdfCreator implements PdfCreator {
         accWidth += leftMargin;
         accHeight += topMargin;
 
+        /*
         Drawable logoDrawable = AppCompatResources.getDrawable(context, R.drawable.tr_logo);
         if (logoDrawable == null) Log.e(getClass().getSimpleName(), "DRAWABLE NULL");
         logoDrawable.setBounds((int)leftMargin - 5, (int)topMargin - 10, (int)(leftMargin + 50f), (int)(topMargin + 30f));
-        logoDrawable.draw(canvas);
+        //logoDrawable.draw(canvas);
 
-        //canvas.drawBitmap(fitImage, leftMargin, topMargin, paint); // 이미지 그리기
+         */
+
+
+        VectorDrawableCompat vectorDrawableCompat = VectorDrawableCompat.create(context.getResources(), R.drawable.ic_tr_logo_small, null);
+        Rect bound = new Rect();
+        bound.set((int)leftMargin - 5, (int)topMargin - 10, (int)(leftMargin + 50f), (int)(topMargin + 30f));
+        //bound.set((int)leftMargin - 5, (int)topMargin - 10, (int)(leftMargin + 200f), (int)(topMargin + 300f));
+
+        //vectorDrawableCompat.setBounds((int)leftMargin - 5, (int)topMargin - 10, (int)(leftMargin + 50f), (int)(topMargin + 30f));
+        vectorDrawableCompat.setBounds(bound);
+
+        vectorDrawableCompat.draw(canvas);
+
+
+
         accWidth += 40f;
         accHeight += 30f;
 

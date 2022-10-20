@@ -579,7 +579,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
         Coordinate coordinate = spiroKitHandler.getValue(pre, data);
 
         timerCount += coordinate.getTime();
-        svcGraphView.setValue((float)coordinate.getTime(), (float)coordinate.getLps(), (float)coordinate.getVolume());
+        svcGraphView.setValue((float)coordinate.getTime(), (float)coordinate.getVolume(), (float)coordinate.getLps());
 
         runOnUiThread(new Runnable() {
             @Override
@@ -730,7 +730,7 @@ public class MeasurementSvcActivity extends AppCompatActivity {
 
             Coordinate coordinate = coordinates.get(i);
 
-            graphView.setValue((float)coordinate.getTime(), (float)coordinate.getLps(), (float)coordinate.getVolume());
+            graphView.setValue((float)coordinate.getTime(), (float)coordinate.getVolume(), (float)coordinate.getLps());
 
         }
 

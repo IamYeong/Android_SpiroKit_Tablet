@@ -696,8 +696,8 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         Coordinate coordinate = spiroKitHandler.getValue(pre, data);
 
         weakFlowProgressBar.setProgress((int)((float)coordinate.getLps() * 1000f));
-        volumeFlowGraphView.setValue((float)coordinate.getTime(), (float)coordinate.getLps(), (float)coordinate.getVolume());
-        volumeTimeGraphView.setValue((float)coordinate.getTime(), (float)coordinate.getLps(), (float)coordinate.getVolume());
+        volumeFlowGraphView.setValue((float)coordinate.getVolume(), (float)coordinate.getLps(), (float)coordinate.getTime());
+        volumeTimeGraphView.setValue((float)coordinate.getTime(), (float)coordinate.getVolume(), (float)coordinate.getLps());
 
         runOnUiThread(new Runnable() {
             @Override
@@ -1009,7 +1009,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         for (int i = 0; i < coordinates.size(); i++) {
 
             Coordinate coordinate = coordinates.get(i);
-            volumeTimeResultView.setValue((float)coordinate.getTime(), (float)coordinate.getLps(), (float)coordinate.getVolume());
+            volumeTimeResultView.setValue((float)coordinate.getTime(), (float)coordinate.getVolume(), (float)coordinate.getLps());
 
         }
 
@@ -1030,7 +1030,7 @@ public class MeasurementFvcActivity extends AppCompatActivity {
         for (int i = 0; i < coordinates.size(); i++) {
 
             Coordinate coordinate = coordinates.get(i);
-            volumeFlowResultView.setValue((float)coordinate.getTime(), (float)coordinate.getLps(), (float)coordinate.getVolume());
+            volumeFlowResultView.setValue((float)coordinate.getVolume(), (float)coordinate.getLps(), (float)coordinate.getTime());
 
         }
 

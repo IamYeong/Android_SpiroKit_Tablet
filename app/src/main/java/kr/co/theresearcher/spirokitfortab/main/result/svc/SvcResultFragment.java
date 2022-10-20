@@ -60,6 +60,7 @@ import kr.co.theresearcher.spirokitfortab.db.operator.Operator;
 import kr.co.theresearcher.spirokitfortab.db.patient.Patient;
 import kr.co.theresearcher.spirokitfortab.db.work.Work;
 
+import kr.co.theresearcher.spirokitfortab.dialog.ConfirmDialog;
 import kr.co.theresearcher.spirokitfortab.graph.Coordinate;
 import kr.co.theresearcher.spirokitfortab.graph.SlowVolumeTimeGraphView;
 
@@ -192,10 +193,27 @@ public class SvcResultFragment extends Fragment implements Observer {
 
                     pdfDocument.finishPage(page);
 
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+
+                    String fileName = patient.getName().replace('.', '_');
+                    long time = Calendar.getInstance().getTime().getTime();
+                    fileName += simpleDateFormat.format(time);
+                    fileName += time + "";
+
                     File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                            Calendar.getInstance().getTime().getTime() + "_result.pdf");
+                            fileName + ".pdf");
 
                     pdfDocument.writeTo(new FileOutputStream(file));
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            ConfirmDialog dialog = new ConfirmDialog(context);
+                            dialog.setTitle(getString(R.string.success_pdf_export));
+                            dialog.show();
+                        }
+                    });
 
                 } catch (IOException e) {
 
