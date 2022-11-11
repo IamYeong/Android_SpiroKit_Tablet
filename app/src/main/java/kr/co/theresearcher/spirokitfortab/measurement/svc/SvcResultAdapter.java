@@ -142,6 +142,10 @@ public class SvcResultAdapter extends RecyclerView.Adapter<SvcResultViewHolder> 
             @Override
             public void onClick(View v) {
 
+                if (isNothing) {
+                    return;
+                }
+
                 int selected = holder.getAdapterPosition();
                 if (selected == -1) return;
 

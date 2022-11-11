@@ -155,6 +155,10 @@ public class FvcResultAdapter extends RecyclerView.Adapter<FvcResultViewHolder> 
             @Override
             public void onClick(View v) {
 
+                if (nothing) {
+                    return;
+                }
+
                 int position = holder.getAdapterPosition();
                 if (position == -1) return;
 
